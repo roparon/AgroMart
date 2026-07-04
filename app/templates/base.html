@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroMart</title>
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+<body>
+
+<nav>
+    <div class="logo">
+        AgroMart
+    </div>
+
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="#">Products</a></li>
+        <li><a href="#">Categories</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">Login</a></li>
+    </ul>
+</nav>
+
+{% block content %}
+{% endblock %}
+
+<footer>
+    <p>&copy; 2026 AgroMart. All Rights Reserved.</p>
+</footer>
+```
+
+</body>
+</html>
