@@ -13,60 +13,43 @@ def register():
 
     if current_user.is_authenticated:
         return redirect(url_for("home.home"))
-
     form = RegisterForm()
-
     if form.validate_on_submit():
-
         username_exists = User.query.filter_by(
             username=form.username.data
         ).first()
-
         if username_exists:
             flash("Username already exists.", "danger")
             return render_template("register.html", form=form)
-
         email_exists = User.query.filter_by(
             email=form.email.data
         ).first()
-
         if email_exists:
             flash("Email already exists.", "danger")
             return render_template("register.html", form=form)
-
         user = User(
             first_name=form.first_name.data,
             last_name=form.last_name.data,
             username=form.username.data,
             email=form.email.data,
         )
-
         user.set_password(form.password.data)
-
         db.session.add(user)
         db.session.commit()
-
         flash("Account created successfully. Please log in.", "success")
-
         return redirect(url_for("auth.login"))
-
     return render_template("register.html", form=form)
 
 
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
-
     if current_user.is_authenticated:
         return redirect(url_for("home.home"))
-
     form = LoginForm()
-
     if form.validate_on_submit():
-
         user = User.query.filter_by(
             username=form.username.data
         ).first()
-
         if user and user.check_password(form.password.data):
 
             login_user(
