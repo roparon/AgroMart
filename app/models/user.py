@@ -20,6 +20,7 @@ class User(UserMixin, db.Model):
     cart = db.relationship("Cart", backref="user", uselist=False, cascade="all, delete")
     wishlist = db.relationship("Wishlist", backref="user", lazy=True, cascade="all, delete")
     created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime, server_default=db.func.now(), onupdate=db.func.now())
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
