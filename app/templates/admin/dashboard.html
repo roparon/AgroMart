@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+
+    <h1 class="mb-4">
+        Admin Dashboard
+    </h1>
+
+    <div class="row">
+
+        <div class="col-md-3 mb-4">
+
+            <div class="card shadow-sm">
+
+                <div class="card-body text-center">
+
+                    <h5>Total Products</h5>
+
+                    <h2>0</h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3 mb-4">
+
+            <div class="card shadow-sm">
+
+                <div class="card-body text-center">
+
+                    <h5>Total Categories</h5>
+
+                    <h2>0</h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3 mb-4">
+
+            <div class="card shadow-sm">
+
+                <div class="card-body text-center">
+
+                    <h5>Total Orders</h5>
+
+                    <h2>0</h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3 mb-4">
+
+            <div class="card shadow-sm">
+
+                <div class="card-body text-center">
+
+                    <h5>Total Users</h5>
+
+                    <h2>0</h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="mt-4">
+
+        <a href="#" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i>
+            Add Product
+        </a>
+
+        <a href="#" class="btn btn-primary">
+            Manage Products
+        </a>
+
+        <a href="#" class="btn btn-warning">
+            Manage Categories
+        </a>
+
+        <a href="#" class="btn btn-dark">
+            View Orders
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}
