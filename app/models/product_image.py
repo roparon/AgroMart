@@ -1,6 +1,4 @@
 from app import db
-
-
 class ProductImage(db.Model):
     __tablename__ = "product_images"
     id = db.Column(db.Integer, primary_key=True)
