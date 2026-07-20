@@ -3,6 +3,8 @@ from wtforms import (StringField, TextAreaField, DecimalField, IntegerField, Boo
 from wtforms.validators import DataRequired, NumberRange
 
 
+
+
 class ProductForm(FlaskForm):
     name = StringField("Product Name", validators=[DataRequired()])
     description = TextAreaField("Description", validators=[DataRequired()])
