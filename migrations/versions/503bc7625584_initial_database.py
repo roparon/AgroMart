@@ -1,8 +1,8 @@
 """Initial database
 
-Revision ID: 2d24ae85134a
+Revision ID: 503bc7625584
 Revises: 
-Create Date: 2026-07-08 20:17:12.261121
+Create Date: 2026-07-21 21:31:58.287024
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '2d24ae85134a'
+revision = '503bc7625584'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -22,9 +22,14 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=100), nullable=False),
     sa.Column('description', sa.Text(), nullable=True),
-    sa.Column('image', sa.String(length=255), nullable=True),
+    sa.Column('slug', sa.String(length=150), nullable=False),
+    sa.Column('image_url', sa.String(length=255), nullable=True),
+    sa.Column('is_active', sa.Boolean(), nullable=False),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
+    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('name')
+    sa.UniqueConstraint('name'),
+    sa.UniqueConstraint('slug')
     )
     op.create_table('users',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -38,6 +43,7 @@ def upgrade():
     sa.Column('role', sa.String(length=20), nullable=True),
     sa.Column('is_active', sa.Boolean(), nullable=True),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
+    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email'),
     sa.UniqueConstraint('username')
@@ -64,16 +70,21 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=200), nullable=False),
     sa.Column('description', sa.Text(), nullable=False),
-    sa.Column('price', sa.Float(), nullable=False),
+    sa.Column('brand', sa.String(length=100), nullable=True),
     sa.Column('stock', sa.Integer(), nullable=True),
+    sa.Column('discount', sa.Integer(), nullable=True),
+    sa.Column('price', sa.Numeric(precision=10, scale=2), nullable=False),
     sa.Column('sku', sa.String(length=100), nullable=True),
+    sa.Column('slug', sa.String(length=255), nullable=True),
     sa.Column('featured', sa.Boolean(), nullable=True),
     sa.Column('category_id', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
     sa.Column('updated_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
+    sa.Column('is_active', sa.Boolean(), nullable=True),
     sa.ForeignKeyConstraint(['category_id'], ['categories.id'], ),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('sku')
+    sa.UniqueConstraint('sku'),
+    sa.UniqueConstraint('slug')
     )
     op.create_table('cart_items',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -99,6 +110,7 @@ def upgrade():
     sa.Column('image_url', sa.String(length=255), nullable=False),
     sa.Column('product_id', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
+    sa.Column('is_primary', sa.Boolean(), nullable=True),
     sa.ForeignKeyConstraint(['product_id'], ['products.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
