@@ -1,0 +1,8 @@
+agromart/
+__pycache__/
+*.pyc
+instance/
+.env
+.vscode/
+.idea/
+*.sqlite3
