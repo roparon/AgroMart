@@ -27,18 +27,7 @@ def create_app():
     migrate.init_app(app, db)
     login_manager.init_app(app)
 
-    # Import models
-    from app.models import (
-        User,
-        Category,
-        Product,
-        ProductImage,
-        Cart,
-        CartItem,
-        Order,
-        OrderItem,
-        Wishlist,
-    )
+
 
     # Register blueprints
     from app.routes.home import home_bp

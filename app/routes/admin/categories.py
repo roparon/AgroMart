@@ -3,15 +3,15 @@ from app.forms.category_forms import CategoryForm
 from app.models.category import Category
 from app import db
 
-admin_bp = Blueprint(
-    "admin",
+categories_bp = Blueprint(
+    "categories",
     __name__,
 )
 
 
 
 
-@admin_bp.route("/categories")
+@categories_bp.route("/categories")
 # @login_required
 def categories():
 
@@ -27,7 +27,7 @@ def categories():
     )
 
 
-@admin_bp.route(
+@categories_bp.route(
     "/categories/add",
     methods=["GET", "POST"],
 )
@@ -104,7 +104,7 @@ def add_category():
     )
 
 
-@admin_bp.route(
+@categories_bp.route(
     "/categories/<int:category_id>/edit",
     methods=["GET", "POST"],
 )
@@ -186,7 +186,7 @@ def edit_category(category_id):
     )
 
 
-@admin_bp.route(
+@categories_bp.route(
     "/categories/<int:category_id>/delete",
     methods=["POST"],
 )
@@ -226,7 +226,7 @@ def delete_category(category_id):
     )
 
 
-@admin_bp.route(
+@categories_bp.route(
     "/categories/<int:category_id>/toggle-status",
     methods=["POST"],
 )

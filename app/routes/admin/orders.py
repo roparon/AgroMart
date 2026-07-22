@@ -3,13 +3,13 @@ from app.models.order import Order
 
 
 
-admin_bp = Blueprint("admin", __name__)
+orders_bp = Blueprint("orders", __name__)
 
 
 
 
 
-@admin_bp.route("/orders")
+@orders_bp.route("/orders")
 # @login_required
 def orders():
 
@@ -25,7 +25,7 @@ def orders():
     )
 
 
-@admin_bp.route(
+@orders_bp.route(
     "/orders/<int:order_id>"
 )
 # @login_required
