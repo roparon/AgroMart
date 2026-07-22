@@ -5,14 +5,14 @@ from flask import Blueprint, render_template, redirect, url_for, flash
 
 from app.models.product import Product
 
-admin_bp = Blueprint(
-    "admin",
+products_bp = Blueprint(
+    "products",
     __name__,
 )
 
 
 
-@admin_bp.route("/products")
+@products_bp.route("/products")
 # @login_required
 def products():
 
@@ -28,7 +28,7 @@ def products():
     )
 
 
-@admin_bp.route("/products/add")
+@products_bp.route("/products/add")
 # @login_required
 def add_product():
 
@@ -37,7 +37,7 @@ def add_product():
     return "<h1>Add Product - Coming Soon</h1>"
 
 
-@admin_bp.route("/products/<int:product_id>/edit")
+@products_bp.route("/products/<int:product_id>/edit")
 # @login_required
 def edit_product(product_id):
 
@@ -51,7 +51,7 @@ def edit_product(product_id):
     )
 
 
-@admin_bp.route("/products/<int:product_id>/delete")
+@products_bp.route("/products/<int:product_id>/delete")
 # @login_required
 def delete_product(product_id):
 

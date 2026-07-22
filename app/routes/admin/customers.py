@@ -1,9 +1,9 @@
 
 from flask import Blueprint, render_template
 from app.models.user import User
-admin_bp = Blueprint("admin", __name__)
+customers_bp = Blueprint("customers", __name__)
 
-@admin_bp.route("/customers")
+@customers_bp.route("/customers")
 # @login_required
 def customers():
 
@@ -19,7 +19,7 @@ def customers():
     )
 
 
-@admin_bp.route(
+@customers_bp.route(
     "/customers/<int:user_id>"
 )
 # @login_required
