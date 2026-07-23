@@ -1,22 +1,21 @@
-    
-
-from app import db
 from flask import Blueprint, render_template, redirect, url_for, flash
 
+from app import db
 from app.models.product import Product
 
+
 products_bp = Blueprint(
-    "products",
+    "admin_products",
     __name__,
 )
 
 
+# ============================================================
+# PRODUCT MANAGEMENT
+# ============================================================
 
-@products_bp.route("/products")
-# @login_required
+@products_bp.route("/")
 def products():
-
-    # admin_required()
 
     products = Product.query.order_by(
         Product.created_at.desc()
@@ -28,22 +27,26 @@ def products():
     )
 
 
-@products_bp.route("/products/add")
-# @login_required
-def add_product():
+# ============================================================
+# ADD PRODUCT
+# ============================================================
 
-    # admin_required()
+@products_bp.route("/add")
+def add_product():
 
     return "<h1>Add Product - Coming Soon</h1>"
 
 
-@products_bp.route("/products/<int:product_id>/edit")
-# @login_required
+# ============================================================
+# EDIT PRODUCT
+# ============================================================
+
+@products_bp.route("/<int:product_id>/edit")
 def edit_product(product_id):
 
-    # admin_required()
-
-    product = Product.query.get_or_404(product_id)
+    product = Product.query.get_or_404(
+        product_id
+    )
 
     return (
         f"<h1>Edit Product: "
@@ -51,13 +54,19 @@ def edit_product(product_id):
     )
 
 
-@products_bp.route("/products/<int:product_id>/delete")
-# @login_required
+# ============================================================
+# DELETE PRODUCT
+# ============================================================
+
+@products_bp.route(
+    "/<int:product_id>/delete",
+    methods=["POST"]
+)
 def delete_product(product_id):
 
-    # admin_required()
-
-    product = Product.query.get_or_404(product_id)
+    product = Product.query.get_or_404(
+        product_id
+    )
 
     db.session.delete(product)
     db.session.commit()
@@ -68,6 +77,5 @@ def delete_product(product_id):
     )
 
     return redirect(
-        url_for("admin.products")
+        url_for("admin_products.products")
     )
-
