@@ -1,17 +1,10 @@
 from flask import Blueprint
 
 
-# Main admin blueprint
-admin_bp = Blueprint(
-    "admin",
-    __name__,
-)
+admin_bp = Blueprint("admin", __name__,)
 
 
-# Import admin route modules
-# These modules all use the admin_bp defined above.
-from app.routes.admin import dashboard
-from app.routes.admin import products
-from app.routes.admin import categories
-from app.routes.admin import orders
-from app.routes.admin import customers
+from app.routes.admin.products import products_bp
+from app.routes.admin.categories import categories_bp
+from app.routes.admin.orders import orders_bp
+from app.routes.admin.customers import customers_bp
