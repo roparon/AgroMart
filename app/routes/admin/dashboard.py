@@ -6,10 +6,7 @@ from app.models.order import Order
 from app.models.user import User
 
 
-dashboard_bp = Blueprint(
-    "dashboard",
-    __name__,
-)
+dashboard_bp = Blueprint("dashboard", __name__,)
 
 
 @dashboard_bp.route("/")
