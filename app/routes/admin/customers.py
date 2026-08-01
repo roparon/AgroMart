@@ -1,6 +1,6 @@
-
 from flask import Blueprint, render_template
 from app.models.user import User
+
 customers_bp = Blueprint("customers", __name__)
 
 @customers_bp.route("/customers")
