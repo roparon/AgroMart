@@ -3,10 +3,7 @@ from app.forms.category_forms import CategoryForm
 from app.models.category import Category
 from app import db
 
-categories_bp = Blueprint(
-    "categories",
-    __name__,
-)
+categories_bp = Blueprint("categories", __name__,)
 
 
 
