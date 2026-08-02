@@ -6,8 +6,6 @@ from app.models.user import User
 
 
 dashboard_bp = Blueprint("dashboard", __name__,)
-
-
 @dashboard_bp.route("/")
 def dashboard():
     total_products = Product.query.count()
