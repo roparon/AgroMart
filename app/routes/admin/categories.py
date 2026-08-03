@@ -138,7 +138,6 @@ def edit_category(category_id):
                 form=form,
                 title="Edit Category",
             )
-
         # Check if another category uses the same slug
         existing_slug = Category.query.filter(
             Category.slug == form.slug.data,
