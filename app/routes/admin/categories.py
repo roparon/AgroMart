@@ -127,7 +127,6 @@ def edit_category(category_id):
         ).first()
 
         if existing_name:
-
             flash(
                 "Another category already uses this name.",
                 "danger",
