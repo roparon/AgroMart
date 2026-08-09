@@ -132,7 +132,6 @@ def edit_category(category_id):
                 "Another category already uses this name.",
                 "danger",
             )
-
             return render_template(
                 "admin/category_form.html",
                 form=form,
