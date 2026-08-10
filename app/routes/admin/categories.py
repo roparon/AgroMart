@@ -88,8 +88,7 @@ def add_category():
         flash(
             "Category created successfully.",
             "success",
-        )
-
+)
         return redirect(
             url_for("admin.categories")
         )
