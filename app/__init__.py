@@ -40,6 +40,7 @@ def create_app():
     from app.routes.home import home_bp
     from app.routes.auth import auth_bp
     from app.routes.admin.products import products_bp
+    from app.routes.product import product_bp
 
     from app.routes.cart import cart_bp
 
@@ -50,6 +51,7 @@ def create_app():
     app.register_blueprint(home_bp)
     app.register_blueprint(auth_bp, url_prefix="/auth")
     app.register_blueprint(products_bp, url_prefix="/admin/products")
+    app.register_blueprint(product_bp, url_prefix="/products")
     app.register_blueprint(cart_bp, url_prefix="/cart")
     app.register_blueprint(dashboard_bp, url_prefix="/admin")
     app.register_blueprint(admin_bp, url_prefix="/admin")
