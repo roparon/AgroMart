@@ -46,8 +46,7 @@ def add_category():
             return render_template(
                 "admin/category_form.html",
                 form=form,
-                title="Add Category",
-            )
+                title="Add Category",)
 
         # Check duplicate slug
         existing_slug = Category.query.filter_by(
