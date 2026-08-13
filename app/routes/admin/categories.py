@@ -15,19 +15,14 @@ def categories():
     # admin_required()
 
     categories = Category.query.order_by(
-        Category.created_at.desc()
-    ).all()
+        Category.created_at.desc()).all()
 
     return render_template(
         "admin/categories.html",
-        categories=categories,
-    )
+        categories=categories)
 
 
-@categories_bp.route(
-    "/categories/add",
-    methods=["GET", "POST"],
-)
+@categories_bp.route("/categories/add", methods=["GET", "POST"],)
 # @login_required
 def add_category():
 
@@ -39,8 +34,7 @@ def add_category():
 
         # Check duplicate category name
         existing_name = Category.query.filter_by(
-            name=form.name.data
-        ).first()
+            name=form.name.data).first()
 
         if existing_name:
 
