@@ -40,9 +40,7 @@ def add_category():
 
             flash(
                 "A category with this name already exists.",
-                "danger",
-            )
-
+                "danger")
             return render_template(
                 "admin/category_form.html",
                 form=form,
