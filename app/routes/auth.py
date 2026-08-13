@@ -16,14 +16,12 @@ def register():
     form = RegisterForm()
     if form.validate_on_submit():
         username_exists = User.query.filter_by(
-            username=form.username.data
-        ).first()
+            username=form.username.data).first()
         if username_exists:
             flash("Username already exists.", "danger")
             return render_template("register.html", form=form)
         email_exists = User.query.filter_by(
-            email=form.email.data
-        ).first()
+            email=form.email.data).first()
         if email_exists:
             flash("Email already exists.", "danger")
             return render_template("register.html", form=form)
@@ -49,14 +47,10 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(
-            username=form.username.data
-        ).first()
+            username=form.username.data).first()
         if user and user.check_password(form.password.data):
 
-            login_user(
-                user,
-                remember=form.remember.data
-            )
+            login_user(user, remember=form.remember.data)
 
             flash("Welcome back!", "success")
 
