@@ -11,7 +11,6 @@ def categories():
 
     categories = Category.query.order_by(
         Category.created_at.desc()).all()
-
     return render_template(
         "admin/categories.html",
         categories=categories)
