@@ -5,14 +5,9 @@ from app import db
 
 categories_bp = Blueprint("categories", __name__,)
 
-
-
-
 @categories_bp.route("/categories")
 # @login_required
 def categories():
-
-    # admin_required()
 
     categories = Category.query.order_by(
         Category.created_at.desc()).all()
