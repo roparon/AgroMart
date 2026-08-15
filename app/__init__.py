@@ -41,9 +41,7 @@ def create_app():
     from app.routes.auth import auth_bp
     from app.routes.admin.products import products_bp
     from app.routes.product import product_bp
-
     from app.routes.cart import cart_bp
-
     from app.routes.admin.dashboard import dashboard_bp
     from app.routes.admin import admin_bp    
 
