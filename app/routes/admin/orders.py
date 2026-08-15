@@ -6,9 +6,6 @@ from app.models.order import Order
 orders_bp = Blueprint("orders", __name__)
 
 
-
-
-
 @orders_bp.route("/orders")
 # @login_required
 def orders():
