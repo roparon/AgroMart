@@ -13,7 +13,6 @@ def products():
 
 @product_bp.route("/<int:id>")
 def product_details(id):
-
     product = Product.query.get_or_404(id)
     return render_template(
         "product_details.html",
