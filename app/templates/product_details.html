@@ -5,72 +5,49 @@
 {% endblock %}
 
 {% block content %}
-
 <div class="container">
-
     <div class="row g-5">
-
         <div class="col-md-6">
-
             <div class="card shadow-sm">
                 <div class="card-body text-center p-5">
-
                     <h1 class="display-1">🌾</h1>
-
                     <p class="text-muted">
                         Product Image
                     </p>
-
                 </div>
             </div>
-
         </div>
-
         <div class="col-md-6">
-
             <h1 class="fw-bold">
                 {{ product.name }}
             </h1>
-
             <hr>
-
             <h2 class="text-success fw-bold">
                 KSh {{ "{:,.2f}".format(product.price) }}
             </h2>
-
             <p class="mt-4">
                 {{ product.description }}
             </p>
-
             <p>
                 <strong>SKU:</strong>
                 {{ product.sku or "N/A" }}
             </p>
-
             <p>
                 <strong>Stock:</strong>
                 {{ product.stock }}
             </p>
-
             {% if product.stock > 0 %}
-
                 <button class="btn btn-success btn-lg">
                     <i class="bi bi-cart-plus"></i>
                     Add to Cart
                 </button>
-
             {% else %}
-
                 <button class="btn btn-secondary btn-lg" disabled>
                     Out of Stock
                 </button>
-
             {% endif %}
-
         </div>
-
     </div>
-
 </div>
 
 {% endblock %}
