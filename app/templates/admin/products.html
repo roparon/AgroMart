@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} | AgroMart Admin{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fw-bold">{{ title }}</h1>
+            <p class="text-muted mb-0">
+                Manage your AgroMart product information.
+            </p>
+        </div>
+
+        <a href="{{ url_for('admin_products.products') }}"
+           class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i>
+            Back to Products
+        </a>
+    </div>
+
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body p-4">
+
+            <form method="POST">
+
+                {{ form.hidden_tag() }}
+
+                <div class="row g-4">
+
+                    <!-- Product Name -->
+                    <div class="col-md-8">
+
+                        {{ form.name.label(class="form-label fw-semibold") }}
+
+                        {{ form.name(
+                            class="form-control",
+                            placeholder="e.g. Diesel Posho Mill 20HP"
+                        ) }}
+
+                        {% for error in form.name.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- SKU -->
+                    <div class="col-md-4">
+
+                        {{ form.sku.label(class="form-label fw-semibold") }}
+
+                        {{ form.sku(
+                            class="form-control",
+                            placeholder="e.g. PM-20HP-001"
+                        ) }}
+
+                        {% for error in form.sku.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- Description -->
+                    <div class="col-12">
+
+                        {{ form.description.label(
+                            class="form-label fw-semibold"
+                        ) }}
+
+                        {{ form.description(
+                            class="form-control",
+                            rows="5",
+                            placeholder="Describe the product..."
+                        ) }}
+
+                        {% for error in form.description.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- Price -->
+                    <div class="col-md-4">
+
+                        {{ form.price.label(
+                            class="form-label fw-semibold"
+                        ) }}
+
+                        <div class="input-group">
+                            <span class="input-group-text">KSh</span>
+
+                            {{ form.price(
+                                class="form-control",
+                                placeholder="0.00"
+                            ) }}
+                        </div>
+
+                        {% for error in form.price.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- Stock -->
+                    <div class="col-md-4">
+
+                        {{ form.stock.label(
+                            class="form-label fw-semibold"
+                        ) }}
+
+                        {{ form.stock(
+                            class="form-control",
+                            placeholder="0"
+                        ) }}
+
+                        {% for error in form.stock.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- Category -->
+                    <div class="col-md-4">
+
+                        {{ form.category.label(
+                            class="form-label fw-semibold"
+                        ) }}
+
+                        {{ form.category(
+                            class="form-select"
+                        ) }}
+
+                        {% for error in form.category.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- Featured -->
+                    <div class="col-12">
+
+                        <div class="form-check">
+
+                            {{ form.featured(
+                                class="form-check-input"
+                            ) }}
+
+                            {{ form.featured.label(
+                                class="form-check-label fw-semibold"
+                            ) }}
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Submit -->
+                    <div class="col-12">
+
+                        <hr>
+
+                        <div class="d-flex justify-content-end gap-2">
+
+                            <a href="{{ url_for('admin_products.products') }}"
+                               class="btn btn-light">
+                                Cancel
+                            </a>
+
+                            {{ form.submit(
+                                class="btn btn-success px-4"
+                            ) }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
