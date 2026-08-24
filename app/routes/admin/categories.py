@@ -1,22 +1,48 @@
 from flask import Blueprint, render_template, flash, redirect, url_for
+
+from app import db
 from app.forms.category_forms import CategoryForm
 from app.models.category import Category
-from app import db
 
-categories_bp = Blueprint("categories", __name__,)
 
-@categories_bp.route("/categories")
+# ============================================================
+# CATEGORY BLUEPRINT
+# ============================================================
+
+categories_bp = Blueprint(
+    "admin_categories",
+    __name__,
+)
+
+
+# ============================================================
+# CATEGORY LIST
+# ============================================================
+
+@categories_bp.route("/")
 # @login_required
 def categories():
 
+    # admin_required()
+
     categories = Category.query.order_by(
-        Category.created_at.desc()).all()
+        Category.created_at.desc()
+    ).all()
+
     return render_template(
         "admin/categories.html",
-        categories=categories)
+        categories=categories,
+    )
 
 
-@categories_bp.route("/categories/add", methods=["GET", "POST"],)
+# ============================================================
+# ADD CATEGORY
+# ============================================================
+
+@categories_bp.route(
+    "/add",
+    methods=["GET", "POST"],
+)
 # @login_required
 def add_category():
 
@@ -26,21 +52,31 @@ def add_category():
 
     if form.validate_on_submit():
 
+        # ----------------------------------------------------
         # Check duplicate category name
+        # ----------------------------------------------------
+
         existing_name = Category.query.filter_by(
-            name=form.name.data).first()
+            name=form.name.data
+        ).first()
 
         if existing_name:
 
             flash(
                 "A category with this name already exists.",
-                "danger")
+                "danger",
+            )
+
             return render_template(
                 "admin/category_form.html",
                 form=form,
-                title="Add Category",)
+                title="Add Category",
+            )
 
-        # Check duplicate slug
+        # ----------------------------------------------------
+        # Check duplicate category slug
+        # ----------------------------------------------------
+
         existing_slug = Category.query.filter_by(
             slug=form.slug.data
         ).first()
@@ -58,7 +94,10 @@ def add_category():
                 title="Add Category",
             )
 
+        # ----------------------------------------------------
         # Create category
+        # ----------------------------------------------------
+
         category = Category(
             name=form.name.data,
             description=form.description.data,
@@ -73,9 +112,10 @@ def add_category():
         flash(
             "Category created successfully.",
             "success",
-)
+        )
+
         return redirect(
-            url_for("admin.categories")
+            url_for("admin_categories.categories")
         )
 
     return render_template(
@@ -85,8 +125,12 @@ def add_category():
     )
 
 
+# ============================================================
+# EDIT CATEGORY
+# ============================================================
+
 @categories_bp.route(
-    "/categories/<int:category_id>/edit",
+    "/<int:category_id>/edit",
     methods=["GET", "POST"],
 )
 # @login_required
@@ -104,23 +148,34 @@ def edit_category(category_id):
 
     if form.validate_on_submit():
 
-        # Check if another category uses the same name
+        # ----------------------------------------------------
+        # Check duplicate category name
+        # Exclude the current category
+        # ----------------------------------------------------
+
         existing_name = Category.query.filter(
             Category.name == form.name.data,
             Category.id != category.id,
         ).first()
 
         if existing_name:
+
             flash(
                 "Another category already uses this name.",
                 "danger",
             )
+
             return render_template(
                 "admin/category_form.html",
                 form=form,
                 title="Edit Category",
             )
-        # Check if another category uses the same slug
+
+        # ----------------------------------------------------
+        # Check duplicate category slug
+        # Exclude the current category
+        # ----------------------------------------------------
+
         existing_slug = Category.query.filter(
             Category.slug == form.slug.data,
             Category.id != category.id,
@@ -139,7 +194,10 @@ def edit_category(category_id):
                 title="Edit Category",
             )
 
+        # ----------------------------------------------------
         # Update category
+        # ----------------------------------------------------
+
         category.name = form.name.data
         category.description = form.description.data
         category.slug = form.slug.data
@@ -154,7 +212,7 @@ def edit_category(category_id):
         )
 
         return redirect(
-            url_for("admin.categories")
+            url_for("admin_categories.categories")
         )
 
     return render_template(
@@ -164,8 +222,12 @@ def edit_category(category_id):
     )
 
 
+# ============================================================
+# DELETE CATEGORY
+# ============================================================
+
 @categories_bp.route(
-    "/categories/<int:category_id>/delete",
+    "/<int:category_id>/delete",
     methods=["POST"],
 )
 # @login_required
@@ -177,19 +239,25 @@ def delete_category(category_id):
         category_id
     )
 
-    # Prevent deleting categories
-    # that still contain products
+    # --------------------------------------------------------
+    # Prevent deleting categories that contain products
+    # --------------------------------------------------------
+
     if category.products:
 
         flash(
-            "Cannot delete this category because it contains products. "
-            "Move or delete the products first.",
+            "Cannot delete this category because it contains "
+            "products. Move or delete the products first.",
             "danger",
         )
 
         return redirect(
-            url_for("admin.categories")
+            url_for("admin_categories.categories")
         )
+
+    # --------------------------------------------------------
+    # Delete category
+    # --------------------------------------------------------
 
     db.session.delete(category)
     db.session.commit()
@@ -200,12 +268,16 @@ def delete_category(category_id):
     )
 
     return redirect(
-        url_for("admin.categories")
+        url_for("admin_categories.categories")
     )
 
 
+# ============================================================
+# TOGGLE CATEGORY STATUS
+# ============================================================
+
 @categories_bp.route(
-    "/categories/<int:category_id>/toggle-status",
+    "/<int:category_id>/toggle-status",
     methods=["POST"],
 )
 # @login_required
@@ -217,9 +289,17 @@ def toggle_category_status(category_id):
         category_id
     )
 
+    # --------------------------------------------------------
+    # Toggle active/inactive status
+    # --------------------------------------------------------
+
     category.is_active = not category.is_active
 
     db.session.commit()
+
+    # --------------------------------------------------------
+    # Show appropriate message
+    # --------------------------------------------------------
 
     if category.is_active:
 
@@ -236,5 +316,5 @@ def toggle_category_status(category_id):
         )
 
     return redirect(
-        url_for("admin.categories")
+        url_for("admin_categories.categories")
     )
