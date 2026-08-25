@@ -1,0 +1,281 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <!-- Header -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h1>{{ title }}</h1>
+
+            <p class="text-muted">
+                Manage your AgroMart product information.
+            </p>
+        </div>
+
+        <a
+            href="{{ url_for('admin_products.products') }}"
+            class="btn btn-outline-secondary"
+        >
+            ← Back to Products
+        </a>
+
+    </div>
+
+
+    <!-- Form -->
+
+    <div class="card shadow-sm">
+
+        <div class="card-body">
+
+            <form method="POST">
+
+                {{ form.hidden_tag() }}
+
+                <div class="row">
+
+                    <!-- Product Name -->
+
+                    <div class="col-md-6 mb-3">
+
+                        {{ form.name.label(
+                            class="form-label fw-bold"
+                        ) }}
+
+                        {{ form.name(
+                            class="form-control",
+                            placeholder="Example: Diesel Posho Mill"
+                        ) }}
+
+                        {% for error in form.name.errors %}
+
+                            <div class="text-danger small">
+                                {{ error }}
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- Brand -->
+
+                    <div class="col-md-6 mb-3">
+
+                        {{ form.brand.label(
+                            class="form-label fw-bold"
+                        ) }}
+
+                        {{ form.brand(
+                            class="form-control",
+                            placeholder="Example: Lister"
+                        ) }}
+
+                        {% for error in form.brand.errors %}
+
+                            <div class="text-danger small">
+                                {{ error }}
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- Description -->
+
+                    <div class="col-12 mb-3">
+
+                        {{ form.description.label(
+                            class="form-label fw-bold"
+                        ) }}
+
+                        {{ form.description(
+                            class="form-control",
+                            rows="5",
+                            placeholder="Describe the product..."
+                        ) }}
+
+                        {% for error in form.description.errors %}
+
+                            <div class="text-danger small">
+                                {{ error }}
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- Price -->
+
+                    <div class="col-md-4 mb-3">
+
+                        {{ form.price.label(
+                            class="form-label fw-bold"
+                        ) }}
+
+                        {{ form.price(
+                            class="form-control",
+                            placeholder="0.00"
+                        ) }}
+
+                    </div>
+
+
+                    <!-- Discount -->
+
+                    <div class="col-md-4 mb-3">
+
+                        {{ form.discount.label(
+                            class="form-label fw-bold"
+                        ) }}
+
+                        {{ form.discount(
+                            class="form-control",
+                            placeholder="0"
+                        ) }}
+
+                    </div>
+
+
+                    <!-- Stock -->
+
+                    <div class="col-md-4 mb-3">
+
+                        {{ form.stock.label(
+                            class="form-label fw-bold"
+                        ) }}
+
+                        {{ form.stock(
+                            class="form-control",
+                            placeholder="0"
+                        ) }}
+
+                    </div>
+
+
+                    <!-- SKU -->
+
+                    <div class="col-md-6 mb-3">
+
+                        {{ form.sku.label(
+                            class="form-label fw-bold"
+                        ) }}
+
+                        {{ form.sku(
+                            class="form-control",
+                            placeholder="Example: AGM-PM-001"
+                        ) }}
+
+                    </div>
+
+
+                    <!-- Slug -->
+
+                    <div class="col-md-6 mb-3">
+
+                        {{ form.slug.label(
+                            class="form-label fw-bold"
+                        ) }}
+
+                        {{ form.slug(
+                            class="form-control",
+                            placeholder="example-product-name"
+                        ) }}
+
+                    </div>
+
+
+                    <!-- Category -->
+
+                    <div class="col-md-6 mb-3">
+
+                        {{ form.category.label(
+                            class="form-label fw-bold"
+                        ) }}
+
+                        {{ form.category(
+                            class="form-select"
+                        ) }}
+
+                        {% for error in form.category.errors %}
+
+                            <div class="text-danger small">
+                                {{ error }}
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- Status -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label fw-bold">
+                            Product Status
+                        </label>
+
+                        <div class="form-check">
+
+                            {{ form.is_active(
+                                class="form-check-input"
+                            ) }}
+
+                            {{ form.is_active.label(
+                                class="form-check-label"
+                            ) }}
+
+                        </div>
+
+                        <div class="form-check mt-2">
+
+                            {{ form.featured(
+                                class="form-check-input"
+                            ) }}
+
+                            {{ form.featured.label(
+                                class="form-check-label"
+                            ) }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Buttons -->
+
+                <hr>
+
+                <div class="d-flex gap-2">
+
+                    {{ form.submit(
+                        class="btn btn-success px-4"
+                    ) }}
+
+                    <a
+                        href="{{ url_for('admin_products.products') }}"
+                        class="btn btn-secondary"
+                    >
+                        Cancel
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
