@@ -235,7 +235,6 @@ def edit_product(product_id):
         return redirect(
             url_for("admin_products.products")
         )
-
     return render_template(
         "admin/product_form.html",
         form=form,
