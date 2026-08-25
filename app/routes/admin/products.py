@@ -241,8 +241,6 @@ def edit_product(product_id):
         form=form,
         title="Edit Product",
     )
-
-
 # ============================================================
 # DELETE PRODUCT
 # ============================================================
@@ -264,7 +262,6 @@ def delete_product(product_id):
         "Product deleted successfully.",
         "success",
     )
-
     return redirect(
         url_for("admin_products.products")
     )
