@@ -1,24 +1,21 @@
-from flask import (
-    Blueprint,
-    render_template,
-    redirect,
-    url_for,
-    flash,
-)
+from email.mime import image
 
+from flask import (Blueprint, render_template, redirect, url_for, flash, request, current_app)
 from app import db
-
 from app.forms.product_forms import ProductForm
-
 from app.models.product import Product
-
 from app.models.category import Category
+import os
+import uuid
+from werkzeug.utils import secure_filename
+from app.models.product_image import ProductImage
+from app.routes import product
 
 
-products_bp = Blueprint(
-    "admin_products",
-    __name__,
-)
+products_bp = Blueprint("admin_products", __name__)
+ALLOWED_IMAGE_EXTENSIONS = {"jpg", "jpeg", "png", "webp"}
+def allowed_image(filename):
+    return ("." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_IMAGE_EXTENSIONS)
 
 
 # ============================================================
@@ -50,6 +47,10 @@ def add_product():
 
     form = ProductForm()
 
+    # --------------------------------------------------------
+    # LOAD ACTIVE CATEGORIES
+    # --------------------------------------------------------
+
     categories = Category.query.filter_by(
         is_active=True
     ).order_by(
@@ -61,9 +62,16 @@ def add_product():
         for category in categories
     ]
 
+    # --------------------------------------------------------
+    # FORM SUBMISSION
+    # --------------------------------------------------------
+
     if form.validate_on_submit():
 
-        # Check SKU
+        # ----------------------------------------------------
+        # CHECK SKU
+        # ----------------------------------------------------
+
         if form.sku.data:
 
             existing_sku = Product.query.filter_by(
@@ -83,7 +91,10 @@ def add_product():
                     title="Add Product",
                 )
 
-        # Check slug
+        # ----------------------------------------------------
+        # CHECK SLUG
+        # ----------------------------------------------------
+
         if form.slug.data:
 
             existing_slug = Product.query.filter_by(
@@ -103,6 +114,10 @@ def add_product():
                     title="Add Product",
                 )
 
+        # ----------------------------------------------------
+        # CREATE PRODUCT
+        # ----------------------------------------------------
+
         product = Product(
             name=form.name.data,
             brand=form.brand.data,
@@ -118,6 +133,102 @@ def add_product():
         )
 
         db.session.add(product)
+
+        # Flush gives the product its database ID
+        # before the final commit.
+        db.session.flush()
+
+        # ----------------------------------------------------
+        # IMAGE UPLOAD DIRECTORY
+        # ----------------------------------------------------
+
+        upload_folder = current_app.config["UPLOAD_FOLDER"]
+
+        os.makedirs(
+            upload_folder,
+            exist_ok=True,
+        )
+
+        # ----------------------------------------------------
+        # GET UPLOADED IMAGES
+        # ----------------------------------------------------
+
+        uploaded_images = request.files.getlist("images")
+
+        image_number = 0
+
+        for image in uploaded_images:
+
+            # Ignore empty file inputs
+            if not image or not image.filename:
+                continue
+
+            # Check extension
+            if not allowed_image(image.filename):
+
+                flash(
+                    f"Invalid image type: {image.filename}. "
+                    "Allowed types are JPG, JPEG, PNG and WEBP.",
+                    "danger",
+                )
+
+                db.session.rollback()
+
+                return render_template(
+                    "admin/product_form.html",
+                    form=form,
+                    title="Add Product",
+                )
+
+            # ------------------------------------------------
+            # CREATE SAFE UNIQUE FILENAME
+            # ------------------------------------------------
+
+            original_filename = secure_filename(
+                image.filename
+            )
+
+            extension = original_filename.rsplit(
+                ".",
+                1
+            )[1].lower()
+
+            unique_filename = (
+                f"{uuid.uuid4().hex}.{extension}"
+            )
+
+            file_path = os.path.join(
+                upload_folder,
+                unique_filename,
+            )
+
+            # ------------------------------------------------
+            # SAVE IMAGE TO DISK
+            # ------------------------------------------------
+
+            image.save(file_path)
+
+            # ------------------------------------------------
+            # CREATE DATABASE RECORD
+            # ------------------------------------------------
+
+            product_image = ProductImage(
+                image_url=(
+                    f"/static/uploads/products/"
+                    f"{unique_filename}"
+                ),
+                product_id=product.id,
+                is_primary=(image_number == 0),
+            )
+
+            db.session.add(product_image)
+
+            image_number += 1
+
+        # ----------------------------------------------------
+        # SAVE EVERYTHING
+        # ----------------------------------------------------
+
         db.session.commit()
 
         flash(
@@ -129,12 +240,15 @@ def add_product():
             url_for("admin_products.products")
         )
 
+    # --------------------------------------------------------
+    # DISPLAY FORM
+    # --------------------------------------------------------
+
     return render_template(
         "admin/product_form.html",
         form=form,
         title="Add Product",
     )
-
 
 # ============================================================
 # EDIT PRODUCT

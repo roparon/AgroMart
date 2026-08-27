@@ -1,22 +1,7 @@
 from flask_wtf import FlaskForm
-
-from wtforms import (
-    StringField,
-    TextAreaField,
-    DecimalField,
-    IntegerField,
-    BooleanField,
-    SelectField,
-    SubmitField,
-)
-
-from wtforms.validators import (
-    DataRequired,
-    Optional,
-    Length,
-    NumberRange,
-)
-
+from wtforms import (StringField, TextAreaField, DecimalField, IntegerField, BooleanField, SelectField, SubmitField)
+from wtforms.validators import (DataRequired, Optional, Length, NumberRange)
+from flask_wtf.file import FileField, FileAllowed
 
 class ProductForm(FlaskForm):
 
@@ -102,6 +87,21 @@ class ProductForm(FlaskForm):
         default=True,
     )
 
+
+    images = FileField(
+    "Product Images",
+    validators=[
+        FileAllowed(
+            ["jpg", "jpeg", "png", "webp"],
+            "Images only: JPG, JPEG, PNG, or WEBP."
+        )
+    ],
+    render_kw={
+        "multiple": True
+    },
+)
+
+    
     submit = SubmitField(
-        "Save Product"
-    )
+            "Save Product"
+        )
