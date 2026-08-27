@@ -32,7 +32,7 @@
 
         <div class="card-body">
 
-            <form method="POST">
+            <form method="POST" enctype="multipart/form-data">
 
                 {{ form.hidden_tag() }}
 
@@ -189,6 +189,32 @@
                         ) }}
 
                     </div>
+
+                    <!-- Product Image -->
+
+                <div class="col-12 mb-3">
+
+                    <label
+                        for="image"
+                        class="form-label fw-bold"
+                    >
+                        Product Image
+                    </label>
+
+                    <input
+                        type="file"
+                        name="image"
+                        id="image"
+                        class="form-control"
+                        accept=".jpg,.jpeg,.png,.webp"
+                    >
+
+                    <div class="form-text">
+                        Allowed formats: JPG, JPEG, PNG, WEBP.
+                        Maximum size: 5MB.
+                    </div>
+
+                </div>
 
 
                     <!-- Category -->

@@ -6,3 +6,7 @@ class ProductImage(db.Model):
     product_id = db.Column(db.Integer, db.ForeignKey("products.id"), nullable=False)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     is_primary = db.Column(db.Boolean, default=False)
+
+
+    def __repr__(self):
+        return f"<ProductImage {self.id}>"

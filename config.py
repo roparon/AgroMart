@@ -5,3 +5,5 @@ class Config:
     SQLALCHEMY_DATABASE_URI = "sqlite:///agromart.db"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     WTF_CSRF_ENABLED = True
+    UPLOAD_FOLDER = os.path.join("app", "static", "uploads", "products")
+    MAX_CONTENT_LENGTH = 5 * 1024 * 1024
