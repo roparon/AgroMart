@@ -24,13 +24,6 @@
                         {{ product.name }}
                     </h5>
 
-                    <p class="card-text text-muted">
-                        {{ product.description[:100] }}
-                        {% if product.description|length > 100 %}
-                            ...
-                        {% endif %}
-                    </p>
-
                     <h5 class="text-success fw-bold">
                         KSh {{ "{:,.2f}".format(product.price) }}
                     </h5>
@@ -48,7 +41,7 @@
 
                     <a
                         href="{{ url_for('product.product_details', id=product.id) }}"
-                        class="btn btn-success w-100"
+                        class="btn btn-outline-success w-70"
                     >
                         View Product
                     </a>
