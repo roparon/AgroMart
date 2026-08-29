@@ -10,94 +10,109 @@
 
     <div class="row g-5">
 
-        <!-- ================================================= -->
         <!-- PRODUCT IMAGE GALLERY -->
-        <!-- ================================================= -->
-
+        <!-- PRODUCT IMAGE GALLERY -->
         <div class="col-md-6">
 
             <div class="card shadow-sm">
 
                 <div class="card-body">
 
-                    <!-- Main Image -->
+                    {% if product.images %}
 
-                    <div class="text-center mb-4">
-
-                        {% if product.images %}
-
-                            {% set primary_image = product.images
-                                | selectattr("is_primary", "equalto", true)
-                                | first
-                            %}
-
-                            {% if not primary_image %}
-                                {% set primary_image = product.images[0] %}
-                            {% endif %}
+                        <!-- MAIN IMAGE -->
+                        <div
+                            id="productGallery"
+                            class="position-relative text-center"
+                        >
 
                             <img
                                 id="mainProductImage"
-                                src="{{ primary_image.image_url }}"
+                                src="{{ product.images[0].image_url }}"
                                 alt="{{ product.name }}"
                                 class="img-fluid"
-                                style="max-height: 450px; object-fit: contain;"
+                                style="
+                                    width: 100%;
+                                    height: 500px;
+                                    object-fit: contain;
+                                "
                             >
 
-                        {% else %}
+                            {% if product.images|length > 1 %}
 
-                            <!-- Fallback when no image exists -->
+                                <!-- PREVIOUS -->
+                                <button
+                                    type="button"
+                                    id="previousImage"
+                                    class="btn btn-dark position-absolute top-50 start-0 translate-middle-y"
+                                >
+                                    <i class="bi bi-chevron-left"></i>
+                                </button>
+
+
+                                <!-- NEXT -->
+                                <button
+                                    type="button"
+                                    id="nextImage"
+                                    class="btn btn-dark position-absolute top-50 end-0 translate-middle-y"
+                                >
+                                    <i class="bi bi-chevron-right"></i>
+                                </button>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- THUMBNAILS -->
+                        {% if product.images|length > 1 %}
 
                             <div
-                                id="imagePlaceholder"
-                                class="text-center py-5"
+                                class="d-flex gap-2 mt-3 overflow-auto"
+                                id="productThumbnails"
                             >
-                                <div style="font-size: 100px;">
-                                    🌾
-                                </div>
 
-                                <p class="text-muted">
-                                    No product image available
-                                </p>
+                                {% for image in product.images %}
+
+                                    <button
+                                        type="button"
+                                        class="product-thumbnail p-0 bg-transparent"
+                                        data-index="{{ loop.index0 }}"
+                                        data-image="{{ image.image_url }}"
+                                    >
+
+                                        <img
+                                            src="{{ image.image_url }}"
+                                            alt="{{ product.name }}"
+                                            style="
+                                                width: 80px;
+                                                height: 80px;
+                                                object-fit: cover;
+                                            "
+                                            class="border rounded"
+                                        >
+
+                                    </button>
+
+                                {% endfor %}
+
                             </div>
 
                         {% endif %}
 
-                    </div>
 
+                    {% else %}
 
-                    <!-- ================================================= -->
-                    <!-- THUMBNAILS -->
-                    <!-- ================================================= -->
+                        <!-- NO IMAGE -->
+                        <div class="text-center py-5">
 
-                    {% if product.images %}
+                            <div style="font-size: 100px;">
+                                🌾
+                            </div>
 
-                        <div
-                            id="productThumbnails"
-                            class="d-flex gap-2 flex-wrap"
-                        >
-
-                            {% for image in product.images %}
-
-                                <button
-                                    type="button"
-                                    class="product-thumbnail"
-                                    data-image-url="{{ image.image_url }}"
-                                    data-image-alt="{{ product.name }}"
-                                >
-
-                                    <img
-                                        src="{{ image.image_url }}"
-                                        alt="{{ product.name }}"
-                                        style="
-                                            width: 100px;
-                                            height: 80px;
-                                            object-fit: contain;
-                                        "
-                                    >
-
-                                </button>
-
-                            {% endfor %}
+                            <p class="text-muted">
+                                No product image available
+                            </p>
 
                         </div>
 
@@ -108,7 +123,6 @@
             </div>
 
         </div>
-
 
         <!-- ================================================= -->
         <!-- PRODUCT INFORMATION -->
@@ -217,16 +231,19 @@
 
             {% if product.stock > 0 %}
 
-                <button
-                    type="button"
-                    class="btn btn-success btn-lg"
+                <form
+                    action="{{ url_for('cart.add_to_cart', product_id=product.id) }}"
+                    method="POST"
                 >
-
-                    <i class="bi bi-cart-plus"></i>
-
-                    Add to Cart
-
-                </button>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button
+                        type="submit"
+                        class="btn btn-success btn-lg"
+                    >
+                        <i class="bi bi-cart-plus"></i>
+                        Add to Cart
+                    </button>
+                </form>
 
             {% else %}
 
@@ -252,7 +269,6 @@
 <!-- ========================================================= -->
 <!-- PRODUCT IMAGE JAVASCRIPT -->
 <!-- ========================================================= -->
-
 <script>
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -260,99 +276,240 @@ document.addEventListener("DOMContentLoaded", function () {
     const mainImage =
         document.getElementById("mainProductImage");
 
+    const previousButton =
+        document.getElementById("previousImage");
+
+    const nextButton =
+        document.getElementById("nextImage");
+
     const thumbnails =
         document.querySelectorAll(".product-thumbnail");
 
 
-    /*
-    -----------------------------------------------------------
-    No product images
-    -----------------------------------------------------------
-    */
-
-    if (!mainImage || thumbnails.length === 0) {
+    // Stop if there is no product image
+    if (!mainImage) {
         return;
     }
 
 
-    /*
-    -----------------------------------------------------------
-    Thumbnail click
-    -----------------------------------------------------------
-    */
+    // Store all image URLs
+    const images = [];
 
     thumbnails.forEach(function (thumbnail) {
 
-        thumbnail.addEventListener("click", function () {
-
-            const imageUrl =
-                thumbnail.dataset.imageUrl;
-
-            const imageAlt =
-                thumbnail.dataset.imageAlt;
-
-
-            if (!imageUrl) {
-                return;
-            }
-
-
-            /*
-            Change the main image
-            */
-
-            mainImage.src = imageUrl;
-
-            mainImage.alt = imageAlt;
-
-
-            /*
-            Make sure the image is visible
-            */
-
-            mainImage.style.display = "inline-block";
-
-        });
-
-    });
-
-    <!-- Image loading error -->
-
-    mainImage.addEventListener("error", function () {
-
-        console.error(
-            "Unable to load product image:",
-            mainImage.src
+        images.push(
+            thumbnail.getAttribute("data-image")
         );
 
     });
 
 
-    /*
-    -----------------------------------------------------------
-    Thumbnail image error detection
-    -----------------------------------------------------------
-    */
+    // Current image
+    let currentIndex = 0;
 
-    thumbnails.forEach(function (thumbnail) {
 
-        const image =
-            thumbnail.querySelector("img");
+    // =========================================
+    // SHOW IMAGE
+    // =========================================
 
-        if (!image) {
+    function showImage(index) {
+
+        if (images.length === 0) {
             return;
         }
 
-        image.addEventListener("error", function () {
 
-            console.error(
-                "Unable to load thumbnail:",
-                image.src
-            );
+        // Go to last image
+        if (index < 0) {
+
+            index = images.length - 1;
+
+        }
+
+
+        // Go back to first image
+        if (index >= images.length) {
+
+            index = 0;
+
+        }
+
+
+        currentIndex = index;
+
+
+        // CHANGE BIG IMAGE
+        mainImage.src = images[currentIndex];
+
+
+        // CHANGE ACTIVE THUMBNAIL
+        thumbnails.forEach(function (thumbnail, index) {
+
+            const image =
+                thumbnail.querySelector("img");
+
+
+            if (index === currentIndex) {
+
+                image.style.border =
+                    "3px solid #198754";
+
+            } else {
+
+                image.style.border =
+                    "";
+
+            }
 
         });
 
+    }
+
+
+    // =========================================
+    // NEXT BUTTON
+    // =========================================
+
+    if (nextButton) {
+
+        nextButton.addEventListener(
+            "click",
+            function () {
+
+                showImage(currentIndex + 1);
+
+            }
+        );
+
+    }
+
+
+    // =========================================
+    // PREVIOUS BUTTON
+    // =========================================
+
+    if (previousButton) {
+
+        previousButton.addEventListener(
+            "click",
+            function () {
+
+                showImage(currentIndex - 1);
+
+            }
+        );
+
+    }
+
+
+    // =========================================
+    // THUMBNAIL CLICK
+    // =========================================
+
+    thumbnails.forEach(function (thumbnail) {
+
+        thumbnail.addEventListener(
+            "click",
+            function () {
+
+                const index =
+                    parseInt(
+                        thumbnail.getAttribute(
+                            "data-index"
+                        )
+                    );
+
+                showImage(index);
+
+            }
+        );
+
     });
+
+
+    // =========================================
+    // KEYBOARD ARROWS
+    // =========================================
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (event.key === "ArrowRight") {
+
+                showImage(currentIndex + 1);
+
+            }
+
+
+            if (event.key === "ArrowLeft") {
+
+                showImage(currentIndex - 1);
+
+            }
+
+        }
+    );
+
+
+    // =========================================
+    // MOBILE SWIPE
+    // =========================================
+
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+
+    mainImage.addEventListener(
+        "touchstart",
+        function (event) {
+
+            touchStartX =
+                event.changedTouches[0].screenX;
+
+        }
+    );
+
+
+    mainImage.addEventListener(
+        "touchend",
+        function (event) {
+
+            touchEndX =
+                event.changedTouches[0].screenX;
+
+
+            const difference =
+                touchEndX - touchStartX;
+
+
+            // Ignore very small movements
+            if (Math.abs(difference) < 50) {
+                return;
+            }
+
+
+            // Swipe right = previous
+            if (difference > 0) {
+
+                showImage(currentIndex - 1);
+
+            }
+
+
+            // Swipe left = next
+            else {
+
+                showImage(currentIndex + 1);
+
+            }
+
+        }
+    );
+
+
+    // Show first image
+    showImage(0);
 
 });
 
