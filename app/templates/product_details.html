@@ -6,513 +6,302 @@
 
 {% block content %}
 
-<div class="container py-4">
+<!-- CUSTOM STYLES FOR OVERLAY & GALLERY HOVER EFFECTS -->
+<style>
+    .product-hero-card {
+        min-height: 520px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .product-hero-card:hover {
+        transform: scale(1.01);
+        box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.25) !important;
+    }
+    /* Gradient backdrop for overlay readability */
+    .hero-overlay-gradient {
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.6) 50%, rgba(0, 0, 0, 0.2) 80%, transparent 100%);
+    }
+    .thumbnail-btn {
+        width: 70px;
+        height: 70px;
+        transition: transform 0.2s ease;
+    }
+    .thumbnail-btn:hover {
+        transform: scale(1.08);
+    }
+</style>
 
-    <div class="row g-5">
+<div class="container py-4 py-lg-5">
+    <div class="row g-4">
 
-        <!-- PRODUCT IMAGE GALLERY -->
-        <!-- PRODUCT IMAGE GALLERY -->
-        <div class="col-md-6">
-
-            <div class="card shadow-sm">
-
-                <div class="card-body">
-
-                    {% if product.images %}
-
-                        <!-- MAIN IMAGE -->
-                        <div
-                            id="productGallery"
-                            class="position-relative text-center"
+        <!-- ================================================= -->
+        <!-- LEFT COLUMN: FULL IMAGE OVERLAY CARD & GALLERY -->
+        <!-- ================================================= -->
+        <div class="col-lg-6">
+            <div class="card product-hero-card border-0 rounded-4 overflow-hidden shadow-lg position-relative text-white h-100">
+                
+                {% if product.images %}
+                    <!-- MAIN IMAGE (FILLS ENTIRE CARD BACKGROUND) -->
+                    <div id="productGallery" class="w-100 h-100 position-absolute top-0 start-0">
+                        <img
+                            id="mainProductImage"
+                            src="{{ product.images[0].image_url }}"
+                            alt="{{ product.name }}"
+                            class="w-100 h-100 object-fit-cover position-absolute top-0 start-0"
                         >
 
-                            <img
-                                id="mainProductImage"
-                                src="{{ product.images[0].image_url }}"
-                                alt="{{ product.name }}"
-                                class="img-fluid"
-                                style="
-                                    width: 100%;
-                                    height: 500px;
-                                    object-fit: contain;
-                                "
-                            >
-
-                            {% if product.images|length > 1 %}
-
-                                <!-- PREVIOUS -->
-                                <button
-                                    type="button"
-                                    id="previousImage"
-                                    class="btn btn-dark position-absolute top-50 start-0 translate-middle-y"
-                                >
-                                    <i class="bi bi-chevron-left"></i>
-                                </button>
-
-
-                                <!-- NEXT -->
-                                <button
-                                    type="button"
-                                    id="nextImage"
-                                    class="btn btn-dark position-absolute top-50 end-0 translate-middle-y"
-                                >
-                                    <i class="bi bi-chevron-right"></i>
-                                </button>
-
-                            {% endif %}
-
-                        </div>
-
-
-                        <!-- THUMBNAILS -->
+                        <!-- GALLERY NAVIGATION CONTROLS OVERLAY -->
                         {% if product.images|length > 1 %}
-
-                            <div
-                                class="d-flex gap-2 mt-3 overflow-auto"
-                                id="productThumbnails"
+                            <button
+                                type="button"
+                                id="previousImage"
+                                class="btn btn-dark btn-sm rounded-circle position-absolute top-50 start-0 translate-middle-y ms-3 z-3 shadow"
+                                style="width: 42px; height: 42px;"
+                                aria-label="Previous Image"
                             >
+                                <i class="bi bi-chevron-left fs-5"></i>
+                            </button>
 
-                                {% for image in product.images %}
-
-                                    <button
-                                        type="button"
-                                        class="product-thumbnail p-0 bg-transparent"
-                                        data-index="{{ loop.index0 }}"
-                                        data-image="{{ image.image_url }}"
-                                    >
-
-                                        <img
-                                            src="{{ image.image_url }}"
-                                            alt="{{ product.name }}"
-                                            style="
-                                                width: 80px;
-                                                height: 80px;
-                                                object-fit: cover;
-                                            "
-                                            class="border rounded"
-                                        >
-
-                                    </button>
-
-                                {% endfor %}
-
-                            </div>
-
+                            <button
+                                type="button"
+                                id="nextImage"
+                                class="btn btn-dark btn-sm rounded-circle position-absolute top-50 end-0 translate-middle-y me-3 z-3 shadow"
+                                style="width: 42px; height: 42px;"
+                                aria-label="Next Image"
+                            >
+                                <i class="bi bi-chevron-right fs-5"></i>
+                            </button>
                         {% endif %}
+                    </div>
+                {% else %}
+                    <!-- FALLBACK BACKGROUND WHEN NO IMAGE -->
+                    <div class="w-100 h-100 position-absolute top-0 start-0 bg-secondary d-flex justify-content-center align-items-center display-1">
+                        🌾
+                    </div>
+                {% endif %}
 
-
+                <!-- TOP FLOATING BADGES (DISCOUNT & BRAND) -->
+                <div class="position-absolute top-0 start-0 end-0 p-3 p-md-4 d-flex justify-content-between align-items-start z-3">
+                    {% if product.brand %}
+                        <span class="badge bg-light text-dark fw-semibold rounded-pill px-3 py-2 shadow-sm border">
+                            {{ product.brand }}
+                        </span>
                     {% else %}
+                        <div></div>
+                    {% endif %}
 
-                        <!-- NO IMAGE -->
-                        <div class="text-center py-5">
+                    {% if product.discount and product.discount > 0 %}
+                        <span class="badge bg-danger rounded-pill fw-bold px-3 py-2 shadow-sm fs-6">
+                            {{ product.discount }}% OFF
+                        </span>
+                    {% endif %}
+                </div>
 
-                            <div style="font-size: 100px;">
-                                🌾
-                            </div>
+                <!-- OVERLAY CONTENT (FLOATING AT BOTTOM OF IMAGE) -->
+                <div class="card-img-overlay hero-overlay-gradient d-flex flex-column justify-content-end p-4 p-md-5 z-2">
+                    
+                    {% if product.category %}
+                        <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill align-self-start mb-2 px-3 py-1 small fw-semibold">
+                            {{ product.category.name }}
+                        </span>
+                    {% endif %}
 
-                            <p class="text-muted">
-                                No product image available
-                            </p>
+                    <h1 class="fw-bold text-white mb-2 display-6">{{ product.name }}</h1>
+                    
+                    <div class="d-flex align-items-baseline gap-2 mb-3">
+                        <span class="fs-2 fw-bold text-warning">
+                            KSh {{ "{:,.2f}".format(product.price) }}
+                        </span>
+                    </div>
 
+                    <!-- THUMBNAILS (FLOATING INSIDE OVERLAY AT THE BOTTOM) -->
+                    {% if product.images and product.images|length > 1 %}
+                        <div class="d-flex gap-2 pt-2 overflow-x-auto" id="productThumbnails">
+                            {% for image in product.images %}
+                                <button
+                                    type="button"
+                                    class="product-thumbnail p-0 bg-transparent border-0 flex-shrink-0"
+                                    data-index="{{ loop.index0 }}"
+                                    data-image="{{ image.image_url }}"
+                                >
+                                    <img
+                                        src="{{ image.image_url }}"
+                                        alt="{{ product.name }}"
+                                        class="thumbnail-btn rounded-3 object-fit-cover border border-2 border-white opacity-75"
+                                    >
+                                </button>
+                            {% endfor %}
                         </div>
-
                     {% endif %}
 
                 </div>
 
             </div>
-
         </div>
 
         <!-- ================================================= -->
-        <!-- PRODUCT INFORMATION -->
+        <!-- RIGHT COLUMN: PRODUCT DETAILS & PURCHASE OPTIONS -->
         <!-- ================================================= -->
+        <div class="col-lg-6 d-flex flex-column">
+            <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 flex-grow-1 d-flex flex-column justify-content-between">
+                <div>
+                    <!-- CATEGORY & SKU HEADER -->
+                    <div class="d-flex justify-content-between align-items-center mb-3 text-muted small">
+                        <span>
+                            <strong>SKU:</strong> {{ product.sku or "N/A" }}
+                        </span>
+                        
+                        {% if product.stock > 0 %}
+                            <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-1">
+                                In Stock ({{ product.stock }})
+                            </span>
+                        {% else %}
+                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-2.5 py-1">
+                                Out of Stock
+                            </span>
+                        {% endif %}
+                    </div>
 
-        <div class="col-md-6">
+                    <h2 class="h3 fw-bold mb-3 text-dark">Product Overview</h2>
 
-            <h1 class="fw-bold">
-                {{ product.name }}
-            </h1>
+                    <!-- DESCRIPTION -->
+                    <div class="text-secondary leading-relaxed mb-4">
+                        <p class="fs-6">{{ product.description }}</p>
+                    </div>
 
-            {% if product.brand %}
+                    <hr class="my-4">
 
-                <p class="text-muted">
-                    Brand: {{ product.brand }}
-                </p>
+                    <!-- PRICING SUMMARY CARD -->
+                    <div class="bg-light p-3 rounded-3 mb-4 d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="text-muted small d-block">Unit Price</span>
+                            <span class="h3 text-success fw-bold mb-0">
+                                KSh {{ "{:,.2f}".format(product.price) }}
+                            </span>
+                        </div>
+                        <i class="bi bi-shield-check fs-2 text-success opacity-75"></i>
+                    </div>
+                </div>
 
-            {% endif %}
+                <!-- ADD TO CART ACTION -->
+                <div>
+                    {% if product.stock > 0 %}
+                        <form action="{{ url_for('cart.add_to_cart', product_id=product.id) }}" method="POST">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button type="submit" class="btn btn-success btn-lg rounded-3 fw-bold w-100 py-3 shadow-sm d-flex align-items-center justify-content-center gap-2">
+                                <i class="bi bi-cart-plus fs-4"></i>
+                                <span>Add to Cart</span>
+                            </button>
+                        </form>
+                    {% else %}
+                        <button type="button" class="btn btn-secondary btn-lg rounded-3 fw-bold w-100 py-3" disabled>
+                            Out of Stock
+                        </button>
+                    {% endif %}
 
-            <hr>
+                    <div class="text-center mt-3">
+                        <small class="text-muted">
+                            <i class="bi bi-truck me-1"></i> Fast delivery nationwide via AgroMart Logistics
+                        </small>
+                    </div>
+                </div>
 
-
-            <!-- Price -->
-
-            <h2 class="text-success fw-bold">
-
-                KSh {{ "{:,.2f}".format(product.price) }}
-
-            </h2>
-
-
-            <!-- Discount -->
-
-            {% if product.discount and product.discount > 0 %}
-
-                <span class="badge bg-danger">
-
-                    {{ product.discount }}% OFF
-
-                </span>
-
-            {% endif %}
-
-
-            <!-- Description -->
-
-            <h5 class="mt-4">
-                Description
-            </h5>
-
-            <p>
-                {{ product.description }}
-            </p>
-
-
-            <!-- SKU -->
-
-            <p>
-
-                <strong>SKU:</strong>
-
-                {{ product.sku or "N/A" }}
-
-            </p>
-
-
-            <!-- Category -->
-
-            {% if product.category %}
-
-                <p>
-
-                    <strong>Category:</strong>
-
-                    {{ product.category.name }}
-
-                </p>
-
-            {% endif %}
-
-
-            <!-- Stock -->
-
-            <p>
-
-                <strong>Stock:</strong>
-
-                {% if product.stock > 0 %}
-
-                    <span class="text-success">
-                        {{ product.stock }} available
-                    </span>
-
-                {% else %}
-
-                    <span class="text-danger">
-                        Out of stock
-                    </span>
-
-                {% endif %}
-
-            </p>
-
-
-            <!-- Cart -->
-
-            {% if product.stock > 0 %}
-
-                <form
-                    action="{{ url_for('cart.add_to_cart', product_id=product.id) }}"
-                    method="POST"
-                >
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                    <button
-                        type="submit"
-                        class="btn btn-success btn-lg"
-                    >
-                        <i class="bi bi-cart-plus"></i>
-                        Add to Cart
-                    </button>
-                </form>
-
-            {% else %}
-
-                <button
-                    type="button"
-                    class="btn btn-secondary btn-lg"
-                    disabled
-                >
-
-                    Out of Stock
-
-                </button>
-
-            {% endif %}
-
+            </div>
         </div>
 
     </div>
-
 </div>
 
-
 <!-- ========================================================= -->
-<!-- PRODUCT IMAGE JAVASCRIPT -->
+<!-- PRODUCT GALLERY JAVASCRIPT (PRESERVED & UPDATED FOR HIGHLIGHTS) -->
 <!-- ========================================================= -->
 <script>
-
 document.addEventListener("DOMContentLoaded", function () {
+    const mainImage = document.getElementById("mainProductImage");
+    const previousButton = document.getElementById("previousImage");
+    const nextButton = document.getElementById("nextImage");
+    const thumbnails = document.querySelectorAll(".product-thumbnail");
 
-    const mainImage =
-        document.getElementById("mainProductImage");
+    if (!mainImage) return;
 
-    const previousButton =
-        document.getElementById("previousImage");
-
-    const nextButton =
-        document.getElementById("nextImage");
-
-    const thumbnails =
-        document.querySelectorAll(".product-thumbnail");
-
-
-    // Stop if there is no product image
-    if (!mainImage) {
-        return;
-    }
-
-
-    // Store all image URLs
     const images = [];
-
     thumbnails.forEach(function (thumbnail) {
-
-        images.push(
-            thumbnail.getAttribute("data-image")
-        );
-
+        images.push(thumbnail.getAttribute("data-image"));
     });
 
-
-    // Current image
     let currentIndex = 0;
 
-
-    // =========================================
-    // SHOW IMAGE
-    // =========================================
-
     function showImage(index) {
+        if (images.length === 0) return;
 
-        if (images.length === 0) {
-            return;
-        }
-
-
-        // Go to last image
         if (index < 0) {
-
             index = images.length - 1;
-
         }
 
-
-        // Go back to first image
         if (index >= images.length) {
-
             index = 0;
-
         }
-
 
         currentIndex = index;
-
-
-        // CHANGE BIG IMAGE
         mainImage.src = images[currentIndex];
 
-
-        // CHANGE ACTIVE THUMBNAIL
-        thumbnails.forEach(function (thumbnail, index) {
-
-            const image =
-                thumbnail.querySelector("img");
-
-
-            if (index === currentIndex) {
-
-                image.style.border =
-                    "3px solid #198754";
-
+        thumbnails.forEach(function (thumbnail, idx) {
+            const img = thumbnail.querySelector("img");
+            if (idx === currentIndex) {
+                img.classList.remove("opacity-75");
+                img.classList.add("border-warning", "opacity-100");
+                img.style.borderWidth = "3px";
             } else {
-
-                image.style.border =
-                    "";
-
+                img.classList.add("opacity-75");
+                img.classList.remove("border-warning", "opacity-100");
+                img.style.borderWidth = "2px";
             }
-
         });
-
     }
-
-
-    // =========================================
-    // NEXT BUTTON
-    // =========================================
 
     if (nextButton) {
-
-        nextButton.addEventListener(
-            "click",
-            function () {
-
-                showImage(currentIndex + 1);
-
-            }
-        );
-
+        nextButton.addEventListener("click", function () {
+            showImage(currentIndex + 1);
+        });
     }
-
-
-    // =========================================
-    // PREVIOUS BUTTON
-    // =========================================
 
     if (previousButton) {
-
-        previousButton.addEventListener(
-            "click",
-            function () {
-
-                showImage(currentIndex - 1);
-
-            }
-        );
-
+        previousButton.addEventListener("click", function () {
+            showImage(currentIndex - 1);
+        });
     }
 
-
-    // =========================================
-    // THUMBNAIL CLICK
-    // =========================================
-
     thumbnails.forEach(function (thumbnail) {
-
-        thumbnail.addEventListener(
-            "click",
-            function () {
-
-                const index =
-                    parseInt(
-                        thumbnail.getAttribute(
-                            "data-index"
-                        )
-                    );
-
-                showImage(index);
-
-            }
-        );
-
+        thumbnail.addEventListener("click", function () {
+            const index = parseInt(thumbnail.getAttribute("data-index"));
+            showImage(index);
+        });
     });
 
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "ArrowRight") showImage(currentIndex + 1);
+        if (event.key === "ArrowLeft") showImage(currentIndex - 1);
+    });
 
-    // =========================================
-    // KEYBOARD ARROWS
-    // =========================================
-
-    document.addEventListener(
-        "keydown",
-        function (event) {
-
-            if (event.key === "ArrowRight") {
-
-                showImage(currentIndex + 1);
-
-            }
-
-
-            if (event.key === "ArrowLeft") {
-
-                showImage(currentIndex - 1);
-
-            }
-
-        }
-    );
-
-
-    // =========================================
-    // MOBILE SWIPE
-    // =========================================
-
+    // Mobile swipe handling
     let touchStartX = 0;
     let touchEndX = 0;
 
+    mainImage.addEventListener("touchstart", function (event) {
+        touchStartX = event.changedTouches[0].screenX;
+    });
 
-    mainImage.addEventListener(
-        "touchstart",
-        function (event) {
+    mainImage.addEventListener("touchend", function (event) {
+        touchEndX = event.changedTouches[0].screenX;
+        const difference = touchEndX - touchStartX;
+        if (Math.abs(difference) < 50) return;
+        if (difference > 0) showImage(currentIndex - 1);
+        else showImage(currentIndex + 1);
+    });
 
-            touchStartX =
-                event.changedTouches[0].screenX;
-
-        }
-    );
-
-
-    mainImage.addEventListener(
-        "touchend",
-        function (event) {
-
-            touchEndX =
-                event.changedTouches[0].screenX;
-
-
-            const difference =
-                touchEndX - touchStartX;
-
-
-            // Ignore very small movements
-            if (Math.abs(difference) < 50) {
-                return;
-            }
-
-
-            // Swipe right = previous
-            if (difference > 0) {
-
-                showImage(currentIndex - 1);
-
-            }
-
-
-            // Swipe left = next
-            else {
-
-                showImage(currentIndex + 1);
-
-            }
-
-        }
-    );
-
-
-    // Show first image
-    showImage(0);
-
+    if (images.length > 0) {
+        showImage(0);
+    }
 });
-
 </script>
 
 {% endblock %}

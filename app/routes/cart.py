@@ -13,6 +13,7 @@ from flask_login import (
 )
 
 from app import db
+from app import csrf
 
 from app.models.cart import Cart, CartItem
 from app.models.product import Product
@@ -220,13 +221,13 @@ def remove_from_cart(item_id):
         return redirect(
             url_for("cart.cart")
         )
-
+    product_name = cart_item.product.name
     db.session.delete(cart_item)
 
     db.session.commit()
 
     flash(
-        "Product removed from your cart.",
+        f"{product_name} removed from your cart.",
         "success",
     )
 
@@ -238,30 +239,32 @@ def remove_from_cart(item_id):
 # ============================================================
 # CHECKOUT
 # ============================================================
-
-@cart_bp.route("/checkout")
+@cart_bp.route("/checkout", methods=["GET", "POST"])
 @login_required
+@csrf.exempt
 def checkout():
-
-    cart = Cart.query.filter_by(
-        user_id=current_user.id
-    ).first()
+    cart = Cart.query.filter_by(user_id=current_user.id).first()
 
     if not cart or not cart.items:
+        flash("Your cart is empty.", "warning")
+        return redirect(url_for("cart.cart"))
 
-        flash(
-            "Your cart is empty.",
-            "warning",
-        )
+    # IF USER SUBMITS THE FORM (CLICKED PLACE ORDER)
+    if request.method == "POST":
+        full_name = request.form.get("full_name")
+        phone = request.form.get("phone")
+        email = request.form.get("email")
+        shipping_address = request.form.get("shipping_address")
+        payment_method = request.form.get("payment_method")
 
-        return redirect(
-            url_for("cart.cart")
-        )
+        # TODO: Save the order to your database here (e.g., Order model)
+        # TODO: Clear the cart or perform M-Pesa STK push logic
 
-    total = sum(
-        item.product.price * item.quantity
-        for item in cart.items
-    )
+        flash("Order placed successfully!", "success")
+        return redirect(url_for("cart.cart"))  # Redirect to success or cart page
+
+    # IF USER IS JUST VIEWING THE PAGE (GET REQUEST)
+    total = sum(item.product.price * item.quantity for item in cart.items)
 
     return render_template(
         "checkout.html",

@@ -1,36 +1,391 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
+{% block title %}AgroMart | Quality Agricultural Machinery & Spare Parts{% endblock %}
 
 {% block content %}
+<style>
+    /* HERO CAROUSEL STYLES */
+    .hero-carousel-item {
+        height: 380px;
+        min-height: 320px;
+    }
+    @media (min-width: 768px) {
+        .hero-carousel-item {
+            height: 480px;
+        }
+    }
+    .hero-slide-overlay {
+        background: linear-gradient(180deg, rgba(184, 134, 11, 0.85) 0%, rgba(0, 0, 0, 0.75) 100%);
+    }
 
-<section class="hero">
+    /* CIRCULAR SHOWCASE CARDS */
+    .circle-card-img {
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        object-fit: cover;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.12);
+        transition: transform 0.3s ease;
+    }
+    .circle-card-img:hover {
+        transform: scale(1.05);
+    }
 
-<h1>Quality Agricultural Machinery & Spare Parts</h1>
+    /* CATEGORY BADGES */
+    .category-badge-card {
+        transition: all 0.2s ease;
+        border: 1px solid #e9ecef;
+    }
+    .category-badge-card:hover {
+        border-color: #198754 !important;
+        background-color: #f8f9fa;
+        transform: translateY(-3px);
+    }
+</style>
 
-<p>
-    Posho Mills, Chaff Cutters, Maize Shellers,
-    Water Pumps, Generators, Refrigerators
-    and Genuine Spare Parts.
-</p>
+<div id="agroMartHeroCarousel" class="carousel slide carousel-fade mb-5" data-bs-ride="carousel" data-bs-interval="5000">
+    
+    <div class="carousel-indicators mb-3">
+        {% for i in range(10) %}
+            <button 
+                type="button" 
+                data-bs-target="#agroMartHeroCarousel" 
+                data-bs-slide-to="{{ i }}" 
+                class="{% if loop.first %}active{% endif %}" 
+                aria-current="{% if loop.first %}true{% endif %}" 
+                aria-label="Slide {{ i + 1 }}">
+            </button>
+        {% endfor %}
+    </div>
 
-<a href="#" class="btn">
-    Shop Now
-</a>
+    <div class="carousel-inner">
 
+        <div class="carousel-item hero-carousel-item active position-relative">
+            <img src="https://images.unsplash.com/photo-1592982537447-7440770cbfc9?auto=format&fit=crop&w=1200&q=60&fm=webp" fetchpriority="high" class="d-block w-100 h-100 object-fit-cover" alt="Tractor in Field">
+            <div class="hero-slide-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center text-center p-3">
+                <div class="container">
+                    <h1 class="fw-black display-5 text-uppercase tracking-wide text-white mb-2">
+                        EQUIPPING YOUR FARM FOR MAXIMUM PRODUCTIVITY WITH AGROMART
+                    </h1>
+                    <p class="lead text-white-50 mb-0 d-none d-md-block">Quality Agricultural Machinery & Genuine Spare Parts</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="carousel-item hero-carousel-item position-relative">
+            <img src="https://images.unsplash.com/photo-1586771107445-d3ca888129ff?auto=format&fit=crop&w=1200&q=60&fm=webp" loading="lazy" class="d-block w-100 h-100 object-fit-cover" alt="Water Pumps & Irrigation">
+            <div class="hero-slide-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center text-center p-3">
+                <div class="container">
+                    <h1 class="fw-black display-5 text-uppercase tracking-wide text-white mb-2">
+                        HIGH-HEAD DIESEL & PETROL WATER PUMPS
+                    </h1>
+                    <p class="lead text-white-50 mb-0 d-none d-md-block">Reliable All-Season Irrigation Solutions</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="carousel-item hero-carousel-item position-relative">
+            <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1200&q=60&fm=webp" loading="lazy" class="d-block w-100 h-100 object-fit-cover" alt="Generators">
+            <div class="hero-slide-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center text-center p-3">
+                <div class="container">
+                    <h1 class="fw-black display-5 text-uppercase tracking-wide text-white mb-2">
+                        POWERFUL BACKUP GENERATORS FOR FARM & COMMERCIAL USE
+                    </h1>
+                    <p class="lead text-white-50 mb-0 d-none d-md-block">Keep Your Operations Running Without Interruptions</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="carousel-item hero-carousel-item position-relative">
+            <img src="https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=1200&q=60&fm=webp" loading="lazy" class="d-block w-100 h-100 object-fit-cover" alt="Engine Spare Parts">
+            <div class="hero-slide-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center text-center p-3">
+                <div class="container">
+                    <h1 class="fw-black display-5 text-uppercase tracking-wide text-white mb-2">
+                        100% GENUINE OEM SPARE PARTS & ACCESSORIES
+                    </h1>
+                    <p class="lead text-white-50 mb-0 d-none d-md-block">Belts, Blades, Screens, Filters & Direct-Fit Components</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="carousel-item hero-carousel-item position-relative">
+            <img src="https://images.unsplash.com/photo-1595246140625-573b715d11dc?auto=format&fit=crop&w=1200&q=60&fm=webp" loading="lazy" class="d-block w-100 h-100 object-fit-cover" alt="Posho Mills">
+            <div class="hero-slide-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center text-center p-3">
+                <div class="container">
+                    <h1 class="fw-black display-5 text-uppercase tracking-wide text-white mb-2">
+                        COMMERCIAL POSHO MILLS & GRAIN SILOS
+                    </h1>
+                    <p class="lead text-white-50 mb-0 d-none d-md-block">High-Capacity Flour Processing Machinery</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="carousel-item hero-carousel-item position-relative">
+            <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=60&fm=webp" loading="lazy" class="d-block w-100 h-100 object-fit-cover" alt="Maize Shellers">
+            <div class="hero-slide-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center text-center p-3">
+                <div class="container">
+                    <h1 class="fw-black display-5 text-uppercase tracking-wide text-white mb-2">
+                        FAST & EFFICIENT MAIZE SHELLERS
+                    </h1>
+                    <p class="lead text-white-50 mb-0 d-none d-md-block">Reduce Labor Costs with Automated Harvesting Gear</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="carousel-item hero-carousel-item position-relative">
+            <img src="https://images.unsplash.com/photo-1530507629858-e4977d30e9e0?auto=format&fit=crop&w=1200&q=60&fm=webp" loading="lazy" class="d-block w-100 h-100 object-fit-cover" alt="Chaff Cutters">
+            <div class="hero-slide-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center text-center p-3">
+                <div class="container">
+                    <h1 class="fw-black display-5 text-uppercase tracking-wide text-white mb-2">
+                        CHAFF CUTTERS & SILAGE PREPARATION
+                    </h1>
+                    <p class="lead text-white-50 mb-0 d-none d-md-block">Prepare Superior Feed for High-Yield Livestock</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="carousel-item hero-carousel-item position-relative">
+            <img src="https://images.unsplash.com/photo-1589923188900-85dae523342b?auto=format&fit=crop&w=1200&q=60&fm=webp" loading="lazy" class="d-block w-100 h-100 object-fit-cover" alt="Power Saws & Equipment">
+            <div class="hero-slide-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center text-center p-3">
+                <div class="container">
+                    <h1 class="fw-black display-5 text-uppercase tracking-wide text-white mb-2">
+                        POWER SAWS, MOWERS & OUTDOOR TOOLS
+                    </h1>
+                    <p class="lead text-white-50 mb-0 d-none d-md-block">Precision Tools Built for Rugged Fieldwork</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="carousel-item hero-carousel-item position-relative">
+            <img src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=1200&q=60&fm=webp" loading="lazy" class="d-block w-100 h-100 object-fit-cover" alt="Cooling Equipment">
+            <div class="hero-slide-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center text-center p-3">
+                <div class="container">
+                    <h1 class="fw-black display-5 text-uppercase tracking-wide text-white mb-2">
+                        MILK CHILLERS & AGRICULTURAL REFRIGERATION
+                    </h1>
+                    <p class="lead text-white-50 mb-0 d-none d-md-block">Protect Produce & Dairy Quality From Farm to Market</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="carousel-item hero-carousel-item position-relative">
+            <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=60&fm=webp" loading="lazy" class="d-block w-100 h-100 object-fit-cover" alt="Maintenance & Services">
+            <div class="hero-slide-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center text-center p-3">
+                <div class="container">
+                    <h1 class="fw-black display-5 text-uppercase tracking-wide text-white mb-2">
+                        EXPERT MACHINERY MAINTENANCE & SUPPORT
+                    </h1>
+                    <p class="lead text-white-50 mb-0 d-none d-md-block">Trusted Technical Service Across Kenya</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#agroMartHeroCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#agroMartHeroCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+
+</div>
+
+<section class="container mb-5">
+    <div class="row g-4 justify-content-center text-center">
+        <div class="col-6 col-md-4">
+            <a href="{{ url_for('product.products', category='Posho Mills') }}" class="text-decoration-none text-dark">
+                <img src="https://images.unsplash.com/photo-1595246140625-573b715d11dc?auto=format&fit=crop&w=350&q=60&fm=webp" 
+                     loading="lazy" alt="Posho Mills" class="circle-card-img mb-3">
+                <h5 class="fw-bold fs-6">Posho Mills</h5>
+            </a>
+        </div>
+        <div class="col-6 col-md-4">
+            <a href="{{ url_for('product.products', category='Chaff Cutters') }}" class="text-decoration-none text-dark">
+                <img src="https://images.unsplash.com/photo-1586771107445-d3ca888129ff?auto=format&fit=crop&w=350&q=60&fm=webp" 
+                     loading="lazy" alt="Chaff Cutters" class="circle-card-img mb-3">
+                <h5 class="fw-bold fs-6">Chaff Cutters</h5>
+            </a>
+        </div>
+        <div class="col-6 col-md-4">
+            <a href="{{ url_for('product.products', category='Maize Shellers') }}" class="text-decoration-none text-dark">
+                <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=350&q=60&fm=webp" 
+                     loading="lazy" alt="Maize Shellers" class="circle-card-img mb-3">
+                <h5 class="fw-bold fs-6">Maize Shellers</h5>
+            </a>
+        </div>
+    </div>
+
+    <div class="row justify-content-center mt-5">
+        <div class="col-lg-9 text-center">
+            <p class="lead text-secondary lh-base fs-6">
+                Looking to boost your farm yields and streamline processing, but struggling to find heavy-duty machinery and genuine parts? 
+                <strong>AgroMart</strong> is your trusted source for powerful Posho Mills, Chaff Cutters, Water Pumps, Generators, and direct-fit spares—helping you save time, reduce labor costs, and keep operations running smoothly.
+            </p>
+        </div>
+    </div>
 </section>
 
-<section class="categories">
-<h2>Product Categories</h2>
-<div class="category-grid">
-    <div class="card">Posho Mills</div>
-    <div class="card">Maize Shellers</div>
-    <div class="card">Chaff Cutters</div>
-    <div class="card">Grass Mowers</div>
-    <div class="card">Power Saws</div>
-    <div class="card">Generators</div>
-    <div class="card">Water Pumps</div>
-    <div class="card">Refrigerators</div>
-    <div class="card">Spare Parts</div>
-</div>
+<section class="bg-light py-5">
+    <div class="container py-3">
+        
+        <h2 class="text-center fw-black display-6 text-uppercase mb-5">IT'S EASILY EFFICIENT...</h2>
+
+        <div class="d-flex flex-column gap-5">
+
+            <div class="row align-items-center g-4 g-lg-5">
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1595246140625-573b715d11dc?auto=format&fit=crop&w=700&q=60&fm=webp" 
+                             loading="lazy" alt="Posho Mills & Milling" class="img-fluid w-100 object-fit-cover" style="height: 380px;">
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <h3 class="fw-bold text-uppercase h4 mb-3">HEAVY-DUTY POSHO MILLS & SHELLERS</h3>
+                    <p class="text-muted mb-4">
+                        Maximize your commercial or farm grain output with high-efficiency diesel and electric milling equipment designed for continuous operation.
+                    </p>
+
+                    <div class="row g-2 mb-4">
+                        {% set posho_cats = ['Posho Mills', 'Maize Shellers', 'Combine Harvesters', 'Grain Dryers', 'De-huskers', 'Flour Sifters'] %}
+                        {% for cat in posho_cats %}
+                            <div class="col-6 col-sm-4">
+                                <a href="{{ url_for('product.products', category=cat) }}" class="text-decoration-none">
+                                    <div class="category-badge-card p-2.5 rounded-3 bg-white text-center shadow-xs">
+                                        <span class="fw-semibold text-dark extra-small">{{ cat }}</span>
+                                    </div>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="d-flex gap-3 align-items-center">
+                        <a href="{{ url_for('product.products', category='Posho Mills') }}" class="btn btn-success rounded-pill px-4 py-2.5 fw-bold shadow-sm">
+                            Shop Posho Mills
+                        </a>
+                        <a href="#" class="btn btn-outline-secondary rounded-pill px-4 py-2.5 fw-semibold">
+                            How It Works
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row align-items-center g-4 g-lg-5 flex-lg-row-reverse">
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=700&q=60&fm=webp" 
+                             loading="lazy" alt="Chaff Cutters & Fodder" class="img-fluid w-100 object-fit-cover" style="height: 380px;">
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <h3 class="fw-bold text-uppercase h4 mb-3">CHAFF CUTTERS & FODDER MACHINERY</h3>
+                    <p class="text-muted mb-4">
+                        Streamline feed preparation for your livestock. Chop green and dry fodder, Napier grass, and stalk effortlessly to boost silage quality.
+                    </p>
+
+                    <div class="row g-2 mb-4">
+                        {% set fodder_cats = ['Chaff Cutters', 'Grass Mowers', 'Silage Choppers', 'Hay Balers', 'Feed Mixers', 'Pellet Mills'] %}
+                        {% for cat in fodder_cats %}
+                            <div class="col-6 col-sm-4">
+                                <a href="{{ url_for('product.products', category=cat) }}" class="text-decoration-none">
+                                    <div class="category-badge-card p-2.5 rounded-3 bg-white text-center shadow-xs">
+                                        <span class="fw-semibold text-dark extra-small">{{ cat }}</span>
+                                    </div>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="d-flex gap-3 align-items-center">
+                        <a href="{{ url_for('product.products', category='Chaff Cutters') }}" class="btn btn-success rounded-pill px-4 py-2.5 fw-bold shadow-sm">
+                            Explore Chaff Cutters
+                        </a>
+                        <a href="#" class="btn btn-outline-secondary rounded-pill px-4 py-2.5 fw-semibold">
+                            View Specs
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row align-items-center g-4 g-lg-5">
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1586771107445-d3ca888129ff?auto=format&fit=crop&w=700&q=60&fm=webp" 
+                             loading="lazy" alt="Water Pumps and Power" class="img-fluid w-100 object-fit-cover" style="height: 380px;">
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <h3 class="fw-bold text-uppercase h4 mb-3">IRRIGATION PUMPS & GENERATORS</h3>
+                    <p class="text-muted mb-4">
+                        Keep your farm powered and irrigated all year round. From high-head petrol water pumps to heavy-duty backup diesel generators.
+                    </p>
+
+                    <div class="row g-2 mb-4">
+                        {% set power_cats = ['Water Pumps', 'Generators', 'Solar Pumps', 'Power Saws', 'Spray Pumps', 'Pressure Washers'] %}
+                        {% for cat in power_cats %}
+                            <div class="col-6 col-sm-4">
+                                <a href="{{ url_for('product.products', category=cat) }}" class="text-decoration-none">
+                                    <div class="category-badge-card p-2.5 rounded-3 bg-white text-center shadow-xs">
+                                        <span class="fw-semibold text-dark extra-small">{{ cat }}</span>
+                                    </div>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="d-flex gap-3 align-items-center">
+                        <a href="{{ url_for('product.products', category='Water Pumps') }}" class="btn btn-success rounded-pill px-4 py-2.5 fw-bold shadow-sm">
+                            Browse Power & Water
+                        </a>
+                        <a href="#" class="btn btn-outline-secondary rounded-pill px-4 py-2.5 fw-semibold">
+                            Learn More
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row align-items-center g-4 g-lg-5 flex-lg-row-reverse">
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=700&q=60&fm=webp" 
+                             loading="lazy" alt="Spare Parts & Refrigeration" class="img-fluid w-100 object-fit-cover" style="height: 380px;">
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <h3 class="fw-bold text-uppercase h4 mb-3">GENUINE SPARE PARTS & COOLING</h3>
+                    <p class="text-muted mb-4">
+                        Avoid costly breakdowns with direct-fit OEM replacement parts, cutter blades, belts, motors, and agricultural milk chillers.
+                    </p>
+
+                    <div class="row g-2 mb-4">
+                        {% set spares_cats = ['Spare Parts', 'Chaff Blades', 'Posho Screens', 'V-Belts', 'Refrigerators', 'Engine Oil'] %}
+                        {% for cat in spares_cats %}
+                            <div class="col-6 col-sm-4">
+                                <a href="{{ url_for('product.products', category=cat) }}" class="text-decoration-none">
+                                    <div class="category-badge-card p-2.5 rounded-3 bg-white text-center shadow-xs">
+                                        <span class="fw-semibold text-dark extra-small">{{ cat }}</span>
+                                    </div>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="d-flex gap-3 align-items-center">
+                        <a href="{{ url_for('product.products', category='Spare Parts') }}" class="btn btn-success rounded-pill px-4 py-2.5 fw-bold shadow-sm">
+                            Find Spare Parts
+                        </a>
+                        <a href="#" class="btn btn-outline-secondary rounded-pill px-4 py-2.5 fw-semibold">
+                            Contact Support
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
 </section>
 
 {% endblock %}

@@ -6,9 +6,7 @@ customers_bp = Blueprint("customers", __name__)
 @customers_bp.route("/customers")
 # @login_required
 def customers():
-
     # admin_required()
-
     customers = User.query.order_by(
         User.created_at.desc()
     ).all()
@@ -19,18 +17,13 @@ def customers():
     )
 
 
-@customers_bp.route(
-    "/customers/<int:user_id>"
-)
+@customers_bp.route("/customers/<int:user_id>")
 # @login_required
 def customer_detail(user_id):
-
     # admin_required()
-
     customer = User.query.get_or_404(
         user_id
     )
-
     return render_template(
         "admin/customer_detail.html",
         customer=customer,
