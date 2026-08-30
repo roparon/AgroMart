@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout | AgroMart{% endblock %}
+
+{% block content %}
+<div class="container py-4 py-lg-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fw-bold h2 mb-1">Checkout</h1>
+            <p class="text-muted mb-0">Complete your order details below.</p>
+        </div>
+        <a href="{{ url_for('cart.cart') }}" class="btn btn-outline-secondary rounded-pill px-3">
+            &larr; Return to Cart
+        </a>
+    </div>
+
+    {% if cart.items %}
+    <form method="POST" action="{{ url_for('cart.checkout') }}">
+        
+        <!-- CSRF TOKEN (FIXED SYNTAX) -->
+        {% if csrf_token is defined and csrf_token is callable %}
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        {% elif csrf_token is defined %}
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        {% endif %}
+
+        <div class="row g-4">
+            
+            <!-- LEFT COLUMN: SHIPPING & PAYMENT DETAILS -->
+            <div class="col-lg-7">
+                
+                <!-- Shipping Details Card -->
+                <div class="card border-0 shadow-sm rounded-3 mb-4">
+                    <div class="card-body p-4">
+                        <h4 class="fw-bold mb-3 h5">1. Shipping Information</h4>
+                        
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="full_name" class="form-label fw-semibold">Full Name</label>
+                                <input type="text" class="form-control" id="full_name" name="full_name" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="phone" class="form-label fw-semibold">Phone Number (M-Pesa)</label>
+                                <input type="tel" class="form-control" id="phone" name="phone" placeholder="07XXXXXXXX" required>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="email" class="form-label fw-semibold">Email Address</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="shipping_address" class="form-label fw-semibold">Delivery Address / Location</label>
+                                <textarea class="form-control" id="shipping_address" name="shipping_address" rows="3" placeholder="Town, Street, Building, Door No." required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Method Card -->
+                <div class="card border-0 shadow-sm rounded-3">
+                    <div class="card-body p-4">
+                        <h4 class="fw-bold mb-3 h5">2. Payment Method</h4>
+                        
+                        <div class="form-check mb-3 p-3 border rounded-3">
+                            <input class="form-check-input ms-0 me-2" type="radio" name="payment_method" id="mpesa" value="mpesa" checked>
+                            <label class="form-check-label fw-semibold" for="mpesa">
+                                📱 M-Pesa Express (STK Push)
+                            </label>
+                            <small class="text-muted d-block mt-1">Pay directly via an M-Pesa prompt sent to your phone.</small>
+                        </div>
+
+                        <div class="form-check p-3 border rounded-3">
+                            <input class="form-check-input ms-0 me-2" type="radio" name="payment_method" id="cod" value="cod">
+                            <label class="form-check-label fw-semibold" for="cod">
+                                💵 Cash on Delivery
+                            </label>
+                            <small class="text-muted d-block mt-1">Pay when your farm supplies arrive at your doorstep.</small>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- RIGHT COLUMN: ORDER SUMMARY -->
+            <div class="col-lg-5">
+                <div class="card border-0 shadow-sm rounded-3 sticky-lg-top" style="top: 80px;">
+                    <div class="card-body p-4">
+                        <h4 class="fw-bold mb-4 h5">Order Summary</h4>
+
+                        <!-- Item mini-list -->
+                        <div class="checkout-items mb-3" style="max-height: 280px; overflow-y: auto;">
+                            {% for item in cart.items %}
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div class="d-flex align-items-center me-2">
+                                        {% if item.product.images %}
+                                            {% set primary_image = item.product.images | selectattr("is_primary", "equalto", true) | first %}
+                                            <img src="{{ primary_image.image_url if primary_image else item.product.images[0].image_url }}" 
+                                                 alt="{{ item.product.name }}" 
+                                                 class="rounded me-3 object-fit-cover" 
+                                                 style="width: 48px; height: 48px;">
+                                        {% else %}
+                                            <span class="fs-4 me-3">🌾</span>
+                                        {% endif %}
+                                        
+                                        <div class="min-w-0">
+                                            <h6 class="mb-0 fw-bold text-truncate" style="max-width: 150px;">{{ item.product.name }}</h6>
+                                            <small class="text-muted">Qty: {{ item.quantity }} × KSh {{ "{:,.2f}".format(item.product.price) }}</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <span class="fw-bold text-nowrap">
+                                        KSh {{ "{:,.2f}".format(item.product.price * item.quantity) }}
+                                    </span>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <hr>
+
+                        <!-- Totals Breakdown -->
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Subtotal</span>
+                            <span class="fw-semibold">KSh {{ "{:,.2f}".format(total) }}</span>
+                        </div>
+
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="text-muted">Delivery Fee</span>
+                            <span class="text-success fw-semibold small">Calculated on confirmation</span>
+                        </div>
+
+                        <hr>
+
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <strong class="fs-5">Total</strong>
+                            <strong class="text-success fs-4 fw-bold">KSh {{ "{:,.2f}".format(total) }}</strong>
+                        </div>
+
+                        <button type="submit" class="btn btn-success w-100 btn-lg rounded-3 fw-bold py-3 shadow-sm">
+                            Place Order
+                        </button>
+
+                        <div class="text-center mt-3">
+                            <small class="text-muted">
+                                🔒 Encrypted & Secure Checkout
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+    {% else %}
+
+    <!-- EMPTY CART FALLBACK -->
+    <div class="card border-0 shadow-sm rounded-3">
+        <div class="card-body text-center py-5">
+            <div class="display-1 mb-3">🛒</div>
+            <h2 class="fw-bold">Your cart is empty</h2>
+            <p class="text-muted">You cannot proceed to checkout without items in your cart.</p>
+            <a href="{{ url_for('product.products') }}" class="btn btn-success rounded-pill px-4">
+                Start Shopping
+            </a>
+        </div>
+    </div>
+
+    {% endif %}
+
+</div>
+{% endblock %}

@@ -3,49 +3,114 @@
 {% block title %}Products - AgroMart{% endblock %}
 
 {% block content %}
-<div class="container">
+
+<!-- CUSTOM STYLES FOR IMAGE OVERLAYS AND HOVER EFFECTS -->
+<style>
+    .product-card {
+        min-height: 380px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .product-card:hover {
+        transform: scale(1.03);
+        box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.3) !important;
+    }
+    /* Dark gradient backdrop to keep overlay text crisp */
+    .card-img-overlay-gradient {
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.6) 45%, rgba(0, 0, 0, 0) 80%);
+        transition: background 0.3s ease;
+    }
+    .product-card:hover .card-img-overlay-gradient {
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.98) 0%, rgba(0, 0, 0, 0.75) 55%, rgba(0, 0, 0, 0.1) 100%);
+    }
+    .hover-action-btn {
+        opacity: 0.9;
+        transform: translateY(4px);
+        transition: all 0.25s ease-in-out;
+    }
+    .product-card:hover .hover-action-btn {
+        opacity: 1;
+        transform: translateY(0);
+    }
+</style>
+
+<div class="container py-4 py-lg-5">
+
+    <!-- HEADER SECTION -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h1 class="fw-bold">Our Products</h1>
-            <p class="text-muted">
-                Quality agricultural machinery and equipment.
+            <h1 class="fw-bold h2 mb-1">Our Products</h1>
+            <p class="text-muted mb-0">
+                Quality agricultural machinery, equipment, and farm supplies.
             </p>
         </div>
     </div>
-    <div class="row g-4">
+
+    <!-- PRODUCT LISTING GRID -->
+    <div class="row g-3 g-md-4">
         {% for product in products %}
-        <div class="col-md-6 col-lg-4 col-xl-3">
+        <div class="col-12 col-sm-6 col-md-4 col-xl-3">
 
-            <div class="card h-100 shadow-sm">
+            <div class="card product-card border-0 rounded-4 overflow-hidden h-100 shadow-sm position-relative text-white">
+                
+                <!-- PRODUCT BACKGROUND IMAGE -->
+                {% if product.images %}
+                    {% set primary_image = product.images | selectattr("is_primary", "equalto", true) | first %}
+                    <img 
+                        src="{{ primary_image.image_url if primary_image else product.images[0].image_url }}" 
+                        class="card-img w-100 h-100 object-fit-cover position-absolute top-0 start-0" 
+                        alt="{{ product.name }}"
+                    >
+                {% else %}
+                    <!-- FALLBACK BACKGROUND WHEN NO IMAGE IS AVAILABLE -->
+                    <div class="w-100 h-100 position-absolute top-0 start-0 bg-dark d-flex justify-content-center align-items-center display-2 opacity-75">
+                        🌾
+                    </div>
+                {% endif %}
 
-                <div class="card-body">
+                <!-- FLOATING TOP BADGES -->
+                <div class="position-absolute top-0 start-0 end-0 p-3 d-flex justify-content-between align-items-start z-3">
+                    <!-- Stock Badge -->
+                    {% if product.stock > 0 %}
+                        <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill fw-semibold px-2.5 py-1.5 shadow-sm">
+                            In Stock
+                        </span>
+                    {% else %}
+                        <span class="badge bg-danger rounded-pill fw-bold px-3 py-1.5 shadow-sm">
+                            Out of Stock
+                        </span>
+                    {% endif %}
 
-                    <h5 class="card-title fw-bold">
+                    <!-- Price Badge -->
+                     <h3 class="card-title fw-bold fs-5 text-white mb-1 text-truncate" title="{{ product.name }}">
                         {{ product.name }}
-                    </h5>
+                    </h3>
+                    
+                </div>
 
-                    <h5 class="text-success fw-bold">
+                <!-- FULL GRADIENT OVERLAY & DETAILS -->
+                <div class="card-img-overlay card-img-overlay-gradient d-flex flex-column justify-content-end p-3 p-md-4 z-2">
+                    
+                    {% if product.category %}
+                        <span class="badge bg-white-50 text-light border border-light-subtle rounded-pill w-auto align-self-start mb-2 px-2.5 py-1 small fw-medium">
+                            {{ product.category.name }}
+                        </span>
+                    {% endif %}
+                    <span class="badge bg-success rounded-pill fw-bold fs-5 px-7 py-2 shadow-sm ms-auto">
                         KSh {{ "{:,.2f}".format(product.price) }}
-                    </h5>
-                    <p class="mb-3">
-                        {% if product.stock > 0 %}
-                            <span class="badge bg-success">
-                                In Stock
-                            </span>
-                        {% else %}
-                            <span class="badge bg-danger">
-                                Out of Stock
-                            </span>
-                        {% endif %}
+                    </span>
+                    
+                    <p class="card-text small text-white-50 mb-3 text-truncate">
+                        {{ product.description or "High-quality farm supplies." }}
                     </p>
 
+                    <!-- ACTION BUTTON -->
                     <a
                         href="{{ url_for('product.product_details', id=product.id) }}"
-                        class="btn btn-outline-success w-70"
+                        class="btn btn-success btn-md rounded-3 fw-bold w-100 hover-action-btn shadow-sm d-flex justify-content-center align-items-center gap-2 text-decoration-none"
                     >
-                        View Product
+                        <i class="bi bi-eye fs-5"></i>
+                        <span>View Product</span>
                     </a>
-
                 </div>
 
             </div>
@@ -54,15 +119,17 @@
 
         {% else %}
 
+        <!-- EMPTY STATE -->
         <div class="col-12">
-
-            <div class="alert alert-info text-center">
-                <h5>No products available yet.</h5>
-                <p class="mb-0">
-                    Products will appear here once they are added.
-                </p>
+            <div class="card border-0 shadow-sm rounded-4 text-center py-5">
+                <div class="card-body">
+                    <div class="display-3 mb-3">🚜</div>
+                    <h4 class="fw-bold">No products available yet.</h4>
+                    <p class="text-muted mb-0">
+                        Products will appear here once they are added to the store.
+                    </p>
+                </div>
             </div>
-
         </div>
 
         {% endfor %}
