@@ -1,7 +1,7 @@
-from flask import Flask
+from flask import Flask, app
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user
 from flask_wtf.csrf import CSRFProtect
 from config import Config
 
@@ -61,6 +61,36 @@ def create_app():
     app.register_blueprint(customers_bp, url_prefix="/admin/customers")
     app.register_blueprint(products_bp, url_prefix="/admin/products")
     app.register_blueprint(orders_bp, url_prefix="/admin/orders")
+
+
+    @app.context_processor
+    def inject_utilities():
+        return dict(
+            # your context variables/functions here
+        )
+
+
+    @app.context_processor
+    def inject_cart_count():
+
+        cart_count = 0
+
+        if current_user.is_authenticated:
+            from app.models.cart import Cart
+
+            cart = Cart.query.filter_by(
+                user_id=current_user.id
+            ).first()
+
+            if cart:
+                cart_count = sum(
+                    item.quantity
+                    for item in cart.items
+                )
+
+        return {
+            "cart_count": cart_count
+        }
 
 
 
