@@ -45,6 +45,14 @@
                                 {{ current_user.username }}
                             </a>
                         </li>
+                        <a href="{{ url_for('cart.cart') }}" class="nav-link position-relative">
+                            <i class="bi bi-cart3"></i>
+                            {% if cart_count > 0 %}
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    {{ cart_count }}
+                                </span>
+                            {% endif %}
+                        </a>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('auth.logout') }}">
                                 Logout

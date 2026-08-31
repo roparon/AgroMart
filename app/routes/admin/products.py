@@ -336,6 +336,7 @@ def edit_product(product_id):
                     "admin/product_form.html",
                     form=form,
                     title="Edit Product",
+                    product=product,
                 )
 
         # ----------------------------------------------------
@@ -477,6 +478,7 @@ def edit_product(product_id):
         "admin/product_form.html",
         form=form,
         title="Edit Product",
+        product=product,
     )
 
 
@@ -531,5 +533,128 @@ def delete_product(product_id):
     return redirect(
         url_for(
             "admin_products.products"
+        )
+    )
+
+
+    # ============================================================
+# DELETE PRODUCT IMAGE
+# ============================================================
+
+@products_bp.route(
+    "/image/<int:image_id>/delete",
+    methods=["POST"],
+)
+def delete_product_image(image_id):
+
+    image = ProductImage.query.get_or_404(
+        image_id
+    )
+
+    product_id = image.product_id
+
+    # --------------------------------------------------------
+    # DELETE PHYSICAL FILE
+    # --------------------------------------------------------
+
+    if image.image_url:
+
+        filename = os.path.basename(
+            image.image_url
+        )
+
+        file_path = os.path.join(
+            current_app.config["UPLOAD_FOLDER"],
+            filename,
+        )
+
+        if os.path.exists(file_path):
+            os.remove(file_path)
+
+    was_primary = image.is_primary
+
+    # --------------------------------------------------------
+    # DELETE DATABASE RECORD
+    # --------------------------------------------------------
+
+    db.session.delete(image)
+
+    db.session.flush()
+
+    # --------------------------------------------------------
+    # IF PRIMARY WAS DELETED, SELECT ANOTHER IMAGE
+    # --------------------------------------------------------
+
+    if was_primary:
+
+        replacement = ProductImage.query.filter_by(
+            product_id=product_id
+        ).order_by(
+            ProductImage.id.asc()
+        ).first()
+
+        if replacement:
+            replacement.is_primary = True
+
+    db.session.commit()
+
+    flash(
+        "Product image deleted successfully.",
+        "success",
+    )
+
+    return redirect(
+        url_for(
+            "admin_products.edit_product",
+            product_id=product_id,
+        )
+    )
+
+
+    # ============================================================
+# SET PRIMARY PRODUCT IMAGE
+# ============================================================
+
+@products_bp.route(
+    "/image/<int:image_id>/primary",
+    methods=["POST"],
+)
+def set_primary_image(image_id):
+
+    image = ProductImage.query.get_or_404(
+        image_id
+    )
+
+    product_id = image.product_id
+
+    # --------------------------------------------------------
+    # REMOVE PRIMARY STATUS FROM ALL PRODUCT IMAGES
+    # --------------------------------------------------------
+
+    ProductImage.query.filter_by(
+        product_id=product_id
+    ).update(
+        {
+            ProductImage.is_primary: False
+        }
+    )
+
+    # --------------------------------------------------------
+    # MAKE SELECTED IMAGE PRIMARY
+    # --------------------------------------------------------
+
+    image.is_primary = True
+
+    db.session.commit()
+
+    flash(
+        "Primary product image updated.",
+        "success",
+    )
+
+    return redirect(
+        url_for(
+            "admin_products.edit_product",
+            product_id=product_id,
         )
     )
