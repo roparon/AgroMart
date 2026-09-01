@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+
+{% block title %}Order Confirmed | AgroMart{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <!-- SUCCESS HEADER -->
+
+            <div class="text-center mb-5">
+
+                <div
+                    class="mx-auto mb-4 d-flex align-items-center justify-content-center rounded-circle bg-success bg-opacity-10"
+                    style="width: 90px; height: 90px;"
+                >
+                    <span class="display-5 text-success">
+                        ✓
+                    </span>
+                </div>
+
+                <h1 class="fw-bold">
+                    Order Confirmed!
+                </h1>
+
+                <p class="text-muted">
+                    Thank you for shopping with AgroMart.
+                    Your order has been successfully placed.
+                </p>
+
+            </div>
+
+
+            <!-- ORDER CODE -->
+
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+                <div class="card-body p-4 text-center">
+
+                    <small class="text-muted d-block mb-2">
+                        YOUR ORDER CODE
+                    </small>
+
+                    <h2 class="fw-bold text-success mb-2">
+                        {{ order.order_code }}
+                    </h2>
+
+                    <p class="text-muted mb-0">
+                        Keep this code to track your order.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- ORDER DETAILS -->
+
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+                <div class="card-body p-4">
+
+                    <h4 class="fw-bold mb-4">
+                        Order Details
+                    </h4>
+
+                    {% for item in order.items %}
+
+                    <div class="d-flex justify-content-between align-items-center border-bottom py-3">
+
+                        <div>
+
+                            <h6 class="fw-bold mb-1">
+                                {{ item.product.name }}
+                            </h6>
+
+                            <small class="text-muted">
+                                Quantity:
+                                {{ item.quantity }}
+                            </small>
+
+                        </div>
+
+                        <div class="text-end">
+
+                            <div class="fw-bold">
+                                KSh
+                                {{ "{:,.2f}".format(
+                                    item.price * item.quantity
+                                ) }}
+                            </div>
+
+                            <small class="text-muted">
+                                KSh
+                                {{ "{:,.2f}".format(item.price) }}
+                                each
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+
+                    <!-- TOTAL -->
+
+                    <div class="d-flex justify-content-between pt-4">
+
+                        <span class="fw-bold">
+                            Total
+                        </span>
+
+                        <span class="fw-bold text-success fs-4">
+                            KSh
+                            {{ "{:,.2f}".format(
+                                order.total_amount
+                            ) }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ORDER INFORMATION -->
+
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+                <div class="card-body p-4">
+
+                    <h4 class="fw-bold mb-4">
+                        Order Information
+                    </h4>
+
+                    <div class="row g-4">
+
+                        <div class="col-md-6">
+
+                            <small class="text-muted d-block">
+                                Order Status
+                            </small>
+
+                            <span class="badge bg-warning text-dark mt-1">
+                                {{ order.status }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <small class="text-muted d-block">
+                                Payment Method
+                            </small>
+
+                            <strong>
+                                {% if order.payment_method == "mpesa" %}
+                                    M-Pesa
+                                {% else %}
+                                    Cash on Delivery
+                                {% endif %}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <small class="text-muted d-block">
+                                Order Date
+                            </small>
+
+                            <strong>
+                                {{ order.created_at.strftime(
+                                    "%d %B %Y, %I:%M %p"
+                                ) if order.created_at else "—" }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <small class="text-muted d-block">
+                                Delivery Address
+                            </small>
+
+                            <strong>
+                                {{ order.shipping_address }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACTIONS -->
+
+            <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+
+                <a
+                    href="{{ url_for('cart.my_orders') }}"
+                    class="btn btn-success btn-lg rounded-pill px-4"
+                >
+                    View My Orders
+                </a>
+
+                <a
+                    href="{{ url_for('product.products') }}"
+                    class="btn btn-outline-secondary btn-lg rounded-pill px-4"
+                >
+                    Continue Shopping
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

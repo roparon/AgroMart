@@ -17,7 +17,7 @@ from app import csrf
 
 from app.models.cart import Cart, CartItem
 from app.models.product import Product
-
+from app.models.order import Order, OrderItem
 
 cart_bp = Blueprint("cart", __name__)
 
@@ -239,35 +239,360 @@ def remove_from_cart(item_id):
 # ============================================================
 # CHECKOUT
 # ============================================================
+# ============================================================
+# CHECKOUT
+# ============================================================
+
 @cart_bp.route("/checkout", methods=["GET", "POST"])
 @login_required
 @csrf.exempt
 def checkout():
-    cart = Cart.query.filter_by(user_id=current_user.id).first()
+
+    cart = Cart.query.filter_by(
+        user_id=current_user.id
+    ).first()
+
+    # --------------------------------------------------------
+    # EMPTY CART
+    # --------------------------------------------------------
 
     if not cart or not cart.items:
-        flash("Your cart is empty.", "warning")
-        return redirect(url_for("cart.cart"))
 
-    # IF USER SUBMITS THE FORM (CLICKED PLACE ORDER)
+        flash(
+            "Your cart is empty.",
+            "warning",
+        )
+
+        return redirect(
+            url_for("cart.cart")
+        )
+
+    # --------------------------------------------------------
+    # CALCULATE TOTAL
+    # --------------------------------------------------------
+
+    total = sum(
+        item.product.price * item.quantity
+        for item in cart.items
+    )
+
+    # --------------------------------------------------------
+    # PLACE ORDER
+    # --------------------------------------------------------
+
     if request.method == "POST":
-        full_name = request.form.get("full_name")
-        phone = request.form.get("phone")
-        email = request.form.get("email")
-        shipping_address = request.form.get("shipping_address")
-        payment_method = request.form.get("payment_method")
 
-        # TODO: Save the order to your database here (e.g., Order model)
-        # TODO: Clear the cart or perform M-Pesa STK push logic
+        full_name = request.form.get(
+            "full_name",
+            ""
+        ).strip()
 
-        flash("Order placed successfully!", "success")
-        return redirect(url_for("cart.cart"))  # Redirect to success or cart page
+        phone = request.form.get(
+            "phone",
+            ""
+        ).strip()
 
-    # IF USER IS JUST VIEWING THE PAGE (GET REQUEST)
-    total = sum(item.product.price * item.quantity for item in cart.items)
+        email = request.form.get(
+            "email",
+            ""
+        ).strip()
+
+        shipping_address = request.form.get(
+            "shipping_address",
+            ""
+        ).strip()
+
+        payment_method = request.form.get(
+            "payment_method",
+            ""
+        ).strip()
+
+        # ----------------------------------------------------
+        # BASIC VALIDATION
+        # ----------------------------------------------------
+
+        if not full_name:
+            flash(
+                "Please enter your full name.",
+                "danger",
+            )
+
+            return redirect(
+                url_for("cart.checkout")
+            )
+
+        if not phone:
+            flash(
+                "Please enter your phone number.",
+                "danger",
+            )
+
+            return redirect(
+                url_for("cart.checkout")
+            )
+
+        if not email:
+            flash(
+                "Please enter your email address.",
+                "danger",
+            )
+
+            return redirect(
+                url_for("cart.checkout")
+            )
+
+        if not shipping_address:
+            flash(
+                "Please enter your delivery address.",
+                "danger",
+            )
+
+            return redirect(
+                url_for("cart.checkout")
+            )
+
+        if payment_method not in [
+            "mpesa",
+            "cod",
+        ]:
+
+            flash(
+                "Please select a valid payment method.",
+                "danger",
+            )
+
+            return redirect(
+                url_for("cart.checkout")
+            )
+
+        # ----------------------------------------------------
+        # VERIFY STOCK BEFORE CREATING ORDER
+        # ----------------------------------------------------
+
+        for cart_item in cart.items:
+
+            product = cart_item.product
+
+            if not product:
+                flash(
+                    "One of the products in your cart is no longer available.",
+                    "danger",
+                )
+
+                return redirect(
+                    url_for("cart.cart")
+                )
+
+            if product.stock < cart_item.quantity:
+
+                flash(
+                    f"Only {product.stock} unit(s) of "
+                    f"{product.name} are available.",
+                    "warning",
+                )
+
+                return redirect(
+                    url_for("cart.cart")
+                )
+
+        # ----------------------------------------------------
+        # GENERATE UNIQUE ORDER CODE
+        # ----------------------------------------------------
+
+        import uuid
+
+        while True:
+
+            order_code = (
+                f"AGM-{uuid.uuid4().hex[:10].upper()}"
+            )
+
+            existing_order = Order.query.filter_by(
+                order_code=order_code
+            ).first()
+
+            if not existing_order:
+                break
+
+        # ----------------------------------------------------
+        # CREATE ORDER
+        # ----------------------------------------------------
+
+        order = Order(
+            user_id=current_user.id,
+            order_code=order_code,
+            total_amount=total,
+            status="Pending",
+            shipping_address=shipping_address,
+            payment_method=payment_method,
+        )
+
+        db.session.add(order)
+
+        # We need the order ID before creating OrderItems
+        db.session.flush()
+
+        # ----------------------------------------------------
+        # CREATE ORDER ITEMS
+        # ----------------------------------------------------
+
+        for cart_item in cart.items:
+
+            product = cart_item.product
+
+            order_item = OrderItem(
+                order_id=order.id,
+                product_id=product.id,
+                quantity=cart_item.quantity,
+                price=product.price,
+            )
+
+            db.session.add(order_item)
+
+            # ------------------------------------------------
+            # REDUCE PRODUCT STOCK
+            # ------------------------------------------------
+
+            product.stock -= cart_item.quantity
+
+        # ----------------------------------------------------
+        # CLEAR CART
+        # ----------------------------------------------------
+
+        for cart_item in list(cart.items):
+
+            db.session.delete(cart_item)
+
+        # ----------------------------------------------------
+        # SAVE EVERYTHING
+        # ----------------------------------------------------
+
+        try:
+
+            db.session.commit()
+
+        except Exception:
+
+            db.session.rollback()
+
+            flash(
+                "Something went wrong while placing your order. "
+                "Please try again.",
+                "danger",
+            )
+
+            return redirect(
+                url_for("cart.checkout")
+            )
+
+        # ----------------------------------------------------
+        # ORDER SUCCESS
+        # ----------------------------------------------------
+
+        flash(
+            f"Order {order.order_code} placed successfully!",
+            "success",
+        )
+
+        return redirect(
+            url_for(
+                "cart.order_confirmation",
+                order_id=order.id,
+            )
+        )
+
+    # --------------------------------------------------------
+    # SHOW CHECKOUT PAGE
+    # --------------------------------------------------------
 
     return render_template(
         "checkout.html",
         cart=cart,
         total=total,
+    )
+
+# ============================================================
+# ORDER CONFIRMATION
+# ============================================================
+
+# ============================================================
+# ORDER CONFIRMATION
+# ============================================================
+
+@cart_bp.route("/order/<int:order_id>/confirmation")
+@login_required
+def order_confirmation(order_id):
+
+    order = Order.query.get_or_404(
+        order_id
+    )
+
+    # --------------------------------------------------------
+    # SECURITY
+    # Make sure the order belongs to the logged-in user
+    # --------------------------------------------------------
+
+    if order.user_id != current_user.id:
+
+        flash(
+            "You are not authorized to view this order.",
+            "danger",
+        )
+
+        return redirect(
+            url_for("cart.cart")
+        )
+
+    return render_template(
+        "order_confirmation.html",
+        order=order,
+    )
+
+    # ============================================================
+# MY ORDERS
+# ============================================================
+
+@cart_bp.route("/orders")
+@login_required
+def my_orders():
+
+    orders = Order.query.filter_by(
+        user_id=current_user.id
+    ).order_by(
+        Order.created_at.desc()
+    ).all()
+
+    return render_template(
+        "my_orders.html",
+        orders=orders,
+    )
+
+    # ============================================================
+# ORDER DETAILS
+# ============================================================
+
+@cart_bp.route("/orders/<int:order_id>")
+@login_required
+def order_details(order_id):
+
+    order = Order.query.get_or_404(
+        order_id
+    )
+
+    # SECURITY CHECK
+
+    if order.user_id != current_user.id:
+
+        flash(
+            "You are not authorized to view this order.",
+            "danger",
+        )
+
+        return redirect(
+            url_for("cart.my_orders")
+        )
+
+    return render_template(
+        "order_details.html",
+        order=order,
     )
