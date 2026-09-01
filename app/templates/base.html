@@ -41,7 +41,7 @@
                 <ul class="navbar-nav">
                     {% if current_user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="{{ url_for('auth.account') }}">
                                 {{ current_user.username }}
                             </a>
                         </li>

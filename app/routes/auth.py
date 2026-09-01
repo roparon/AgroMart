@@ -84,6 +84,73 @@ def login():
         form=form
     )
 
+# ============================================================
+# ACCOUNT DASHBOARD
+# ============================================================
+
+@auth_bp.route("/account")
+@login_required
+def account():
+
+    # All orders belonging to the logged-in customer
+    orders = (
+        current_user.orders
+        if current_user.orders
+        else []
+    )
+
+    # Order statistics
+    total_orders = len(orders)
+
+    pending_orders = sum(
+        1
+        for order in orders
+        if order.status == "Pending"
+    )
+
+    processing_orders = sum(
+        1
+        for order in orders
+        if order.status == "Processing"
+    )
+
+    shipped_orders = sum(
+        1
+        for order in orders
+        if order.status == "Shipped"
+    )
+
+    delivered_orders = sum(
+        1
+        for order in orders
+        if order.status == "Delivered"
+    )
+
+    # Total amount spent
+    total_spent = sum(
+        order.total_amount
+        for order in orders
+        if order.status != "Cancelled"
+    )
+
+    # Most recent orders
+    recent_orders = sorted(
+        orders,
+        key=lambda order: order.created_at,
+        reverse=True
+    )[:5]
+
+    return render_template(
+        "account.html",
+        total_orders=total_orders,
+        pending_orders=pending_orders,
+        processing_orders=processing_orders,
+        shipped_orders=shipped_orders,
+        delivered_orders=delivered_orders,
+        total_spent=total_spent,
+        recent_orders=recent_orders,
+    )
+
 
 @auth_bp.route("/logout")
 @login_required
