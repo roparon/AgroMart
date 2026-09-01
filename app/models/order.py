@@ -6,12 +6,16 @@ class Order(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    order_code = db.Column(db.String(30), unique=True, nullable=False)
     total_amount = db.Column(db.Float, nullable=False)
     status = db.Column(db.String(50), default="Pending")
     shipping_address = db.Column(db.Text)
     payment_method = db.Column(db.String(50))
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     items = db.relationship("OrderItem", backref="order", lazy=True, cascade="all, delete-orphan")
+
+    def __repr__(self):
+        return f"<Order {self.order_code}>"
 
 class OrderItem(db.Model):
     __tablename__ = "order_items"
