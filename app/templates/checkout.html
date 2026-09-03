@@ -15,10 +15,10 @@
         </a>
     </div>
 
-    {% if cart.items %}
+    {% if checkout_items %}
     <form method="POST" action="{{ url_for('cart.checkout') }}">
         
-        <!-- CSRF TOKEN (FIXED SYNTAX) -->
+        <!-- CSRF TOKEN -->
         {% if csrf_token is defined and csrf_token is callable %}
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         {% elif csrf_token is defined %}
@@ -92,50 +92,59 @@
 
                         <!-- Item mini-list -->
                         <div class="checkout-items mb-3" style="max-height: 280px; overflow-y: auto;">
-                            {% for item in cart.items %}
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <div class="d-flex align-items-center me-2">
-                                        {% if item.product.images %}
-                                            {% set primary_image = item.product.images | selectattr("is_primary", "equalto", true) | first %}
-                                            <img src="{{ primary_image.image_url if primary_image else item.product.images[0].image_url }}" 
-                                                 alt="{{ item.product.name }}" 
-                                                 class="rounded me-3 object-fit-cover" 
-                                                 style="width: 48px; height: 48px;">
-                                        {% else %}
-                                            <span class="fs-4 me-3">🌾</span>
-                                        {% endif %}
-                                        
-                                        <div class="min-w-0">
-                                            <h6 class="mb-0 fw-bold text-truncate" style="max-width: 150px;">{{ item.product.name }}</h6>
-                                            <small class="text-muted">Qty: {{ item.quantity }} × KSh {{ "{:,.2f}".format(item.product.price) }}</small>
+                            {% if buy_now_mode %}
+                                {% for item in checkout_items %}
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <div class="d-flex align-items-center gap-3">
+                                            {% if item.product.images %}
+                                                {% set primary_image = item.product.images | selectattr("is_primary", "equalto", true) | first %}
+                                                <img src="{{ primary_image.image_url if primary_image else item.product.images[0].image_url }}" 
+                                                     alt="{{ item.product.name }}" 
+                                                     width="70" 
+                                                     height="70" 
+                                                     class="rounded-3 object-fit-cover">
+                                            {% endif %}
+                                            <div>
+                                                <div class="fw-semibold">
+                                                    {{ item.product.name }}
+                                                </div>
+                                                <small class="text-muted">
+                                                    Quantity: {{ item.quantity }}
+                                                </small>
+                                            </div>
+                                        </div>
+                                        <div class="fw-bold">
+                                            KSh {{ "{:,.2f}".format(item.subtotal) }}
                                         </div>
                                     </div>
-                                    
-                                    <span class="fw-bold text-nowrap">
-                                        KSh {{ "{:,.2f}".format(item.product.price * item.quantity) }}
-                                    </span>
-                                </div>
-                            {% endfor %}
+                                {% endfor %}
+                            {% else %}
+                                {% for item in checkout_items %}
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <div>
+                                            <div class="fw-semibold">
+                                                {{ item.product.name }}
+                                            </div>
+                                            <small class="text-muted">
+                                                {{ item.quantity }} × KSh {{ "{:,.2f}".format(item.unit_price) }}
+                                            </small>
+                                        </div>
+                                        <div class="fw-bold">
+                                            KSh {{ "{:,.2f}".format(item.subtotal) }}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
                         </div>
 
-                        <hr>
-
-                        <!-- Totals Breakdown -->
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="text-muted">Subtotal</span>
-                            <span class="fw-semibold">KSh {{ "{:,.2f}".format(total) }}</span>
-                        </div>
-
-                        <div class="d-flex justify-content-between mb-3">
-                            <span class="text-muted">Delivery Fee</span>
-                            <span class="text-success fw-semibold small">Calculated on confirmation</span>
-                        </div>
-
-                        <hr>
-
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <strong class="fs-5">Total</strong>
-                            <strong class="text-success fs-4 fw-bold">KSh {{ "{:,.2f}".format(total) }}</strong>
+                        <!-- Total Breakdown -->
+                        <div class="d-flex justify-content-between border-top pt-3 mb-4">
+                            <span class="fw-bold">
+                                Total
+                            </span>
+                            <span class="fw-bold fs-4 text-success">
+                                KSh {{ "{:,.2f}".format(total) }}
+                            </span>
                         </div>
 
                         <button type="submit" class="btn btn-success w-100 btn-lg rounded-3 fw-bold py-3 shadow-sm">

@@ -22,3 +22,23 @@ class Product(db.Model):
 
     def __repr__(self):
         return f"<Product {self.name}>"
+    
+
+    @property
+    def discounted_price(self):
+        from decimal import Decimal
+
+        price = Decimal(str(self.price))
+        discount = Decimal(str(self.discount or 0))
+
+        if discount < 0:
+            discount = Decimal("0")
+
+        if discount > 100:
+            discount = Decimal("100")
+
+        return (
+            price - (price * discount / Decimal("100"))
+        ).quantize(
+            Decimal("0.01")
+        )

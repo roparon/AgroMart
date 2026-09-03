@@ -1,3 +1,6 @@
+from decimal import Decimal
+import uuid
+
 from flask import (
     Blueprint,
     render_template,
@@ -5,6 +8,7 @@ from flask import (
     url_for,
     flash,
     request,
+    session,
 )
 
 from flask_login import (
@@ -13,23 +17,24 @@ from flask_login import (
 )
 
 from app import db
-from app import csrf
-
 from app.models.cart import Cart, CartItem
 from app.models.product import Product
 from app.models.order import Order, OrderItem
+
 
 cart_bp = Blueprint("cart", __name__)
 
 
 # ============================================================
-# VIEW CART
+# HELPER FUNCTIONS
 # ============================================================
 
-@cart_bp.route("/")
-@login_required
-def cart():
+def get_or_create_cart():
+    """
+    Get the logged-in user's cart.
 
+    If the user does not have a cart yet, create one.
+    """
     cart = Cart.query.filter_by(
         user_id=current_user.id
     ).first()
@@ -40,12 +45,99 @@ def cart():
         )
 
         db.session.add(cart)
+        db.session.flush()
+
+    return cart
+
+
+def get_discounted_price(product):
+    """
+    Calculate the final selling price of a product.
+
+    This calculation is always performed on the server.
+    """
+
+    price = Decimal(str(product.price))
+    discount = Decimal(str(product.discount or 0))
+
+    # Protect against invalid discount values.
+    if discount < 0:
+        discount = Decimal("0")
+
+    if discount > 100:
+        discount = Decimal("100")
+
+    discounted_price = price - (
+        price * discount / Decimal("100")
+    )
+
+    return discounted_price.quantize(
+        Decimal("0.01")
+    )
+
+
+def calculate_cart_total(cart):
+    """
+    Calculate the cart total using the current
+    server-side discounted prices.
+    """
+
+    total = Decimal("0.00")
+
+    for item in cart.items:
+        if not item.product:
+            continue
+
+        total += (
+            get_discounted_price(item.product)
+            * item.quantity
+        )
+
+    return total.quantize(
+        Decimal("0.01")
+    )
+
+
+def safe_quantity(value, default=1):
+    """
+    Safely convert a submitted quantity into an integer.
+    """
+
+    try:
+        quantity = int(value)
+
+        if quantity < 1:
+            return default
+
+        return quantity
+
+    except (TypeError, ValueError):
+        return default
+
+
+# ============================================================
+# VIEW CART
+# ============================================================
+
+@cart_bp.route("/")
+@login_required
+def cart():
+
+    cart = get_or_create_cart()
+
+    # Remove products that no longer exist.
+    removed_items = False
+
+    for item in list(cart.items):
+
+        if not item.product:
+            db.session.delete(item)
+            removed_items = True
+
+    if removed_items:
         db.session.commit()
 
-    total = sum(
-        item.product.price * item.quantity
-        for item in cart.items
-    )
+    total = calculate_cart_total(cart)
 
     return render_template(
         "cart.html",
@@ -69,6 +161,24 @@ def add_to_cart(product_id):
         product_id
     )
 
+    # --------------------------------------------------------
+    # PRODUCT AVAILABILITY
+    # --------------------------------------------------------
+
+    if not product.is_active:
+
+        flash(
+            "This product is no longer available.",
+            "danger",
+        )
+
+        return redirect(
+            url_for(
+                "product.product_details",
+                id=product.id,
+            )
+        )
+
     if product.stock <= 0:
 
         flash(
@@ -83,18 +193,38 @@ def add_to_cart(product_id):
             )
         )
 
-    cart = Cart.query.filter_by(
-        user_id=current_user.id
-    ).first()
+    # --------------------------------------------------------
+    # REQUESTED QUANTITY
+    # --------------------------------------------------------
 
-    if not cart:
+    requested_quantity = safe_quantity(
+        request.form.get("quantity", 1)
+    )
 
-        cart = Cart(
-            user_id=current_user.id
+    if requested_quantity > product.stock:
+
+        flash(
+            f"Only {product.stock} unit(s) "
+            f"of {product.name} are available.",
+            "warning",
         )
 
-        db.session.add(cart)
-        db.session.flush()
+        return redirect(
+            url_for(
+                "product.product_details",
+                id=product.id,
+            )
+        )
+
+    # --------------------------------------------------------
+    # GET / CREATE CART
+    # --------------------------------------------------------
+
+    cart = get_or_create_cart()
+
+    # --------------------------------------------------------
+    # FIND EXISTING ITEM
+    # --------------------------------------------------------
 
     cart_item = CartItem.query.filter_by(
         cart_id=cart.id,
@@ -103,10 +233,17 @@ def add_to_cart(product_id):
 
     if cart_item:
 
-        if cart_item.quantity >= product.stock:
+        new_quantity = (
+            cart_item.quantity
+            + requested_quantity
+        )
+
+        if new_quantity > product.stock:
 
             flash(
-                "You cannot add more than the available stock.",
+                f"You can only have up to "
+                f"{product.stock} unit(s) "
+                f"of {product.name} in your cart.",
                 "warning",
             )
 
@@ -117,27 +254,152 @@ def add_to_cart(product_id):
                 )
             )
 
-        cart_item.quantity += 1
+        cart_item.quantity = new_quantity
 
     else:
 
         cart_item = CartItem(
             cart_id=cart.id,
             product_id=product.id,
-            quantity=1,
+            quantity=requested_quantity,
         )
 
         db.session.add(cart_item)
 
-    db.session.commit()
+    # --------------------------------------------------------
+    # SAVE
+    # --------------------------------------------------------
+
+    try:
+
+        db.session.commit()
+
+    except Exception:
+
+        db.session.rollback()
+
+        flash(
+            "Unable to add this product to your cart. "
+            "Please try again.",
+            "danger",
+        )
+
+        return redirect(
+            url_for(
+                "product.product_details",
+                id=product.id,
+            )
+        )
 
     flash(
-        f"{product.name} added to your cart.",
+        f"{requested_quantity} x {product.name} added to your cart.",
         "success",
     )
 
     return redirect(
         url_for("cart.cart")
+    )
+
+
+# ============================================================
+# BUY NOW
+# ============================================================
+
+@cart_bp.route(
+    "/buy-now/<int:product_id>",
+    methods=["POST"]
+)
+@login_required
+def buy_now(product_id):
+
+    product = Product.query.get_or_404(product_id)
+
+    # --------------------------------------------------------
+    # PRODUCT AVAILABILITY
+    # --------------------------------------------------------
+
+    if not product.is_active:
+        flash(
+            "This product is no longer available.",
+            "warning",
+        )
+
+        return redirect(
+            url_for(
+                "product.product_details",
+                id=product.id,
+            )
+        )
+
+    # --------------------------------------------------------
+    # STOCK CHECK
+    # --------------------------------------------------------
+
+    if product.stock <= 0:
+        flash(
+            "This product is currently out of stock.",
+            "danger",
+        )
+
+        return redirect(
+            url_for(
+                "product.product_details",
+                id=product.id,
+            )
+        )
+
+    # --------------------------------------------------------
+    # GET REQUESTED QUANTITY
+    # --------------------------------------------------------
+
+    try:
+        quantity = int(
+            request.form.get(
+                "quantity",
+                1,
+            )
+        )
+    except (TypeError, ValueError):
+        quantity = 1
+
+    # --------------------------------------------------------
+    # QUANTITY VALIDATION
+    # --------------------------------------------------------
+
+    if quantity < 1:
+        quantity = 1
+
+    if quantity > product.stock:
+        flash(
+            f"Only {product.stock} unit(s) of "
+            f"{product.name} are available.",
+            "warning",
+        )
+
+        return redirect(
+            url_for(
+                "product.product_details",
+                id=product.id,
+            )
+        )
+
+    # --------------------------------------------------------
+    # STORE TEMPORARY BUY-NOW ORDER
+    # --------------------------------------------------------
+
+    session["buy_now"] = {
+        "product_id": product.id,
+        "quantity": quantity,
+    }
+
+    session.modified = True
+
+    # --------------------------------------------------------
+    # GO DIRECTLY TO CHECKOUT
+    # --------------------------------------------------------
+
+    return redirect(
+        url_for("cart.checkout")
     )
 
 
@@ -156,6 +418,20 @@ def update_cart(item_id):
         item_id
     )
 
+    # --------------------------------------------------------
+    # SECURITY
+    # --------------------------------------------------------
+
+    if not cart_item.cart:
+        flash(
+            "Cart item not found.",
+            "danger",
+        )
+
+        return redirect(
+            url_for("cart.cart")
+        )
+
     if cart_item.cart.user_id != current_user.id:
 
         flash(
@@ -167,29 +443,99 @@ def update_cart(item_id):
             url_for("cart.cart")
         )
 
-    quantity = int(
-        request.form.get(
-            "quantity",
-            1,
-        )
-    )
+    product = cart_item.product
 
-    if quantity < 1:
+    # --------------------------------------------------------
+    # PRODUCT CHECK
+    # --------------------------------------------------------
+
+    if not product or not product.is_active:
 
         db.session.delete(cart_item)
-
-    elif quantity > cart_item.product.stock:
+        db.session.commit()
 
         flash(
-            "Requested quantity exceeds available stock.",
+            "This product is no longer available "
+            "and was removed from your cart.",
             "warning",
         )
 
-    else:
+        return redirect(
+            url_for("cart.cart")
+        )
 
-        cart_item.quantity = quantity
+    # --------------------------------------------------------
+    # QUANTITY
+    # --------------------------------------------------------
 
-    db.session.commit()
+    quantity = safe_quantity(
+        request.form.get("quantity"),
+        default=1,
+    )
+
+    # --------------------------------------------------------
+    # REMOVE WHEN ZERO / INVALID
+    # --------------------------------------------------------
+
+    raw_quantity = request.form.get(
+        "quantity",
+        ""
+    ).strip()
+
+    try:
+        requested_quantity = int(raw_quantity)
+    except (TypeError, ValueError):
+        requested_quantity = 1
+
+    if requested_quantity <= 0:
+
+        db.session.delete(cart_item)
+
+        db.session.commit()
+
+        flash(
+            f"{product.name} removed from your cart.",
+            "success",
+        )
+
+        return redirect(
+            url_for("cart.cart")
+        )
+
+    # --------------------------------------------------------
+    # STOCK VALIDATION
+    # --------------------------------------------------------
+
+    if quantity > product.stock:
+
+        flash(
+            f"Only {product.stock} unit(s) "
+            f"of {product.name} are available.",
+            "warning",
+        )
+
+        return redirect(
+            url_for("cart.cart")
+        )
+
+    # --------------------------------------------------------
+    # UPDATE
+    # --------------------------------------------------------
+
+    cart_item.quantity = quantity
+
+    try:
+
+        db.session.commit()
+
+    except Exception:
+
+        db.session.rollback()
+
+        flash(
+            "Unable to update your cart.",
+            "danger",
+        )
 
     return redirect(
         url_for("cart.cart")
@@ -211,6 +557,21 @@ def remove_from_cart(item_id):
         item_id
     )
 
+    # --------------------------------------------------------
+    # SECURITY
+    # --------------------------------------------------------
+
+    if not cart_item.cart:
+
+        flash(
+            "Cart item not found.",
+            "danger",
+        )
+
+        return redirect(
+            url_for("cart.cart")
+        )
+
     if cart_item.cart.user_id != current_user.id:
 
         flash(
@@ -221,10 +582,31 @@ def remove_from_cart(item_id):
         return redirect(
             url_for("cart.cart")
         )
-    product_name = cart_item.product.name
+
+    product_name = (
+        cart_item.product.name
+        if cart_item.product
+        else "Product"
+    )
+
     db.session.delete(cart_item)
 
-    db.session.commit()
+    try:
+
+        db.session.commit()
+
+    except Exception:
+
+        db.session.rollback()
+
+        flash(
+            "Unable to remove the item.",
+            "danger",
+        )
+
+        return redirect(
+            url_for("cart.cart")
+        )
 
     flash(
         f"{product_name} removed from your cart.",
@@ -238,73 +620,304 @@ def remove_from_cart(item_id):
 
 # ============================================================
 # CHECKOUT
-# ============================================================
-# ============================================================
-# CHECKOUT
-# ============================================================
+#=========================================================
 
-@cart_bp.route("/checkout", methods=["GET", "POST"])
+@cart_bp.route(
+    "/checkout",
+    methods=["GET", "POST"]
+)
 @login_required
-@csrf.exempt
 def checkout():
 
-    cart = Cart.query.filter_by(
-        user_id=current_user.id
-    ).first()
+    from decimal import Decimal
+    import uuid
 
-    # --------------------------------------------------------
-    # EMPTY CART
-    # --------------------------------------------------------
+    # ========================================================
+    # DETERMINE CHECKOUT MODE
+    # ========================================================
 
-    if not cart or not cart.items:
+    buy_now_data = session.get("buy_now")
 
-        flash(
-            "Your cart is empty.",
-            "warning",
+    buy_now_mode = bool(buy_now_data)
+
+    # ========================================================
+    # BUY NOW CHECKOUT
+    # ========================================================
+
+    if buy_now_mode:
+
+        product_id = buy_now_data.get("product_id")
+        quantity = buy_now_data.get("quantity", 1)
+
+        # ----------------------------------------------------
+        # VALIDATE SESSION DATA
+        # ----------------------------------------------------
+
+        try:
+            product_id = int(product_id)
+            quantity = int(quantity)
+        except (TypeError, ValueError):
+
+            session.pop("buy_now", None)
+
+            flash(
+                "Your Buy Now session has expired. "
+                "Please try again.",
+                "warning",
+            )
+
+            return redirect(
+                url_for("product.products")
+            )
+
+        if quantity < 1:
+            session.pop("buy_now", None)
+
+            flash(
+                "Invalid purchase quantity.",
+                "danger",
+            )
+
+            return redirect(
+                url_for("product.products")
+            )
+
+        # ----------------------------------------------------
+        # GET PRODUCT
+        # ----------------------------------------------------
+
+        product = Product.query.get(product_id)
+
+        if not product or not product.is_active:
+
+            session.pop("buy_now", None)
+
+            flash(
+                "This product is no longer available.",
+                "danger",
+            )
+
+            return redirect(
+                url_for("product.products")
+            )
+
+        # ----------------------------------------------------
+        # STOCK VALIDATION
+        # ----------------------------------------------------
+
+        if product.stock < quantity:
+
+            session.pop("buy_now", None)
+
+            flash(
+                f"Only {product.stock} unit(s) of "
+                f"{product.name} are currently available.",
+                "warning",
+            )
+
+            return redirect(
+                url_for(
+                    "product.product_details",
+                    id=product.id,
+                )
+            )
+
+        # ----------------------------------------------------
+        # DISCOUNTED PRICE
+        # ----------------------------------------------------
+
+        price = Decimal(str(product.price))
+
+        discount = Decimal(
+            str(product.discount or 0)
         )
 
-        return redirect(
-            url_for("cart.cart")
+        if discount < 0:
+            discount = Decimal("0")
+
+        if discount > 100:
+            discount = Decimal("100")
+
+        unit_price = (
+            price
+            - (
+                price
+                * discount
+                / Decimal("100")
+            )
+        ).quantize(
+            Decimal("0.01")
         )
 
-    # --------------------------------------------------------
-    # CALCULATE TOTAL
-    # --------------------------------------------------------
+        total = (
+            unit_price
+            * Decimal(quantity)
+        ).quantize(
+            Decimal("0.01")
+        )
 
-    total = sum(
-        item.product.price * item.quantity
-        for item in cart.items
-    )
+        # ----------------------------------------------------
+        # CREATE BUY-NOW ITEMS FOR TEMPLATE
+        # ----------------------------------------------------
 
-    # --------------------------------------------------------
+        checkout_items = [
+            {
+                "product": product,
+                "quantity": quantity,
+                "unit_price": unit_price,
+                "subtotal": total,
+            }
+        ]
+
+    # ========================================================
+    # NORMAL CART CHECKOUT
+    # ========================================================
+
+    else:
+
+        cart = Cart.query.filter_by(
+            user_id=current_user.id
+        ).first()
+
+        if not cart or not cart.items:
+
+            flash(
+                "Your cart is empty.",
+                "warning",
+            )
+
+            return redirect(
+                url_for("cart.cart")
+            )
+
+        checkout_items = []
+
+        total = Decimal("0")
+
+        # ----------------------------------------------------
+        # VALIDATE CART
+        # ----------------------------------------------------
+
+        for cart_item in cart.items:
+
+            product = cart_item.product
+
+            if not product or not product.is_active:
+
+                flash(
+                    "One of the products in your cart "
+                    "is no longer available.",
+                    "danger",
+                )
+
+                return redirect(
+                    url_for("cart.cart")
+                )
+
+            if cart_item.quantity < 1:
+
+                flash(
+                    "Invalid quantity detected in your cart.",
+                    "danger",
+                )
+
+                return redirect(
+                    url_for("cart.cart")
+                )
+
+            if cart_item.quantity > product.stock:
+
+                flash(
+                    f"Only {product.stock} unit(s) of "
+                    f"{product.name} are available.",
+                    "warning",
+                )
+
+                return redirect(
+                    url_for("cart.cart")
+                )
+
+            # ------------------------------------------------
+            # CALCULATE DISCOUNTED PRICE
+            # ------------------------------------------------
+
+            price = Decimal(
+                str(product.price)
+            )
+
+            discount = Decimal(
+                str(product.discount or 0)
+            )
+
+            if discount < 0:
+                discount = Decimal("0")
+
+            if discount > 100:
+                discount = Decimal("100")
+
+            unit_price = (
+                price
+                - (
+                    price
+                    * discount
+                    / Decimal("100")
+                )
+            ).quantize(
+                Decimal("0.01")
+            )
+
+            subtotal = (
+                unit_price
+                * Decimal(cart_item.quantity)
+            ).quantize(
+                Decimal("0.01")
+            )
+
+            checkout_items.append(
+                {
+                    "cart_item": cart_item,
+                    "product": product,
+                    "quantity": cart_item.quantity,
+                    "unit_price": unit_price,
+                    "subtotal": subtotal,
+                }
+            )
+
+            total += subtotal
+
+        total = total.quantize(
+            Decimal("0.01")
+        )
+
+    # ========================================================
     # PLACE ORDER
-    # --------------------------------------------------------
+    # ========================================================
 
     if request.method == "POST":
 
         full_name = request.form.get(
             "full_name",
-            ""
+            "",
         ).strip()
 
         phone = request.form.get(
             "phone",
-            ""
+            "",
         ).strip()
 
         email = request.form.get(
             "email",
-            ""
+            "",
         ).strip()
 
         shipping_address = request.form.get(
             "shipping_address",
-            ""
+            "",
         ).strip()
 
         payment_method = request.form.get(
             "payment_method",
-            ""
+            "",
         ).strip()
 
         # ----------------------------------------------------
@@ -312,6 +925,7 @@ def checkout():
         # ----------------------------------------------------
 
         if not full_name:
+
             flash(
                 "Please enter your full name.",
                 "danger",
@@ -322,6 +936,7 @@ def checkout():
             )
 
         if not phone:
+
             flash(
                 "Please enter your phone number.",
                 "danger",
@@ -332,6 +947,7 @@ def checkout():
             )
 
         if not email:
+
             flash(
                 "Please enter your email address.",
                 "danger",
@@ -342,6 +958,7 @@ def checkout():
             )
 
         if not shipping_address:
+
             flash(
                 "Please enter your delivery address.",
                 "danger",
@@ -366,40 +983,42 @@ def checkout():
             )
 
         # ----------------------------------------------------
-        # VERIFY STOCK BEFORE CREATING ORDER
+        # FINAL STOCK CHECK
         # ----------------------------------------------------
+        # This happens again immediately before creating
+        # the order so we don't trust an old checkout page.
 
-        for cart_item in cart.items:
+        for item in checkout_items:
 
-            product = cart_item.product
+            product = item["product"]
+            quantity = item["quantity"]
 
-            if not product:
+            if not product.is_active:
+
                 flash(
-                    "One of the products in your cart is no longer available.",
+                    f"{product.name} is no longer available.",
                     "danger",
                 )
 
                 return redirect(
-                    url_for("cart.cart")
+                    url_for("cart.checkout")
                 )
 
-            if product.stock < cart_item.quantity:
+            if product.stock < quantity:
 
                 flash(
                     f"Only {product.stock} unit(s) of "
-                    f"{product.name} are available.",
+                    f"{product.name} remain.",
                     "warning",
                 )
 
                 return redirect(
-                    url_for("cart.cart")
+                    url_for("cart.checkout")
                 )
 
         # ----------------------------------------------------
         # GENERATE UNIQUE ORDER CODE
         # ----------------------------------------------------
-
-        import uuid
 
         while True:
 
@@ -421,7 +1040,7 @@ def checkout():
         order = Order(
             user_id=current_user.id,
             order_code=order_code,
-            total_amount=total,
+            total_amount=float(total),
             status="Pending",
             shipping_address=shipping_address,
             payment_method=payment_method,
@@ -429,43 +1048,68 @@ def checkout():
 
         db.session.add(order)
 
-        # We need the order ID before creating OrderItems
+        # Need order ID before OrderItems
         db.session.flush()
 
-        # ----------------------------------------------------
+        # ====================================================
         # CREATE ORDER ITEMS
-        # ----------------------------------------------------
+        # ====================================================
 
-        for cart_item in cart.items:
+        for item in checkout_items:
 
-            product = cart_item.product
+            product = item["product"]
+            quantity = item["quantity"]
+            unit_price = item["unit_price"]
 
             order_item = OrderItem(
                 order_id=order.id,
                 product_id=product.id,
-                quantity=cart_item.quantity,
-                price=product.price,
+                quantity=quantity,
+                price=float(unit_price),
             )
 
             db.session.add(order_item)
 
             # ------------------------------------------------
-            # REDUCE PRODUCT STOCK
+            # REDUCE STOCK
             # ------------------------------------------------
 
-            product.stock -= cart_item.quantity
+            product.stock -= quantity
 
-        # ----------------------------------------------------
-        # CLEAR CART
-        # ----------------------------------------------------
+        # ====================================================
+        # CLEAR ONLY THE CORRECT PURCHASE SOURCE
+        # ====================================================
 
-        for cart_item in list(cart.items):
+        if buy_now_mode:
 
-            db.session.delete(cart_item)
+            # IMPORTANT:
+            # Do NOT touch the user's normal cart.
 
-        # ----------------------------------------------------
-        # SAVE EVERYTHING
-        # ----------------------------------------------------
+            session.pop(
+                "buy_now",
+                None,
+            )
+
+        else:
+
+            # Normal checkout:
+            # clear the cart as before.
+
+            for item in checkout_items:
+
+                cart_item = item.get(
+                    "cart_item"
+                )
+
+                if cart_item:
+
+                    db.session.delete(
+                        cart_item
+                    )
+
+        # ====================================================
+        # SAVE TRANSACTION
+        # ====================================================
 
         try:
 
@@ -475,9 +1119,17 @@ def checkout():
 
             db.session.rollback()
 
+            # Restore Buy Now session if transaction failed
+            if buy_now_mode:
+
+                session["buy_now"] = {
+                    "product_id": product_id,
+                    "quantity": quantity,
+                }
+
             flash(
-                "Something went wrong while placing your order. "
-                "Please try again.",
+                "Something went wrong while placing "
+                "your order. Please try again.",
                 "danger",
             )
 
@@ -485,9 +1137,9 @@ def checkout():
                 url_for("cart.checkout")
             )
 
-        # ----------------------------------------------------
+        # ====================================================
         # ORDER SUCCESS
-        # ----------------------------------------------------
+        # ====================================================
 
         flash(
             f"Order {order.order_code} placed successfully!",
@@ -501,25 +1153,29 @@ def checkout():
             )
         )
 
-    # --------------------------------------------------------
-    # SHOW CHECKOUT PAGE
-    # --------------------------------------------------------
+    # ========================================================
+    # SHOW CHECKOUT
+    # ========================================================
 
     return render_template(
         "checkout.html",
-        cart=cart,
+        cart=(
+            None
+            if buy_now_mode
+            else cart
+        ),
+        checkout_items=checkout_items,
         total=total,
+        buy_now_mode=buy_now_mode,
     )
 
 # ============================================================
 # ORDER CONFIRMATION
 # ============================================================
 
-# ============================================================
-# ORDER CONFIRMATION
-# ============================================================
-
-@cart_bp.route("/order/<int:order_id>/confirmation")
+@cart_bp.route(
+    "/order/<int:order_id>/confirmation"
+)
 @login_required
 def order_confirmation(order_id):
 
@@ -529,7 +1185,6 @@ def order_confirmation(order_id):
 
     # --------------------------------------------------------
     # SECURITY
-    # Make sure the order belongs to the logged-in user
     # --------------------------------------------------------
 
     if order.user_id != current_user.id:
@@ -548,7 +1203,8 @@ def order_confirmation(order_id):
         order=order,
     )
 
-    # ============================================================
+
+# ============================================================
 # MY ORDERS
 # ============================================================
 
@@ -556,22 +1212,30 @@ def order_confirmation(order_id):
 @login_required
 def my_orders():
 
-    orders = Order.query.filter_by(
-        user_id=current_user.id
-    ).order_by(
-        Order.created_at.desc()
-    ).all()
+    orders = (
+        Order.query
+        .filter_by(
+            user_id=current_user.id
+        )
+        .order_by(
+            Order.created_at.desc()
+        )
+        .all()
+    )
 
     return render_template(
         "my_orders.html",
         orders=orders,
     )
 
-    # ============================================================
+
+# ============================================================
 # ORDER DETAILS
 # ============================================================
 
-@cart_bp.route("/orders/<int:order_id>")
+@cart_bp.route(
+    "/orders/<int:order_id>"
+)
 @login_required
 def order_details(order_id):
 
@@ -579,7 +1243,9 @@ def order_details(order_id):
         order_id
     )
 
+    # --------------------------------------------------------
     # SECURITY CHECK
+    # --------------------------------------------------------
 
     if order.user_id != current_user.id:
 

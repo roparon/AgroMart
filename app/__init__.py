@@ -48,6 +48,7 @@ def create_app():
     from app.routes.admin.customers import customers_bp
     from app.routes.admin.products import products_bp
     from app.routes.admin.orders import orders_bp
+    from app.routes.wishlist import wishlist_bp
 
 
 
@@ -61,6 +62,7 @@ def create_app():
     app.register_blueprint(customers_bp, url_prefix="/admin/customers")
     app.register_blueprint(products_bp, url_prefix="/admin/products")
     app.register_blueprint(orders_bp, url_prefix="/admin/orders")
+    app.register_blueprint(wishlist_bp, url_prefix="/wishlist")
 
 
     @app.context_processor

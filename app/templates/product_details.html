@@ -4,304 +4,3964 @@
     {{ product.name }} - AgroMart
 {% endblock %}
 
+
 {% block content %}
 
-<!-- CUSTOM STYLES FOR OVERLAY & GALLERY HOVER EFFECTS -->
 <style>
-    .product-hero-card {
-        min-height: 520px;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+/* ============================================================
+   AGROMART — PRODUCT DETAILS
+   MOBILE FIRST / RESPONSIVE / PROFESSIONAL
+============================================================ */
+
+:root {
+    --agro-green: #15803d;
+    --agro-green-dark: #166534;
+    --agro-green-light: #dcfce7;
+
+    --agro-yellow: #f59e0b;
+    --agro-yellow-light: #fef3c7;
+
+    --agro-red: #dc2626;
+    --agro-red-light: #fee2e2;
+
+    --agro-text: #111827;
+    --agro-muted: #6b7280;
+    --agro-border: #e5e7eb;
+    --agro-soft: #f8fafc;
+
+    --agro-radius: 18px;
+
+    --agro-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.06);
+
+    --agro-shadow-lg:
+        0 18px 45px rgba(0, 0, 0, 0.10);
+}
+
+
+/* ============================================================
+   PAGE
+============================================================ */
+
+.product-details-page {
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+}
+
+
+/* ============================================================
+   BREADCRUMB
+============================================================ */
+
+.product-breadcrumb {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 6px;
+
+    margin-bottom: 14px;
+
+    color: var(--agro-muted);
+
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.product-breadcrumb a {
+    color: var(--agro-green);
+
+    text-decoration: none;
+
+    font-weight: 700;
+}
+
+.product-breadcrumb a:hover {
+    color: var(--agro-green-dark);
+
+    text-decoration: underline;
+}
+
+.product-breadcrumb .separator {
+    color: #9ca3af;
+}
+
+.product-breadcrumb .current {
+    max-width: 210px;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+    color: #374151;
+
+    font-weight: 600;
+}
+
+
+/* ============================================================
+   MAIN GRID
+============================================================ */
+
+.product-details-row {
+    align-items: stretch;
+}
+
+
+/* ============================================================
+   GALLERY
+============================================================ */
+
+.product-gallery-card {
+    position: relative;
+
+    width: 100%;
+
+    min-height: 390px;
+
+    overflow: hidden;
+
+    background: #111827;
+
+    border-radius: var(--agro-radius);
+
+    box-shadow: var(--agro-shadow-lg);
+}
+
+.product-main-image-wrapper {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background: #111827;
+
+    overflow: hidden;
+}
+
+.product-main-image {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+
+    cursor: zoom-in;
+
+    user-select: none;
+
+    -webkit-user-drag: none;
+
+    transition:
+        transform 0.35s ease,
+        opacity 0.2s ease;
+}
+
+.product-main-image:hover {
+    transform: scale(1.025);
+}
+
+
+/* ============================================================
+   IMAGE FALLBACK
+============================================================ */
+
+.product-image-fallback {
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #374151,
+            #111827
+        );
+
+    color: #ffffff;
+
+    font-size: 65px;
+}
+
+
+/* ============================================================
+   IMAGE GRADIENT
+============================================================ */
+
+.product-gallery-gradient {
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 1;
+
+    pointer-events: none;
+
+    background:
+        linear-gradient(
+            to top,
+            rgba(0, 0, 0, 0.92) 0%,
+            rgba(0, 0, 0, 0.62) 24%,
+            rgba(0, 0, 0, 0.12) 65%,
+            rgba(0, 0, 0, 0.18) 100%
+        );
+}
+
+
+/* ============================================================
+   GALLERY TOP BAR
+============================================================ */
+
+.gallery-top-bar {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    z-index: 5;
+
+    padding: 13px;
+
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 8px;
+}
+
+.gallery-brand {
+    max-width: 62%;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+.gallery-discount {
+    flex-shrink: 0;
+}
+
+
+/* ============================================================
+   GALLERY NAVIGATION
+============================================================ */
+
+.gallery-navigation {
+    position: absolute;
+
+    top: 50%;
+    left: 0;
+    right: 0;
+
+    z-index: 5;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 0 9px;
+
+    transform: translateY(-50%);
+
+    pointer-events: none;
+}
+
+.gallery-nav-btn {
+    width: 40px;
+    height: 40px;
+
+    flex-shrink: 0;
+
+    border: 0;
+
+    border-radius: 50%;
+
+    background: rgba(0, 0, 0, 0.58);
+
+    color: #ffffff;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    cursor: pointer;
+
+    pointer-events: auto;
+
+    backdrop-filter: blur(6px);
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.gallery-nav-btn:hover {
+    background: rgba(0, 0, 0, 0.82);
+
+    transform: scale(1.05);
+}
+
+.gallery-nav-btn:focus-visible {
+    outline: 3px solid rgba(255, 193, 7, 0.8);
+
+    outline-offset: 3px;
+}
+
+
+/* ============================================================
+   GALLERY COUNTER
+============================================================ */
+
+.gallery-counter {
+    position: absolute;
+
+    top: 60px;
+    right: 13px;
+
+    z-index: 5;
+
+    padding: 5px 9px;
+
+    border-radius: 50px;
+
+    background: rgba(0, 0, 0, 0.55);
+
+    color: #ffffff;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    backdrop-filter: blur(5px);
+}
+
+
+/* ============================================================
+   GALLERY BOTTOM
+============================================================ */
+
+.gallery-bottom {
+    position: absolute;
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    z-index: 4;
+
+    padding:
+        15px
+        15px
+        78px;
+
+    color: #ffffff;
+}
+
+.gallery-category {
+    display: inline-flex;
+
+    align-items: center;
+
+    max-width: 100%;
+
+    margin-bottom: 7px;
+
+    padding: 5px 9px;
+
+    border-radius: 50px;
+
+    background: rgba(220, 252, 231, 0.96);
+
+    color: var(--agro-green-dark);
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+.gallery-product-name {
+    margin: 0;
+
+    color: #ffffff;
+
+    font-size: 1.25rem;
+
+    font-weight: 850;
+
+    line-height: 1.15;
+}
+
+
+/* ============================================================
+   THUMBNAILS
+============================================================ */
+
+.product-thumbnails-wrapper {
+    position: absolute;
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    z-index: 6;
+
+    padding:
+        0
+        10px
+        10px;
+
+    pointer-events: none;
+}
+
+.product-thumbnails {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    overflow-x: auto;
+
+    padding: 2px;
+
+    scrollbar-width: thin;
+
+    pointer-events: auto;
+}
+
+.product-thumbnails::-webkit-scrollbar {
+    height: 3px;
+}
+
+.product-thumbnail {
+    width: 45px;
+    height: 45px;
+
+    flex: 0 0 auto;
+
+    padding: 0;
+
+    border: 2px solid rgba(255, 255, 255, 0.55);
+
+    border-radius: 8px;
+
+    overflow: hidden;
+
+    background: #111827;
+
+    cursor: pointer;
+
+    opacity: 0.70;
+
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.product-thumbnail:hover {
+    opacity: 1;
+
+    transform: translateY(-2px);
+}
+
+.product-thumbnail.active {
+    opacity: 1;
+
+    border-color: #ffc107;
+
+    box-shadow:
+        0 0 0 2px rgba(255, 193, 7, 0.25);
+}
+
+.product-thumbnail img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+}
+
+
+/* ============================================================
+   PRODUCT INFORMATION CARD
+============================================================ */
+
+.product-info-card {
+    height: 100%;
+
+    padding: 18px;
+
+    background: #ffffff;
+
+    border: 1px solid var(--agro-border);
+
+    border-radius: var(--agro-radius);
+
+    box-shadow: var(--agro-shadow);
+}
+
+
+/* ============================================================
+   META
+============================================================ */
+
+.product-meta {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 8px;
+
+    margin-bottom: 14px;
+}
+
+.product-sku {
+    width: 100%;
+
+    min-width: 0;
+
+    color: var(--agro-muted);
+
+    font-size: 12px;
+}
+
+.product-sku strong {
+    color: #374151;
+}
+
+.sku-copy-btn {
+    border: 0;
+
+    background: transparent;
+
+    color: var(--agro-green);
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    padding: 2px 0;
+}
+
+.sku-copy-btn:hover {
+    color: var(--agro-green-dark);
+
+    text-decoration: underline;
+}
+
+.stock-badge {
+    align-self: flex-start;
+
+    flex-shrink: 0;
+}
+
+
+/* ============================================================
+   PRODUCT TITLE
+============================================================ */
+
+.product-title {
+    margin: 0 0 8px;
+
+    color: var(--agro-text);
+
+    font-size: 1.55rem;
+
+    font-weight: 850;
+
+    line-height: 1.15;
+}
+
+.product-brand {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    margin-bottom: 17px;
+
+    color: var(--agro-muted);
+
+    font-size: 13px;
+
+    font-weight: 650;
+}
+
+.product-brand i {
+    color: #16a34a;
+}
+
+
+/* ============================================================
+   PRICE CARD
+============================================================ */
+
+.product-price-section {
+    margin-bottom: 20px;
+
+    padding: 15px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f8fafc,
+            #f0fdf4
+        );
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 15px;
+}
+
+.price-label {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: var(--agro-muted);
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.04em;
+}
+
+.price-line {
+    display: flex;
+
+    align-items: baseline;
+
+    flex-wrap: wrap;
+
+    gap: 6px;
+}
+
+.current-price {
+    color: var(--agro-green);
+
+    font-size: 1.65rem;
+
+    font-weight: 900;
+
+    line-height: 1.1;
+}
+
+.original-price {
+    color: #9ca3af;
+
+    font-size: 12px;
+
+    text-decoration: line-through;
+}
+
+.save-badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 4px 7px;
+
+    background: var(--agro-red-light);
+
+    color: #b91c1c;
+
+    border-radius: 50px;
+
+    font-size: 10px;
+
+    font-weight: 850;
+}
+
+.savings-text {
+    margin-top: 7px;
+
+    color: #15803d;
+
+    font-size: 11px;
+
+    font-weight: 700;
+}
+
+
+/* ============================================================
+   DESCRIPTION
+============================================================ */
+
+.section-title {
+    margin: 0 0 8px;
+
+    color: var(--agro-text);
+
+    font-size: 1rem;
+
+    font-weight: 850;
+}
+
+.product-description {
+    color: #4b5563;
+
+    font-size: 13px;
+
+    line-height: 1.75;
+
+    white-space: pre-line;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* ============================================================
+   PRODUCT INFO GRID
+============================================================ */
+
+.product-info-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 8px;
+
+    margin-top: 19px;
+
+    margin-bottom: 20px;
+}
+
+.info-item {
+    min-width: 0;
+
+    padding: 11px;
+
+    background: #f9fafb;
+
+    border: 1px solid #f0f1f3;
+
+    border-radius: 11px;
+}
+
+.info-item-label {
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #9ca3af;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.05em;
+}
+
+.info-item-value {
+    display: block;
+
+    color: #374151;
+
+    font-size: 11px;
+
+    font-weight: 750;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+/* ============================================================
+   PURCHASE SECTION
+============================================================ */
+
+.purchase-section {
+    margin-top: auto;
+
+    padding-top: 18px;
+
+    border-top: 1px solid var(--agro-border);
+}
+
+
+/* ============================================================
+   QUANTITY ROW
+============================================================ */
+
+.quantity-row {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 11px;
+}
+
+.quantity-label {
+    color: #374151;
+
+    font-size: 12px;
+
+    font-weight: 850;
+}
+
+.quantity-stock {
+    color: #9ca3af;
+
+    font-size: 10px;
+
+    font-weight: 600;
+}
+
+
+/* ============================================================
+   QUANTITY CONTROL
+============================================================ */
+
+.quantity-control {
+    display: inline-flex;
+
+    align-items: center;
+
+    height: 44px;
+
+    overflow: hidden;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 11px;
+
+    background: #ffffff;
+}
+
+.quantity-btn {
+    width: 40px;
+    height: 100%;
+
+    border: 0;
+
+    background: #f3f4f6;
+
+    color: #374151;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    cursor: pointer;
+
+    font-size: 15px;
+
+    font-weight: 900;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+.quantity-btn:hover:not(:disabled) {
+    background: var(--agro-green-light);
+
+    color: var(--agro-green);
+}
+
+.quantity-btn:disabled {
+    opacity: 0.4;
+
+    cursor: not-allowed;
+}
+
+.quantity-input {
+    width: 48px;
+    height: 100%;
+
+    padding: 0;
+
+    border: 0;
+
+    border-left: 1px solid #e5e7eb;
+
+    border-right: 1px solid #e5e7eb;
+
+    outline: none;
+
+    background: #ffffff;
+
+    color: #111827;
+
+    text-align: center;
+
+    font-size: 14px;
+
+    font-weight: 850;
+
+    appearance: textfield;
+
+    -moz-appearance: textfield;
+}
+
+.quantity-input::-webkit-inner-spin-button,
+.quantity-input::-webkit-outer-spin-button {
+    margin: 0;
+
+    appearance: none;
+}
+
+.quantity-input:focus {
+    box-shadow:
+        inset 0 0 0 2px rgba(21, 128, 61, 0.15);
+}
+
+
+/* ============================================================
+   ACTION BUTTONS
+============================================================ */
+
+.purchase-action-grid {
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 8px;
+}
+
+.purchase-action-form {
+    margin: 0;
+}
+
+.add-cart-btn,
+.buy-now-btn {
+    width: 100%;
+
+    min-height: 50px;
+
+    border-radius: 12px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    font-size: 13px;
+
+    font-weight: 850;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.add-cart-btn {
+    box-shadow:
+        0 5px 15px rgba(25, 135, 84, 0.17);
+}
+
+.add-cart-btn:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 8px 20px rgba(25, 135, 84, 0.25);
+}
+
+.buy-now-btn {
+    background: #ffc107;
+
+    border: 1px solid #ffc107;
+
+    color: #111827;
+
+    box-shadow:
+        0 5px 15px rgba(245, 158, 11, 0.16);
+}
+
+.buy-now-btn:hover {
+    background: #ffca2c;
+
+    border-color: #ffca2c;
+
+    color: #111827;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 8px 20px rgba(245, 158, 11, 0.24);
+}
+
+
+/* ============================================================
+   WISHLIST
+============================================================ */
+
+.wishlist-form {
+    margin: 8px 0 0;
+}
+
+.wishlist-btn {
+    width: 100%;
+
+    min-height: 45px;
+
+    border-radius: 11px;
+
+    border: 1px solid #e5e7eb;
+
+    background: #ffffff;
+
+    color: #374151;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    cursor: pointer;
+
+    font-size: 12px;
+
+    font-weight: 750;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.wishlist-btn:hover {
+    background: #fff1f2;
+
+    border-color: #fecdd3;
+
+    color: #dc2626;
+}
+
+.wishlist-btn i {
+    font-size: 16px;
+}
+
+
+/* ============================================================
+   SHARE
+============================================================ */
+
+.share-product-row {
+    display: flex;
+
+    justify-content: center;
+
+    margin-top: 8px;
+}
+
+.share-btn {
+    border: 0;
+
+    background: transparent;
+
+    color: #6b7280;
+
+    padding: 6px 10px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-size: 11px;
+
+    font-weight: 700;
+}
+
+.share-btn:hover {
+    background: #f3f4f6;
+
+    color: var(--agro-green);
+}
+
+
+/* ============================================================
+   DELIVERY NOTE
+============================================================ */
+
+.delivery-note {
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: center;
+
+    gap: 6px;
+
+    margin-top: 10px;
+
+    color: #6b7280;
+
+    font-size: 10px;
+
+    line-height: 1.5;
+
+    text-align: center;
+}
+
+.delivery-note i {
+    color: #16a34a;
+
+    flex-shrink: 0;
+
+    margin-top: 2px;
+}
+
+
+/* ============================================================
+   TRUST FEATURES
+============================================================ */
+
+.trust-features {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 6px;
+
+    margin-top: 12px;
+}
+
+.trust-feature {
+    min-width: 0;
+
+    padding: 9px 4px;
+
+    text-align: center;
+
+    background: #f9fafb;
+
+    border-radius: 10px;
+}
+
+.trust-feature i {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #16a34a;
+
+    font-size: 15px;
+}
+
+.trust-feature span {
+    display: block;
+
+    color: #6b7280;
+
+    font-size: 8px;
+
+    font-weight: 750;
+
+    line-height: 1.25;
+}
+
+
+/* ============================================================
+   LIGHTBOX
+============================================================ */
+
+.image-lightbox {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 9999;
+
+    display: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 12px;
+
+    background: rgba(0, 0, 0, 0.95);
+}
+
+.image-lightbox.show {
+    display: flex;
+}
+
+.lightbox-content {
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+
+    max-width: 1500px;
+    max-height: 950px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+.lightbox-image {
+    max-width: 94%;
+
+    max-height: 82vh;
+
+    object-fit: contain;
+
+    border-radius: 7px;
+
+    user-select: none;
+
+    -webkit-user-drag: none;
+}
+
+.lightbox-close,
+.lightbox-prev,
+.lightbox-next {
+    position: absolute;
+
+    z-index: 3;
+
+    width: 42px;
+    height: 42px;
+
+    border: 0;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: rgba(255, 255, 255, 0.12);
+
+    color: #ffffff;
+
+    cursor: pointer;
+
+    backdrop-filter: blur(6px);
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.lightbox-close:hover,
+.lightbox-prev:hover,
+.lightbox-next:hover {
+    background: rgba(255, 255, 255, 0.24);
+}
+
+.lightbox-close {
+    top: 10px;
+    right: 10px;
+}
+
+.lightbox-prev {
+    left: 5px;
+    top: 50%;
+
+    transform: translateY(-50%);
+}
+
+.lightbox-next {
+    right: 5px;
+    top: 50%;
+
+    transform: translateY(-50%);
+}
+
+.lightbox-prev:hover,
+.lightbox-next:hover {
+    transform:
+        translateY(-50%)
+        scale(1.05);
+}
+
+.lightbox-counter {
+    position: absolute;
+
+    left: 50%;
+    bottom: 12px;
+
+    transform: translateX(-50%);
+
+    padding: 5px 10px;
+
+    background: rgba(0, 0, 0, 0.55);
+
+    color: #ffffff;
+
+    border-radius: 50px;
+
+    font-size: 10px;
+
+    font-weight: 800;
+}
+
+
+/* ============================================================
+   COPY FEEDBACK
+============================================================ */
+
+.copy-feedback {
+    position: fixed;
+
+    left: 50%;
+    bottom: 20px;
+
+    z-index: 10000;
+
+    padding: 9px 14px;
+
+    background: #111827;
+
+    color: #ffffff;
+
+    border-radius: 50px;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.25);
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transform:
+        translate(-50%, 15px);
+
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
+}
+
+.copy-feedback.show {
+    opacity: 1;
+
+    transform:
+        translate(-50%, 0);
+}
+
+
+/* ============================================================
+   TABLET
+============================================================ */
+
+@media (min-width: 576px) {
+
+    .product-gallery-card {
+        min-height: 500px;
     }
-    .product-hero-card:hover {
-        transform: scale(1.01);
-        box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.25) !important;
+
+    .gallery-bottom {
+        padding:
+            20px
+            20px
+            90px;
     }
-    /* Gradient backdrop for overlay readability */
-    .hero-overlay-gradient {
-        background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.6) 50%, rgba(0, 0, 0, 0.2) 80%, transparent 100%);
+
+    .gallery-product-name {
+        font-size: 1.55rem;
     }
-    .thumbnail-btn {
-        width: 70px;
-        height: 70px;
-        transition: transform 0.2s ease;
+
+    .product-thumbnail {
+        width: 55px;
+        height: 55px;
     }
-    .thumbnail-btn:hover {
-        transform: scale(1.08);
+
+    .product-info-card {
+        padding: 24px;
     }
+
+    .product-title {
+        font-size: 1.8rem;
+    }
+
+    .current-price {
+        font-size: 1.85rem;
+    }
+
+    .quantity-control {
+        height: 46px;
+    }
+
+}
+
+
+/* ============================================================
+   DESKTOP
+============================================================ */
+
+@media (min-width: 768px) {
+
+    .product-details-page {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    .product-breadcrumb {
+        margin-bottom: 20px;
+
+        font-size: 13px;
+    }
+
+    .product-breadcrumb .current {
+        max-width: 320px;
+    }
+
+    .product-gallery-card {
+        min-height: 600px;
+
+        border-radius: 22px;
+    }
+
+    .gallery-top-bar {
+        padding: 18px;
+    }
+
+    .gallery-counter {
+        top: 75px;
+        right: 18px;
+
+        font-size: 11px;
+    }
+
+    .gallery-navigation {
+        padding: 0 15px;
+    }
+
+    .gallery-nav-btn {
+        width: 46px;
+        height: 46px;
+    }
+
+    .gallery-bottom {
+        padding:
+            25px
+            25px
+            100px;
+    }
+
+    .gallery-product-name {
+        font-size: 2rem;
+    }
+
+    .gallery-category {
+        font-size: 11px;
+    }
+
+    .product-thumbnails-wrapper {
+        padding:
+            0
+            24px
+            20px;
+    }
+
+    .product-thumbnail {
+        width: 62px;
+        height: 62px;
+
+        border-radius: 10px;
+    }
+
+    .product-info-card {
+        padding: 30px;
+
+        border-radius: 22px;
+    }
+
+    .product-meta {
+        flex-direction: row;
+
+        align-items: center;
+
+        justify-content: space-between;
+    }
+
+    .product-sku {
+        width: auto;
+    }
+
+    .stock-badge {
+        align-self: auto;
+    }
+
+    .product-title {
+        font-size: 2.15rem;
+    }
+
+    .product-brand {
+        font-size: 14px;
+    }
+
+    .product-price-section {
+        padding: 18px;
+    }
+
+    .current-price {
+        font-size: 2.15rem;
+    }
+
+    .product-description {
+        font-size: 14px;
+    }
+
+    .product-info-grid {
+        gap: 10px;
+    }
+
+    .info-item {
+        padding: 13px;
+    }
+
+    .info-item-label {
+        font-size: 10px;
+    }
+
+    .info-item-value {
+        font-size: 12px;
+    }
+
+    .quantity-label {
+        font-size: 13px;
+    }
+
+    .quantity-stock {
+        font-size: 11px;
+    }
+
+    .quantity-control {
+        height: 48px;
+    }
+
+    .quantity-btn {
+        width: 44px;
+    }
+
+    .quantity-input {
+        width: 55px;
+    }
+
+    .add-cart-btn,
+    .buy-now-btn {
+        min-height: 54px;
+
+        font-size: 14px;
+    }
+
+    .wishlist-btn {
+        min-height: 48px;
+
+        font-size: 12px;
+    }
+
+    .delivery-note {
+        font-size: 11px;
+    }
+
+    .trust-feature {
+        padding: 11px 7px;
+    }
+
+    .trust-feature i {
+        font-size: 17px;
+    }
+
+    .trust-feature span {
+        font-size: 10px;
+    }
+
+}
+
+
+/* ============================================================
+   LARGE DESKTOP
+============================================================ */
+
+@media (min-width: 1200px) {
+
+    .product-details-page {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .product-gallery-card {
+        min-height: 680px;
+    }
+
+    .product-info-card {
+        padding: 34px;
+    }
+
+    .product-title {
+        font-size: 2.35rem;
+    }
+
+}
+
+
+/* ============================================================
+   VERY SMALL PHONES
+============================================================ */
+
+@media (max-width: 360px) {
+
+    .product-gallery-card {
+        min-height: 350px;
+    }
+
+    .product-title {
+        font-size: 1.4rem;
+    }
+
+    .current-price {
+        font-size: 1.45rem;
+    }
+
+    .product-info-card {
+        padding: 14px;
+    }
+
+    .purchase-action-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+/* ============================================================
+   REDUCE MOTION
+============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .product-main-image,
+    .gallery-nav-btn,
+    .product-thumbnail,
+    .add-cart-btn,
+    .buy-now-btn,
+    .copy-feedback {
+        transition: none !important;
+    }
+
+}
+
 </style>
 
-<div class="container py-4 py-lg-5">
-    <div class="row g-4">
 
-        <!-- ================================================= -->
-        <!-- LEFT COLUMN: FULL IMAGE OVERLAY CARD & GALLERY -->
-        <!-- ================================================= -->
-        <div class="col-lg-6">
-            <div class="card product-hero-card border-0 rounded-4 overflow-hidden shadow-lg position-relative text-white h-100">
-                
-                {% if product.images %}
-                    <!-- MAIN IMAGE (FILLS ENTIRE CARD BACKGROUND) -->
-                    <div id="productGallery" class="w-100 h-100 position-absolute top-0 start-0">
-                        <img
-                            id="mainProductImage"
-                            src="{{ product.images[0].image_url }}"
-                            alt="{{ product.name }}"
-                            class="w-100 h-100 object-fit-cover position-absolute top-0 start-0"
+<div class="container-fluid py-2 py-md-4 py-lg-5">
+
+    <div class="product-details-page">
+
+
+        <!-- ========================================================
+             BREADCRUMB
+        ======================================================== -->
+
+        <nav
+            class="product-breadcrumb"
+            aria-label="Breadcrumb"
+        >
+
+            <a href="{{ url_for('product.products') }}">
+                Products
+            </a>
+
+            <span class="separator">
+                /
+            </span>
+
+            {% if product.category %}
+
+                <span>
+                    {{ product.category.name }}
+                </span>
+
+                <span class="separator">
+                    /
+                </span>
+
+            {% endif %}
+
+            <span
+                class="current"
+                title="{{ product.name }}"
+            >
+                {{ product.name }}
+            </span>
+
+        </nav>
+
+
+        <!-- ========================================================
+             PRODUCT LAYOUT
+        ======================================================== -->
+
+        <div class="row g-3 g-lg-4 product-details-row">
+
+
+            <!-- ====================================================
+                 PRODUCT GALLERY
+            ==================================================== -->
+
+            <div class="col-12 col-lg-6">
+
+                <div class="product-gallery-card">
+
+
+                    <!-- =================================================
+                         MAIN IMAGE
+                    ================================================= -->
+
+                    {% if product.images %}
+
+                        {% set primary_image =
+                            product.images
+                            | selectattr("is_primary", "equalto", true)
+                            | first
+                        %}
+
+                        <div
+                            class="product-main-image-wrapper"
+                            id="productGallery"
                         >
 
-                        <!-- GALLERY NAVIGATION CONTROLS OVERLAY -->
-                        {% if product.images|length > 1 %}
+                            <img
+                                id="mainProductImage"
+                                src="{{ primary_image.image_url if primary_image else product.images[0].image_url }}"
+                                alt="{{ product.name }}"
+                                class="product-main-image"
+                                draggable="false"
+                                loading="eager"
+                            >
+
+                        </div>
+
+                    {% else %}
+
+                        <div class="product-image-fallback">
+                            🌾
+                        </div>
+
+                    {% endif %}
+
+
+                    <!-- =================================================
+                         GRADIENT
+                    ================================================= -->
+
+                    <div class="product-gallery-gradient"></div>
+
+
+                    <!-- =================================================
+                         TOP BADGES
+                    ================================================= -->
+
+                    <div class="gallery-top-bar">
+
+                        {% if product.brand %}
+
+                            <span
+                                class="
+                                    badge
+                                    bg-light
+                                    text-dark
+                                    rounded-pill
+                                    px-3
+                                    py-2
+                                    shadow-sm
+                                    gallery-brand
+                                "
+                            >
+
+                                <i class="bi bi-tag me-1"></i>
+
+                                {{ product.brand }}
+
+                            </span>
+
+                        {% else %}
+
+                            <span></span>
+
+                        {% endif %}
+
+
+                        {% if product.discount and product.discount > 0 %}
+
+                            <span
+                                class="
+                                    badge
+                                    bg-danger
+                                    rounded-pill
+                                    fw-bold
+                                    px-3
+                                    py-2
+                                    shadow-sm
+                                    gallery-discount
+                                "
+                            >
+
+                                {{ product.discount }}% OFF
+
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- =================================================
+                         IMAGE COUNTER
+                    ================================================= -->
+
+                    {% if product.images|length > 1 %}
+
+                        <div
+                            class="gallery-counter"
+                            id="galleryCounter"
+                        >
+                            1 / {{ product.images|length }}
+                        </div>
+
+                    {% endif %}
+
+
+                    <!-- =================================================
+                         PREVIOUS / NEXT
+                    ================================================= -->
+
+                    {% if product.images|length > 1 %}
+
+                        <div class="gallery-navigation">
+
                             <button
                                 type="button"
                                 id="previousImage"
-                                class="btn btn-dark btn-sm rounded-circle position-absolute top-50 start-0 translate-middle-y ms-3 z-3 shadow"
-                                style="width: 42px; height: 42px;"
-                                aria-label="Previous Image"
+                                class="gallery-nav-btn"
+                                aria-label="Previous image"
                             >
-                                <i class="bi bi-chevron-left fs-5"></i>
+                                <i class="bi bi-chevron-left"></i>
                             </button>
+
 
                             <button
                                 type="button"
                                 id="nextImage"
-                                class="btn btn-dark btn-sm rounded-circle position-absolute top-50 end-0 translate-middle-y me-3 z-3 shadow"
-                                style="width: 42px; height: 42px;"
-                                aria-label="Next Image"
+                                class="gallery-nav-btn"
+                                aria-label="Next image"
                             >
-                                <i class="bi bi-chevron-right fs-5"></i>
+                                <i class="bi bi-chevron-right"></i>
                             </button>
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <!-- =================================================
+                         GALLERY BOTTOM
+                    ================================================= -->
+
+                    <div class="gallery-bottom">
+
+                        {% if product.category %}
+
+                            <span class="gallery-category">
+
+                                <i class="bi bi-grid me-1"></i>
+
+                                {{ product.category.name }}
+
+                            </span>
+
                         {% endif %}
-                    </div>
-                {% else %}
-                    <!-- FALLBACK BACKGROUND WHEN NO IMAGE -->
-                    <div class="w-100 h-100 position-absolute top-0 start-0 bg-secondary d-flex justify-content-center align-items-center display-1">
-                        🌾
-                    </div>
-                {% endif %}
 
-                <!-- TOP FLOATING BADGES (DISCOUNT & BRAND) -->
-                <div class="position-absolute top-0 start-0 end-0 p-3 p-md-4 d-flex justify-content-between align-items-start z-3">
-                    {% if product.brand %}
-                        <span class="badge bg-light text-dark fw-semibold rounded-pill px-3 py-2 shadow-sm border">
-                            {{ product.brand }}
-                        </span>
-                    {% else %}
-                        <div></div>
+                        <h1 class="gallery-product-name">
+                            {{ product.name }}
+                        </h1>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         THUMBNAILS
+                    ================================================= -->
+
+                    {% if product.images|length > 1 %}
+
+                        <div class="product-thumbnails-wrapper">
+
+                            <div
+                                class="product-thumbnails"
+                                id="productThumbnails"
+                                aria-label="Product images"
+                            >
+
+                                {% for image in product.images %}
+
+                                    <button
+                                        type="button"
+                                        class="
+                                            product-thumbnail
+                                            {% if (primary_image and image.id == primary_image.id)
+                                               or (not primary_image and loop.first) %}
+                                                active
+                                            {% endif %}
+                                        "
+                                        data-index="{{ loop.index0 }}"
+                                        data-image="{{ image.image_url }}"
+                                        aria-label="View image {{ loop.index }}"
+                                        aria-current="{% if (primary_image and image.id == primary_image.id) or (not primary_image and loop.first) %}true{% else %}false{% endif %}"
+                                    >
+
+                                        <img
+                                            src="{{ image.image_url }}"
+                                            alt="{{ product.name }} image {{ loop.index }}"
+                                            loading="lazy"
+                                        >
+
+                                    </button>
+
+                                {% endfor %}
+
+                            </div>
+
+                        </div>
+
                     {% endif %}
 
-                    {% if product.discount and product.discount > 0 %}
-                        <span class="badge bg-danger rounded-pill fw-bold px-3 py-2 shadow-sm fs-6">
-                            {{ product.discount }}% OFF
-                        </span>
-                    {% endif %}
+
                 </div>
 
-                <!-- OVERLAY CONTENT (FLOATING AT BOTTOM OF IMAGE) -->
-                <div class="card-img-overlay hero-overlay-gradient d-flex flex-column justify-content-end p-4 p-md-5 z-2">
-                    
-                    {% if product.category %}
-                        <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill align-self-start mb-2 px-3 py-1 small fw-semibold">
-                            {{ product.category.name }}
-                        </span>
-                    {% endif %}
+            </div>
 
-                    <h1 class="fw-bold text-white mb-2 display-6">{{ product.name }}</h1>
-                    
-                    <div class="d-flex align-items-baseline gap-2 mb-3">
-                        <span class="fs-2 fw-bold text-warning">
-                            KSh {{ "{:,.2f}".format(product.price) }}
-                        </span>
-                    </div>
 
-                    <!-- THUMBNAILS (FLOATING INSIDE OVERLAY AT THE BOTTOM) -->
-                    {% if product.images and product.images|length > 1 %}
-                        <div class="d-flex gap-2 pt-2 overflow-x-auto" id="productThumbnails">
-                            {% for image in product.images %}
+            <!-- ====================================================
+                 PRODUCT INFORMATION
+            ==================================================== -->
+
+            <div class="col-12 col-lg-6">
+
+                <div class="product-info-card d-flex flex-column">
+
+
+                    <!-- =================================================
+                         SKU + STOCK
+                    ================================================= -->
+
+                    <div class="product-meta">
+
+                        <div class="product-sku">
+
+                            <strong>
+                                SKU:
+                            </strong>
+
+                            <span id="productSku">
+                                {{ product.sku or "N/A" }}
+                            </span>
+
+                            {% if product.sku %}
+
                                 <button
                                     type="button"
-                                    class="product-thumbnail p-0 bg-transparent border-0 flex-shrink-0"
-                                    data-index="{{ loop.index0 }}"
-                                    data-image="{{ image.image_url }}"
+                                    class="sku-copy-btn"
+                                    id="copySkuButton"
+                                    aria-label="Copy SKU"
+                                    title="Copy SKU"
                                 >
-                                    <img
-                                        src="{{ image.image_url }}"
-                                        alt="{{ product.name }}"
-                                        class="thumbnail-btn rounded-3 object-fit-cover border border-2 border-white opacity-75"
-                                    >
+
+                                    <i class="bi bi-copy"></i>
+
+                                    Copy
+
                                 </button>
-                            {% endfor %}
+
+                            {% endif %}
+
                         </div>
-                    {% endif %}
 
-                </div>
 
-            </div>
-        </div>
-
-        <!-- ================================================= -->
-        <!-- RIGHT COLUMN: PRODUCT DETAILS & PURCHASE OPTIONS -->
-        <!-- ================================================= -->
-        <div class="col-lg-6 d-flex flex-column">
-            <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 flex-grow-1 d-flex flex-column justify-content-between">
-                <div>
-                    <!-- CATEGORY & SKU HEADER -->
-                    <div class="d-flex justify-content-between align-items-center mb-3 text-muted small">
-                        <span>
-                            <strong>SKU:</strong> {{ product.sku or "N/A" }}
-                        </span>
-                        
                         {% if product.stock > 0 %}
-                            <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-1">
-                                In Stock ({{ product.stock }})
+
+                            <span
+                                class="
+                                    badge
+                                    bg-success-subtle
+                                    text-success
+                                    border
+                                    border-success-subtle
+                                    rounded-pill
+                                    px-3
+                                    py-2
+                                    stock-badge
+                                "
+                            >
+
+                                <i class="bi bi-check-circle me-1"></i>
+
+                                In Stock
+
+                                {% if product.stock <= 10 %}
+
+                                    · {{ product.stock }} left
+
+                                {% endif %}
+
                             </span>
+
                         {% else %}
-                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-2.5 py-1">
+
+                            <span
+                                class="
+                                    badge
+                                    bg-danger-subtle
+                                    text-danger
+                                    border
+                                    border-danger-subtle
+                                    rounded-pill
+                                    px-3
+                                    py-2
+                                    stock-badge
+                                "
+                            >
+
+                                <i class="bi bi-x-circle me-1"></i>
+
                                 Out of Stock
+
                             </span>
+
                         {% endif %}
+
                     </div>
 
-                    <h2 class="h3 fw-bold mb-3 text-dark">Product Overview</h2>
 
-                    <!-- DESCRIPTION -->
-                    <div class="text-secondary leading-relaxed mb-4">
-                        <p class="fs-6">{{ product.description }}</p>
-                    </div>
+                    <!-- =================================================
+                         PRODUCT TITLE
+                    ================================================= -->
 
-                    <hr class="my-4">
+                    <h2 class="product-title">
+                        {{ product.name }}
+                    </h2>
 
-                    <!-- PRICING SUMMARY CARD -->
-                    <div class="bg-light p-3 rounded-3 mb-4 d-flex justify-content-between align-items-center">
-                        <div>
-                            <span class="text-muted small d-block">Unit Price</span>
-                            <span class="h3 text-success fw-bold mb-0">
-                                KSh {{ "{:,.2f}".format(product.price) }}
-                            </span>
+
+                    {% if product.brand %}
+
+                        <div class="product-brand">
+
+                            <i class="bi bi-patch-check-fill"></i>
+
+                            {{ product.brand }}
+
                         </div>
-                        <i class="bi bi-shield-check fs-2 text-success opacity-75"></i>
-                    </div>
-                </div>
 
-                <!-- ADD TO CART ACTION -->
-                <div>
-                    {% if product.stock > 0 %}
-                        <form action="{{ url_for('cart.add_to_cart', product_id=product.id) }}" method="POST">
-                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                            <button type="submit" class="btn btn-success btn-lg rounded-3 fw-bold w-100 py-3 shadow-sm d-flex align-items-center justify-content-center gap-2">
-                                <i class="bi bi-cart-plus fs-4"></i>
-                                <span>Add to Cart</span>
-                            </button>
-                        </form>
-                    {% else %}
-                        <button type="button" class="btn btn-secondary btn-lg rounded-3 fw-bold w-100 py-3" disabled>
-                            Out of Stock
-                        </button>
                     {% endif %}
 
-                    <div class="text-center mt-3">
-                        <small class="text-muted">
-                            <i class="bi bi-truck me-1"></i> Fast delivery nationwide via AgroMart Logistics
-                        </small>
+
+                    <!-- =================================================
+                         PRICE
+                    ================================================= -->
+
+                    <div class="product-price-section">
+
+                        <span class="price-label">
+                            Unit Price
+                        </span>
+
+                        {% if product.discount and product.discount > 0 %}
+
+                            {% set discounted_price =
+                                product.price -
+                                (product.price * product.discount / 100)
+                            %}
+
+                            {% set savings =
+                                product.price - discounted_price
+                            %}
+
+                            <div class="price-line">
+
+                                <span class="current-price">
+                                    KSh
+                                    {{ "{:,.2f}".format(discounted_price) }}
+                                </span>
+
+                                <span class="original-price">
+                                    KSh
+                                    {{ "{:,.2f}".format(product.price) }}
+                                </span>
+
+                                <span class="save-badge">
+                                    SAVE {{ product.discount }}%
+                                </span>
+
+                            </div>
+
+                            <div class="savings-text">
+
+                                <i class="bi bi-tag-fill me-1"></i>
+
+                                You save
+                                KSh
+                                {{ "{:,.2f}".format(savings) }}
+                                per unit
+
+                            </div>
+
+                        {% else %}
+
+                            <div class="price-line">
+
+                                <span class="current-price">
+                                    KSh
+                                    {{ "{:,.2f}".format(product.price) }}
+                                </span>
+
+                            </div>
+
+                        {% endif %}
+
                     </div>
+
+
+                    <!-- =================================================
+                         DESCRIPTION
+                    ================================================= -->
+
+                    <div>
+
+                        <h3 class="section-title">
+                            Product Overview
+                        </h3>
+
+                        {% if product.description %}
+
+                            <div class="product-description">
+                                {{ product.description }}
+                            </div>
+
+                        {% else %}
+
+                            <div class="product-description">
+                                No detailed description is available
+                                for this product yet.
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- =================================================
+                         PRODUCT INFORMATION
+                    ================================================= -->
+
+                    <div class="product-info-grid">
+
+
+                        <div class="info-item">
+
+                            <span class="info-item-label">
+                                Category
+                            </span>
+
+                            <span class="info-item-value">
+
+                                {% if product.category %}
+                                    {{ product.category.name }}
+                                {% else %}
+                                    General
+                                {% endif %}
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-item">
+
+                            <span class="info-item-label">
+                                Availability
+                            </span>
+
+                            <span class="info-item-value">
+
+                                {% if product.stock > 0 %}
+                                    Available
+                                {% else %}
+                                    Currently unavailable
+                                {% endif %}
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-item">
+
+                            <span class="info-item-label">
+                                Stock
+                            </span>
+
+                            <span class="info-item-value">
+                                {{ product.stock }} unit(s)
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-item">
+
+                            <span class="info-item-label">
+                                Delivery
+                            </span>
+
+                            <span class="info-item-value">
+                                Nationwide
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         PURCHASE
+                    ================================================= -->
+
+                    <div class="purchase-section">
+
+
+                        {% if product.stock > 0 %}
+
+
+                            <!-- =========================================
+                                 QUANTITY
+                            ========================================= -->
+
+                            <div class="quantity-row">
+
+                                <div>
+
+                                    <div class="quantity-label">
+                                        Quantity
+                                    </div>
+
+                                    <div class="quantity-stock">
+                                        Maximum {{ product.stock }}
+                                    </div>
+
+                                </div>
+
+
+                                <div
+                                    class="quantity-control"
+                                    aria-label="Product quantity"
+                                >
+
+                                    <button
+                                        type="button"
+                                        class="quantity-btn"
+                                        id="decreaseQuantity"
+                                        aria-label="Decrease quantity"
+                                    >
+
+                                        <i class="bi bi-dash"></i>
+
+                                    </button>
+
+
+                                    <input
+                                        type="number"
+                                        id="productQuantity"
+                                        class="quantity-input"
+                                        value="1"
+                                        min="1"
+                                        max="{{ product.stock }}"
+                                        inputmode="numeric"
+                                        aria-label="Product quantity"
+                                    >
+
+
+                                    <button
+                                        type="button"
+                                        class="quantity-btn"
+                                        id="increaseQuantity"
+                                        aria-label="Increase quantity"
+                                    >
+
+                                        <i class="bi bi-plus"></i>
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- =========================================
+                                 ACTION BUTTONS
+                            ========================================= -->
+
+                            <div class="purchase-action-grid">
+
+
+                                <!-- =====================================
+                                     ADD TO CART
+                                ====================================== -->
+
+                                <form
+                                    action="{{ url_for(
+                                        'cart.add_to_cart',
+                                        product_id=product.id
+                                    ) }}"
+                                    method="POST"
+                                    class="purchase-action-form"
+                                    id="addToCartForm"
+                                >
+
+                                    <input
+                                        type="hidden"
+                                        name="csrf_token"
+                                        value="{{ csrf_token() }}"
+                                    >
+
+                                    <input
+                                        type="hidden"
+                                        name="quantity"
+                                        id="cartQuantity"
+                                        value="1"
+                                    >
+
+                                    <button
+                                        type="submit"
+                                        class="
+                                            btn
+                                            btn-success
+                                            add-cart-btn
+                                        "
+                                    >
+
+                                        <i class="bi bi-cart-plus"></i>
+
+                                        <span>
+                                            Add to Cart
+                                        </span>
+
+                                    </button>
+
+                                </form>
+
+
+                                <!-- =====================================
+                                     BUY NOW
+                                ====================================== -->
+
+                                <form
+                                    action="{{ url_for(
+                                        'cart.buy_now',
+                                        product_id=product.id
+                                    ) }}"
+                                    method="POST"
+                                    class="purchase-action-form"
+                                    id="buyNowForm"
+                                >
+
+                                    <input
+                                        type="hidden"
+                                        name="csrf_token"
+                                        value="{{ csrf_token() }}"
+                                    >
+
+                                    <input
+                                        type="hidden"
+                                        name="quantity"
+                                        id="buyNowQuantity"
+                                        value="1"
+                                    >
+
+                                    <button
+                                        type="submit"
+                                        class="btn buy-now-btn"
+                                    >
+
+                                        <i class="bi bi-lightning-charge-fill"></i>
+
+                                        <span>
+                                            Buy Now
+                                        </span>
+
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+
+                            <!-- =========================================
+                                 WISHLIST
+                            ========================================== -->
+
+                            <form
+                                action="{{ url_for(
+                                    'wishlist.toggle_wishlist',
+                                    product_id=product.id
+                                ) }}"
+                                method="POST"
+                                class="wishlist-form"
+                            >
+
+                                <input
+                                    type="hidden"
+                                    name="csrf_token"
+                                    value="{{ csrf_token() }}"
+                                >
+
+                                <button
+                                    type="submit"
+                                    class="wishlist-btn"
+                                >
+
+                                    <i class="bi bi-heart"></i>
+
+                                    <span>
+                                        Add to Wishlist
+                                    </span>
+
+                                </button>
+
+                            </form>
+
+
+                            <!-- =========================================
+                                 SHARE
+                            ========================================== -->
+
+                            <div class="share-product-row">
+
+                                <button
+                                    type="button"
+                                    class="share-btn"
+                                    id="shareProductButton"
+                                    aria-label="Share product"
+                                >
+
+                                    <i class="bi bi-share me-1"></i>
+
+                                    Share Product
+
+                                </button>
+
+                            </div>
+
+
+                        {% else %}
+
+
+                            <!-- =========================================
+                                 OUT OF STOCK
+                            ========================================== -->
+
+                            <button
+                                type="button"
+                                class="
+                                    btn
+                                    btn-secondary
+                                    w-100
+                                    out-of-stock-btn
+                                    py-3
+                                "
+                                disabled
+                            >
+
+                                <i class="bi bi-x-circle me-2"></i>
+
+                                Out of Stock
+
+                            </button>
+
+
+                        {% endif %}
+
+
+                        <!-- =============================================
+                             DELIVERY
+                        ============================================== -->
+
+                        <div class="delivery-note">
+
+                            <i class="bi bi-truck"></i>
+
+                            <span>
+                                Fast delivery nationwide via AgroMart Logistics.
+                                Delivery availability and cost are confirmed during checkout.
+                            </span>
+
+                        </div>
+
+
+                        <!-- =============================================
+                             TRUST
+                        ============================================== -->
+
+                        <div class="trust-features">
+
+
+                            <div class="trust-feature">
+
+                                <i class="bi bi-shield-check"></i>
+
+                                <span>
+                                    Secure Shopping
+                                </span>
+
+                            </div>
+
+
+                            <div class="trust-feature">
+
+                                <i class="bi bi-truck"></i>
+
+                                <span>
+                                    Nationwide Delivery
+                                </span>
+
+                            </div>
+
+
+                            <div class="trust-feature">
+
+                                <i class="bi bi-headset"></i>
+
+                                <span>
+                                    Customer Support
+                                </span>
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+
                 </div>
 
             </div>
+
         </div>
 
     </div>
+
 </div>
 
-<!-- ========================================================= -->
-<!-- PRODUCT GALLERY JAVASCRIPT (PRESERVED & UPDATED FOR HIGHLIGHTS) -->
-<!-- ========================================================= -->
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const mainImage = document.getElementById("mainProductImage");
-    const previousButton = document.getElementById("previousImage");
-    const nextButton = document.getElementById("nextImage");
-    const thumbnails = document.querySelectorAll(".product-thumbnail");
 
-    if (!mainImage) return;
+<!-- ================================================================
+     IMAGE LIGHTBOX
+================================================================ -->
+
+{% if product.images %}
+
+    <div
+        class="image-lightbox"
+        id="imageLightbox"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Product image viewer"
+    >
+
+        <div class="lightbox-content">
+
+
+            <button
+                type="button"
+                class="lightbox-close"
+                id="lightboxClose"
+                aria-label="Close image viewer"
+            >
+
+                <i class="bi bi-x-lg"></i>
+
+            </button>
+
+
+            {% if product.images|length > 1 %}
+
+                <button
+                    type="button"
+                    class="lightbox-prev"
+                    id="lightboxPrev"
+                    aria-label="Previous image"
+                >
+
+                    <i class="bi bi-chevron-left"></i>
+
+                </button>
+
+            {% endif %}
+
+
+            <img
+                id="lightboxImage"
+                class="lightbox-image"
+                src=""
+                alt="{{ product.name }}"
+                draggable="false"
+            >
+
+
+            {% if product.images|length > 1 %}
+
+                <button
+                    type="button"
+                    class="lightbox-next"
+                    id="lightboxNext"
+                    aria-label="Next image"
+                >
+
+                    <i class="bi bi-chevron-right"></i>
+
+                </button>
+
+
+                <div
+                    class="lightbox-counter"
+                    id="lightboxCounter"
+                >
+                    1 / {{ product.images|length }}
+                </div>
+
+            {% endif %}
+
+
+        </div>
+
+    </div>
+
+{% endif %}
+
+
+<!-- ================================================================
+     COPY FEEDBACK
+================================================================ -->
+
+<div
+    id="copyFeedback"
+    class="copy-feedback"
+    role="status"
+    aria-live="polite"
+>
+    Copied
+</div>
+
+
+<!-- ================================================================
+     JAVASCRIPT
+================================================================ -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+
+    /* ============================================================
+       QUANTITY MANAGEMENT
+    ============================================================ */
+
+    const quantityInput =
+        document.getElementById("productQuantity");
+
+    const decreaseQuantityButton =
+        document.getElementById("decreaseQuantity");
+
+    const increaseQuantityButton =
+        document.getElementById("increaseQuantity");
+
+    const cartQuantity =
+        document.getElementById("cartQuantity");
+
+    const buyNowQuantity =
+        document.getElementById("buyNowQuantity");
+
+
+    if (quantityInput) {
+
+        const maximumQuantity =
+            parseInt(
+                quantityInput.getAttribute("max"),
+                10
+            ) || 1;
+
+
+        function updateQuantity(value) {
+
+            let quantity =
+                parseInt(value, 10);
+
+
+            /*
+               Protect against invalid values.
+            */
+
+            if (
+                Number.isNaN(quantity) ||
+                quantity < 1
+            ) {
+                quantity = 1;
+            }
+
+
+            /*
+               Never allow quantity
+               above available stock.
+            */
+
+            if (
+                quantity > maximumQuantity
+            ) {
+                quantity = maximumQuantity;
+            }
+
+
+            quantityInput.value =
+                quantity;
+
+
+            /*
+               Synchronize both forms.
+            */
+
+            if (cartQuantity) {
+
+                cartQuantity.value =
+                    quantity;
+
+            }
+
+
+            if (buyNowQuantity) {
+
+                buyNowQuantity.value =
+                    quantity;
+
+            }
+
+
+            /*
+               Update minus button.
+            */
+
+            if (decreaseQuantityButton) {
+
+                decreaseQuantityButton.disabled =
+                    quantity <= 1;
+
+            }
+
+
+            /*
+               Update plus button.
+            */
+
+            if (increaseQuantityButton) {
+
+                increaseQuantityButton.disabled =
+                    quantity >= maximumQuantity;
+
+            }
+
+        }
+
+
+        /*
+           DECREASE
+        */
+
+        if (decreaseQuantityButton) {
+
+            decreaseQuantityButton.addEventListener(
+                "click",
+                function () {
+
+                    updateQuantity(
+                        parseInt(
+                            quantityInput.value,
+                            10
+                        ) - 1
+                    );
+
+                }
+            );
+
+        }
+
+
+        /*
+           INCREASE
+        */
+
+        if (increaseQuantityButton) {
+
+            increaseQuantityButton.addEventListener(
+                "click",
+                function () {
+
+                    updateQuantity(
+                        parseInt(
+                            quantityInput.value,
+                            10
+                        ) + 1
+                    );
+
+                }
+            );
+
+        }
+
+
+        /*
+           MANUAL INPUT
+        */
+
+        quantityInput.addEventListener(
+            "input",
+            function () {
+
+                updateQuantity(
+                    quantityInput.value
+                );
+
+            }
+        );
+
+
+        quantityInput.addEventListener(
+            "change",
+            function () {
+
+                updateQuantity(
+                    quantityInput.value
+                );
+
+            }
+        );
+
+
+        /*
+           INITIALIZE
+        */
+
+        updateQuantity(1);
+
+    }
+
+
+    /* ============================================================
+       PRODUCT GALLERY
+    ============================================================ */
+
+    const mainImage =
+        document.getElementById("mainProductImage");
+
+    const thumbnails =
+        document.querySelectorAll(
+            ".product-thumbnail"
+        );
+
+    const previousButton =
+        document.getElementById("previousImage");
+
+    const nextButton =
+        document.getElementById("nextImage");
+
+    const galleryCounter =
+        document.getElementById("galleryCounter");
+
+
+    /*
+       Build image array.
+    */
 
     const images = [];
-    thumbnails.forEach(function (thumbnail) {
-        images.push(thumbnail.getAttribute("data-image"));
-    });
+
+
+    thumbnails.forEach(
+        function (thumbnail) {
+
+            const image =
+                thumbnail.getAttribute(
+                    "data-image"
+                );
+
+            if (image) {
+
+                images.push(image);
+
+            }
+
+        }
+    );
+
+
+    /*
+       Find active image.
+    */
 
     let currentIndex = 0;
 
+
+    thumbnails.forEach(
+        function (thumbnail, index) {
+
+            if (
+                thumbnail.classList.contains(
+                    "active"
+                )
+            ) {
+
+                currentIndex = index;
+
+            }
+
+        }
+    );
+
+
+    /*
+       Update thumbnail state.
+    */
+
+    function updateThumbnailState() {
+
+        thumbnails.forEach(
+            function (thumbnail, index) {
+
+                const active =
+                    index === currentIndex;
+
+
+                thumbnail.classList.toggle(
+                    "active",
+                    active
+                );
+
+
+                thumbnail.setAttribute(
+                    "aria-current",
+                    active
+                        ? "true"
+                        : "false"
+                );
+
+            }
+        );
+
+
+        /*
+           Keep active thumbnail visible.
+        */
+
+        const activeThumbnail =
+            thumbnails[currentIndex];
+
+
+        if (activeThumbnail) {
+
+            activeThumbnail.scrollIntoView({
+                behavior: "smooth",
+                block: "nearest",
+                inline: "center"
+            });
+
+        }
+
+    }
+
+
+    /*
+       SHOW IMAGE
+    */
+
     function showImage(index) {
-        if (images.length === 0) return;
+
+        if (
+            !mainImage ||
+            images.length === 0
+        ) {
+            return;
+        }
+
+
+        /*
+           Loop backwards.
+        */
 
         if (index < 0) {
-            index = images.length - 1;
+
+            index =
+                images.length - 1;
+
         }
 
-        if (index >= images.length) {
+
+        /*
+           Loop forwards.
+        */
+
+        if (
+            index >= images.length
+        ) {
+
             index = 0;
+
         }
 
-        currentIndex = index;
-        mainImage.src = images[currentIndex];
 
-        thumbnails.forEach(function (thumbnail, idx) {
-            const img = thumbnail.querySelector("img");
-            if (idx === currentIndex) {
-                img.classList.remove("opacity-75");
-                img.classList.add("border-warning", "opacity-100");
-                img.style.borderWidth = "3px";
-            } else {
-                img.classList.add("opacity-75");
-                img.classList.remove("border-warning", "opacity-100");
-                img.style.borderWidth = "2px";
-            }
-        });
+        currentIndex =
+            index;
+
+
+        /*
+           Fade transition.
+        */
+
+        mainImage.style.opacity =
+            "0.35";
+
+
+        setTimeout(
+            function () {
+
+                mainImage.src =
+                    images[currentIndex];
+
+                mainImage.style.opacity =
+                    "1";
+
+            },
+            80
+        );
+
+
+        updateThumbnailState();
+
+
+        /*
+           Counter.
+        */
+
+        if (galleryCounter) {
+
+            galleryCounter.textContent =
+                `${currentIndex + 1} / ${images.length}`;
+
+        }
+
     }
 
-    if (nextButton) {
-        nextButton.addEventListener("click", function () {
-            showImage(currentIndex + 1);
-        });
-    }
+
+    /*
+       Thumbnail click.
+    */
+
+    thumbnails.forEach(
+        function (thumbnail, index) {
+
+            thumbnail.addEventListener(
+                "click",
+                function () {
+
+                    showImage(index);
+
+                }
+            );
+
+        }
+    );
+
+
+    /*
+       PREVIOUS
+    */
 
     if (previousButton) {
-        previousButton.addEventListener("click", function () {
-            showImage(currentIndex - 1);
-        });
+
+        previousButton.addEventListener(
+            "click",
+            function () {
+
+                showImage(
+                    currentIndex - 1
+                );
+
+            }
+        );
+
     }
 
-    thumbnails.forEach(function (thumbnail) {
-        thumbnail.addEventListener("click", function () {
-            const index = parseInt(thumbnail.getAttribute("data-index"));
-            showImage(index);
-        });
-    });
 
-    document.addEventListener("keydown", function (event) {
-        if (event.key === "ArrowRight") showImage(currentIndex + 1);
-        if (event.key === "ArrowLeft") showImage(currentIndex - 1);
-    });
+    /*
+       NEXT
+    */
 
-    // Mobile swipe handling
+    if (nextButton) {
+
+        nextButton.addEventListener(
+            "click",
+            function () {
+
+                showImage(
+                    currentIndex + 1
+                );
+
+            }
+        );
+
+    }
+
+
+    /* ============================================================
+       GALLERY KEYBOARD NAVIGATION
+    ============================================================ */
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            const activeElement =
+                document.activeElement;
+
+
+            /*
+               Don't hijack typing.
+            */
+
+            if (
+                activeElement &&
+                (
+                    activeElement.tagName === "INPUT" ||
+                    activeElement.tagName === "TEXTAREA" ||
+                    activeElement.tagName === "SELECT"
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            if (
+                event.key === "ArrowRight"
+            ) {
+
+                showImage(
+                    currentIndex + 1
+                );
+
+            }
+
+
+            if (
+                event.key === "ArrowLeft"
+            ) {
+
+                showImage(
+                    currentIndex - 1
+                );
+
+            }
+
+        }
+    );
+
+
+    /* ============================================================
+       GALLERY TOUCH SWIPE
+    ============================================================ */
+
     let touchStartX = 0;
-    let touchEndX = 0;
 
-    mainImage.addEventListener("touchstart", function (event) {
-        touchStartX = event.changedTouches[0].screenX;
-    });
+    let touchStartY = 0;
 
-    mainImage.addEventListener("touchend", function (event) {
-        touchEndX = event.changedTouches[0].screenX;
-        const difference = touchEndX - touchStartX;
-        if (Math.abs(difference) < 50) return;
-        if (difference > 0) showImage(currentIndex - 1);
-        else showImage(currentIndex + 1);
-    });
 
-    if (images.length > 0) {
-        showImage(0);
+    if (mainImage) {
+
+        mainImage.addEventListener(
+            "touchstart",
+            function (event) {
+
+                if (
+                    !event.changedTouches.length
+                ) {
+                    return;
+                }
+
+
+                touchStartX =
+                    event.changedTouches[0]
+                        .screenX;
+
+                touchStartY =
+                    event.changedTouches[0]
+                        .screenY;
+
+            },
+            {
+                passive: true
+            }
+        );
+
+
+        mainImage.addEventListener(
+            "touchend",
+            function (event) {
+
+                if (
+                    !event.changedTouches.length
+                ) {
+                    return;
+                }
+
+
+                const touchEndX =
+                    event.changedTouches[0]
+                        .screenX;
+
+                const touchEndY =
+                    event.changedTouches[0]
+                        .screenY;
+
+
+                const differenceX =
+                    touchEndX -
+                    touchStartX;
+
+                const differenceY =
+                    touchEndY -
+                    touchStartY;
+
+
+                /*
+                   Ignore vertical gestures.
+                */
+
+                if (
+                    Math.abs(differenceX) <
+                    Math.abs(differenceY)
+                ) {
+
+                    return;
+
+                }
+
+
+                /*
+                   Ignore tiny movements.
+                */
+
+                if (
+                    Math.abs(differenceX) < 45
+                ) {
+
+                    return;
+
+                }
+
+
+                if (
+                    differenceX > 0
+                ) {
+
+                    showImage(
+                        currentIndex - 1
+                    );
+
+                } else {
+
+                    showImage(
+                        currentIndex + 1
+                    );
+
+                }
+
+            },
+            {
+                passive: true
+            }
+        );
+
     }
+
+
+    /* ============================================================
+       LIGHTBOX
+    ============================================================ */
+
+    const lightbox =
+        document.getElementById(
+            "imageLightbox"
+        );
+
+    const lightboxImage =
+        document.getElementById(
+            "lightboxImage"
+        );
+
+    const lightboxClose =
+        document.getElementById(
+            "lightboxClose"
+        );
+
+    const lightboxPrev =
+        document.getElementById(
+            "lightboxPrev"
+        );
+
+    const lightboxNext =
+        document.getElementById(
+            "lightboxNext"
+        );
+
+    const lightboxCounter =
+        document.getElementById(
+            "lightboxCounter"
+        );
+
+
+    /*
+       Update lightbox.
+    */
+
+    function updateLightbox() {
+
+        if (
+            !lightboxImage ||
+            images.length === 0
+        ) {
+
+            return;
+
+        }
+
+
+        lightboxImage.src =
+            images[currentIndex];
+
+
+        if (lightboxCounter) {
+
+            lightboxCounter.textContent =
+                `${currentIndex + 1} / ${images.length}`;
+
+        }
+
+    }
+
+
+    /*
+       OPEN
+    */
+
+    if (
+        mainImage &&
+        lightbox
+    ) {
+
+        mainImage.addEventListener(
+            "click",
+            function () {
+
+                if (
+                    images.length === 0
+                ) {
+
+                    return;
+
+                }
+
+
+                updateLightbox();
+
+
+                lightbox.classList.add(
+                    "show"
+                );
+
+
+                document.body.style.overflow =
+                    "hidden";
+
+            }
+        );
+
+    }
+
+
+    /*
+       CLOSE
+    */
+
+    function closeLightbox() {
+
+        if (!lightbox) {
+
+            return;
+
+        }
+
+
+        lightbox.classList.remove(
+            "show"
+        );
+
+
+        document.body.style.overflow =
+            "";
+
+    }
+
+
+    if (lightboxClose) {
+
+        lightboxClose.addEventListener(
+            "click",
+            closeLightbox
+        );
+
+    }
+
+
+    /*
+       Background click.
+    */
+
+    if (lightbox) {
+
+        lightbox.addEventListener(
+            "click",
+            function (event) {
+
+                if (
+                    event.target === lightbox
+                ) {
+
+                    closeLightbox();
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /*
+       LIGHTBOX PREVIOUS
+    */
+
+    if (lightboxPrev) {
+
+        lightboxPrev.addEventListener(
+            "click",
+            function () {
+
+                showImage(
+                    currentIndex - 1
+                );
+
+                updateLightbox();
+
+            }
+        );
+
+    }
+
+
+    /*
+       LIGHTBOX NEXT
+    */
+
+    if (lightboxNext) {
+
+        lightboxNext.addEventListener(
+            "click",
+            function () {
+
+                showImage(
+                    currentIndex + 1
+                );
+
+                updateLightbox();
+
+            }
+        );
+
+    }
+
+
+    /*
+       ESCAPE
+    */
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                event.key === "Escape" &&
+                lightbox &&
+                lightbox.classList.contains(
+                    "show"
+                )
+            ) {
+
+                closeLightbox();
+
+            }
+
+        }
+    );
+
+
+    /*
+       LIGHTBOX ARROWS
+    */
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                !lightbox ||
+                !lightbox.classList.contains(
+                    "show"
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            if (
+                event.key === "ArrowRight"
+            ) {
+
+                showImage(
+                    currentIndex + 1
+                );
+
+                updateLightbox();
+
+            }
+
+
+            if (
+                event.key === "ArrowLeft"
+            ) {
+
+                showImage(
+                    currentIndex - 1
+                );
+
+                updateLightbox();
+
+            }
+
+        }
+    );
+
+
+    /* ============================================================
+       LIGHTBOX MOBILE SWIPE
+    ============================================================ */
+
+    let lightboxTouchStartX = 0;
+
+
+    if (lightboxImage) {
+
+        lightboxImage.addEventListener(
+            "touchstart",
+            function (event) {
+
+                if (
+                    !event.changedTouches.length
+                ) {
+
+                    return;
+
+                }
+
+
+                lightboxTouchStartX =
+                    event.changedTouches[0]
+                        .screenX;
+
+            },
+            {
+                passive: true
+            }
+        );
+
+
+        lightboxImage.addEventListener(
+            "touchend",
+            function (event) {
+
+                if (
+                    !event.changedTouches.length
+                ) {
+
+                    return;
+
+                }
+
+
+                const touchEndX =
+                    event.changedTouches[0]
+                        .screenX;
+
+
+                const difference =
+                    touchEndX -
+                    lightboxTouchStartX;
+
+
+                if (
+                    Math.abs(difference) < 45
+                ) {
+
+                    return;
+
+                }
+
+
+                if (
+                    difference > 0
+                ) {
+
+                    showImage(
+                        currentIndex - 1
+                    );
+
+                } else {
+
+                    showImage(
+                        currentIndex + 1
+                    );
+
+                }
+
+
+                updateLightbox();
+
+            },
+            {
+                passive: true
+            }
+        );
+
+    }
+
+
+    /* ============================================================
+       COPY SKU
+    ============================================================ */
+
+    const copySkuButton =
+        document.getElementById(
+            "copySkuButton"
+        );
+
+    const productSku =
+        document.getElementById(
+            "productSku"
+        );
+
+    const copyFeedback =
+        document.getElementById(
+            "copyFeedback"
+        );
+
+
+    function showCopyFeedback(message) {
+
+        if (!copyFeedback) {
+
+            return;
+
+        }
+
+
+        copyFeedback.textContent =
+            message;
+
+
+        copyFeedback.classList.add(
+            "show"
+        );
+
+
+        setTimeout(
+            function () {
+
+                copyFeedback.classList.remove(
+                    "show"
+                );
+
+            },
+            1800
+        );
+
+    }
+
+
+    if (
+        copySkuButton &&
+        productSku
+    ) {
+
+        copySkuButton.addEventListener(
+            "click",
+            async function () {
+
+                const sku =
+                    productSku.textContent.trim();
+
+
+                if (
+                    !sku ||
+                    sku === "N/A"
+                ) {
+
+                    return;
+
+                }
+
+
+                try {
+
+                    await navigator.clipboard.writeText(
+                        sku
+                    );
+
+
+                    showCopyFeedback(
+                        "SKU copied"
+                    );
+
+                } catch (error) {
+
+                    /*
+                       Clipboard fallback.
+                    */
+
+                    const temporaryInput =
+                        document.createElement(
+                            "input"
+                        );
+
+
+                    temporaryInput.value =
+                        sku;
+
+
+                    document.body.appendChild(
+                        temporaryInput
+                    );
+
+
+                    temporaryInput.select();
+
+
+                    document.execCommand(
+                        "copy"
+                    );
+
+
+                    temporaryInput.remove();
+
+
+                    showCopyFeedback(
+                        "SKU copied"
+                    );
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* ============================================================
+       SHARE PRODUCT
+    ============================================================ */
+
+    const shareButton =
+        document.getElementById(
+            "shareProductButton"
+        );
+
+
+    if (shareButton) {
+
+        shareButton.addEventListener(
+            "click",
+            async function () {
+
+                const productTitle =
+                    {{ product.name|tojson }};
+
+
+                const productUrl =
+                    window.location.href;
+
+
+                /*
+                   Native sharing.
+                */
+
+                if (
+                    navigator.share
+                ) {
+
+                    try {
+
+                        await navigator.share({
+
+                            title:
+                                productTitle,
+
+                            text:
+                                `Check out ${productTitle} on AgroMart.`,
+
+                            url:
+                                productUrl
+
+                        });
+
+                    } catch (error) {
+
+                        /*
+                           User cancelled.
+                        */
+
+                    }
+
+                    return;
+
+                }
+
+
+                /*
+                   Clipboard fallback.
+                */
+
+                try {
+
+                    await navigator.clipboard.writeText(
+                        productUrl
+                    );
+
+
+                    showCopyFeedback(
+                        "Product link copied"
+                    );
+
+                } catch (error) {
+
+                    showCopyFeedback(
+                        "Copy the page URL to share"
+                    );
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* ============================================================
+       INITIALIZE GALLERY
+    ============================================================ */
+
+    if (
+        images.length > 0
+    ) {
+
+        showImage(
+            currentIndex
+        );
+
+    }
+
 });
+
 </script>
+
 
 {% endblock %}
