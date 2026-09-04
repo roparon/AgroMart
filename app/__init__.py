@@ -1,15 +1,16 @@
-from flask import Flask, app
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager, current_user
 from flask_wtf.csrf import CSRFProtect
 from config import Config
-
+from flask_mail import Mail
 
 # EXTENSIONS
 
 db = SQLAlchemy()
 migrate = Migrate()
+mail = Mail()
 login_manager = LoginManager()
 csrf = CSRFProtect()
 
@@ -38,6 +39,7 @@ def create_app():
     migrate.init_app(app, db)
     login_manager.init_app(app)
     csrf.init_app(app)
+    mail.init_app(app)
 
     from app.routes.home import home_bp
     from app.routes.auth import auth_bp
