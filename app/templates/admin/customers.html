@@ -1,0 +1,828 @@
+{% extends "base.html" %}
+
+{% block title %}Customers | AgroMart Admin{% endblock %}
+
+{% block content %}
+
+<style>
+    .customers-page {
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 16px;
+    }
+
+    /* Header */
+    .customers-header {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        margin-bottom: 20px;
+    }
+
+    .customers-header h1 {
+        margin: 0;
+        font-size: 24px;
+        color: #111827;
+    }
+
+    .customers-header p {
+        margin: 5px 0 0;
+        color: #6b7280;
+        font-size: 14px;
+    }
+
+    .dashboard-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: 10px 16px;
+        border-radius: 8px;
+        background: #1f7a3f;
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: 600;
+        width: 100%;
+    }
+
+    .dashboard-link:hover {
+        background: #176332;
+    }
+
+    /* Stats */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .stat-card {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 18px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+    }
+
+    .stat-label {
+        font-size: 12px;
+        font-weight: 700;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+    }
+
+    .stat-value {
+        margin-top: 7px;
+        font-size: 26px;
+        font-weight: 800;
+        color: #111827;
+    }
+
+    /* Search */
+    .toolbar {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 14px;
+        margin-bottom: 16px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+    }
+
+    .search-box {
+        width: 100%;
+        min-height: 46px;
+        padding: 11px 13px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        font-size: 15px;
+        outline: none;
+    }
+
+    .search-box:focus {
+        border-color: #1f7a3f;
+        box-shadow: 0 0 0 3px rgba(31, 122, 63, .12);
+    }
+
+    /* Mobile customer cards */
+    .customers-list {
+        display: grid;
+        gap: 12px;
+    }
+
+    .customer-card {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 16px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+    }
+
+    .customer-top {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 15px;
+    }
+
+    .avatar {
+        width: 46px;
+        height: 46px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        background: #e8f5ed;
+        color: #1f7a3f;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 16px;
+    }
+
+    .customer-name {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 700;
+        color: #111827;
+    }
+
+    .customer-username {
+        margin: 3px 0 0;
+        font-size: 13px;
+        color: #6b7280;
+    }
+
+    .customer-info {
+        display: grid;
+        gap: 10px;
+    }
+
+    .info-item {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        padding-bottom: 9px;
+        border-bottom: 1px solid #edf0ee;
+    }
+
+    .info-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .info-label {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #9ca3af;
+        letter-spacing: .04em;
+    }
+
+    .info-value {
+        font-size: 14px;
+        color: #374151;
+        overflow-wrap: anywhere;
+    }
+
+    /* Badges */
+    .badge {
+        display: inline-flex;
+        width: fit-content;
+        padding: 5px 9px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .badge-admin {
+        background: #f3e8ff;
+        color: #7e22ce;
+    }
+
+    .badge-customer {
+        background: #eff6ff;
+        color: #1d4ed8;
+    }
+
+    .badge-active {
+        background: #ecfdf5;
+        color: #047857;
+    }
+
+    .badge-inactive {
+        background: #fef2f2;
+        color: #b91c1c;
+    }
+
+    /* Desktop table */
+    .table-container {
+        display: none;
+        background: #ffffff;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+    }
+
+    .table-wrapper {
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        min-width: 850px;
+        border-collapse: collapse;
+    }
+
+    th,
+    td {
+        padding: 14px 16px;
+        text-align: left;
+        border-bottom: 1px solid #edf0ee;
+    }
+
+    th {
+        background: #f8faf9;
+        color: #6b7280;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+    }
+
+    td {
+        color: #374151;
+        font-size: 14px;
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+
+    /* Empty state */
+    .empty-state {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 40px 20px;
+        text-align: center;
+        color: #6b7280;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+    }
+
+    .empty-state h3 {
+        margin: 0 0 6px;
+        color: #374151;
+    }
+
+    .empty-state p {
+        margin: 0;
+        font-size: 14px;
+    }
+
+    /* Tablet */
+    @media (min-width: 600px) {
+
+        .customers-page {
+            padding: 22px;
+        }
+
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .dashboard-link {
+            width: fit-content;
+        }
+    }
+
+    /* Desktop */
+    @media (min-width: 900px) {
+
+        .customers-page {
+            padding: 28px;
+        }
+
+        .customers-header {
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stats-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .customers-list {
+            display: none;
+        }
+
+        .table-container {
+            display: block;
+        }
+    }
+</style>
+
+
+<div class="customers-page">
+
+    <!-- HEADER -->
+    <div class="customers-header">
+
+        <div>
+            <h1>Customers</h1>
+
+            <p>
+                Manage AgroMart customer accounts and information.
+            </p>
+        </div>
+
+        <a
+            href="{{ url_for('dashboard.dashboard') }}"
+            class="dashboard-link"
+        >
+            ← Dashboard
+        </a>
+
+    </div>
+
+
+    <!-- STATISTICS -->
+    <div class="stats-grid">
+
+        <div class="stat-card">
+
+            <div class="stat-label">
+                Total Customers
+            </div>
+
+            <div class="stat-value">
+                {{ customers|length }}
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-label">
+                Active Accounts
+            </div>
+
+            <div class="stat-value">
+
+                {{
+                    customers
+                    |selectattr("is_active")
+                    |list
+                    |length
+                }}
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-label">
+                Administrators
+            </div>
+
+            <div class="stat-value">
+
+                {{
+                    customers
+                    |selectattr("role", "equalto", "admin")
+                    |list
+                    |length
+                }}
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- SEARCH -->
+    <div class="toolbar">
+
+        <input
+            type="search"
+            id="customerSearch"
+            class="search-box"
+            placeholder="Search by name, username, email or phone..."
+            autocomplete="off"
+        >
+
+    </div>
+
+
+    {% if customers %}
+
+        <!-- ========================= -->
+        <!-- MOBILE / TABLET CARDS -->
+        <!-- ========================= -->
+
+        <div class="customers-list" id="customersList">
+
+            {% for customer in customers %}
+
+                <div
+                    class="customer-card customer-item"
+                    data-search="
+                        {{ customer.first_name }}
+                        {{ customer.last_name }}
+                        {{ customer.username }}
+                        {{ customer.email }}
+                        {{ customer.phone or '' }}
+                    "
+                >
+
+                    <div class="customer-top">
+
+                        <div class="avatar">
+
+                            {{ customer.first_name[:1]|upper }}{{ customer.last_name[:1]|upper }}
+
+                        </div>
+
+                        <div>
+
+                            <h2 class="customer-name">
+                                {{ customer.full_name }}
+                            </h2>
+
+                            <p class="customer-username">
+                                @{{ customer.username }}
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="customer-info">
+
+                        <div class="info-item">
+
+                            <span class="info-label">
+                                Email
+                            </span>
+
+                            <span class="info-value">
+                                {{ customer.email }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-item">
+
+                            <span class="info-label">
+                                Phone
+                            </span>
+
+                            <span class="info-value">
+                                {{ customer.phone or "Not provided" }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-item">
+
+                            <span class="info-label">
+                                Address
+                            </span>
+
+                            <span class="info-value">
+                                {{ customer.address or "Not provided" }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-item">
+
+                            <span class="info-label">
+                                Role
+                            </span>
+
+                            {% if customer.role == "admin" %}
+
+                                <span class="badge badge-admin">
+                                    Administrator
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge badge-customer">
+                                    Customer
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="info-item">
+
+                            <span class="info-label">
+                                Account Status
+                            </span>
+
+                            {% if customer.is_active %}
+
+                                <span class="badge badge-active">
+                                    Active
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge badge-inactive">
+                                    Inactive
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="info-item">
+
+                            <span class="info-label">
+                                Joined
+                            </span>
+
+                            <span class="info-value">
+
+                                {% if customer.created_at %}
+
+                                    {{ customer.created_at.strftime("%d %B %Y") }}
+
+                                {% else %}
+
+                                    N/A
+
+                                {% endif %}
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- DESKTOP TABLE -->
+        <!-- ========================= -->
+
+        <div class="table-container">
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Customer</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Joined</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for customer in customers %}
+
+                            <tr
+                                class="table-customer-item"
+                                data-search="
+                                    {{ customer.first_name }}
+                                    {{ customer.last_name }}
+                                    {{ customer.username }}
+                                    {{ customer.email }}
+                                    {{ customer.phone or '' }}
+                                "
+                            >
+
+                                <td>
+
+                                    <strong>
+                                        {{ customer.full_name }}
+                                    </strong>
+
+                                    <br>
+
+                                    <small>
+                                        @{{ customer.username }}
+                                    </small>
+
+                                </td>
+
+
+                                <td>
+                                    {{ customer.email }}
+                                </td>
+
+
+                                <td>
+                                    {{ customer.phone or "Not provided" }}
+                                </td>
+
+
+                                <td>
+
+                                    {% if customer.role == "admin" %}
+
+                                        <span class="badge badge-admin">
+                                            Administrator
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge badge-customer">
+                                            Customer
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <td>
+
+                                    {% if customer.is_active %}
+
+                                        <span class="badge badge-active">
+                                            Active
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge badge-inactive">
+                                            Inactive
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <td>
+
+                                    {% if customer.created_at %}
+
+                                        {{ customer.created_at.strftime("%d %b %Y") }}
+
+                                    {% else %}
+
+                                        N/A
+
+                                    {% endif %}
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <!-- NO SEARCH RESULTS -->
+
+        <div
+            id="noResults"
+            class="empty-state"
+            style="display: none; margin-top: 16px;"
+        >
+
+            <h3>
+                No customers found
+            </h3>
+
+            <p>
+                Try a different name, username, email or phone number.
+            </p>
+
+        </div>
+
+
+    {% else %}
+
+        <!-- NO CUSTOMERS -->
+
+        <div class="empty-state">
+
+            <h3>
+                No customers yet
+            </h3>
+
+            <p>
+                Customer accounts will appear here when users register.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const searchInput =
+            document.getElementById("customerSearch");
+
+        if (!searchInput) {
+            return;
+        }
+
+        const mobileItems =
+            document.querySelectorAll(".customer-item");
+
+        const tableItems =
+            document.querySelectorAll(".table-customer-item");
+
+        const noResults =
+            document.getElementById("noResults");
+
+
+        searchInput.addEventListener("input", function () {
+
+            const searchTerm =
+                this.value
+                    .toLowerCase()
+                    .trim();
+
+            let visibleCount = 0;
+
+
+            mobileItems.forEach(function (item) {
+
+                const text =
+                    item.dataset.search
+                        .toLowerCase();
+
+                const matches =
+                    text.includes(searchTerm);
+
+                item.style.display =
+                    matches ? "" : "none";
+
+                if (matches) {
+                    visibleCount++;
+                }
+
+            });
+
+
+            tableItems.forEach(function (item) {
+
+                const text =
+                    item.dataset.search
+                        .toLowerCase();
+
+                const matches =
+                    text.includes(searchTerm);
+
+                item.style.display =
+                    matches ? "" : "none";
+
+            });
+
+
+            if (noResults) {
+
+                noResults.style.display =
+                    visibleCount === 0
+                        ? "block"
+                        : "none";
+
+            }
+
+        });
+
+    });
+</script>
+
+{% endblock %}

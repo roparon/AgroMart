@@ -3,6 +3,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from app import db
 from app.forms import RegisterForm, LoginForm
 from app.models.user import User
+from app.services.email_service import send_email
 
 auth_bp = Blueprint("auth", __name__)
 
@@ -34,46 +35,102 @@ def register():
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        flash("Account created successfully. Please log in.", "success")
+        send_email(
+            subject="Welcome to Bomet Machineries Ltd",
+            recipients=[user.email],
+            template="emails/welcome.html",
+            user=user,
+        )
+
+
+        flash(
+            "Account created successfully. Please log in.",
+            "success",
+        )
         return redirect(url_for("auth.login"))
     return render_template("register.html", form=form)
-
 
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
 
+    # Already logged in
     if current_user.is_authenticated:
-        return redirect(url_for("home.home"))
+
+        if current_user.is_admin:
+            return redirect(
+                url_for("dashboard.dashboard")
+            )
+
+        return redirect(
+            url_for("home.home")
+        )
 
     form = LoginForm()
 
     if form.validate_on_submit():
 
         user = User.query.filter_by(
-            username=form.username.data
+            username=form.username.data.strip()
         ).first()
 
-        if user and user.check_password(form.password.data):
+        # Validate credentials
+        if user and user.check_password(
+            form.password.data
+        ):
 
+            # Make sure the account is active
+            if not user.is_active:
+
+                flash(
+                    "Your account has been deactivated. "
+                    "Please contact support.",
+                    "danger"
+                )
+
+                return render_template(
+                    "login.html",
+                    form=form
+                )
+
+            # Log the user in
             login_user(
                 user,
                 remember=form.remember.data
             )
 
-            flash(
-                "Welcome back!",
-                "success"
-            )
+            # Welcome message
+            if user.is_admin:
 
+                flash(
+                    f"Welcome back, Admin {user.first_name}!",
+                    "success"
+                )
+
+            else:
+
+                flash(
+                    f"Welcome back, {user.first_name}!",
+                    "success"
+                )
+
+            # Respect Flask-Login's next parameter
             next_page = request.args.get("next")
 
             if next_page and next_page.startswith("/"):
                 return redirect(next_page)
 
+            # Admin → Admin Dashboard
+            if user.is_admin:
+                return redirect(
+                    url_for("dashboard.dashboard")
+                )
+
+            # Customer → Storefront
             return redirect(
                 url_for("home.home")
             )
 
+        # Invalid credentials
         flash(
             "Invalid username or password.",
             "danger"

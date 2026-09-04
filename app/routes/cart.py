@@ -1,6 +1,4 @@
 from decimal import Decimal
-import uuid
-
 from flask import (
     Blueprint,
     render_template,
@@ -17,6 +15,7 @@ from flask_login import (
 )
 
 from app import db
+from app.services.email_service import send_email
 from app.models.cart import Cart, CartItem
 from app.models.product import Product
 from app.models.order import Order, OrderItem
@@ -1136,6 +1135,13 @@ def checkout():
             return redirect(
                 url_for("cart.checkout")
             )
+
+        send_email(
+            subject=f"Bomet Machineries Ltd Order Confirmation - {order.order_code}",
+            recipients=[email],
+            template="emails/order_confirmation.html",
+            order=order,
+        )
 
         # ====================================================
         # ORDER SUCCESS

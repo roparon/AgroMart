@@ -1,0 +1,703 @@
+{% extends "base.html" %}
+
+{% block title %}
+Order {{ order.order_code }} | AgroMart Admin
+{% endblock %}
+
+{% block content %}
+
+<style>
+    /* =========================================================
+       MOBILE FIRST — ORDER DETAILS
+       ========================================================= */
+
+    .order-detail-page {
+        width: 100%;
+        padding: 16px;
+        box-sizing: border-box;
+    }
+
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .order-header {
+        margin-bottom: 18px;
+    }
+
+    .order-header h1 {
+        margin: 0;
+        font-size: 22px;
+        line-height: 1.3;
+        color: #1f2937;
+        word-break: break-word;
+    }
+
+    .order-header p {
+        margin: 6px 0 0;
+        color: #6b7280;
+        font-size: 13px;
+    }
+
+    .back-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 100%;
+        min-height: 44px;
+        margin-bottom: 16px;
+
+        box-sizing: border-box;
+
+        background: #f3f4f6;
+        color: #374151;
+
+        text-decoration: none;
+        border-radius: 8px;
+
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .back-btn:active {
+        transform: scale(.98);
+    }
+
+
+    /* =========================================================
+       GRID
+       ========================================================= */
+
+    .order-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+
+    /* =========================================================
+       CARDS
+       ========================================================= */
+
+    .card {
+        width: 100%;
+        box-sizing: border-box;
+
+        background: #ffffff;
+
+        border-radius: 12px;
+
+        padding: 18px;
+
+        box-shadow:
+            0 3px 15px rgba(0, 0, 0, .06);
+    }
+
+    .card h2 {
+        margin: 0 0 18px;
+
+        font-size: 17px;
+        color: #1f2937;
+    }
+
+
+    /* =========================================================
+       ORDER INFORMATION
+       ========================================================= */
+
+    .order-summary {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .info-label {
+        margin-bottom: 5px;
+
+        font-size: 10px;
+        font-weight: 700;
+
+        text-transform: uppercase;
+        letter-spacing: .04em;
+
+        color: #9ca3af;
+    }
+
+    .info-value {
+        color: #111827;
+        font-size: 14px;
+        font-weight: 600;
+        word-break: break-word;
+    }
+
+
+    /* =========================================================
+       STATUS
+       ========================================================= */
+
+    .status {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        min-height: 28px;
+        padding: 5px 11px;
+
+        border-radius: 999px;
+
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .status-pending {
+        background: #fff7ed;
+        color: #c2410c;
+    }
+
+    .status-confirmed {
+        background: #eff6ff;
+        color: #1d4ed8;
+    }
+
+    .status-processing {
+        background: #f5f3ff;
+        color: #6d28d9;
+    }
+
+    .status-shipped {
+        background: #ecfeff;
+        color: #0e7490;
+    }
+
+    .status-delivered {
+        background: #f0fdf4;
+        color: #15803d;
+    }
+
+    .status-cancelled {
+        background: #fef2f2;
+        color: #b91c1c;
+    }
+
+
+    /* =========================================================
+       PRODUCTS
+       ========================================================= */
+
+    .items-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .items-table {
+        width: 100%;
+        min-width: 580px;
+        border-collapse: collapse;
+    }
+
+    .items-table th {
+        padding: 12px 10px;
+
+        background: #f8fafc;
+
+        color: #64748b;
+
+        font-size: 10px;
+        font-weight: 700;
+
+        text-align: left;
+        text-transform: uppercase;
+    }
+
+    .items-table td {
+        padding: 14px 10px;
+
+        border-bottom: 1px solid #f1f5f9;
+
+        color: #374151;
+        font-size: 13px;
+    }
+
+    .product-name {
+        font-weight: 700;
+        color: #111827;
+    }
+
+    .price {
+        font-weight: 700;
+    }
+
+
+    /* =========================================================
+       TOTAL
+       ========================================================= */
+
+    .order-total {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        gap: 15px;
+
+        padding-top: 17px;
+        margin-top: 8px;
+
+        border-top: 2px solid #e5e7eb;
+
+        font-size: 17px;
+        font-weight: 800;
+    }
+
+    .order-total span:last-child {
+        white-space: nowrap;
+    }
+
+
+    /* =========================================================
+       SHIPPING
+       ========================================================= */
+
+    .shipping-address {
+        color: #374151;
+
+        font-size: 14px;
+        line-height: 1.7;
+
+        white-space: pre-line;
+        word-break: break-word;
+    }
+
+
+    /* =========================================================
+       CUSTOMER
+       ========================================================= */
+
+    .customer-id {
+        color: #166534;
+        font-size: 15px;
+        font-weight: 800;
+    }
+
+
+    /* =========================================================
+       TABLET
+       ========================================================= */
+
+    @media (min-width: 600px) {
+
+        .order-detail-page {
+            padding: 22px;
+        }
+
+        .order-header h1 {
+            font-size: 26px;
+        }
+
+        .order-summary {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .back-btn {
+            width: auto;
+            display: inline-flex;
+            padding: 0 18px;
+        }
+    }
+
+
+    /* =========================================================
+       DESKTOP
+       ========================================================= */
+
+    @media (min-width: 992px) {
+
+        .order-detail-page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+
+        .order-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+            align-items: start;
+            gap: 22px;
+        }
+
+        .card {
+            padding: 24px;
+        }
+
+        .card h2 {
+            font-size: 19px;
+        }
+
+        .order-summary {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+</style>
+
+
+<div class="order-detail-page">
+
+
+    <!-- =====================================================
+         BACK BUTTON
+         ===================================================== -->
+
+    <a
+        href="{{ url_for('orders.orders') }}"
+        class="back-btn"
+    >
+        ← Back to Orders
+    </a>
+
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="order-header">
+
+        <h1>
+            Order {{ order.order_code }}
+        </h1>
+
+        <p>
+            Complete order information and customer purchase details.
+        </p>
+
+    </div>
+
+
+    <div class="order-grid">
+
+
+        <!-- =================================================
+             LEFT COLUMN
+             ================================================= -->
+
+        <div>
+
+
+            <!-- ORDER INFORMATION -->
+
+            <div class="card">
+
+                <h2>
+                    Order Information
+                </h2>
+
+                <div class="order-summary">
+
+
+                    <div>
+
+                        <div class="info-label">
+                            Order Code
+                        </div>
+
+                        <div class="info-value">
+                            {{ order.order_code }}
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="info-label">
+                            Order Date
+                        </div>
+
+                        <div class="info-value">
+
+                            {% if order.created_at %}
+
+                                {{ order.created_at.strftime(
+                                    "%d %B %Y, %I:%M %p"
+                                ) }}
+
+                            {% else %}
+
+                                —
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="info-label">
+                            Payment Method
+                        </div>
+
+                        <div class="info-value">
+                            {{ order.payment_method or "—" }}
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <div class="info-label">
+                            Status
+                        </div>
+
+                        {% set status_class =
+                            order.status|lower|replace(" ", "-")
+                        %}
+
+                        <span class="status status-{{ status_class }}">
+                            {{ order.status }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 PRODUCTS
+                 ================================================= -->
+
+            <div
+                class="card"
+                style="margin-top: 16px;"
+            >
+
+                <h2>
+                    Products Ordered
+                </h2>
+
+
+                {% if order.items %}
+
+                    <div class="items-wrapper">
+
+                        <table class="items-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Product
+                                    </th>
+
+                                    <th>
+                                        Quantity
+                                    </th>
+
+                                    <th>
+                                        Unit Price
+                                    </th>
+
+                                    <th>
+                                        Subtotal
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                                {% for item in order.items %}
+
+                                    <tr>
+
+                                        <td>
+
+                                            <span class="product-name">
+
+                                                {% if item.product %}
+
+                                                    {{ item.product.name }}
+
+                                                {% else %}
+
+                                                    Product
+                                                    #{{ item.product_id }}
+
+                                                {% endif %}
+
+                                            </span>
+
+                                        </td>
+
+
+                                        <td>
+                                            {{ item.quantity }}
+                                        </td>
+
+
+                                        <td>
+                                            KSh
+                                            {{ "{:,.2f}".format(
+                                                item.price
+                                            ) }}
+                                        </td>
+
+
+                                        <td class="price">
+
+                                            KSh
+                                            {{ "{:,.2f}".format(
+                                                item.price *
+                                                item.quantity
+                                            ) }}
+
+                                        </td>
+
+                                    </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+
+                    <div class="order-total">
+
+                        <span>
+                            Total
+                        </span>
+
+                        <span>
+                            KSh
+                            {{ "{:,.2f}".format(
+                                order.total_amount
+                            ) }}
+                        </span>
+
+                    </div>
+
+                {% else %}
+
+                    <p>
+                        No products found for this order.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             RIGHT COLUMN
+             ================================================= -->
+
+        <div>
+
+
+            <!-- CUSTOMER -->
+
+            <div class="card">
+
+                <h2>
+                    Customer
+                </h2>
+
+                <div>
+
+                    <div class="info-label">
+                        Customer ID
+                    </div>
+
+                    <div class="customer-id">
+                        #{{ order.user_id }}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- SHIPPING -->
+
+            <div
+                class="card"
+                style="margin-top: 16px;"
+            >
+
+                <h2>
+                    Shipping Address
+                </h2>
+
+                <div class="shipping-address">
+
+                    {{ order.shipping_address
+                        or "No shipping address provided."
+                    }}
+
+                </div>
+
+            </div>
+
+
+            <!-- PAYMENT -->
+
+            <div
+                class="card"
+                style="margin-top: 16px;"
+            >
+
+                <h2>
+                    Payment
+                </h2>
+
+
+                <div>
+
+                    <div class="info-label">
+                        Method
+                    </div>
+
+                    <div class="info-value">
+                        {{ order.payment_method or "Not specified" }}
+                    </div>
+
+                </div>
+
+
+                <div style="margin-top: 18px;">
+
+                    <div class="info-label">
+                        Amount
+                    </div>
+
+                    <div class="info-value">
+                        KSh
+                        {{ "{:,.2f}".format(
+                            order.total_amount
+                        ) }}
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
