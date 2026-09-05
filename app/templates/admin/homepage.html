@@ -1,0 +1,147 @@
+```html
+{% extends "base.html" %}
+
+{% block title %}
+Homepage Content | Bomet Machineries Ltd.
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-4 py-lg-5">
+
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+
+        <div>
+            <h1 class="fw-bold mb-1">
+                Homepage Content
+            </h1>
+
+            <p class="text-muted mb-0">
+                Manage homepage headlines, banners, images and calls to action.
+            </p>
+        </div>
+
+        <a
+            href="{{ url_for('admin_homepage.add_content') }}"
+            class="btn btn-success rounded-3"
+        >
+            <i class="bi bi-plus-lg me-1"></i>
+            Add Content
+        </a>
+
+    </div>
+
+
+    {% if content %}
+
+        <div class="row g-4">
+
+            {% for item in content %}
+
+                <div class="col-12 col-md-6 col-xl-4">
+
+                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100">
+
+                        {% if item.image_url %}
+
+                            <img
+                                src="{{ item.image_url }}"
+                                alt="{{ item.image_alt or item.key }}"
+                                width="800"
+                                height="450"
+                                loading="lazy"
+                                decoding="async"
+                                class="w-100 object-fit-cover"
+                                style="height: 220px;"
+                            >
+
+                        {% else %}
+
+                            <div
+                                class="bg-light d-flex align-items-center justify-content-center"
+                                style="height: 220px;"
+                            >
+                                <i class="bi bi-image fs-1 text-muted"></i>
+                            </div>
+
+                        {% endif %}
+
+                        <div class="card-body">
+
+                            <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+
+                                <span class="badge bg-dark">
+                                    {{ item.key }}
+                                </span>
+
+                                {% if item.is_active %}
+
+                                    <span class="badge bg-success">
+                                        Published
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge bg-secondary">
+                                        Hidden
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+                            <h2 class="h5 fw-bold">
+                                {{ item.headline or "Untitled content" }}
+                            </h2>
+
+                            {% if item.subheadline %}
+
+                                <p class="text-muted small">
+                                    {{ item.subheadline|truncate(120) }}
+                                </p>
+
+                            {% endif %}
+
+                            <a
+                                href="{{ url_for(
+                                    'admin_homepage.edit_content',
+                                    content_id=item.id
+                                ) }}"
+                                class="btn btn-outline-success rounded-3 w-100"
+                            >
+                                <i class="bi bi-pencil me-1"></i>
+                                Edit
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="text-center py-5">
+
+            <i class="bi bi-layout-text-window-reverse display-4 text-muted"></i>
+
+            <h2 class="h4 fw-bold mt-3">
+                No homepage content yet
+            </h2>
+
+            <p class="text-muted">
+                Create your first homepage content block.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
+```

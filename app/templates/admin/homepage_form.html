@@ -1,0 +1,200 @@
+```html
+{% extends "base.html" %}
+
+{% block title %}
+{{ title }} | Bomet Machineries Ltd.
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-4 py-lg-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-12 col-lg-8">
+
+            <div class="mb-4">
+
+                <h1 class="fw-bold mb-1">
+                    {{ title }}
+                </h1>
+
+                <p class="text-muted">
+                    Update the content displayed on the public homepage.
+                </p>
+
+            </div>
+
+
+            <form method="POST" class="card border-0 shadow-sm rounded-4 p-4">
+
+                {{ form.hidden_tag() }}
+
+                <div class="mb-3">
+
+                    {{ form.key.label(class="form-label fw-semibold") }}
+
+                    {{ form.key(
+                        class="form-control",
+                        placeholder="hero"
+                    ) }}
+
+                    <small class="text-muted">
+                        Example: hero, machinery-banner, featured-heading
+                    </small>
+
+                    {% for error in form.key.errors %}
+                        <div class="text-danger small">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+
+                <div class="mb-3">
+
+                    {{ form.headline.label(class="form-label fw-semibold") }}
+
+                    {{ form.headline(
+                        class="form-control"
+                    ) }}
+
+                </div>
+
+
+                <div class="mb-3">
+
+                    {{ form.subheadline.label(class="form-label fw-semibold") }}
+
+                    {{ form.subheadline(
+                        class="form-control",
+                        rows="4"
+                    ) }}
+
+                </div>
+
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+
+                        {{ form.button_text.label(
+                            class="form-label fw-semibold"
+                        ) }}
+
+                        {{ form.button_text(
+                            class="form-control"
+                        ) }}
+
+                    </div>
+
+
+                    <div class="col-md-6 mb-3">
+
+                        {{ form.button_url.label(
+                            class="form-label fw-semibold"
+                        ) }}
+
+                        {{ form.button_url(
+                            class="form-control"
+                        ) }}
+
+                    </div>
+
+                </div>
+
+
+                <div class="mb-3">
+
+                    {{ form.image_url.label(
+                        class="form-label fw-semibold"
+                    ) }}
+
+                    {{ form.image_url(
+                        class="form-control",
+                        placeholder="/static/uploads/home/hero.webp"
+                    ) }}
+
+                    <small class="text-muted">
+                        Store the public image URL/path here.
+                    </small>
+
+                </div>
+
+
+                <div class="mb-3">
+
+                    {{ form.image_alt.label(
+                        class="form-label fw-semibold"
+                    ) }}
+
+                    {{ form.image_alt(
+                        class="form-control"
+                    ) }}
+
+                </div>
+
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+
+                        {{ form.sort_order.label(
+                            class="form-label fw-semibold"
+                        ) }}
+
+                        {{ form.sort_order(
+                            class="form-control"
+                        ) }}
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <div class="form-check mt-md-4">
+
+                            {{ form.is_active(
+                                class="form-check-input"
+                            ) }}
+
+                            {{ form.is_active.label(
+                                class="form-check-label fw-semibold"
+                            ) }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="d-flex flex-column flex-sm-row gap-2">
+
+                    <button
+                        type="submit"
+                        class="btn btn-success rounded-3 px-4"
+                    >
+                        <i class="bi bi-check-lg me-1"></i>
+                        Save Changes
+                    </button>
+
+                    <a
+                        href="{{ url_for('admin_homepage.homepage') }}"
+                        class="btn btn-outline-secondary rounded-3 px-4"
+                    >
+                        Cancel
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+```
