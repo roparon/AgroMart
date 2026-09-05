@@ -1,391 +1,862 @@
 {% extends "base.html" %}
 
-{% block title %}AgroMart | Quality Agricultural Machinery & Spare Parts{% endblock %}
+{% block title %}Bomet Machineries Ltd. | Agricultural Machinery & Spare Parts{% endblock %}
 
 {% block content %}
+
 <style>
-    /* HERO CAROUSEL STYLES */
+    /* =========================================================
+       HERO
+    ========================================================= */
+
     .hero-carousel-item {
         height: 380px;
         min-height: 320px;
     }
+
     @media (min-width: 768px) {
         .hero-carousel-item {
             height: 480px;
         }
     }
+
     .hero-slide-overlay {
-        background: linear-gradient(180deg, rgba(184, 134, 11, 0.85) 0%, rgba(0, 0, 0, 0.75) 100%);
+        background: linear-gradient(
+            180deg,
+            rgba(184, 134, 11, 0.82) 0%,
+            rgba(0, 0, 0, 0.78) 100%
+        );
     }
 
-    /* CIRCULAR SHOWCASE CARDS */
+    .hero-slide-title {
+        font-weight: 900;
+        letter-spacing: 0.02em;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+    }
+
+    /* =========================================================
+       CIRCULAR CATEGORY SHOWCASE
+    ========================================================= */
+
     .circle-card-img {
         width: 180px;
         height: 180px;
         border-radius: 50%;
         object-fit: cover;
         box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.12);
-        transition: transform 0.3s ease;
-    }
-    .circle-card-img:hover {
-        transform: scale(1.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    /* CATEGORY BADGES */
+    .circle-card-img:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.18);
+    }
+
+    /* =========================================================
+       CATEGORY BADGES
+    ========================================================= */
+
     .category-badge-card {
-        transition: all 0.2s ease;
+        transition:
+            transform 0.2s ease,
+            border-color 0.2s ease,
+            background-color 0.2s ease;
+
         border: 1px solid #e9ecef;
     }
+
     .category-badge-card:hover {
         border-color: #198754 !important;
         background-color: #f8f9fa;
         transform: translateY(-3px);
     }
+
+    /* =========================================================
+       CATEGORY PRODUCT CARDS
+    ========================================================= */
+
+    .homepage-product-card {
+        border: 0;
+        transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease;
+        height: 100%;
+    }
+
+    .homepage-product-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.10) !important;
+    }
+
+    .homepage-product-image {
+        height: 210px;
+        width: 100%;
+        object-fit: cover;
+        background: #f8f9fa;
+    }
+
+    /* =========================================================
+       SECTION IMAGES
+    ========================================================= */
+
+    .homepage-section-image {
+        height: 380px;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    /* =========================================================
+       SKELETON / LOADING SUPPORT
+    ========================================================= */
+
+    .lazy-image {
+        background-color: #f1f3f5;
+    }
+
+    .content-section {
+        content-visibility: auto;
+        contain-intrinsic-size: 600px;
+    }
 </style>
 
-<div id="agroMartHeroCarousel" class="carousel slide carousel-fade mb-5" data-bs-ride="carousel" data-bs-interval="5000">
-    
-    <div class="carousel-indicators mb-3">
-        {% for i in range(10) %}
-            <button 
-                type="button" 
-                data-bs-target="#agroMartHeroCarousel" 
-                data-bs-slide-to="{{ i }}" 
-                class="{% if loop.first %}active{% endif %}" 
-                aria-current="{% if loop.first %}true{% endif %}" 
-                aria-label="Slide {{ i + 1 }}">
-            </button>
-        {% endfor %}
-    </div>
 
-    <div class="carousel-inner">
+<!-- =========================================================
+     HERO CAROUSEL
+========================================================= -->
 
-        <div class="carousel-item hero-carousel-item active position-relative">
-            <img src="https://images.unsplash.com/photo-1592982537447-7440770cbfc9?auto=format&fit=crop&w=1200&q=60&fm=webp" fetchpriority="high" class="d-block w-100 h-100 object-fit-cover" alt="Tractor in Field">
-            <div class="hero-slide-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center text-center p-3">
-                <div class="container">
-                    <h1 class="fw-black display-5 text-uppercase tracking-wide text-white mb-2">
-                        EQUIPPING YOUR FARM FOR MAXIMUM PRODUCTIVITY WITH AGROMART
-                    </h1>
-                    <p class="lead text-white-50 mb-0 d-none d-md-block">Quality Agricultural Machinery & Genuine Spare Parts</p>
+<section
+    id="bometHeroCarousel"
+    class="carousel slide carousel-fade mb-5"
+    data-bs-ride="carousel"
+    data-bs-interval="5000"
+    aria-label="Bomet Machineries Ltd. featured products"
+>
+
+    {% if cms and cms.get('hero_1') %}
+
+        <div class="carousel-indicators mb-3">
+
+            {% for key in ['hero_1', 'hero_2', 'hero_3', 'hero_4', 'hero_5', 'hero_6', 'hero_7', 'hero_8'] %}
+
+                {% if cms.get(key) and cms.get(key).is_active %}
+
+                    <button
+                        type="button"
+                        data-bs-target="#bometHeroCarousel"
+                        data-bs-slide-to="{{ loop.index0 }}"
+                        class="{% if loop.first %}active{% endif %}"
+                        {% if loop.first %}aria-current="true"{% endif %}
+                        aria-label="Slide {{ loop.index }}"
+                    ></button>
+
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
+
+
+        <div class="carousel-inner">
+
+            {% set hero_keys = [
+                'hero_1',
+                'hero_2',
+                'hero_3',
+                'hero_4',
+                'hero_5',
+                'hero_6',
+                'hero_7',
+                'hero_8'
+            ] %}
+
+            {% set hero_index = namespace(value=0) %}
+
+            {% for key in hero_keys %}
+
+                {% set hero = cms.get(key) %}
+
+                {% if hero and hero.is_active %}
+
+                    <div
+                        class="carousel-item hero-carousel-item position-relative {% if hero_index.value == 0 %}active{% endif %}"
+                    >
+
+                        {% if hero.image_url %}
+
+                            <img
+                                src="{{ hero.image_url }}"
+                                {% if hero_index.value == 0 %}
+                                    fetchpriority="high"
+                                {% else %}
+                                    loading="lazy"
+                                {% endif %}
+                                decoding="async"
+                                class="d-block w-100 h-100 object-fit-cover"
+                                alt="{{ hero.image_alt or hero.headline or 'Bomet Machineries Ltd.' }}"
+                            >
+
+                        {% endif %}
+
+
+                        <div
+                            class="hero-slide-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center text-center p-3"
+                        >
+
+                            <div class="container">
+
+                                {% if hero.headline %}
+
+                                    <h1 class="hero-slide-title display-5 text-uppercase text-white mb-2">
+                                        {{ hero.headline }}
+                                    </h1>
+
+                                {% endif %}
+
+
+                                {% if hero.subheadline %}
+
+                                    <p class="lead text-white-50 mb-4 d-none d-md-block">
+                                        {{ hero.subheadline }}
+                                    </p>
+
+                                {% endif %}
+
+
+                                {% if hero.button_text and hero.button_url %}
+
+                                    <a
+                                        href="{{ hero.button_url }}"
+                                        class="btn btn-success rounded-pill px-4 py-2 fw-bold"
+                                    >
+                                        {{ hero.button_text }}
+                                    </a>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    {% set hero_index.value = hero_index.value + 1 %}
+
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
+
+
+        <button
+            class="carousel-control-prev"
+            type="button"
+            data-bs-target="#bometHeroCarousel"
+            data-bs-slide="prev"
+        >
+            <span
+                class="carousel-control-prev-icon"
+                aria-hidden="true"
+            ></span>
+
+            <span class="visually-hidden">
+                Previous
+            </span>
+        </button>
+
+
+        <button
+            class="carousel-control-next"
+            type="button"
+            data-bs-target="#bometHeroCarousel"
+            data-bs-slide="next"
+        >
+            <span
+                class="carousel-control-next-icon"
+                aria-hidden="true"
+            ></span>
+
+            <span class="visually-hidden">
+                Next
+            </span>
+        </button>
+
+    {% else %}
+
+        <!-- FALLBACK HERO -->
+
+        <div class="carousel-inner">
+
+            <div class="carousel-item hero-carousel-item active position-relative">
+
+                <img
+                    src="https://images.unsplash.com/photo-1592982537447-7440770cbfc9?auto=format&fit=crop&w=1200&q=60&fm=webp"
+                    fetchpriority="high"
+                    decoding="async"
+                    class="d-block w-100 h-100 object-fit-cover"
+                    alt="Agricultural machinery"
+                >
+
+                <div
+                    class="hero-slide-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center text-center p-3"
+                >
+
+                    <div class="container">
+
+                        <h1 class="hero-slide-title display-5 text-uppercase text-white mb-2">
+                            EQUIPPING YOUR FARM FOR MAXIMUM PRODUCTIVITY
+                        </h1>
+
+                        <p class="lead text-white-50 mb-0 d-none d-md-block">
+                            Quality Agricultural Machinery & Genuine Spare Parts
+                        </p>
+
+                    </div>
+
                 </div>
+
             </div>
+
         </div>
 
-        <div class="carousel-item hero-carousel-item position-relative">
-            <img src="https://images.unsplash.com/photo-1586771107445-d3ca888129ff?auto=format&fit=crop&w=1200&q=60&fm=webp" loading="lazy" class="d-block w-100 h-100 object-fit-cover" alt="Water Pumps & Irrigation">
-            <div class="hero-slide-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center text-center p-3">
-                <div class="container">
-                    <h1 class="fw-black display-5 text-uppercase tracking-wide text-white mb-2">
-                        HIGH-HEAD DIESEL & PETROL WATER PUMPS
-                    </h1>
-                    <p class="lead text-white-50 mb-0 d-none d-md-block">Reliable All-Season Irrigation Solutions</p>
-                </div>
-            </div>
-        </div>
+    {% endif %}
 
-        <div class="carousel-item hero-carousel-item position-relative">
-            <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1200&q=60&fm=webp" loading="lazy" class="d-block w-100 h-100 object-fit-cover" alt="Generators">
-            <div class="hero-slide-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center text-center p-3">
-                <div class="container">
-                    <h1 class="fw-black display-5 text-uppercase tracking-wide text-white mb-2">
-                        POWERFUL BACKUP GENERATORS FOR FARM & COMMERCIAL USE
-                    </h1>
-                    <p class="lead text-white-50 mb-0 d-none d-md-block">Keep Your Operations Running Without Interruptions</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="carousel-item hero-carousel-item position-relative">
-            <img src="https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=1200&q=60&fm=webp" loading="lazy" class="d-block w-100 h-100 object-fit-cover" alt="Engine Spare Parts">
-            <div class="hero-slide-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center text-center p-3">
-                <div class="container">
-                    <h1 class="fw-black display-5 text-uppercase tracking-wide text-white mb-2">
-                        100% GENUINE OEM SPARE PARTS & ACCESSORIES
-                    </h1>
-                    <p class="lead text-white-50 mb-0 d-none d-md-block">Belts, Blades, Screens, Filters & Direct-Fit Components</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="carousel-item hero-carousel-item position-relative">
-            <img src="https://images.unsplash.com/photo-1595246140625-573b715d11dc?auto=format&fit=crop&w=1200&q=60&fm=webp" loading="lazy" class="d-block w-100 h-100 object-fit-cover" alt="Posho Mills">
-            <div class="hero-slide-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center text-center p-3">
-                <div class="container">
-                    <h1 class="fw-black display-5 text-uppercase tracking-wide text-white mb-2">
-                        COMMERCIAL POSHO MILLS & GRAIN SILOS
-                    </h1>
-                    <p class="lead text-white-50 mb-0 d-none d-md-block">High-Capacity Flour Processing Machinery</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="carousel-item hero-carousel-item position-relative">
-            <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=60&fm=webp" loading="lazy" class="d-block w-100 h-100 object-fit-cover" alt="Maize Shellers">
-            <div class="hero-slide-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center text-center p-3">
-                <div class="container">
-                    <h1 class="fw-black display-5 text-uppercase tracking-wide text-white mb-2">
-                        FAST & EFFICIENT MAIZE SHELLERS
-                    </h1>
-                    <p class="lead text-white-50 mb-0 d-none d-md-block">Reduce Labor Costs with Automated Harvesting Gear</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="carousel-item hero-carousel-item position-relative">
-            <img src="https://images.unsplash.com/photo-1530507629858-e4977d30e9e0?auto=format&fit=crop&w=1200&q=60&fm=webp" loading="lazy" class="d-block w-100 h-100 object-fit-cover" alt="Chaff Cutters">
-            <div class="hero-slide-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center text-center p-3">
-                <div class="container">
-                    <h1 class="fw-black display-5 text-uppercase tracking-wide text-white mb-2">
-                        CHAFF CUTTERS & SILAGE PREPARATION
-                    </h1>
-                    <p class="lead text-white-50 mb-0 d-none d-md-block">Prepare Superior Feed for High-Yield Livestock</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="carousel-item hero-carousel-item position-relative">
-            <img src="https://images.unsplash.com/photo-1589923188900-85dae523342b?auto=format&fit=crop&w=1200&q=60&fm=webp" loading="lazy" class="d-block w-100 h-100 object-fit-cover" alt="Power Saws & Equipment">
-            <div class="hero-slide-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center text-center p-3">
-                <div class="container">
-                    <h1 class="fw-black display-5 text-uppercase tracking-wide text-white mb-2">
-                        POWER SAWS, MOWERS & OUTDOOR TOOLS
-                    </h1>
-                    <p class="lead text-white-50 mb-0 d-none d-md-block">Precision Tools Built for Rugged Fieldwork</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="carousel-item hero-carousel-item position-relative">
-            <img src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=1200&q=60&fm=webp" loading="lazy" class="d-block w-100 h-100 object-fit-cover" alt="Cooling Equipment">
-            <div class="hero-slide-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center text-center p-3">
-                <div class="container">
-                    <h1 class="fw-black display-5 text-uppercase tracking-wide text-white mb-2">
-                        MILK CHILLERS & AGRICULTURAL REFRIGERATION
-                    </h1>
-                    <p class="lead text-white-50 mb-0 d-none d-md-block">Protect Produce & Dairy Quality From Farm to Market</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="carousel-item hero-carousel-item position-relative">
-            <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=60&fm=webp" loading="lazy" class="d-block w-100 h-100 object-fit-cover" alt="Maintenance & Services">
-            <div class="hero-slide-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center text-center p-3">
-                <div class="container">
-                    <h1 class="fw-black display-5 text-uppercase tracking-wide text-white mb-2">
-                        EXPERT MACHINERY MAINTENANCE & SUPPORT
-                    </h1>
-                    <p class="lead text-white-50 mb-0 d-none d-md-block">Trusted Technical Service Across Kenya</p>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <button class="carousel-control-prev" type="button" data-bs-target="#agroMartHeroCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#agroMartHeroCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-    </button>
-
-</div>
-
-<section class="container mb-5">
-    <div class="row g-4 justify-content-center text-center">
-        <div class="col-6 col-md-4">
-            <a href="{{ url_for('product.products', category='Posho Mills') }}" class="text-decoration-none text-dark">
-                <img src="https://images.unsplash.com/photo-1595246140625-573b715d11dc?auto=format&fit=crop&w=350&q=60&fm=webp" 
-                     loading="lazy" alt="Posho Mills" class="circle-card-img mb-3">
-                <h5 class="fw-bold fs-6">Posho Mills</h5>
-            </a>
-        </div>
-        <div class="col-6 col-md-4">
-            <a href="{{ url_for('product.products', category='Chaff Cutters') }}" class="text-decoration-none text-dark">
-                <img src="https://images.unsplash.com/photo-1586771107445-d3ca888129ff?auto=format&fit=crop&w=350&q=60&fm=webp" 
-                     loading="lazy" alt="Chaff Cutters" class="circle-card-img mb-3">
-                <h5 class="fw-bold fs-6">Chaff Cutters</h5>
-            </a>
-        </div>
-        <div class="col-6 col-md-4">
-            <a href="{{ url_for('product.products', category='Maize Shellers') }}" class="text-decoration-none text-dark">
-                <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=350&q=60&fm=webp" 
-                     loading="lazy" alt="Maize Shellers" class="circle-card-img mb-3">
-                <h5 class="fw-bold fs-6">Maize Shellers</h5>
-            </a>
-        </div>
-    </div>
-
-    <div class="row justify-content-center mt-5">
-        <div class="col-lg-9 text-center">
-            <p class="lead text-secondary lh-base fs-6">
-                Looking to boost your farm yields and streamline processing, but struggling to find heavy-duty machinery and genuine parts? 
-                <strong>AgroMart</strong> is your trusted source for powerful Posho Mills, Chaff Cutters, Water Pumps, Generators, and direct-fit spares—helping you save time, reduce labor costs, and keep operations running smoothly.
-            </p>
-        </div>
-    </div>
 </section>
 
-<section class="bg-light py-5">
+
+<!-- =========================================================
+     FEATURED CATEGORY SHOWCASE
+========================================================= -->
+
+<section class="container mb-5">
+
+    <div class="row g-4 justify-content-center text-center">
+
+        {% for category in categories[:3] %}
+
+            <div class="col-6 col-md-4">
+
+                <a
+                    href="{{ url_for('product.category_products', slug=category.slug) }}"
+                    class="text-decoration-none text-dark"
+                >
+
+                    {% if category.image_url %}
+
+                        <img
+                            src="{{ category.image_url }}"
+                            loading="lazy"
+                            decoding="async"
+                            alt="{{ category.name }}"
+                            class="circle-card-img mb-3"
+                        >
+
+                    {% else %}
+
+                        <div
+                            class="circle-card-img mb-3 mx-auto d-flex align-items-center justify-content-center bg-light"
+                        >
+                            <i class="bi bi-image fs-1 text-secondary"></i>
+                        </div>
+
+                    {% endif %}
+
+                    <h5 class="fw-bold fs-6">
+                        {{ category.name }}
+                    </h5>
+
+                </a>
+
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+
+    <div class="row justify-content-center mt-5">
+
+        <div class="col-lg-9 text-center">
+
+            <p class="lead text-secondary lh-base fs-6">
+
+                Bomet Machineries Ltd. is your trusted source for
+                high-quality agricultural machinery, equipment and
+                genuine spare parts. We provide reliable solutions
+                designed to help farmers, businesses and agricultural
+                processors improve productivity, reduce downtime and
+                operate efficiently.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     DYNAMIC CATEGORY PRODUCT SECTIONS
+========================================================= -->
+
+<section class="bg-light py-5 content-section">
+
     <div class="container py-3">
-        
-        <h2 class="text-center fw-black display-6 text-uppercase mb-5">IT'S EASILY EFFICIENT...</h2>
+
+        <div class="text-center mb-5">
+
+            <h2 class="fw-black display-6 text-uppercase mb-3">
+                OUR MACHINERY & EQUIPMENT
+            </h2>
+
+            <p class="text-muted mb-0">
+                Explore our latest agricultural machinery and equipment.
+            </p>
+
+        </div>
+
+
+        {% if categories %}
+
+            {% for category in categories %}
+
+                {% set products = featured_by_category.get(category.id, []) %}
+
+                {% if products %}
+
+                    <div class="mb-5">
+
+                        <!-- CATEGORY HEADER -->
+
+                        <div
+                            class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4"
+                        >
+
+                            <div>
+
+                                <h3 class="fw-bold text-uppercase h4 mb-1">
+                                    {{ category.name }}
+                                </h3>
+
+                                {% if category.description %}
+
+                                    <p class="text-muted mb-0">
+                                        {{ category.description }}
+                                    </p>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <a
+                                href="{{ url_for('product.category_products', slug=category.slug) }}"
+                                class="btn btn-outline-success rounded-pill px-4 fw-semibold"
+                            >
+                                View All
+                                <i class="bi bi-arrow-right ms-1"></i>
+                            </a>
+
+                        </div>
+
+
+                        <!-- PRODUCT GRID -->
+
+                        <div class="row g-4">
+
+                            {% for product in products[:6] %}
+
+                                <div class="col-6 col-md-4 col-lg-2">
+
+                                    <div class="card homepage-product-card shadow-sm rounded-4 overflow-hidden">
+
+                                        <a
+                                            href="{{ url_for('product.products', slug=product.slug) }}"
+                                            class="text-decoration-none"
+                                        >
+
+                                            {% if product.images %}
+
+                                                {% set primary_image = product.images | selectattr('is_primary', 'equalto', true) | first %}
+
+                                                {% if primary_image %}
+
+                                                    <img
+                                                        src="{{ primary_image.image_url }}"
+                                                        loading="lazy"
+                                                        decoding="async"
+                                                        class="homepage-product-image"
+                                                        alt="{{ product.name }}"
+                                                    >
+
+                                                {% else %}
+
+                                                    <img
+                                                        src="{{ product.images[0].image_url }}"
+                                                        loading="lazy"
+                                                        decoding="async"
+                                                        class="homepage-product-image"
+                                                        alt="{{ product.name }}"
+                                                    >
+
+                                                {% endif %}
+
+                                            {% else %}
+
+                                                <div
+                                                    class="homepage-product-image d-flex align-items-center justify-content-center"
+                                                >
+                                                    <i class="bi bi-image fs-1 text-secondary"></i>
+                                                </div>
+
+                                            {% endif %}
+
+                                        </a>
+
+
+                                        <div class="card-body p-3">
+
+                                            <h5
+                                                class="fw-semibold small mb-2 text-truncate"
+                                                title="{{ product.name }}"
+                                            >
+                                                {{ product.name }}
+                                            </h5>
+
+
+                                            {% if product.discount and product.discount > 0 %}
+
+                                                <div class="small text-muted text-decoration-line-through">
+                                                    KSh {{ "{:,.2f}".format(product.price) }}
+                                                </div>
+
+                                                <div class="fw-bold text-success">
+                                                    KSh {{ "{:,.2f}".format(product.discounted_price) }}
+                                                </div>
+
+                                            {% else %}
+
+                                                <div class="fw-bold text-success">
+                                                    KSh {{ "{:,.2f}".format(product.price) }}
+                                                </div>
+
+                                            {% endif %}
+                                            <a
+                                                href="{{ url_for('product.product_details', id=product.id) }}"
+                                                class="btn btn-sm btn-outline-success rounded-pill w-100 mt-3"
+                                            >
+                                                View Product
+                                            </a>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="text-center py-5">
+
+                <i class="bi bi-box-seam fs-1 text-secondary"></i>
+
+                <h4 class="mt-3">
+                    Products Coming Soon
+                </h4>
+
+                <p class="text-muted">
+                    Our latest machinery and equipment will appear here.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     FEATURED CATEGORY LINKS
+========================================================= -->
+
+<section class="container py-5 content-section">
+
+    <div class="text-center mb-5">
+
+        <h2 class="fw-black text-uppercase display-6">
+            SHOP BY CATEGORY
+        </h2>
+
+        <p class="text-muted">
+            Find the machinery and equipment you need.
+        </p>
+
+    </div>
+
+
+    <div class="row g-3">
+
+        {% for category in categories %}
+
+            <div class="col-6 col-md-4 col-lg-3">
+
+                <a
+                    href="{{ url_for('product.category_products', slug=category.slug) }}"
+                    class="text-decoration-none"
+                >
+
+                    <div class="category-badge-card p-3 rounded-4 bg-white text-center shadow-sm h-100">
+
+                        {% if category.image_url %}
+
+                            <img
+                                src="{{ category.image_url }}"
+                                loading="lazy"
+                                decoding="async"
+                                class="img-fluid rounded-3 mb-3"
+                                style="height: 140px; width: 100%; object-fit: cover;"
+                                alt="{{ category.name }}"
+                            >
+
+                        {% endif %}
+
+                        <h6 class="fw-bold text-dark mb-0">
+                            {{ category.name }}
+                        </h6>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     BUSINESS / SERVICE PROMOTION
+========================================================= -->
+
+{% set service_sections = [
+    {
+        'key': 'section_milling',
+        'fallback_image': 'https://images.unsplash.com/photo-1595246140625-573b715d11dc?auto=format&fit=crop&w=700&q=60&fm=webp',
+        'fallback_title': 'HEAVY-DUTY POSHO MILLS & GRAIN PROCESSING',
+        'fallback_text': 'Maximize your grain processing capacity with reliable milling and harvesting equipment designed for farms and commercial operations.'
+    },
+    {
+        'key': 'section_fodder',
+        'fallback_image': 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=700&q=60&fm=webp',
+        'fallback_title': 'CHAFF CUTTERS & FODDER MACHINERY',
+        'fallback_text': 'Streamline feed preparation with dependable machinery for chopping grass, fodder and other livestock feed.'
+    },
+    {
+        'key': 'section_power',
+        'fallback_image': 'https://images.unsplash.com/photo-1586771107445-d3ca888129ff?auto=format&fit=crop&w=700&q=60&fm=webp',
+        'fallback_title': 'WATER PUMPS & GENERATORS',
+        'fallback_text': 'Keep your farm powered and irrigated with reliable water pumps, generators and agricultural power equipment.'
+    },
+    {
+        'key': 'section_spares',
+        'fallback_image': 'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=700&q=60&fm=webp',
+        'fallback_title': 'GENUINE SPARE PARTS & EQUIPMENT',
+        'fallback_text': 'Keep your machinery operating efficiently with quality replacement parts and agricultural equipment.'
+    }
+] %}
+
+
+<section class="py-5 content-section">
+
+    <div class="container py-3">
+
+        <h2 class="text-center fw-black display-6 text-uppercase mb-5">
+            WHY CHOOSE BOMET MACHINERIES?
+        </h2>
+
 
         <div class="d-flex flex-column gap-5">
 
-            <div class="row align-items-center g-4 g-lg-5">
-                <div class="col-lg-6">
-                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1595246140625-573b715d11dc?auto=format&fit=crop&w=700&q=60&fm=webp" 
-                             loading="lazy" alt="Posho Mills & Milling" class="img-fluid w-100 object-fit-cover" style="height: 380px;">
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <h3 class="fw-bold text-uppercase h4 mb-3">HEAVY-DUTY POSHO MILLS & SHELLERS</h3>
-                    <p class="text-muted mb-4">
-                        Maximize your commercial or farm grain output with high-efficiency diesel and electric milling equipment designed for continuous operation.
-                    </p>
+            {% for section in service_sections %}
 
-                    <div class="row g-2 mb-4">
-                        {% set posho_cats = ['Posho Mills', 'Maize Shellers', 'Combine Harvesters', 'Grain Dryers', 'De-huskers', 'Flour Sifters'] %}
-                        {% for cat in posho_cats %}
-                            <div class="col-6 col-sm-4">
-                                <a href="{{ url_for('product.products', category=cat) }}" class="text-decoration-none">
-                                    <div class="category-badge-card p-2.5 rounded-3 bg-white text-center shadow-xs">
-                                        <span class="fw-semibold text-dark extra-small">{{ cat }}</span>
-                                    </div>
+                {% set cms_section = cms.get(section.key) if cms else none %}
+
+                <div
+                    class="row align-items-center g-4 g-lg-5 {% if loop.index is even %}flex-lg-row-reverse{% endif %}"
+                >
+
+                    <div class="col-lg-6">
+
+                        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+
+                            <img
+                                src="{{ cms_section.image_url if cms_section and cms_section.image_url else section.fallback_image }}"
+                                loading="lazy"
+                                decoding="async"
+                                alt="{{ cms_section.image_alt if cms_section and cms_section.image_alt else section.fallback_title }}"
+                                class="homepage-section-image"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-lg-6">
+
+                        <h3 class="fw-bold text-uppercase h4 mb-3">
+
+                            {% if cms_section and cms_section.headline %}
+
+                                {{ cms_section.headline }}
+
+                            {% else %}
+
+                                {{ section.fallback_title }}
+
+                            {% endif %}
+
+                        </h3>
+
+
+                        <p class="text-muted mb-4">
+
+                            {% if cms_section and cms_section.subheadline %}
+
+                                {{ cms_section.subheadline }}
+
+                            {% else %}
+
+                                {{ section.fallback_text }}
+
+                            {% endif %}
+
+                        </p>
+
+
+                        <!-- DYNAMIC CATEGORY LINKS -->
+
+                        <div class="row g-2 mb-4">
+
+                            {% for category in categories[:6] %}
+
+                                <div class="col-6 col-sm-4">
+
+                                    <a
+                                        href="{{ url_for('product.category_products', slug=category.slug) }}"
+                                        class="text-decoration-none"
+                                    >
+
+                                        <div
+                                            class="category-badge-card p-2 rounded-3 bg-white text-center shadow-sm"
+                                        >
+
+                                            <span class="fw-semibold text-dark small">
+                                                {{ category.name }}
+                                            </span>
+
+                                        </div>
+
+                                    </a>
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                        <div class="d-flex gap-3 align-items-center flex-wrap">
+
+                            {% if categories %}
+
+                                <a
+                                    href="{{ url_for('product.category_products', slug=categories[0].slug) }}"
+                                    class="btn btn-success rounded-pill px-4 py-2 fw-bold shadow-sm"
+                                >
+                                    Explore Machinery
                                 </a>
-                            </div>
-                        {% endfor %}
+
+                            {% endif %}
+
+                            <a
+                                href="{{ url_for('product.products') }}"
+                                class="btn btn-outline-secondary rounded-pill px-4 py-2 fw-semibold"
+                            >
+                                View All Products
+                            </a>
+
+                        </div>
+
                     </div>
 
-                    <div class="d-flex gap-3 align-items-center">
-                        <a href="{{ url_for('product.products', category='Posho Mills') }}" class="btn btn-success rounded-pill px-4 py-2.5 fw-bold shadow-sm">
-                            Shop Posho Mills
-                        </a>
-                        <a href="#" class="btn btn-outline-secondary rounded-pill px-4 py-2.5 fw-semibold">
-                            How It Works
-                        </a>
-                    </div>
                 </div>
-            </div>
 
-            <div class="row align-items-center g-4 g-lg-5 flex-lg-row-reverse">
-                <div class="col-lg-6">
-                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=700&q=60&fm=webp" 
-                             loading="lazy" alt="Chaff Cutters & Fodder" class="img-fluid w-100 object-fit-cover" style="height: 380px;">
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <h3 class="fw-bold text-uppercase h4 mb-3">CHAFF CUTTERS & FODDER MACHINERY</h3>
-                    <p class="text-muted mb-4">
-                        Streamline feed preparation for your livestock. Chop green and dry fodder, Napier grass, and stalk effortlessly to boost silage quality.
-                    </p>
-
-                    <div class="row g-2 mb-4">
-                        {% set fodder_cats = ['Chaff Cutters', 'Grass Mowers', 'Silage Choppers', 'Hay Balers', 'Feed Mixers', 'Pellet Mills'] %}
-                        {% for cat in fodder_cats %}
-                            <div class="col-6 col-sm-4">
-                                <a href="{{ url_for('product.products', category=cat) }}" class="text-decoration-none">
-                                    <div class="category-badge-card p-2.5 rounded-3 bg-white text-center shadow-xs">
-                                        <span class="fw-semibold text-dark extra-small">{{ cat }}</span>
-                                    </div>
-                                </a>
-                            </div>
-                        {% endfor %}
-                    </div>
-
-                    <div class="d-flex gap-3 align-items-center">
-                        <a href="{{ url_for('product.products', category='Chaff Cutters') }}" class="btn btn-success rounded-pill px-4 py-2.5 fw-bold shadow-sm">
-                            Explore Chaff Cutters
-                        </a>
-                        <a href="#" class="btn btn-outline-secondary rounded-pill px-4 py-2.5 fw-semibold">
-                            View Specs
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row align-items-center g-4 g-lg-5">
-                <div class="col-lg-6">
-                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1586771107445-d3ca888129ff?auto=format&fit=crop&w=700&q=60&fm=webp" 
-                             loading="lazy" alt="Water Pumps and Power" class="img-fluid w-100 object-fit-cover" style="height: 380px;">
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <h3 class="fw-bold text-uppercase h4 mb-3">IRRIGATION PUMPS & GENERATORS</h3>
-                    <p class="text-muted mb-4">
-                        Keep your farm powered and irrigated all year round. From high-head petrol water pumps to heavy-duty backup diesel generators.
-                    </p>
-
-                    <div class="row g-2 mb-4">
-                        {% set power_cats = ['Water Pumps', 'Generators', 'Solar Pumps', 'Power Saws', 'Spray Pumps', 'Pressure Washers'] %}
-                        {% for cat in power_cats %}
-                            <div class="col-6 col-sm-4">
-                                <a href="{{ url_for('product.products', category=cat) }}" class="text-decoration-none">
-                                    <div class="category-badge-card p-2.5 rounded-3 bg-white text-center shadow-xs">
-                                        <span class="fw-semibold text-dark extra-small">{{ cat }}</span>
-                                    </div>
-                                </a>
-                            </div>
-                        {% endfor %}
-                    </div>
-
-                    <div class="d-flex gap-3 align-items-center">
-                        <a href="{{ url_for('product.products', category='Water Pumps') }}" class="btn btn-success rounded-pill px-4 py-2.5 fw-bold shadow-sm">
-                            Browse Power & Water
-                        </a>
-                        <a href="#" class="btn btn-outline-secondary rounded-pill px-4 py-2.5 fw-semibold">
-                            Learn More
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row align-items-center g-4 g-lg-5 flex-lg-row-reverse">
-                <div class="col-lg-6">
-                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=700&q=60&fm=webp" 
-                             loading="lazy" alt="Spare Parts & Refrigeration" class="img-fluid w-100 object-fit-cover" style="height: 380px;">
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <h3 class="fw-bold text-uppercase h4 mb-3">GENUINE SPARE PARTS & COOLING</h3>
-                    <p class="text-muted mb-4">
-                        Avoid costly breakdowns with direct-fit OEM replacement parts, cutter blades, belts, motors, and agricultural milk chillers.
-                    </p>
-
-                    <div class="row g-2 mb-4">
-                        {% set spares_cats = ['Spare Parts', 'Chaff Blades', 'Posho Screens', 'V-Belts', 'Refrigerators', 'Engine Oil'] %}
-                        {% for cat in spares_cats %}
-                            <div class="col-6 col-sm-4">
-                                <a href="{{ url_for('product.products', category=cat) }}" class="text-decoration-none">
-                                    <div class="category-badge-card p-2.5 rounded-3 bg-white text-center shadow-xs">
-                                        <span class="fw-semibold text-dark extra-small">{{ cat }}</span>
-                                    </div>
-                                </a>
-                            </div>
-                        {% endfor %}
-                    </div>
-
-                    <div class="d-flex gap-3 align-items-center">
-                        <a href="{{ url_for('product.products', category='Spare Parts') }}" class="btn btn-success rounded-pill px-4 py-2.5 fw-bold shadow-sm">
-                            Find Spare Parts
-                        </a>
-                        <a href="#" class="btn btn-outline-secondary rounded-pill px-4 py-2.5 fw-semibold">
-                            Contact Support
-                        </a>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
 
         </div>
 
     </div>
+
+</section>
+
+
+<!-- =========================================================
+     FINAL CALL TO ACTION
+========================================================= -->
+
+<section class="bg-dark text-white py-5 content-section">
+
+    <div class="container text-center py-4">
+
+        <h2 class="fw-bold text-uppercase mb-3">
+            READY TO EQUIP YOUR FARM?
+        </h2>
+
+        <p class="text-white-50 mb-4">
+            Browse our agricultural machinery, equipment and genuine spare parts.
+        </p>
+
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+
+            <a
+                href="{{ url_for('product.products') }}"
+                class="btn btn-success rounded-pill px-4 py-2 fw-bold"
+            >
+                Shop Now
+            </a>
+
+            {% if categories %}
+
+                <a
+                    href="{{ url_for('product.category_products', slug=categories[0].slug) }}"
+                    class="btn btn-outline-light rounded-pill px-4 py-2 fw-semibold"
+                >
+                    Browse Categories
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
 </section>
 
 {% endblock %}

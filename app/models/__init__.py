@@ -5,3 +5,4 @@ from .product_image import ProductImage
 from .cart import Cart, CartItem
 from .order import Order, OrderItem
 from .wishlist import Wishlist
+from app.models.homepage_content import HomepageContent

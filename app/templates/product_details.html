@@ -1,48 +1,31 @@
 {% extends "base.html" %}
 
-{% block title %}
-    {{ product.name }} - AgroMart
-{% endblock %}
-
+{% block title %}{{ product.name }} - Bomet Machineries Ltd.{% endblock %}
 
 {% block content %}
 
 <style>
-
 /* ============================================================
-   AGROMART — PRODUCT DETAILS
-   MOBILE FIRST / RESPONSIVE / PROFESSIONAL
-============================================================ */
+   BOMET MACHINERIES LTD.
+   PRODUCT DETAILS — MOBILE FIRST
+   ============================================================ */
 
 :root {
-    --agro-green: #15803d;
-    --agro-green-dark: #166534;
-    --agro-green-light: #dcfce7;
-
-    --agro-yellow: #f59e0b;
-    --agro-yellow-light: #fef3c7;
-
-    --agro-red: #dc2626;
-    --agro-red-light: #fee2e2;
-
-    --agro-text: #111827;
-    --agro-muted: #6b7280;
-    --agro-border: #e5e7eb;
-    --agro-soft: #f8fafc;
-
-    --agro-radius: 18px;
-
-    --agro-shadow:
-        0 10px 30px rgba(0, 0, 0, 0.06);
-
-    --agro-shadow-lg:
-        0 18px 45px rgba(0, 0, 0, 0.10);
+    --bm-green: #15803d;
+    --bm-green-dark: #166534;
+    --bm-green-light: #dcfce7;
+    --bm-yellow: #f59e0b;
+    --bm-yellow-light: #fef3c7;
+    --bm-red: #dc2626;
+    --bm-red-light: #fee2e2;
+    --bm-text: #111827;
+    --bm-muted: #6b7280;
+    --bm-border: #e5e7eb;
+    --bm-soft: #f8fafc;
+    --bm-radius: 18px;
+    --bm-shadow: 0 10px 30px rgba(0,0,0,.06);
+    --bm-shadow-lg: 0 18px 45px rgba(0,0,0,.10);
 }
-
-
-/* ============================================================
-   PAGE
-============================================================ */
 
 .product-details-page {
     width: 100%;
@@ -50,37 +33,29 @@
     margin: 0 auto;
 }
 
-
 /* ============================================================
    BREADCRUMB
-============================================================ */
+   ============================================================ */
 
 .product-breadcrumb {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-
     gap: 6px;
-
     margin-bottom: 14px;
-
-    color: var(--agro-muted);
-
+    color: var(--bm-muted);
     font-size: 12px;
     line-height: 1.4;
 }
 
 .product-breadcrumb a {
-    color: var(--agro-green);
-
+    color: var(--bm-green);
     text-decoration: none;
-
     font-weight: 700;
 }
 
 .product-breadcrumb a:hover {
-    color: var(--agro-green-dark);
-
+    color: var(--bm-green-dark);
     text-decoration: underline;
 }
 
@@ -90,168 +65,105 @@
 
 .product-breadcrumb .current {
     max-width: 210px;
-
     overflow: hidden;
-
     text-overflow: ellipsis;
-
     white-space: nowrap;
-
     color: #374151;
-
     font-weight: 600;
 }
 
-
 /* ============================================================
-   MAIN GRID
-============================================================ */
+   PRODUCT LAYOUT
+   ============================================================ */
 
 .product-details-row {
     align-items: stretch;
 }
 
-
 /* ============================================================
    GALLERY
-============================================================ */
+   ============================================================ */
 
 .product-gallery-card {
     position: relative;
-
     width: 100%;
-
-    min-height: 390px;
-
+    height: min(112vw, 520px);
+    min-height: 350px;
     overflow: hidden;
-
     background: #111827;
-
-    border-radius: var(--agro-radius);
-
-    box-shadow: var(--agro-shadow-lg);
+    border-radius: var(--bm-radius);
+    box-shadow: var(--bm-shadow-lg);
 }
 
 .product-main-image-wrapper {
     position: absolute;
-
     inset: 0;
-
-    width: 100%;
-    height: 100%;
-
-    background: #111827;
-
     overflow: hidden;
+    background: #111827;
 }
 
 .product-main-image {
     width: 100%;
     height: 100%;
-
     display: block;
-
     object-fit: cover;
-
     cursor: zoom-in;
-
     user-select: none;
-
     -webkit-user-drag: none;
-
-    transition:
-        transform 0.35s ease,
-        opacity 0.2s ease;
+    transition: transform .35s ease, opacity .2s ease;
 }
 
 .product-main-image:hover {
     transform: scale(1.025);
 }
 
-
-/* ============================================================
-   IMAGE FALLBACK
-============================================================ */
-
 .product-image-fallback {
     position: absolute;
-
     inset: 0;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
-    background:
-        linear-gradient(
-            135deg,
-            #374151,
-            #111827
-        );
-
-    color: #ffffff;
-
+    background: linear-gradient(135deg,#374151,#111827);
+    color: white;
     font-size: 65px;
 }
 
-
-/* ============================================================
-   IMAGE GRADIENT
-============================================================ */
-
 .product-gallery-gradient {
     position: absolute;
-
     inset: 0;
-
     z-index: 1;
-
     pointer-events: none;
-
     background:
         linear-gradient(
             to top,
-            rgba(0, 0, 0, 0.92) 0%,
-            rgba(0, 0, 0, 0.62) 24%,
-            rgba(0, 0, 0, 0.12) 65%,
-            rgba(0, 0, 0, 0.18) 100%
+            rgba(0,0,0,.94) 0%,
+            rgba(0,0,0,.65) 24%,
+            rgba(0,0,0,.12) 65%,
+            rgba(0,0,0,.18) 100%
         );
 }
 
-
 /* ============================================================
-   GALLERY TOP BAR
-============================================================ */
+   GALLERY TOP
+   ============================================================ */
 
 .gallery-top-bar {
     position: absolute;
-
     top: 0;
     left: 0;
     right: 0;
-
     z-index: 5;
-
-    padding: 13px;
-
+    padding: 12px;
     display: flex;
-
     align-items: flex-start;
-
     justify-content: space-between;
-
     gap: 8px;
 }
 
 .gallery-brand {
     max-width: 62%;
-
     overflow: hidden;
-
     text-overflow: ellipsis;
-
     white-space: nowrap;
 }
 
@@ -259,301 +171,182 @@
     flex-shrink: 0;
 }
 
+.gallery-counter {
+    position: absolute;
+    top: 58px;
+    right: 12px;
+    z-index: 5;
+    padding: 5px 9px;
+    border-radius: 50px;
+    background: rgba(0,0,0,.55);
+    color: white;
+    font-size: 10px;
+    font-weight: 800;
+    backdrop-filter: blur(5px);
+}
 
 /* ============================================================
    GALLERY NAVIGATION
-============================================================ */
+   ============================================================ */
 
 .gallery-navigation {
     position: absolute;
-
     top: 50%;
     left: 0;
     right: 0;
-
     z-index: 5;
-
     display: flex;
-
-    align-items: center;
-
     justify-content: space-between;
-
-    padding: 0 9px;
-
+    padding: 0 8px;
     transform: translateY(-50%);
-
     pointer-events: none;
+}
+
+.gallery-nav-btn,
+.lightbox-close,
+.lightbox-prev,
+.lightbox-next {
+    border: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
 }
 
 .gallery-nav-btn {
     width: 40px;
     height: 40px;
-
-    flex-shrink: 0;
-
-    border: 0;
-
-    border-radius: 50%;
-
-    background: rgba(0, 0, 0, 0.58);
-
-    color: #ffffff;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    cursor: pointer;
-
+    background: rgba(0,0,0,.58);
+    color: white;
     pointer-events: auto;
-
     backdrop-filter: blur(6px);
-
-    transition:
-        background 0.2s ease,
-        transform 0.2s ease;
+    transition: background .2s ease, transform .2s ease;
 }
 
 .gallery-nav-btn:hover {
-    background: rgba(0, 0, 0, 0.82);
-
+    background: rgba(0,0,0,.82);
     transform: scale(1.05);
 }
 
-.gallery-nav-btn:focus-visible {
-    outline: 3px solid rgba(255, 193, 7, 0.8);
-
-    outline-offset: 3px;
-}
-
-
-/* ============================================================
-   GALLERY COUNTER
-============================================================ */
-
-.gallery-counter {
-    position: absolute;
-
-    top: 60px;
-    right: 13px;
-
-    z-index: 5;
-
-    padding: 5px 9px;
-
-    border-radius: 50px;
-
-    background: rgba(0, 0, 0, 0.55);
-
-    color: #ffffff;
-
-    font-size: 10px;
-
-    font-weight: 800;
-
-    backdrop-filter: blur(5px);
-}
-
-
 /* ============================================================
    GALLERY BOTTOM
-============================================================ */
+   ============================================================ */
 
 .gallery-bottom {
     position: absolute;
-
     left: 0;
     right: 0;
     bottom: 0;
-
     z-index: 4;
-
-    padding:
-        15px
-        15px
-        78px;
-
-    color: #ffffff;
+    padding: 15px 15px 78px;
+    color: white;
 }
 
 .gallery-category {
     display: inline-flex;
-
     align-items: center;
-
     max-width: 100%;
-
     margin-bottom: 7px;
-
     padding: 5px 9px;
-
     border-radius: 50px;
-
-    background: rgba(220, 252, 231, 0.96);
-
-    color: var(--agro-green-dark);
-
+    background: rgba(220,252,231,.96);
+    color: var(--bm-green-dark);
     font-size: 10px;
-
     font-weight: 800;
-
     overflow: hidden;
-
     text-overflow: ellipsis;
-
     white-space: nowrap;
 }
 
 .gallery-product-name {
     margin: 0;
-
-    color: #ffffff;
-
+    color: white;
     font-size: 1.25rem;
-
     font-weight: 850;
-
     line-height: 1.15;
 }
 
-
 /* ============================================================
    THUMBNAILS
-============================================================ */
+   ============================================================ */
 
 .product-thumbnails-wrapper {
     position: absolute;
-
     left: 0;
     right: 0;
     bottom: 0;
-
     z-index: 6;
-
-    padding:
-        0
-        10px
-        10px;
-
+    padding: 0 10px 10px;
     pointer-events: none;
 }
 
 .product-thumbnails {
     display: flex;
-
     align-items: center;
-
     gap: 7px;
-
     overflow-x: auto;
-
     padding: 2px;
-
     scrollbar-width: thin;
-
     pointer-events: auto;
-}
-
-.product-thumbnails::-webkit-scrollbar {
-    height: 3px;
 }
 
 .product-thumbnail {
     width: 45px;
     height: 45px;
-
     flex: 0 0 auto;
-
     padding: 0;
-
-    border: 2px solid rgba(255, 255, 255, 0.55);
-
+    border: 2px solid rgba(255,255,255,.55);
     border-radius: 8px;
-
     overflow: hidden;
-
     background: #111827;
-
     cursor: pointer;
-
-    opacity: 0.70;
-
-    transition:
-        opacity 0.2s ease,
-        transform 0.2s ease,
-        border-color 0.2s ease;
+    opacity: .7;
+    transition: opacity .2s ease, transform .2s ease, border-color .2s ease;
 }
 
-.product-thumbnail:hover {
+.product-thumbnail:hover,
+.product-thumbnail.active {
     opacity: 1;
-
-    transform: translateY(-2px);
 }
 
 .product-thumbnail.active {
-    opacity: 1;
-
     border-color: #ffc107;
-
-    box-shadow:
-        0 0 0 2px rgba(255, 193, 7, 0.25);
+    box-shadow: 0 0 0 2px rgba(255,193,7,.25);
 }
 
 .product-thumbnail img {
     width: 100%;
     height: 100%;
-
     display: block;
-
     object-fit: cover;
 }
 
-
 /* ============================================================
-   PRODUCT INFORMATION CARD
-============================================================ */
+   PRODUCT INFORMATION
+   ============================================================ */
 
 .product-info-card {
     height: 100%;
-
     padding: 18px;
-
-    background: #ffffff;
-
-    border: 1px solid var(--agro-border);
-
-    border-radius: var(--agro-radius);
-
-    box-shadow: var(--agro-shadow);
+    background: white;
+    border: 1px solid var(--bm-border);
+    border-radius: var(--bm-radius);
+    box-shadow: var(--bm-shadow);
 }
-
-
-/* ============================================================
-   META
-============================================================ */
 
 .product-meta {
     display: flex;
-
     flex-direction: column;
-
     align-items: flex-start;
-
     gap: 8px;
-
     margin-bottom: 14px;
 }
 
 .product-sku {
     width: 100%;
-
     min-width: 0;
-
-    color: var(--agro-muted);
-
+    color: var(--bm-muted);
     font-size: 12px;
 }
 
@@ -563,62 +356,29 @@
 
 .sku-copy-btn {
     border: 0;
-
     background: transparent;
-
-    color: var(--agro-green);
-
+    color: var(--bm-green);
     font-size: 11px;
-
     font-weight: 800;
-
     cursor: pointer;
-
     padding: 2px 0;
 }
 
-.sku-copy-btn:hover {
-    color: var(--agro-green-dark);
-
-    text-decoration: underline;
-}
-
-.stock-badge {
-    align-self: flex-start;
-
-    flex-shrink: 0;
-}
-
-
-/* ============================================================
-   PRODUCT TITLE
-============================================================ */
-
 .product-title {
     margin: 0 0 8px;
-
-    color: var(--agro-text);
-
+    color: var(--bm-text);
     font-size: 1.55rem;
-
     font-weight: 850;
-
     line-height: 1.15;
 }
 
 .product-brand {
     display: inline-flex;
-
     align-items: center;
-
     gap: 6px;
-
     margin-bottom: 17px;
-
-    color: var(--agro-muted);
-
+    color: var(--bm-muted);
     font-size: 13px;
-
     font-weight: 650;
 }
 
@@ -626,347 +386,208 @@
     color: #16a34a;
 }
 
-
 /* ============================================================
-   PRICE CARD
-============================================================ */
+   PRICE
+   ============================================================ */
 
 .product-price-section {
     margin-bottom: 20px;
-
     padding: 15px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #f8fafc,
-            #f0fdf4
-        );
-
-    border: 1px solid #e5e7eb;
-
+    background: linear-gradient(135deg,#f8fafc,#f0fdf4);
+    border: 1px solid var(--bm-border);
     border-radius: 15px;
 }
 
 .price-label {
     display: block;
-
     margin-bottom: 4px;
-
-    color: var(--agro-muted);
-
+    color: var(--bm-muted);
     font-size: 11px;
-
     font-weight: 700;
-
     text-transform: uppercase;
-
-    letter-spacing: 0.04em;
+    letter-spacing: .04em;
 }
 
 .price-line {
     display: flex;
-
     align-items: baseline;
-
     flex-wrap: wrap;
-
     gap: 6px;
 }
 
 .current-price {
-    color: var(--agro-green);
-
+    color: var(--bm-green);
     font-size: 1.65rem;
-
     font-weight: 900;
-
     line-height: 1.1;
 }
 
 .original-price {
     color: #9ca3af;
-
     font-size: 12px;
-
     text-decoration: line-through;
 }
 
 .save-badge {
     display: inline-flex;
-
     align-items: center;
-
     padding: 4px 7px;
-
-    background: var(--agro-red-light);
-
+    background: var(--bm-red-light);
     color: #b91c1c;
-
     border-radius: 50px;
-
     font-size: 10px;
-
     font-weight: 850;
 }
 
 .savings-text {
     margin-top: 7px;
-
-    color: #15803d;
-
+    color: var(--bm-green);
     font-size: 11px;
-
     font-weight: 700;
 }
 
-
 /* ============================================================
-   DESCRIPTION
-============================================================ */
+   DESCRIPTION / INFORMATION
+   ============================================================ */
 
 .section-title {
     margin: 0 0 8px;
-
-    color: var(--agro-text);
-
+    color: var(--bm-text);
     font-size: 1rem;
-
     font-weight: 850;
 }
 
 .product-description {
     color: #4b5563;
-
     font-size: 13px;
-
     line-height: 1.75;
-
     white-space: pre-line;
-
     overflow-wrap: anywhere;
 }
 
-
-/* ============================================================
-   PRODUCT INFO GRID
-============================================================ */
-
 .product-info-grid {
     display: grid;
-
-    grid-template-columns:
-        repeat(2, minmax(0, 1fr));
-
+    grid-template-columns: repeat(2,minmax(0,1fr));
     gap: 8px;
-
     margin-top: 19px;
-
     margin-bottom: 20px;
 }
 
 .info-item {
     min-width: 0;
-
     padding: 11px;
-
     background: #f9fafb;
-
     border: 1px solid #f0f1f3;
-
     border-radius: 11px;
 }
 
 .info-item-label {
     display: block;
-
     margin-bottom: 3px;
-
     color: #9ca3af;
-
     font-size: 9px;
-
     font-weight: 800;
-
     text-transform: uppercase;
-
-    letter-spacing: 0.05em;
+    letter-spacing: .05em;
 }
 
 .info-item-value {
     display: block;
-
     color: #374151;
-
     font-size: 11px;
-
     font-weight: 750;
-
     overflow: hidden;
-
     text-overflow: ellipsis;
-
     white-space: nowrap;
 }
 
-
 /* ============================================================
-   PURCHASE SECTION
-============================================================ */
+   PURCHASE
+   ============================================================ */
 
 .purchase-section {
     margin-top: auto;
-
     padding-top: 18px;
-
-    border-top: 1px solid var(--agro-border);
+    border-top: 1px solid var(--bm-border);
 }
-
-
-/* ============================================================
-   QUANTITY ROW
-============================================================ */
 
 .quantity-row {
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
-
     gap: 10px;
-
     margin-bottom: 11px;
 }
 
 .quantity-label {
     color: #374151;
-
     font-size: 12px;
-
     font-weight: 850;
 }
 
 .quantity-stock {
     color: #9ca3af;
-
     font-size: 10px;
-
     font-weight: 600;
 }
 
-
-/* ============================================================
-   QUANTITY CONTROL
-============================================================ */
-
 .quantity-control {
     display: inline-flex;
-
     align-items: center;
-
     height: 44px;
-
     overflow: hidden;
-
     border: 1px solid #d1d5db;
-
     border-radius: 11px;
-
-    background: #ffffff;
+    background: white;
 }
 
 .quantity-btn {
     width: 40px;
     height: 100%;
-
     border: 0;
-
     background: #f3f4f6;
-
     color: #374151;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     cursor: pointer;
-
     font-size: 15px;
-
     font-weight: 900;
-
-    transition:
-        background 0.2s ease,
-        color 0.2s ease;
-}
-
-.quantity-btn:hover:not(:disabled) {
-    background: var(--agro-green-light);
-
-    color: var(--agro-green);
 }
 
 .quantity-btn:disabled {
-    opacity: 0.4;
-
+    opacity: .4;
     cursor: not-allowed;
 }
 
 .quantity-input {
     width: 48px;
     height: 100%;
-
     padding: 0;
-
     border: 0;
-
     border-left: 1px solid #e5e7eb;
-
     border-right: 1px solid #e5e7eb;
-
     outline: none;
-
-    background: #ffffff;
-
+    background: white;
     color: #111827;
-
     text-align: center;
-
     font-size: 14px;
-
     font-weight: 850;
-
     appearance: textfield;
-
-    -moz-appearance: textfield;
 }
 
 .quantity-input::-webkit-inner-spin-button,
 .quantity-input::-webkit-outer-spin-button {
-    margin: 0;
-
     appearance: none;
 }
 
-.quantity-input:focus {
-    box-shadow:
-        inset 0 0 0 2px rgba(21, 128, 61, 0.15);
-}
-
-
 /* ============================================================
-   ACTION BUTTONS
-============================================================ */
+   ACTIONS
+   ============================================================ */
 
 .purchase-action-grid {
     display: grid;
-
-    grid-template-columns:
-        1fr 1fr;
-
+    grid-template-columns: 1fr 1fr;
     gap: 8px;
 }
 
@@ -977,69 +598,26 @@
 .add-cart-btn,
 .buy-now-btn {
     width: 100%;
-
     min-height: 50px;
-
     border-radius: 12px;
-
     display: inline-flex;
-
     align-items: center;
-
     justify-content: center;
-
     gap: 7px;
-
     font-size: 13px;
-
     font-weight: 850;
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease,
-        background 0.2s ease;
 }
 
 .add-cart-btn {
-    box-shadow:
-        0 5px 15px rgba(25, 135, 84, 0.17);
-}
-
-.add-cart-btn:hover {
-    transform: translateY(-1px);
-
-    box-shadow:
-        0 8px 20px rgba(25, 135, 84, 0.25);
+    box-shadow: 0 5px 15px rgba(25,135,84,.17);
 }
 
 .buy-now-btn {
     background: #ffc107;
-
     border: 1px solid #ffc107;
-
     color: #111827;
-
-    box-shadow:
-        0 5px 15px rgba(245, 158, 11, 0.16);
+    box-shadow: 0 5px 15px rgba(245,158,11,.16);
 }
-
-.buy-now-btn:hover {
-    background: #ffca2c;
-
-    border-color: #ffca2c;
-
-    color: #111827;
-
-    transform: translateY(-1px);
-
-    box-shadow:
-        0 8px 20px rgba(245, 158, 11, 0.24);
-}
-
-
-/* ============================================================
-   WISHLIST
-============================================================ */
 
 .wishlist-form {
     margin: 8px 0 0;
@@ -1047,190 +625,103 @@
 
 .wishlist-btn {
     width: 100%;
-
     min-height: 45px;
-
     border-radius: 11px;
-
     border: 1px solid #e5e7eb;
-
-    background: #ffffff;
-
+    background: white;
     color: #374151;
-
     display: inline-flex;
-
     align-items: center;
-
     justify-content: center;
-
     gap: 7px;
-
     cursor: pointer;
-
     font-size: 12px;
-
     font-weight: 750;
-
-    transition:
-        background 0.2s ease,
-        color 0.2s ease,
-        border-color 0.2s ease;
 }
 
 .wishlist-btn:hover {
     background: #fff1f2;
-
     border-color: #fecdd3;
-
     color: #dc2626;
 }
 
-.wishlist-btn i {
-    font-size: 16px;
-}
-
-
-/* ============================================================
-   SHARE
-============================================================ */
-
 .share-product-row {
     display: flex;
-
     justify-content: center;
-
     margin-top: 8px;
 }
 
 .share-btn {
     border: 0;
-
     background: transparent;
-
     color: #6b7280;
-
     padding: 6px 10px;
-
     border-radius: 8px;
-
     cursor: pointer;
-
     font-size: 11px;
-
     font-weight: 700;
 }
 
-.share-btn:hover {
-    background: #f3f4f6;
-
-    color: var(--agro-green);
-}
-
-
-/* ============================================================
-   DELIVERY NOTE
-============================================================ */
-
 .delivery-note {
     display: flex;
-
     align-items: flex-start;
-
     justify-content: center;
-
     gap: 6px;
-
     margin-top: 10px;
-
     color: #6b7280;
-
     font-size: 10px;
-
     line-height: 1.5;
-
     text-align: center;
 }
 
 .delivery-note i {
     color: #16a34a;
-
     flex-shrink: 0;
-
-    margin-top: 2px;
 }
-
-
-/* ============================================================
-   TRUST FEATURES
-============================================================ */
 
 .trust-features {
     display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
+    grid-template-columns: repeat(3,1fr);
     gap: 6px;
-
     margin-top: 12px;
 }
 
 .trust-feature {
     min-width: 0;
-
     padding: 9px 4px;
-
     text-align: center;
-
     background: #f9fafb;
-
     border-radius: 10px;
 }
 
 .trust-feature i {
     display: block;
-
     margin-bottom: 4px;
-
     color: #16a34a;
-
     font-size: 15px;
 }
 
 .trust-feature span {
     display: block;
-
     color: #6b7280;
-
     font-size: 8px;
-
     font-weight: 750;
-
     line-height: 1.25;
 }
 
-
 /* ============================================================
    LIGHTBOX
-============================================================ */
+   ============================================================ */
 
 .image-lightbox {
     position: fixed;
-
     inset: 0;
-
     z-index: 9999;
-
     display: none;
-
     align-items: center;
-
     justify-content: center;
-
-    padding: 12px;
-
-    background: rgba(0, 0, 0, 0.95);
+    padding: 10px;
+    background: rgba(0,0,0,.96);
 }
 
 .image-lightbox.show {
@@ -1239,31 +730,21 @@
 
 .lightbox-content {
     position: relative;
-
     width: 100%;
     height: 100%;
-
     max-width: 1500px;
     max-height: 950px;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 }
 
 .lightbox-image {
     max-width: 94%;
-
     max-height: 82vh;
-
     object-fit: contain;
-
     border-radius: 7px;
-
     user-select: none;
-
     -webkit-user-drag: none;
 }
 
@@ -1271,39 +752,12 @@
 .lightbox-prev,
 .lightbox-next {
     position: absolute;
-
     z-index: 3;
-
     width: 42px;
     height: 42px;
-
-    border: 0;
-
-    border-radius: 50%;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    background: rgba(255, 255, 255, 0.12);
-
-    color: #ffffff;
-
-    cursor: pointer;
-
+    background: rgba(255,255,255,.12);
+    color: white;
     backdrop-filter: blur(6px);
-
-    transition:
-        background 0.2s ease,
-        transform 0.2s ease;
-}
-
-.lightbox-close:hover,
-.lightbox-prev:hover,
-.lightbox-next:hover {
-    background: rgba(255, 255, 255, 0.24);
 }
 
 .lightbox-close {
@@ -1314,108 +768,66 @@
 .lightbox-prev {
     left: 5px;
     top: 50%;
-
     transform: translateY(-50%);
 }
 
 .lightbox-next {
     right: 5px;
     top: 50%;
-
     transform: translateY(-50%);
-}
-
-.lightbox-prev:hover,
-.lightbox-next:hover {
-    transform:
-        translateY(-50%)
-        scale(1.05);
 }
 
 .lightbox-counter {
     position: absolute;
-
     left: 50%;
     bottom: 12px;
-
     transform: translateX(-50%);
-
     padding: 5px 10px;
-
-    background: rgba(0, 0, 0, 0.55);
-
-    color: #ffffff;
-
+    background: rgba(0,0,0,.55);
+    color: white;
     border-radius: 50px;
-
     font-size: 10px;
-
     font-weight: 800;
 }
 
-
 /* ============================================================
    COPY FEEDBACK
-============================================================ */
+   ============================================================ */
 
 .copy-feedback {
     position: fixed;
-
     left: 50%;
     bottom: 20px;
-
     z-index: 10000;
-
     padding: 9px 14px;
-
     background: #111827;
-
-    color: #ffffff;
-
+    color: white;
     border-radius: 50px;
-
     font-size: 11px;
-
     font-weight: 800;
-
-    box-shadow:
-        0 8px 25px rgba(0, 0, 0, 0.25);
-
     opacity: 0;
-
     pointer-events: none;
-
-    transform:
-        translate(-50%, 15px);
-
-    transition:
-        opacity 0.2s ease,
-        transform 0.2s ease;
+    transform: translate(-50%,15px);
+    transition: opacity .2s ease, transform .2s ease;
 }
 
 .copy-feedback.show {
     opacity: 1;
-
-    transform:
-        translate(-50%, 0);
+    transform: translate(-50%,0);
 }
-
 
 /* ============================================================
    TABLET
-============================================================ */
+   ============================================================ */
 
-@media (min-width: 576px) {
+@media (min-width:576px) {
 
     .product-gallery-card {
-        min-height: 500px;
+        height: 500px;
     }
 
     .gallery-bottom {
-        padding:
-            20px
-            20px
-            90px;
+        padding: 20px 20px 90px;
     }
 
     .gallery-product-name {
@@ -1438,19 +850,13 @@
     .current-price {
         font-size: 1.85rem;
     }
-
-    .quantity-control {
-        height: 46px;
-    }
-
 }
-
 
 /* ============================================================
    DESKTOP
-============================================================ */
+   ============================================================ */
 
-@media (min-width: 768px) {
+@media (min-width:768px) {
 
     .product-details-page {
         padding-left: 8px;
@@ -1459,7 +865,6 @@
 
     .product-breadcrumb {
         margin-bottom: 20px;
-
         font-size: 13px;
     }
 
@@ -1468,8 +873,7 @@
     }
 
     .product-gallery-card {
-        min-height: 600px;
-
+        height: 600px;
         border-radius: 22px;
     }
 
@@ -1480,7 +884,6 @@
     .gallery-counter {
         top: 75px;
         right: 18px;
-
         font-size: 11px;
     }
 
@@ -1494,54 +897,36 @@
     }
 
     .gallery-bottom {
-        padding:
-            25px
-            25px
-            100px;
+        padding: 25px 25px 100px;
     }
 
     .gallery-product-name {
         font-size: 2rem;
     }
 
-    .gallery-category {
-        font-size: 11px;
-    }
-
     .product-thumbnails-wrapper {
-        padding:
-            0
-            24px
-            20px;
+        padding: 0 24px 20px;
     }
 
     .product-thumbnail {
         width: 62px;
         height: 62px;
-
         border-radius: 10px;
     }
 
     .product-info-card {
         padding: 30px;
-
         border-radius: 22px;
     }
 
     .product-meta {
         flex-direction: row;
-
         align-items: center;
-
         justify-content: space-between;
     }
 
     .product-sku {
         width: auto;
-    }
-
-    .stock-badge {
-        align-self: auto;
     }
 
     .product-title {
@@ -1562,10 +947,6 @@
 
     .product-description {
         font-size: 14px;
-    }
-
-    .product-info-grid {
-        gap: 10px;
     }
 
     .info-item {
@@ -1603,14 +984,11 @@
     .add-cart-btn,
     .buy-now-btn {
         min-height: 54px;
-
         font-size: 14px;
     }
 
     .wishlist-btn {
         min-height: 48px;
-
-        font-size: 12px;
     }
 
     .delivery-note {
@@ -1628,15 +1006,9 @@
     .trust-feature span {
         font-size: 10px;
     }
-
 }
 
-
-/* ============================================================
-   LARGE DESKTOP
-============================================================ */
-
-@media (min-width: 1200px) {
+@media (min-width:1200px) {
 
     .product-details-page {
         padding-left: 0;
@@ -1644,7 +1016,7 @@
     }
 
     .product-gallery-card {
-        min-height: 680px;
+        height: 680px;
     }
 
     .product-info-card {
@@ -1654,17 +1026,16 @@
     .product-title {
         font-size: 2.35rem;
     }
-
 }
 
-
 /* ============================================================
-   VERY SMALL PHONES
-============================================================ */
+   SMALL PHONES
+   ============================================================ */
 
-@media (max-width: 360px) {
+@media (max-width:360px) {
 
     .product-gallery-card {
+        height: 350px;
         min-height: 350px;
     }
 
@@ -1683,792 +1054,622 @@
     .purchase-action-grid {
         grid-template-columns: 1fr;
     }
-
 }
-
 
 /* ============================================================
-   REDUCE MOTION
-============================================================ */
+   REDUCED MOTION
+   ============================================================ */
 
-@media (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion:reduce) {
 
-    .product-main-image,
-    .gallery-nav-btn,
-    .product-thumbnail,
-    .add-cart-btn,
-    .buy-now-btn,
-    .copy-feedback {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
         transition: none !important;
     }
-
 }
-
 </style>
-
 
 <div class="container-fluid py-2 py-md-4 py-lg-5">
 
-    <div class="product-details-page">
+```
+<div class="product-details-page">
 
+    <!-- ========================================================
+         BREADCRUMB
+    ======================================================== -->
 
-        <!-- ========================================================
-             BREADCRUMB
-        ======================================================== -->
+    <nav class="product-breadcrumb" aria-label="Breadcrumb">
 
-        <nav
-            class="product-breadcrumb"
-            aria-label="Breadcrumb"
-        >
+        <a href="{{ url_for('product.products') }}">
+            Products
+        </a>
 
-            <a href="{{ url_for('product.products') }}">
-                Products
+        <span class="separator">/</span>
+
+        {% if product.category %}
+
+            <a href="{{ url_for(
+                'product.category_products',
+                slug=product.category.slug
+            ) }}">
+                {{ product.category.name }}
             </a>
 
-            <span class="separator">
-                /
-            </span>
+            <span class="separator">/</span>
 
-            {% if product.category %}
+        {% endif %}
 
-                <span>
-                    {{ product.category.name }}
-                </span>
+        <span
+            class="current"
+            title="{{ product.name }}"
+        >
+            {{ product.name }}
+        </span>
 
-                <span class="separator">
-                    /
-                </span>
-
-            {% endif %}
-
-            <span
-                class="current"
-                title="{{ product.name }}"
-            >
-                {{ product.name }}
-            </span>
-
-        </nav>
+    </nav>
 
 
-        <!-- ========================================================
-             PRODUCT LAYOUT
-        ======================================================== -->
+    <!-- ========================================================
+         PRODUCT
+    ======================================================== -->
 
-        <div class="row g-3 g-lg-4 product-details-row">
+    <div class="row g-3 g-lg-4 product-details-row">
 
+        <!-- ====================================================
+             GALLERY
+        ==================================================== -->
 
-            <!-- ====================================================
-                 PRODUCT GALLERY
-            ==================================================== -->
+        <div class="col-12 col-lg-6">
 
-            <div class="col-12 col-lg-6">
+            <div class="product-gallery-card">
 
-                <div class="product-gallery-card">
+                {% if product.images %}
 
+                    {% set primary_image =
+                        product.images
+                        | selectattr("is_primary", "equalto", true)
+                        | first
+                    %}
 
-                    <!-- =================================================
-                         MAIN IMAGE
-                    ================================================= -->
+                    <div
+                        class="product-main-image-wrapper"
+                        id="productGallery"
+                    >
 
-                    {% if product.images %}
-
-                        {% set primary_image =
-                            product.images
-                            | selectattr("is_primary", "equalto", true)
-                            | first
-                        %}
-
-                        <div
-                            class="product-main-image-wrapper"
-                            id="productGallery"
+                        <img
+                            id="mainProductImage"
+                            src="{{ primary_image.image_url if primary_image else product.images[0].image_url }}"
+                            alt="{{ product.name }}"
+                            class="product-main-image"
+                            draggable="false"
+                            loading="eager"
+                            fetchpriority="high"
                         >
 
-                            <img
-                                id="mainProductImage"
-                                src="{{ primary_image.image_url if primary_image else product.images[0].image_url }}"
-                                alt="{{ product.name }}"
-                                class="product-main-image"
-                                draggable="false"
-                                loading="eager"
+                    </div>
+
+                {% else %}
+
+                    <div
+                        class="product-image-fallback"
+                        aria-label="No product image available"
+                    >
+                        🌾
+                    </div>
+
+                {% endif %}
+
+
+                <div class="product-gallery-gradient"></div>
+
+
+                <!-- TOP BADGES -->
+
+                <div class="gallery-top-bar">
+
+                    {% if product.brand %}
+
+                        <span class="
+                            badge
+                            bg-light
+                            text-dark
+                            rounded-pill
+                            px-3
+                            py-2
+                            shadow-sm
+                            gallery-brand
+                        ">
+                            <i class="bi bi-tag me-1"></i>
+                            {{ product.brand }}
+                        </span>
+
+                    {% else %}
+
+                        <span></span>
+
+                    {% endif %}
+
+
+                    {% if product.discount and product.discount > 0 %}
+
+                        <span class="
+                            badge
+                            bg-danger
+                            rounded-pill
+                            fw-bold
+                            px-3
+                            py-2
+                            shadow-sm
+                            gallery-discount
+                        ">
+                            {{ product.discount }}% OFF
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- IMAGE COUNTER -->
+
+                {% if product.images|length > 1 %}
+
+                    <div
+                        class="gallery-counter"
+                        id="galleryCounter"
+                    >
+                        1 / {{ product.images|length }}
+                    </div>
+
+                {% endif %}
+
+
+                <!-- IMAGE NAVIGATION -->
+
+                {% if product.images|length > 1 %}
+
+                    <div class="gallery-navigation">
+
+                        <button
+                            type="button"
+                            id="previousImage"
+                            class="gallery-nav-btn"
+                            aria-label="Previous product image"
+                        >
+                            <i class="bi bi-chevron-left"></i>
+                        </button>
+
+                        <button
+                            type="button"
+                            id="nextImage"
+                            class="gallery-nav-btn"
+                            aria-label="Next product image"
+                        >
+                            <i class="bi bi-chevron-right"></i>
+                        </button>
+
+                    </div>
+
+                {% endif %}
+
+
+                <!-- GALLERY TITLE -->
+
+                <div class="gallery-bottom">
+
+                    {% if product.category %}
+
+                        <span class="gallery-category">
+                            <i class="bi bi-grid me-1"></i>
+                            {{ product.category.name }}
+                        </span>
+
+                    {% endif %}
+
+                    <h1 class="gallery-product-name">
+                        {{ product.name }}
+                    </h1>
+
+                </div>
+
+
+                <!-- THUMBNAILS -->
+
+                {% if product.images|length > 1 %}
+
+                    <div class="product-thumbnails-wrapper">
+
+                        <div
+                            class="product-thumbnails"
+                            id="productThumbnails"
+                            aria-label="Product images"
+                        >
+
+                            {% for image in product.images %}
+
+                                {% set image_is_active =
+                                    (primary_image and image.id == primary_image.id)
+                                    or
+                                    (not primary_image and loop.first)
+                                %}
+
+                                <button
+                                    type="button"
+                                    class="
+                                        product-thumbnail
+                                        {% if image_is_active %}active{% endif %}
+                                    "
+                                    data-index="{{ loop.index0 }}"
+                                    data-image="{{ image.image_url }}"
+                                    aria-label="View product image {{ loop.index }}"
+                                    aria-current="{{ 'true' if image_is_active else 'false' }}"
+                                >
+
+                                    <img
+                                        src="{{ image.image_url }}"
+                                        alt="{{ product.name }} image {{ loop.index }}"
+                                        loading="lazy"
+                                        decoding="async"
+                                    >
+
+                                </button>
+
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <!-- ====================================================
+             PRODUCT INFORMATION
+        ==================================================== -->
+
+        <div class="col-12 col-lg-6">
+
+            <div class="product-info-card d-flex flex-column">
+
+                <!-- SKU + STOCK -->
+
+                <div class="product-meta">
+
+                    <div class="product-sku">
+
+                        <strong>SKU:</strong>
+
+                        <span id="productSku">
+                            {{ product.sku or "N/A" }}
+                        </span>
+
+                        {% if product.sku %}
+
+                            <button
+                                type="button"
+                                class="sku-copy-btn"
+                                id="copySkuButton"
+                                aria-label="Copy product SKU"
+                                title="Copy SKU"
                             >
+                                <i class="bi bi-copy"></i>
+                                Copy
+                            </button>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    {% if product.stock > 0 %}
+
+                        <span class="
+                            badge
+                            bg-success-subtle
+                            text-success
+                            border
+                            border-success-subtle
+                            rounded-pill
+                            px-3
+                            py-2
+                        ">
+
+                            <i class="bi bi-check-circle me-1"></i>
+
+                            In Stock
+
+                            {% if product.stock <= 10 %}
+                                · {{ product.stock }} left
+                            {% endif %}
+
+                        </span>
+
+                    {% else %}
+
+                        <span class="
+                            badge
+                            bg-danger-subtle
+                            text-danger
+                            border
+                            border-danger-subtle
+                            rounded-pill
+                            px-3
+                            py-2
+                        ">
+                            <i class="bi bi-x-circle me-1"></i>
+                            Out of Stock
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- TITLE -->
+
+                <h2 class="product-title">
+                    {{ product.name }}
+                </h2>
+
+
+                {% if product.brand %}
+
+                    <div class="product-brand">
+                        <i class="bi bi-patch-check-fill"></i>
+                        {{ product.brand }}
+                    </div>
+
+                {% endif %}
+
+
+                <!-- =================================================
+                     PRICE
+                ================================================= -->
+
+                <div class="product-price-section">
+
+                    <span class="price-label">
+                        Unit Price
+                    </span>
+
+                    {% set final_price =
+                        discounted_price if discounted_price is defined
+                        else product.price
+                    %}
+
+                    {% if product.discount and product.discount > 0 %}
+
+                        {% set savings =
+                            product.price - final_price
+                        %}
+
+                        <div class="price-line">
+
+                            <span class="current-price">
+                                KSh {{ "{:,.2f}".format(final_price) }}
+                            </span>
+
+                            <span class="original-price">
+                                KSh {{ "{:,.2f}".format(product.price) }}
+                            </span>
+
+                            <span class="save-badge">
+                                SAVE {{ product.discount }}%
+                            </span>
+
+                        </div>
+
+                        <div class="savings-text">
+
+                            <i class="bi bi-tag-fill me-1"></i>
+
+                            You save
+                            KSh {{ "{:,.2f}".format(savings) }}
+                            per unit
 
                         </div>
 
                     {% else %}
 
-                        <div class="product-image-fallback">
-                            🌾
-                        </div>
+                        <div class="price-line">
 
-                    {% endif %}
-
-
-                    <!-- =================================================
-                         GRADIENT
-                    ================================================= -->
-
-                    <div class="product-gallery-gradient"></div>
-
-
-                    <!-- =================================================
-                         TOP BADGES
-                    ================================================= -->
-
-                    <div class="gallery-top-bar">
-
-                        {% if product.brand %}
-
-                            <span
-                                class="
-                                    badge
-                                    bg-light
-                                    text-dark
-                                    rounded-pill
-                                    px-3
-                                    py-2
-                                    shadow-sm
-                                    gallery-brand
-                                "
-                            >
-
-                                <i class="bi bi-tag me-1"></i>
-
-                                {{ product.brand }}
-
+                            <span class="current-price">
+                                KSh {{ "{:,.2f}".format(final_price) }}
                             </span>
 
-                        {% else %}
-
-                            <span></span>
-
-                        {% endif %}
-
-
-                        {% if product.discount and product.discount > 0 %}
-
-                            <span
-                                class="
-                                    badge
-                                    bg-danger
-                                    rounded-pill
-                                    fw-bold
-                                    px-3
-                                    py-2
-                                    shadow-sm
-                                    gallery-discount
-                                "
-                            >
-
-                                {{ product.discount }}% OFF
-
-                            </span>
-
-                        {% endif %}
-
-                    </div>
-
-
-                    <!-- =================================================
-                         IMAGE COUNTER
-                    ================================================= -->
-
-                    {% if product.images|length > 1 %}
-
-                        <div
-                            class="gallery-counter"
-                            id="galleryCounter"
-                        >
-                            1 / {{ product.images|length }}
                         </div>
 
                     {% endif %}
-
-
-                    <!-- =================================================
-                         PREVIOUS / NEXT
-                    ================================================= -->
-
-                    {% if product.images|length > 1 %}
-
-                        <div class="gallery-navigation">
-
-                            <button
-                                type="button"
-                                id="previousImage"
-                                class="gallery-nav-btn"
-                                aria-label="Previous image"
-                            >
-                                <i class="bi bi-chevron-left"></i>
-                            </button>
-
-
-                            <button
-                                type="button"
-                                id="nextImage"
-                                class="gallery-nav-btn"
-                                aria-label="Next image"
-                            >
-                                <i class="bi bi-chevron-right"></i>
-                            </button>
-
-                        </div>
-
-                    {% endif %}
-
-
-                    <!-- =================================================
-                         GALLERY BOTTOM
-                    ================================================= -->
-
-                    <div class="gallery-bottom">
-
-                        {% if product.category %}
-
-                            <span class="gallery-category">
-
-                                <i class="bi bi-grid me-1"></i>
-
-                                {{ product.category.name }}
-
-                            </span>
-
-                        {% endif %}
-
-                        <h1 class="gallery-product-name">
-                            {{ product.name }}
-                        </h1>
-
-                    </div>
-
-
-                    <!-- =================================================
-                         THUMBNAILS
-                    ================================================= -->
-
-                    {% if product.images|length > 1 %}
-
-                        <div class="product-thumbnails-wrapper">
-
-                            <div
-                                class="product-thumbnails"
-                                id="productThumbnails"
-                                aria-label="Product images"
-                            >
-
-                                {% for image in product.images %}
-
-                                    <button
-                                        type="button"
-                                        class="
-                                            product-thumbnail
-                                            {% if (primary_image and image.id == primary_image.id)
-                                               or (not primary_image and loop.first) %}
-                                                active
-                                            {% endif %}
-                                        "
-                                        data-index="{{ loop.index0 }}"
-                                        data-image="{{ image.image_url }}"
-                                        aria-label="View image {{ loop.index }}"
-                                        aria-current="{% if (primary_image and image.id == primary_image.id) or (not primary_image and loop.first) %}true{% else %}false{% endif %}"
-                                    >
-
-                                        <img
-                                            src="{{ image.image_url }}"
-                                            alt="{{ product.name }} image {{ loop.index }}"
-                                            loading="lazy"
-                                        >
-
-                                    </button>
-
-                                {% endfor %}
-
-                            </div>
-
-                        </div>
-
-                    {% endif %}
-
 
                 </div>
 
-            </div>
 
+                <!-- =================================================
+                     DESCRIPTION
+                ================================================= -->
 
-            <!-- ====================================================
-                 PRODUCT INFORMATION
-            ==================================================== -->
+                <div>
 
-            <div class="col-12 col-lg-6">
+                    <h3 class="section-title">
+                        Product Overview
+                    </h3>
 
-                <div class="product-info-card d-flex flex-column">
+                    {% if product.description %}
 
-
-                    <!-- =================================================
-                         SKU + STOCK
-                    ================================================= -->
-
-                    <div class="product-meta">
-
-                        <div class="product-sku">
-
-                            <strong>
-                                SKU:
-                            </strong>
-
-                            <span id="productSku">
-                                {{ product.sku or "N/A" }}
-                            </span>
-
-                            {% if product.sku %}
-
-                                <button
-                                    type="button"
-                                    class="sku-copy-btn"
-                                    id="copySkuButton"
-                                    aria-label="Copy SKU"
-                                    title="Copy SKU"
-                                >
-
-                                    <i class="bi bi-copy"></i>
-
-                                    Copy
-
-                                </button>
-
-                            {% endif %}
-
+                        <div class="product-description">
+                            {{ product.description }}
                         </div>
 
+                    {% else %}
 
-                        {% if product.stock > 0 %}
-
-                            <span
-                                class="
-                                    badge
-                                    bg-success-subtle
-                                    text-success
-                                    border
-                                    border-success-subtle
-                                    rounded-pill
-                                    px-3
-                                    py-2
-                                    stock-badge
-                                "
-                            >
-
-                                <i class="bi bi-check-circle me-1"></i>
-
-                                In Stock
-
-                                {% if product.stock <= 10 %}
-
-                                    · {{ product.stock }} left
-
-                                {% endif %}
-
-                            </span>
-
-                        {% else %}
-
-                            <span
-                                class="
-                                    badge
-                                    bg-danger-subtle
-                                    text-danger
-                                    border
-                                    border-danger-subtle
-                                    rounded-pill
-                                    px-3
-                                    py-2
-                                    stock-badge
-                                "
-                            >
-
-                                <i class="bi bi-x-circle me-1"></i>
-
-                                Out of Stock
-
-                            </span>
-
-                        {% endif %}
-
-                    </div>
-
-
-                    <!-- =================================================
-                         PRODUCT TITLE
-                    ================================================= -->
-
-                    <h2 class="product-title">
-                        {{ product.name }}
-                    </h2>
-
-
-                    {% if product.brand %}
-
-                        <div class="product-brand">
-
-                            <i class="bi bi-patch-check-fill"></i>
-
-                            {{ product.brand }}
-
+                        <div class="product-description">
+                            No detailed description is available
+                            for this product yet.
                         </div>
 
                     {% endif %}
 
+                </div>
 
-                    <!-- =================================================
-                         PRICE
-                    ================================================= -->
 
-                    <div class="product-price-section">
+                <!-- =================================================
+                     PRODUCT INFORMATION
+                ================================================= -->
 
-                        <span class="price-label">
-                            Unit Price
+                <div class="product-info-grid">
+
+                    <div class="info-item">
+
+                        <span class="info-item-label">
+                            Category
                         </span>
 
-                        {% if product.discount and product.discount > 0 %}
+                        <span class="info-item-value">
 
-                            {% set discounted_price =
-                                product.price -
-                                (product.price * product.discount / 100)
-                            %}
+                            {% if product.category %}
+                                {{ product.category.name }}
+                            {% else %}
+                                General
+                            {% endif %}
 
-                            {% set savings =
-                                product.price - discounted_price
-                            %}
-
-                            <div class="price-line">
-
-                                <span class="current-price">
-                                    KSh
-                                    {{ "{:,.2f}".format(discounted_price) }}
-                                </span>
-
-                                <span class="original-price">
-                                    KSh
-                                    {{ "{:,.2f}".format(product.price) }}
-                                </span>
-
-                                <span class="save-badge">
-                                    SAVE {{ product.discount }}%
-                                </span>
-
-                            </div>
-
-                            <div class="savings-text">
-
-                                <i class="bi bi-tag-fill me-1"></i>
-
-                                You save
-                                KSh
-                                {{ "{:,.2f}".format(savings) }}
-                                per unit
-
-                            </div>
-
-                        {% else %}
-
-                            <div class="price-line">
-
-                                <span class="current-price">
-                                    KSh
-                                    {{ "{:,.2f}".format(product.price) }}
-                                </span>
-
-                            </div>
-
-                        {% endif %}
+                        </span>
 
                     </div>
 
 
-                    <!-- =================================================
-                         DESCRIPTION
-                    ================================================= -->
+                    <div class="info-item">
 
-                    <div>
+                        <span class="info-item-label">
+                            Availability
+                        </span>
 
-                        <h3 class="section-title">
-                            Product Overview
-                        </h3>
+                        <span class="info-item-value">
 
-                        {% if product.description %}
+                            {% if product.stock > 0 %}
+                                Available
+                            {% else %}
+                                Currently unavailable
+                            {% endif %}
 
-                            <div class="product-description">
-                                {{ product.description }}
-                            </div>
-
-                        {% else %}
-
-                            <div class="product-description">
-                                No detailed description is available
-                                for this product yet.
-                            </div>
-
-                        {% endif %}
+                        </span>
 
                     </div>
 
 
-                    <!-- =================================================
-                         PRODUCT INFORMATION
-                    ================================================= -->
+                    <div class="info-item">
 
-                    <div class="product-info-grid">
+                        <span class="info-item-label">
+                            Stock
+                        </span>
 
-
-                        <div class="info-item">
-
-                            <span class="info-item-label">
-                                Category
-                            </span>
-
-                            <span class="info-item-value">
-
-                                {% if product.category %}
-                                    {{ product.category.name }}
-                                {% else %}
-                                    General
-                                {% endif %}
-
-                            </span>
-
-                        </div>
-
-
-                        <div class="info-item">
-
-                            <span class="info-item-label">
-                                Availability
-                            </span>
-
-                            <span class="info-item-value">
-
-                                {% if product.stock > 0 %}
-                                    Available
-                                {% else %}
-                                    Currently unavailable
-                                {% endif %}
-
-                            </span>
-
-                        </div>
-
-
-                        <div class="info-item">
-
-                            <span class="info-item-label">
-                                Stock
-                            </span>
-
-                            <span class="info-item-value">
-                                {{ product.stock }} unit(s)
-                            </span>
-
-                        </div>
-
-
-                        <div class="info-item">
-
-                            <span class="info-item-label">
-                                Delivery
-                            </span>
-
-                            <span class="info-item-value">
-                                Nationwide
-                            </span>
-
-                        </div>
+                        <span class="info-item-value">
+                            {{ product.stock }} unit(s)
+                        </span>
 
                     </div>
 
 
-                    <!-- =================================================
-                         PURCHASE
-                    ================================================= -->
+                    <div class="info-item">
 
-                    <div class="purchase-section">
+                        <span class="info-item-label">
+                            Delivery
+                        </span>
+
+                        <span class="info-item-value">
+                            Nationwide
+                        </span>
+
+                    </div>
+
+                </div>
 
 
-                        {% if product.stock > 0 %}
+                <!-- =================================================
+                     PURCHASE
+                ================================================= -->
 
+                <div class="purchase-section">
 
-                            <!-- =========================================
-                                 QUANTITY
-                            ========================================= -->
+                    {% if product.stock > 0 %}
 
-                            <div class="quantity-row">
+                        <!-- QUANTITY -->
 
-                                <div>
+                        <div class="quantity-row">
 
-                                    <div class="quantity-label">
-                                        Quantity
-                                    </div>
+                            <div>
 
-                                    <div class="quantity-stock">
-                                        Maximum {{ product.stock }}
-                                    </div>
-
+                                <div class="quantity-label">
+                                    Quantity
                                 </div>
 
+                                <div class="quantity-stock">
+                                    Maximum {{ product.stock }}
+                                </div>
 
-                                <div
-                                    class="quantity-control"
+                            </div>
+
+
+                            <div
+                                class="quantity-control"
+                                aria-label="Product quantity"
+                            >
+
+                                <button
+                                    type="button"
+                                    class="quantity-btn"
+                                    id="decreaseQuantity"
+                                    aria-label="Decrease quantity"
+                                >
+                                    <i class="bi bi-dash"></i>
+                                </button>
+
+
+                                <input
+                                    type="number"
+                                    id="productQuantity"
+                                    class="quantity-input"
+                                    value="1"
+                                    min="1"
+                                    max="{{ product.stock }}"
+                                    inputmode="numeric"
                                     aria-label="Product quantity"
                                 >
 
-                                    <button
-                                        type="button"
-                                        class="quantity-btn"
-                                        id="decreaseQuantity"
-                                        aria-label="Decrease quantity"
-                                    >
 
-                                        <i class="bi bi-dash"></i>
-
-                                    </button>
-
-
-                                    <input
-                                        type="number"
-                                        id="productQuantity"
-                                        class="quantity-input"
-                                        value="1"
-                                        min="1"
-                                        max="{{ product.stock }}"
-                                        inputmode="numeric"
-                                        aria-label="Product quantity"
-                                    >
-
-
-                                    <button
-                                        type="button"
-                                        class="quantity-btn"
-                                        id="increaseQuantity"
-                                        aria-label="Increase quantity"
-                                    >
-
-                                        <i class="bi bi-plus"></i>
-
-                                    </button>
-
-                                </div>
+                                <button
+                                    type="button"
+                                    class="quantity-btn"
+                                    id="increaseQuantity"
+                                    aria-label="Increase quantity"
+                                >
+                                    <i class="bi bi-plus"></i>
+                                </button>
 
                             </div>
 
-
-                            <!-- =========================================
-                                 ACTION BUTTONS
-                            ========================================= -->
-
-                            <div class="purchase-action-grid">
+                        </div>
 
 
-                                <!-- =====================================
-                                     ADD TO CART
-                                ====================================== -->
+                        <!-- ACTION BUTTONS -->
 
-                                <form
-                                    action="{{ url_for(
-                                        'cart.add_to_cart',
-                                        product_id=product.id
-                                    ) }}"
-                                    method="POST"
-                                    class="purchase-action-form"
-                                    id="addToCartForm"
-                                >
+                        <div class="purchase-action-grid">
 
-                                    <input
-                                        type="hidden"
-                                        name="csrf_token"
-                                        value="{{ csrf_token() }}"
-                                    >
-
-                                    <input
-                                        type="hidden"
-                                        name="quantity"
-                                        id="cartQuantity"
-                                        value="1"
-                                    >
-
-                                    <button
-                                        type="submit"
-                                        class="
-                                            btn
-                                            btn-success
-                                            add-cart-btn
-                                        "
-                                    >
-
-                                        <i class="bi bi-cart-plus"></i>
-
-                                        <span>
-                                            Add to Cart
-                                        </span>
-
-                                    </button>
-
-                                </form>
-
-
-                                <!-- =====================================
-                                     BUY NOW
-                                ====================================== -->
-
-                                <form
-                                    action="{{ url_for(
-                                        'cart.buy_now',
-                                        product_id=product.id
-                                    ) }}"
-                                    method="POST"
-                                    class="purchase-action-form"
-                                    id="buyNowForm"
-                                >
-
-                                    <input
-                                        type="hidden"
-                                        name="csrf_token"
-                                        value="{{ csrf_token() }}"
-                                    >
-
-                                    <input
-                                        type="hidden"
-                                        name="quantity"
-                                        id="buyNowQuantity"
-                                        value="1"
-                                    >
-
-                                    <button
-                                        type="submit"
-                                        class="btn buy-now-btn"
-                                    >
-
-                                        <i class="bi bi-lightning-charge-fill"></i>
-
-                                        <span>
-                                            Buy Now
-                                        </span>
-
-                                    </button>
-
-                                </form>
-
-                            </div>
-
-
-                            <!-- =========================================
-                                 WISHLIST
-                            ========================================== -->
+                            <!-- ADD TO CART -->
 
                             <form
                                 action="{{ url_for(
-                                    'wishlist.toggle_wishlist',
+                                    'cart.add_to_cart',
                                     product_id=product.id
                                 ) }}"
                                 method="POST"
-                                class="wishlist-form"
+                                class="purchase-action-form"
+                                id="addToCartForm"
                             >
 
                                 <input
@@ -2477,134 +1678,166 @@
                                     value="{{ csrf_token() }}"
                                 >
 
-                                <button
-                                    type="submit"
-                                    class="wishlist-btn"
+                                <input
+                                    type="hidden"
+                                    name="quantity"
+                                    id="cartQuantity"
+                                    value="1"
                                 >
 
-                                    <i class="bi bi-heart"></i>
-
-                                    <span>
-                                        Add to Wishlist
-                                    </span>
-
+                                <button
+                                    type="submit"
+                                    class="btn btn-success add-cart-btn"
+                                >
+                                    <i class="bi bi-cart-plus"></i>
+                                    <span>Add to Cart</span>
                                 </button>
 
                             </form>
 
 
-                            <!-- =========================================
-                                 SHARE
-                            ========================================== -->
+                            <!-- BUY NOW -->
 
-                            <div class="share-product-row">
-
-                                <button
-                                    type="button"
-                                    class="share-btn"
-                                    id="shareProductButton"
-                                    aria-label="Share product"
-                                >
-
-                                    <i class="bi bi-share me-1"></i>
-
-                                    Share Product
-
-                                </button>
-
-                            </div>
-
-
-                        {% else %}
-
-
-                            <!-- =========================================
-                                 OUT OF STOCK
-                            ========================================== -->
-
-                            <button
-                                type="button"
-                                class="
-                                    btn
-                                    btn-secondary
-                                    w-100
-                                    out-of-stock-btn
-                                    py-3
-                                "
-                                disabled
+                            <form
+                                action="{{ url_for(
+                                    'cart.buy_now',
+                                    product_id=product.id
+                                ) }}"
+                                method="POST"
+                                class="purchase-action-form"
+                                id="buyNowForm"
                             >
 
-                                <i class="bi bi-x-circle me-2"></i>
+                                <input
+                                    type="hidden"
+                                    name="csrf_token"
+                                    value="{{ csrf_token() }}"
+                                >
 
-                                Out of Stock
+                                <input
+                                    type="hidden"
+                                    name="quantity"
+                                    id="buyNowQuantity"
+                                    value="1"
+                                >
+
+                                <button
+                                    type="submit"
+                                    class="btn buy-now-btn"
+                                >
+                                    <i class="bi bi-lightning-charge-fill"></i>
+                                    <span>Buy Now</span>
+                                </button>
+
+                            </form>
+
+                        </div>
+
+
+                        <!-- WISHLIST -->
+
+                        <form
+                            action="{{ url_for(
+                                'wishlist.toggle_wishlist',
+                                product_id=product.id
+                            ) }}"
+                            method="POST"
+                            class="wishlist-form"
+                        >
+
+                            <input
+                                type="hidden"
+                                name="csrf_token"
+                                value="{{ csrf_token() }}"
+                            >
+
+                            <button
+                                type="submit"
+                                class="wishlist-btn"
+                            >
+
+                                {% if is_in_wishlist is defined and is_in_wishlist %}
+
+                                    <i class="bi bi-heart-fill text-danger"></i>
+                                    <span>Remove from Wishlist</span>
+
+                                {% else %}
+
+                                    <i class="bi bi-heart"></i>
+                                    <span>Add to Wishlist</span>
+
+                                {% endif %}
 
                             </button>
 
-
-                        {% endif %}
-
-
-                        <!-- =============================================
-                             DELIVERY
-                        ============================================== -->
-
-                        <div class="delivery-note">
-
-                            <i class="bi bi-truck"></i>
-
-                            <span>
-                                Fast delivery nationwide via AgroMart Logistics.
-                                Delivery availability and cost are confirmed during checkout.
-                            </span>
-
-                        </div>
+                        </form>
 
 
-                        <!-- =============================================
-                             TRUST
-                        ============================================== -->
+                        <!-- SHARE -->
 
-                        <div class="trust-features">
+                        <div class="share-product-row">
 
-
-                            <div class="trust-feature">
-
-                                <i class="bi bi-shield-check"></i>
-
-                                <span>
-                                    Secure Shopping
-                                </span>
-
-                            </div>
-
-
-                            <div class="trust-feature">
-
-                                <i class="bi bi-truck"></i>
-
-                                <span>
-                                    Nationwide Delivery
-                                </span>
-
-                            </div>
-
-
-                            <div class="trust-feature">
-
-                                <i class="bi bi-headset"></i>
-
-                                <span>
-                                    Customer Support
-                                </span>
-
-                            </div>
-
+                            <button
+                                type="button"
+                                class="share-btn"
+                                id="shareProductButton"
+                            >
+                                <i class="bi bi-share me-1"></i>
+                                Share Product
+                            </button>
 
                         </div>
 
+
+                    {% else %}
+
+                        <button
+                            type="button"
+                            class="btn btn-secondary w-100 py-3"
+                            disabled
+                        >
+                            <i class="bi bi-x-circle me-2"></i>
+                            Out of Stock
+                        </button>
+
+                    {% endif %}
+
+
+                    <!-- DELIVERY -->
+
+                    <div class="delivery-note">
+
+                        <i class="bi bi-truck"></i>
+
+                        <span>
+                            Nationwide delivery available.
+                            Delivery availability and cost are confirmed
+                            during checkout.
+                        </span>
 
                     </div>
 
+
+                    <!-- TRUST -->
+
+                    <div class="trust-features">
+
+                        <div class="trust-feature">
+                            <i class="bi bi-shield-check"></i>
+                            <span>Secure Shopping</span>
+                        </div>
+
+                        <div class="trust-feature">
+                            <i class="bi bi-truck"></i>
+                            <span>Nationwide Delivery</span>
+                        </div>
+
+                        <div class="trust-feature">
+                            <i class="bi bi-headset"></i>
+                            <span>Customer Support</span>
+                        </div>
+
+                    </div>
 
                 </div>
 
@@ -2615,7 +1848,9 @@
     </div>
 
 </div>
+```
 
+</div>
 
 <!-- ================================================================
      IMAGE LIGHTBOX
@@ -2623,88 +1858,78 @@
 
 {% if product.images %}
 
-    <div
-        class="image-lightbox"
-        id="imageLightbox"
-        role="dialog"
-        aria-modal="true"
-        aria-label="Product image viewer"
+<div
+    class="image-lightbox"
+    id="imageLightbox"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Product image viewer"
+>
+
+```
+<div class="lightbox-content">
+
+    <button
+        type="button"
+        class="lightbox-close"
+        id="lightboxClose"
+        aria-label="Close image viewer"
+    >
+        <i class="bi bi-x-lg"></i>
+    </button>
+
+
+    {% if product.images|length > 1 %}
+
+        <button
+            type="button"
+            class="lightbox-prev"
+            id="lightboxPrev"
+            aria-label="Previous image"
+        >
+            <i class="bi bi-chevron-left"></i>
+        </button>
+
+    {% endif %}
+
+
+    <img
+        id="lightboxImage"
+        class="lightbox-image"
+        src=""
+        alt="{{ product.name }}"
+        draggable="false"
     >
 
-        <div class="lightbox-content">
 
+    {% if product.images|length > 1 %}
 
-            <button
-                type="button"
-                class="lightbox-close"
-                id="lightboxClose"
-                aria-label="Close image viewer"
-            >
+        <button
+            type="button"
+            class="lightbox-next"
+            id="lightboxNext"
+            aria-label="Next image"
+        >
+            <i class="bi bi-chevron-right"></i>
+        </button>
 
-                <i class="bi bi-x-lg"></i>
-
-            </button>
-
-
-            {% if product.images|length > 1 %}
-
-                <button
-                    type="button"
-                    class="lightbox-prev"
-                    id="lightboxPrev"
-                    aria-label="Previous image"
-                >
-
-                    <i class="bi bi-chevron-left"></i>
-
-                </button>
-
-            {% endif %}
-
-
-            <img
-                id="lightboxImage"
-                class="lightbox-image"
-                src=""
-                alt="{{ product.name }}"
-                draggable="false"
-            >
-
-
-            {% if product.images|length > 1 %}
-
-                <button
-                    type="button"
-                    class="lightbox-next"
-                    id="lightboxNext"
-                    aria-label="Next image"
-                >
-
-                    <i class="bi bi-chevron-right"></i>
-
-                </button>
-
-
-                <div
-                    class="lightbox-counter"
-                    id="lightboxCounter"
-                >
-                    1 / {{ product.images|length }}
-                </div>
-
-            {% endif %}
-
-
+        <div
+            class="lightbox-counter"
+            id="lightboxCounter"
+        >
+            1 / {{ product.images|length }}
         </div>
 
-    </div>
+    {% endif %}
+
+</div>
+```
+
+</div>
 
 {% endif %}
 
-
-<!-- ================================================================
-     COPY FEEDBACK
-================================================================ -->
+<!-- COPY FEEDBACK -->
 
 <div
     id="copyFeedback"
@@ -2715,27 +1940,251 @@
     Copied
 </div>
 
-
-<!-- ================================================================
-     JAVASCRIPT
-================================================================ -->
-
 <script>
-
 document.addEventListener("DOMContentLoaded", function () {
+
+    /* ============================================================
+       IMAGE DATA
+    ============================================================ */
+
+    const imageElements = [
+        {% if product.images %}
+            {% for image in product.images %}
+                {{ image.image_url|tojson }}{% if not loop.last %},{% endif %}
+            {% endfor %}
+        {% endif %}
+    ];
+
+    const images = imageElements;
+
+    let currentIndex = 0;
+
+    const primaryIndex = [
+        {% if product.images %}
+            {% set primary_image =
+                product.images
+                | selectattr("is_primary", "equalto", true)
+                | first
+            %}
+            {% if primary_image %}
+                {% for image in product.images %}
+                    {% if image.id == primary_image.id %}
+                        {{ loop.index0 }}
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                0
+            {% endif %}
+        {% else %}
+            0
+        {% endif %}
+    ];
+
+    currentIndex = primaryIndex || 0;
 
 
     /* ============================================================
-       QUANTITY MANAGEMENT
+       GALLERY
+    ============================================================ */
+
+    const mainImage =
+        document.getElementById("mainProductImage");
+
+    const thumbnails =
+        document.querySelectorAll(".product-thumbnail");
+
+    const galleryCounter =
+        document.getElementById("galleryCounter");
+
+    const previousImage =
+        document.getElementById("previousImage");
+
+    const nextImage =
+        document.getElementById("nextImage");
+
+
+    function updateGallery(index) {
+
+        if (!images.length) {
+            return;
+        }
+
+        currentIndex =
+            (index + images.length) % images.length;
+
+
+        if (mainImage) {
+
+            mainImage.style.opacity = "0.35";
+
+            setTimeout(function () {
+
+                mainImage.src =
+                    images[currentIndex];
+
+                mainImage.onload = function () {
+                    mainImage.style.opacity = "1";
+                };
+
+            }, 80);
+        }
+
+
+        thumbnails.forEach(function (thumbnail, index) {
+
+            const active =
+                index === currentIndex;
+
+            thumbnail.classList.toggle(
+                "active",
+                active
+            );
+
+            thumbnail.setAttribute(
+                "aria-current",
+                active ? "true" : "false"
+            );
+
+            if (active) {
+                thumbnail.scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest",
+                    inline: "center"
+                });
+            }
+
+        });
+
+
+        if (galleryCounter) {
+
+            galleryCounter.textContent =
+                `${currentIndex + 1} / ${images.length}`;
+
+        }
+
+    }
+
+
+    thumbnails.forEach(function (thumbnail) {
+
+        thumbnail.addEventListener(
+            "click",
+            function () {
+
+                const index =
+                    parseInt(
+                        thumbnail.dataset.index,
+                        10
+                    );
+
+                updateGallery(index);
+
+            }
+        );
+
+    });
+
+
+    if (previousImage) {
+
+        previousImage.addEventListener(
+            "click",
+            function () {
+                updateGallery(currentIndex - 1);
+            }
+        );
+
+    }
+
+
+    if (nextImage) {
+
+        nextImage.addEventListener(
+            "click",
+            function () {
+                updateGallery(currentIndex + 1);
+            }
+        );
+
+    }
+
+
+    /* ============================================================
+       MOBILE GALLERY SWIPE
+    ============================================================ */
+
+    let galleryTouchStartX = 0;
+
+    if (mainImage) {
+
+        mainImage.addEventListener(
+            "touchstart",
+            function (event) {
+
+                if (!event.changedTouches.length) {
+                    return;
+                }
+
+                galleryTouchStartX =
+                    event.changedTouches[0].screenX;
+
+            },
+            { passive: true }
+        );
+
+
+        mainImage.addEventListener(
+            "touchend",
+            function (event) {
+
+                if (!event.changedTouches.length) {
+                    return;
+                }
+
+                const endX =
+                    event.changedTouches[0].screenX;
+
+                const difference =
+                    endX - galleryTouchStartX;
+
+                if (Math.abs(difference) < 45) {
+                    return;
+                }
+
+                if (difference > 0) {
+                    updateGallery(currentIndex - 1);
+                } else {
+                    updateGallery(currentIndex + 1);
+                }
+
+            },
+            { passive: true }
+        );
+
+    }
+
+
+    /* ============================================================
+       INITIAL GALLERY
+    ============================================================ */
+
+    if (images.length) {
+        updateGallery(currentIndex);
+    }
+
+
+    /* ============================================================
+       QUANTITY
     ============================================================ */
 
     const quantityInput =
         document.getElementById("productQuantity");
 
-    const decreaseQuantityButton =
+    const decreaseButton =
         document.getElementById("decreaseQuantity");
 
-    const increaseQuantityButton =
+    const increaseButton =
         document.getElementById("increaseQuantity");
 
     const cartQuantity =
@@ -2749,7 +2198,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const maximumQuantity =
             parseInt(
-                quantityInput.getAttribute("max"),
+                quantityInput.max,
                 10
             ) || 1;
 
@@ -2759,11 +2208,6 @@ document.addEventListener("DOMContentLoaded", function () {
             let quantity =
                 parseInt(value, 10);
 
-
-            /*
-               Protect against invalid values.
-            */
-
             if (
                 Number.isNaN(quantity) ||
                 quantity < 1
@@ -2771,585 +2215,93 @@ document.addEventListener("DOMContentLoaded", function () {
                 quantity = 1;
             }
 
-
-            /*
-               Never allow quantity
-               above available stock.
-            */
-
-            if (
-                quantity > maximumQuantity
-            ) {
-                quantity = maximumQuantity;
-            }
-
+            quantity =
+                Math.min(
+                    quantity,
+                    maximumQuantity
+                );
 
             quantityInput.value =
                 quantity;
 
 
-            /*
-               Synchronize both forms.
-            */
-
             if (cartQuantity) {
-
                 cartQuantity.value =
                     quantity;
-
             }
 
 
             if (buyNowQuantity) {
-
                 buyNowQuantity.value =
                     quantity;
-
             }
 
 
-            /*
-               Update minus button.
-            */
-
-            if (decreaseQuantityButton) {
-
-                decreaseQuantityButton.disabled =
+            if (decreaseButton) {
+                decreaseButton.disabled =
                     quantity <= 1;
-
             }
 
 
-            /*
-               Update plus button.
-            */
-
-            if (increaseQuantityButton) {
-
-                increaseQuantityButton.disabled =
+            if (increaseButton) {
+                increaseButton.disabled =
                     quantity >= maximumQuantity;
-
             }
 
         }
 
 
-        /*
-           DECREASE
-        */
+        decreaseButton?.addEventListener(
+            "click",
+            function () {
 
-        if (decreaseQuantityButton) {
+                updateQuantity(
+                    parseInt(
+                        quantityInput.value,
+                        10
+                    ) - 1
+                );
 
-            decreaseQuantityButton.addEventListener(
-                "click",
-                function () {
-
-                    updateQuantity(
-                        parseInt(
-                            quantityInput.value,
-                            10
-                        ) - 1
-                    );
-
-                }
-            );
-
-        }
+            }
+        );
 
 
-        /*
-           INCREASE
-        */
+        increaseButton?.addEventListener(
+            "click",
+            function () {
 
-        if (increaseQuantityButton) {
+                updateQuantity(
+                    parseInt(
+                        quantityInput.value,
+                        10
+                    ) + 1
+                );
 
-            increaseQuantityButton.addEventListener(
-                "click",
-                function () {
+            }
+        );
 
-                    updateQuantity(
-                        parseInt(
-                            quantityInput.value,
-                            10
-                        ) + 1
-                    );
-
-                }
-            );
-
-        }
-
-
-        /*
-           MANUAL INPUT
-        */
 
         quantityInput.addEventListener(
             "input",
             function () {
-
                 updateQuantity(
                     quantityInput.value
                 );
-
             }
         );
 
 
         quantityInput.addEventListener(
-            "change",
+            "blur",
             function () {
-
                 updateQuantity(
                     quantityInput.value
                 );
-
             }
         );
 
-
-        /*
-           INITIALIZE
-        */
 
         updateQuantity(1);
-
-    }
-
-
-    /* ============================================================
-       PRODUCT GALLERY
-    ============================================================ */
-
-    const mainImage =
-        document.getElementById("mainProductImage");
-
-    const thumbnails =
-        document.querySelectorAll(
-            ".product-thumbnail"
-        );
-
-    const previousButton =
-        document.getElementById("previousImage");
-
-    const nextButton =
-        document.getElementById("nextImage");
-
-    const galleryCounter =
-        document.getElementById("galleryCounter");
-
-
-    /*
-       Build image array.
-    */
-
-    const images = [];
-
-
-    thumbnails.forEach(
-        function (thumbnail) {
-
-            const image =
-                thumbnail.getAttribute(
-                    "data-image"
-                );
-
-            if (image) {
-
-                images.push(image);
-
-            }
-
-        }
-    );
-
-
-    /*
-       Find active image.
-    */
-
-    let currentIndex = 0;
-
-
-    thumbnails.forEach(
-        function (thumbnail, index) {
-
-            if (
-                thumbnail.classList.contains(
-                    "active"
-                )
-            ) {
-
-                currentIndex = index;
-
-            }
-
-        }
-    );
-
-
-    /*
-       Update thumbnail state.
-    */
-
-    function updateThumbnailState() {
-
-        thumbnails.forEach(
-            function (thumbnail, index) {
-
-                const active =
-                    index === currentIndex;
-
-
-                thumbnail.classList.toggle(
-                    "active",
-                    active
-                );
-
-
-                thumbnail.setAttribute(
-                    "aria-current",
-                    active
-                        ? "true"
-                        : "false"
-                );
-
-            }
-        );
-
-
-        /*
-           Keep active thumbnail visible.
-        */
-
-        const activeThumbnail =
-            thumbnails[currentIndex];
-
-
-        if (activeThumbnail) {
-
-            activeThumbnail.scrollIntoView({
-                behavior: "smooth",
-                block: "nearest",
-                inline: "center"
-            });
-
-        }
-
-    }
-
-
-    /*
-       SHOW IMAGE
-    */
-
-    function showImage(index) {
-
-        if (
-            !mainImage ||
-            images.length === 0
-        ) {
-            return;
-        }
-
-
-        /*
-           Loop backwards.
-        */
-
-        if (index < 0) {
-
-            index =
-                images.length - 1;
-
-        }
-
-
-        /*
-           Loop forwards.
-        */
-
-        if (
-            index >= images.length
-        ) {
-
-            index = 0;
-
-        }
-
-
-        currentIndex =
-            index;
-
-
-        /*
-           Fade transition.
-        */
-
-        mainImage.style.opacity =
-            "0.35";
-
-
-        setTimeout(
-            function () {
-
-                mainImage.src =
-                    images[currentIndex];
-
-                mainImage.style.opacity =
-                    "1";
-
-            },
-            80
-        );
-
-
-        updateThumbnailState();
-
-
-        /*
-           Counter.
-        */
-
-        if (galleryCounter) {
-
-            galleryCounter.textContent =
-                `${currentIndex + 1} / ${images.length}`;
-
-        }
-
-    }
-
-
-    /*
-       Thumbnail click.
-    */
-
-    thumbnails.forEach(
-        function (thumbnail, index) {
-
-            thumbnail.addEventListener(
-                "click",
-                function () {
-
-                    showImage(index);
-
-                }
-            );
-
-        }
-    );
-
-
-    /*
-       PREVIOUS
-    */
-
-    if (previousButton) {
-
-        previousButton.addEventListener(
-            "click",
-            function () {
-
-                showImage(
-                    currentIndex - 1
-                );
-
-            }
-        );
-
-    }
-
-
-    /*
-       NEXT
-    */
-
-    if (nextButton) {
-
-        nextButton.addEventListener(
-            "click",
-            function () {
-
-                showImage(
-                    currentIndex + 1
-                );
-
-            }
-        );
-
-    }
-
-
-    /* ============================================================
-       GALLERY KEYBOARD NAVIGATION
-    ============================================================ */
-
-    document.addEventListener(
-        "keydown",
-        function (event) {
-
-            const activeElement =
-                document.activeElement;
-
-
-            /*
-               Don't hijack typing.
-            */
-
-            if (
-                activeElement &&
-                (
-                    activeElement.tagName === "INPUT" ||
-                    activeElement.tagName === "TEXTAREA" ||
-                    activeElement.tagName === "SELECT"
-                )
-            ) {
-
-                return;
-
-            }
-
-
-            if (
-                event.key === "ArrowRight"
-            ) {
-
-                showImage(
-                    currentIndex + 1
-                );
-
-            }
-
-
-            if (
-                event.key === "ArrowLeft"
-            ) {
-
-                showImage(
-                    currentIndex - 1
-                );
-
-            }
-
-        }
-    );
-
-
-    /* ============================================================
-       GALLERY TOUCH SWIPE
-    ============================================================ */
-
-    let touchStartX = 0;
-
-    let touchStartY = 0;
-
-
-    if (mainImage) {
-
-        mainImage.addEventListener(
-            "touchstart",
-            function (event) {
-
-                if (
-                    !event.changedTouches.length
-                ) {
-                    return;
-                }
-
-
-                touchStartX =
-                    event.changedTouches[0]
-                        .screenX;
-
-                touchStartY =
-                    event.changedTouches[0]
-                        .screenY;
-
-            },
-            {
-                passive: true
-            }
-        );
-
-
-        mainImage.addEventListener(
-            "touchend",
-            function (event) {
-
-                if (
-                    !event.changedTouches.length
-                ) {
-                    return;
-                }
-
-
-                const touchEndX =
-                    event.changedTouches[0]
-                        .screenX;
-
-                const touchEndY =
-                    event.changedTouches[0]
-                        .screenY;
-
-
-                const differenceX =
-                    touchEndX -
-                    touchStartX;
-
-                const differenceY =
-                    touchEndY -
-                    touchStartY;
-
-
-                /*
-                   Ignore vertical gestures.
-                */
-
-                if (
-                    Math.abs(differenceX) <
-                    Math.abs(differenceY)
-                ) {
-
-                    return;
-
-                }
-
-
-                /*
-                   Ignore tiny movements.
-                */
-
-                if (
-                    Math.abs(differenceX) < 45
-                ) {
-
-                    return;
-
-                }
-
-
-                if (
-                    differenceX > 0
-                ) {
-
-                    showImage(
-                        currentIndex - 1
-                    );
-
-                } else {
-
-                    showImage(
-                        currentIndex + 1
-                    );
-
-                }
-
-            },
-            {
-                passive: true
-            }
-        );
 
     }
 
@@ -3359,55 +2311,35 @@ document.addEventListener("DOMContentLoaded", function () {
     ============================================================ */
 
     const lightbox =
-        document.getElementById(
-            "imageLightbox"
-        );
+        document.getElementById("imageLightbox");
 
     const lightboxImage =
-        document.getElementById(
-            "lightboxImage"
-        );
+        document.getElementById("lightboxImage");
 
     const lightboxClose =
-        document.getElementById(
-            "lightboxClose"
-        );
+        document.getElementById("lightboxClose");
 
     const lightboxPrev =
-        document.getElementById(
-            "lightboxPrev"
-        );
+        document.getElementById("lightboxPrev");
 
     const lightboxNext =
-        document.getElementById(
-            "lightboxNext"
-        );
+        document.getElementById("lightboxNext");
 
     const lightboxCounter =
-        document.getElementById(
-            "lightboxCounter"
-        );
+        document.getElementById("lightboxCounter");
 
-
-    /*
-       Update lightbox.
-    */
 
     function updateLightbox() {
 
         if (
             !lightboxImage ||
-            images.length === 0
+            !images.length
         ) {
-
             return;
-
         }
-
 
         lightboxImage.src =
             images[currentIndex];
-
 
         if (lightboxCounter) {
 
@@ -3419,174 +2351,95 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /*
-       OPEN
-    */
+    function openLightbox() {
 
-    if (
-        mainImage &&
-        lightbox
-    ) {
+        if (
+            !lightbox ||
+            !images.length
+        ) {
+            return;
+        }
 
-        mainImage.addEventListener(
-            "click",
-            function () {
+        updateLightbox();
 
-                if (
-                    images.length === 0
-                ) {
+        lightbox.classList.add("show");
 
-                    return;
-
-                }
-
-
-                updateLightbox();
-
-
-                lightbox.classList.add(
-                    "show"
-                );
-
-
-                document.body.style.overflow =
-                    "hidden";
-
-            }
-        );
+        document.body.style.overflow =
+            "hidden";
 
     }
 
-
-    /*
-       CLOSE
-    */
 
     function closeLightbox() {
 
         if (!lightbox) {
-
             return;
-
         }
 
+        lightbox.classList.remove("show");
 
-        lightbox.classList.remove(
-            "show"
-        );
-
-
-        document.body.style.overflow =
-            "";
+        document.body.style.overflow = "";
 
     }
 
 
-    if (lightboxClose) {
-
-        lightboxClose.addEventListener(
-            "click",
-            closeLightbox
-        );
-
-    }
+    mainImage?.addEventListener(
+        "click",
+        openLightbox
+    );
 
 
-    /*
-       Background click.
-    */
-
-    if (lightbox) {
-
-        lightbox.addEventListener(
-            "click",
-            function (event) {
-
-                if (
-                    event.target === lightbox
-                ) {
-
-                    closeLightbox();
-
-                }
-
-            }
-        );
-
-    }
+    lightboxClose?.addEventListener(
+        "click",
+        closeLightbox
+    );
 
 
-    /*
-       LIGHTBOX PREVIOUS
-    */
-
-    if (lightboxPrev) {
-
-        lightboxPrev.addEventListener(
-            "click",
-            function () {
-
-                showImage(
-                    currentIndex - 1
-                );
-
-                updateLightbox();
-
-            }
-        );
-
-    }
-
-
-    /*
-       LIGHTBOX NEXT
-    */
-
-    if (lightboxNext) {
-
-        lightboxNext.addEventListener(
-            "click",
-            function () {
-
-                showImage(
-                    currentIndex + 1
-                );
-
-                updateLightbox();
-
-            }
-        );
-
-    }
-
-
-    /*
-       ESCAPE
-    */
-
-    document.addEventListener(
-        "keydown",
+    lightbox?.addEventListener(
+        "click",
         function (event) {
 
             if (
-                event.key === "Escape" &&
-                lightbox &&
-                lightbox.classList.contains(
-                    "show"
-                )
+                event.target === lightbox
             ) {
-
                 closeLightbox();
-
             }
 
         }
     );
 
 
-    /*
-       LIGHTBOX ARROWS
-    */
+    lightboxPrev?.addEventListener(
+        "click",
+        function () {
+
+            updateGallery(
+                currentIndex - 1
+            );
+
+            updateLightbox();
+
+        }
+    );
+
+
+    lightboxNext?.addEventListener(
+        "click",
+        function () {
+
+            updateGallery(
+                currentIndex + 1
+            );
+
+            updateLightbox();
+
+        }
+    );
+
+
+    /* ============================================================
+       KEYBOARD GALLERY
+    ============================================================ */
 
     document.addEventListener(
         "keydown",
@@ -3594,21 +2447,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (
                 !lightbox ||
-                !lightbox.classList.contains(
-                    "show"
-                )
+                !lightbox.classList.contains("show")
             ) {
-
                 return;
-
             }
 
 
-            if (
-                event.key === "ArrowRight"
-            ) {
+            if (event.key === "Escape") {
+                closeLightbox();
+            }
 
-                showImage(
+
+            if (event.key === "ArrowRight") {
+
+                updateGallery(
                     currentIndex + 1
                 );
 
@@ -3617,11 +2469,9 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
 
-            if (
-                event.key === "ArrowLeft"
-            ) {
+            if (event.key === "ArrowLeft") {
 
-                showImage(
+                updateGallery(
                     currentIndex - 1
                 );
 
@@ -3634,96 +2484,64 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     /* ============================================================
-       LIGHTBOX MOBILE SWIPE
+       LIGHTBOX SWIPE
     ============================================================ */
 
     let lightboxTouchStartX = 0;
 
+    lightboxImage?.addEventListener(
+        "touchstart",
+        function (event) {
 
-    if (lightboxImage) {
-
-        lightboxImage.addEventListener(
-            "touchstart",
-            function (event) {
-
-                if (
-                    !event.changedTouches.length
-                ) {
-
-                    return;
-
-                }
-
-
-                lightboxTouchStartX =
-                    event.changedTouches[0]
-                        .screenX;
-
-            },
-            {
-                passive: true
+            if (!event.changedTouches.length) {
+                return;
             }
-        );
+
+            lightboxTouchStartX =
+                event.changedTouches[0].screenX;
+
+        },
+        { passive: true }
+    );
 
 
-        lightboxImage.addEventListener(
-            "touchend",
-            function (event) {
+    lightboxImage?.addEventListener(
+        "touchend",
+        function (event) {
 
-                if (
-                    !event.changedTouches.length
-                ) {
-
-                    return;
-
-                }
-
-
-                const touchEndX =
-                    event.changedTouches[0]
-                        .screenX;
-
-
-                const difference =
-                    touchEndX -
-                    lightboxTouchStartX;
-
-
-                if (
-                    Math.abs(difference) < 45
-                ) {
-
-                    return;
-
-                }
-
-
-                if (
-                    difference > 0
-                ) {
-
-                    showImage(
-                        currentIndex - 1
-                    );
-
-                } else {
-
-                    showImage(
-                        currentIndex + 1
-                    );
-
-                }
-
-
-                updateLightbox();
-
-            },
-            {
-                passive: true
+            if (!event.changedTouches.length) {
+                return;
             }
-        );
 
-    }
+            const endX =
+                event.changedTouches[0].screenX;
+
+            const difference =
+                endX - lightboxTouchStartX;
+
+            if (Math.abs(difference) < 45) {
+                return;
+            }
+
+            if (difference > 0) {
+
+                updateGallery(
+                    currentIndex - 1
+                );
+
+            } else {
+
+                updateGallery(
+                    currentIndex + 1
+                );
+
+            }
+
+            updateLightbox();
+
+        },
+        { passive: true }
+    );
 
 
     /* ============================================================
@@ -3731,129 +2549,83 @@ document.addEventListener("DOMContentLoaded", function () {
     ============================================================ */
 
     const copySkuButton =
-        document.getElementById(
-            "copySkuButton"
-        );
+        document.getElementById("copySkuButton");
 
     const productSku =
-        document.getElementById(
-            "productSku"
-        );
+        document.getElementById("productSku");
 
     const copyFeedback =
-        document.getElementById(
-            "copyFeedback"
-        );
+        document.getElementById("copyFeedback");
 
 
     function showCopyFeedback(message) {
 
         if (!copyFeedback) {
-
             return;
-
         }
-
 
         copyFeedback.textContent =
             message;
 
+        copyFeedback.classList.add("show");
 
-        copyFeedback.classList.add(
-            "show"
-        );
+        setTimeout(function () {
+
+            copyFeedback.classList.remove("show");
+
+        }, 1800);
+
+    }
 
 
-        setTimeout(
-            function () {
+    copySkuButton?.addEventListener(
+        "click",
+        async function () {
 
-                copyFeedback.classList.remove(
-                    "show"
+            const sku =
+                productSku?.textContent.trim();
+
+            if (
+                !sku ||
+                sku === "N/A"
+            ) {
+                return;
+            }
+
+
+            try {
+
+                await navigator.clipboard.writeText(
+                    sku
                 );
 
-            },
-            1800
-        );
+                showCopyFeedback(
+                    "SKU copied"
+                );
 
-    }
+            } catch (error) {
 
+                const input =
+                    document.createElement("input");
 
-    if (
-        copySkuButton &&
-        productSku
-    ) {
+                input.value = sku;
 
-        copySkuButton.addEventListener(
-            "click",
-            async function () {
+                document.body.appendChild(input);
 
-                const sku =
-                    productSku.textContent.trim();
+                input.select();
 
+                document.execCommand("copy");
 
-                if (
-                    !sku ||
-                    sku === "N/A"
-                ) {
+                input.remove();
 
-                    return;
-
-                }
-
-
-                try {
-
-                    await navigator.clipboard.writeText(
-                        sku
-                    );
-
-
-                    showCopyFeedback(
-                        "SKU copied"
-                    );
-
-                } catch (error) {
-
-                    /*
-                       Clipboard fallback.
-                    */
-
-                    const temporaryInput =
-                        document.createElement(
-                            "input"
-                        );
-
-
-                    temporaryInput.value =
-                        sku;
-
-
-                    document.body.appendChild(
-                        temporaryInput
-                    );
-
-
-                    temporaryInput.select();
-
-
-                    document.execCommand(
-                        "copy"
-                    );
-
-
-                    temporaryInput.remove();
-
-
-                    showCopyFeedback(
-                        "SKU copied"
-                    );
-
-                }
+                showCopyFeedback(
+                    "SKU copied"
+                );
 
             }
-        );
 
-    }
+        }
+    );
 
 
     /* ============================================================
@@ -3865,103 +2637,64 @@ document.addEventListener("DOMContentLoaded", function () {
             "shareProductButton"
         );
 
+    shareButton?.addEventListener(
+        "click",
+        async function () {
 
-    if (shareButton) {
+            const productTitle =
+                {{ product.name|tojson }};
 
-        shareButton.addEventListener(
-            "click",
-            async function () {
-
-                const productTitle =
-                    {{ product.name|tojson }};
-
-
-                const productUrl =
-                    window.location.href;
+            const productUrl =
+                window.location.href;
 
 
-                /*
-                   Native sharing.
-                */
-
-                if (
-                    navigator.share
-                ) {
-
-                    try {
-
-                        await navigator.share({
-
-                            title:
-                                productTitle,
-
-                            text:
-                                `Check out ${productTitle} on AgroMart.`,
-
-                            url:
-                                productUrl
-
-                        });
-
-                    } catch (error) {
-
-                        /*
-                           User cancelled.
-                        */
-
-                    }
-
-                    return;
-
-                }
-
-
-                /*
-                   Clipboard fallback.
-                */
+            if (navigator.share) {
 
                 try {
 
-                    await navigator.clipboard.writeText(
-                        productUrl
-                    );
+                    await navigator.share({
 
+                        title:
+                            productTitle,
 
-                    showCopyFeedback(
-                        "Product link copied"
-                    );
+                        text:
+                            `Check out ${productTitle} at Bomet Machineries Ltd.`,
+
+                        url:
+                            productUrl
+
+                    });
 
                 } catch (error) {
-
-                    showCopyFeedback(
-                        "Copy the page URL to share"
-                    );
-
+                    /* User cancelled sharing. */
                 }
 
+                return;
             }
-        );
-
-    }
 
 
-    /* ============================================================
-       INITIALIZE GALLERY
-    ============================================================ */
+            try {
 
-    if (
-        images.length > 0
-    ) {
+                await navigator.clipboard.writeText(
+                    productUrl
+                );
 
-        showImage(
-            currentIndex
-        );
+                showCopyFeedback(
+                    "Product link copied"
+                );
 
-    }
+            } catch (error) {
+
+                showCopyFeedback(
+                    "Copy the page URL to share"
+                );
+
+            }
+
+        }
+    );
 
 });
-
 </script>
-
 
 {% endblock %}
