@@ -1,50 +1,130 @@
-```html
 {% extends "base.html" %}
 
 {% block title %}
-{{ title }} | Bomet Machineries Ltd.
+{{ page_title }} | Bomet Machineries Ltd.
 {% endblock %}
 
 {% block content %}
 
 <div class="container py-4 py-lg-5">
+<div class="row justify-content-center">
 
-    <div class="row justify-content-center">
+    <div class="col-12 col-lg-8">
 
-        <div class="col-12 col-lg-8">
+        <!-- Header -->
+        <div class="mb-4">
 
+            <div class="d-flex align-items-center gap-2 mb-2">
+                <i class="bi bi-layout-text-window-reverse text-success fs-4"></i>
+
+                <h1 class="fw-bold mb-0">
+                    {{ page_title }}
+                </h1>
+            </div>
+
+            <p class="text-muted mb-0">
+                Manage the content displayed on the public homepage.
+            </p>
+
+        </div>
+
+
+        <!-- Form -->
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+            class="card border-0 shadow-sm rounded-4 p-3 p-md-4"
+        >
+
+            {{ form.hidden_tag() }}
+
+
+            <!-- Content Key -->
             <div class="mb-4">
 
-                <h1 class="fw-bold mb-1">
-                    {{ title }}
-                </h1>
+                {{ form.key.label(
+                    class="form-label fw-semibold"
+                ) }}
 
-                <p class="text-muted">
-                    Update the content displayed on the public homepage.
-                </p>
+                {{ form.key(
+                    class="form-control",
+                    placeholder="hero_1"
+                ) }}
+
+                <small class="text-muted d-block mt-1">
+                    Unique identifier used by the homepage.
+                    Examples:
+                    <code>hero_1</code>,
+                    <code>section_milling</code>,
+                    <code>section_fodder</code>.
+                </small>
+
+                {% for error in form.key.errors %}
+                    <div class="text-danger small mt-1">
+                        {{ error }}
+                    </div>
+                {% endfor %}
 
             </div>
 
 
-            <form method="POST" class="card border-0 shadow-sm rounded-4 p-4">
+            <!-- Headline -->
+            <div class="mb-4">
 
-                {{ form.hidden_tag() }}
+                {{ form.headline.label(
+                    class="form-label fw-semibold"
+                ) }}
 
-                <div class="mb-3">
+                {{ form.headline(
+                    class="form-control"
+                ) }}
 
-                    {{ form.key.label(class="form-label fw-semibold") }}
+                {% for error in form.headline.errors %}
+                    <div class="text-danger small mt-1">
+                        {{ error }}
+                    </div>
+                {% endfor %}
 
-                    {{ form.key(
-                        class="form-control",
-                        placeholder="hero"
+            </div>
+
+
+            <!-- Subheadline -->
+            <div class="mb-4">
+
+                {{ form.subheadline.label(
+                    class="form-label fw-semibold"
+                ) }}
+
+                {{ form.subheadline(
+                    class="form-control",
+                    rows="5"
+                ) }}
+
+                {% for error in form.subheadline.errors %}
+                    <div class="text-danger small mt-1">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+
+            <!-- CTA -->
+            <div class="row">
+
+                <div class="col-md-6 mb-4">
+
+                    {{ form.button_text.label(
+                        class="form-label fw-semibold"
                     ) }}
 
-                    <small class="text-muted">
-                        Example: hero, machinery-banner, featured-heading
-                    </small>
+                    {{ form.button_text(
+                        class="form-control",
+                        placeholder="Shop Now"
+                    ) }}
 
-                    {% for error in form.key.errors %}
-                        <div class="text-danger small">
+                    {% for error in form.button_text.errors %}
+                        <div class="text-danger small mt-1">
                             {{ error }}
                         </div>
                     {% endfor %}
@@ -52,149 +132,225 @@
                 </div>
 
 
-                <div class="mb-3">
+                <div class="col-md-6 mb-4">
 
-                    {{ form.headline.label(class="form-label fw-semibold") }}
-
-                    {{ form.headline(
-                        class="form-control"
-                    ) }}
-
-                </div>
-
-
-                <div class="mb-3">
-
-                    {{ form.subheadline.label(class="form-label fw-semibold") }}
-
-                    {{ form.subheadline(
-                        class="form-control",
-                        rows="4"
-                    ) }}
-
-                </div>
-
-
-                <div class="row">
-
-                    <div class="col-md-6 mb-3">
-
-                        {{ form.button_text.label(
-                            class="form-label fw-semibold"
-                        ) }}
-
-                        {{ form.button_text(
-                            class="form-control"
-                        ) }}
-
-                    </div>
-
-
-                    <div class="col-md-6 mb-3">
-
-                        {{ form.button_url.label(
-                            class="form-label fw-semibold"
-                        ) }}
-
-                        {{ form.button_url(
-                            class="form-control"
-                        ) }}
-
-                    </div>
-
-                </div>
-
-
-                <div class="mb-3">
-
-                    {{ form.image_url.label(
+                    {{ form.button_url.label(
                         class="form-label fw-semibold"
                     ) }}
 
-                    {{ form.image_url(
+                    {{ form.button_url(
                         class="form-control",
-                        placeholder="/static/uploads/home/hero.webp"
+                        placeholder="/products"
                     ) }}
 
-                    <small class="text-muted">
-                        Store the public image URL/path here.
+                    <small class="text-muted d-block mt-1">
+                        Example:
+                        <code>/products</code>
+                    </small>
+
+                    {% for error in form.button_url.errors %}
+                        <div class="text-danger small mt-1">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+
+            <!-- Image Upload -->
+            <div class="mb-4">
+
+                {{ form.image.label(
+                    class="form-label fw-semibold"
+                ) }}
+
+                {{ form.image(
+                    class="form-control",
+                    accept=".jpg,.jpeg,.png,.webp"
+                ) }}
+
+                <small class="text-muted d-block mt-1">
+                    JPG, JPEG, PNG or WEBP. Maximum size: 5 MB.
+                </small>
+
+                {% for error in form.image.errors %}
+                    <div class="text-danger small mt-1">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+
+            <!-- Current Image -->
+            {% if content and content.image_url %}
+
+                <div class="mb-4">
+
+                    <label class="form-label fw-semibold">
+                        Current Image
+                    </label>
+
+                    <div class="border rounded-4 overflow-hidden bg-light">
+
+                        <img
+                            src="{{ content.image_url }}"
+                            alt="{{ content.image_alt or content.key }}"
+                            class="img-fluid w-100"
+                            style="max-height: 320px; object-fit: cover;"
+                            loading="lazy"
+                            decoding="async"
+                        >
+
+                    </div>
+
+                    <small class="text-muted d-block mt-2">
+                        Upload a new image above to replace the current image.
                     </small>
 
                 </div>
 
+            {% endif %}
 
-                <div class="mb-3">
 
-                    {{ form.image_alt.label(
-                        class="form-label fw-semibold"
-                    ) }}
+            <!-- Image Alt -->
+            <div class="mb-4">
 
-                    {{ form.image_alt(
-                        class="form-control"
-                    ) }}
+                {{ form.image_alt.label(
+                    class="form-label fw-semibold"
+                ) }}
 
-                </div>
+                {{ form.image_alt(
+                    class="form-control",
+                    placeholder="Describe the image for accessibility"
+                ) }}
 
+                <small class="text-muted d-block mt-1">
+                    Helpful for accessibility and SEO.
+                </small>
+
+                {% for error in form.image_alt.errors %}
+                    <div class="text-danger small mt-1">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+
+            <!-- Advanced Settings -->
+            <div class="border rounded-4 p-3 mb-4 bg-light">
+
+                <h2 class="h6 fw-bold mb-3">
+                    <i class="bi bi-sliders me-1"></i>
+                    Display Settings
+                </h2>
 
                 <div class="row">
 
-                    <div class="col-md-6 mb-3">
+                    <!-- Sort Order -->
+                    <div class="col-md-6 mb-3 mb-md-0">
 
                         {{ form.sort_order.label(
                             class="form-label fw-semibold"
                         ) }}
 
                         {{ form.sort_order(
-                            class="form-control"
+                            class="form-control",
+                            min="0"
                         ) }}
 
+                        <small class="text-muted">
+                            Lower numbers appear first.
+                        </small>
+
+                        {% for error in form.sort_order.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+
                     </div>
 
-                    <div class="col-md-6 mb-3">
 
-                        <div class="form-check mt-md-4">
+                    <!-- CSS Class -->
+                    <div class="col-md-6">
 
-                            {{ form.is_active(
-                                class="form-check-input"
-                            ) }}
+                        {{ form.css_class.label(
+                            class="form-label fw-semibold"
+                        ) }}
 
-                            {{ form.is_active.label(
-                                class="form-check-label fw-semibold"
-                            ) }}
+                        {{ form.css_class(
+                            class="form-control",
+                            placeholder="Optional CSS class"
+                        ) }}
 
-                        </div>
+                        <small class="text-muted">
+                            Optional custom styling class.
+                        </small>
+
+                        {% for error in form.css_class.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
 
                     </div>
 
                 </div>
 
+            </div>
 
-                <div class="d-flex flex-column flex-sm-row gap-2">
 
-                    <button
-                        type="submit"
-                        class="btn btn-success rounded-3 px-4"
-                    >
-                        <i class="bi bi-check-lg me-1"></i>
-                        Save Changes
-                    </button>
+            <!-- Publishing -->
+            <div class="border rounded-4 p-3 mb-4">
 
-                    <a
-                        href="{{ url_for('admin_homepage.homepage') }}"
-                        class="btn btn-outline-secondary rounded-3 px-4"
-                    >
-                        Cancel
-                    </a>
+                <div class="form-check form-switch">
+
+                    {{ form.is_active(
+                        class="form-check-input",
+                        role="switch"
+                    ) }}
+
+                    {{ form.is_active.label(
+                        class="form-check-label fw-semibold"
+                    ) }}
 
                 </div>
 
-            </form>
+                <small class="text-muted ms-4">
+                    Published content is displayed on the public homepage.
+                </small>
 
-        </div>
+            </div>
+
+
+            <!-- Actions -->
+            <div class="d-flex flex-column flex-sm-row gap-2">
+
+                {{ form.submit(
+                    class="btn btn-success rounded-3 px-4"
+                ) }}
+
+                <a
+                    href="{{ url_for('admin_homepage.homepage') }}"
+                    class="btn btn-outline-secondary rounded-3 px-4"
+                >
+                    <i class="bi bi-x-lg me-1"></i>
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
 
     </div>
 
 </div>
+``
+
+</div>
 
 {% endblock %}
-```

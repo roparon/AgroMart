@@ -1,0 +1,639 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page_title }} | Bomet Machineries Ltd.{% endblock %}
+
+{% block content %}
+
+<div class="container py-4 py-lg-5">
+
+    <!-- HEADER -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+
+        <div>
+            <div class="d-flex align-items-center gap-2 mb-2">
+                <a
+                    href="{{ url_for('admin_homepage.homepage') }}"
+                    class="text-decoration-none text-muted"
+                >
+                    <i class="bi bi-arrow-left"></i>
+                    Homepage CMS
+                </a>
+            </div>
+
+            <h1 class="fw-bold mb-1">
+                {{ page_title }}
+            </h1>
+
+            <p class="text-muted mb-0">
+                Configure homepage text, imagery, buttons and publishing settings.
+            </p>
+        </div>
+
+        <a
+            href="{{ url_for('admin_homepage.homepage') }}"
+            class="btn btn-outline-secondary rounded-3"
+        >
+            <i class="bi bi-grid me-1"></i>
+            All Content
+        </a>
+
+    </div>
+
+
+    <form
+        method="POST"
+        enctype="multipart/form-data"
+        novalidate
+        id="homepageContentForm"
+    >
+
+        {{ form.hidden_tag() }}
+
+        <div class="row g-4">
+
+            <!-- ==================================================
+                 MAIN CONTENT
+            =================================================== -->
+
+            <div class="col-12 col-lg-8">
+
+                <!-- CONTENT CARD -->
+                <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+                    <div class="card-header bg-white border-0 p-4 pb-2">
+                        <h2 class="h5 fw-bold mb-1">
+                            <i class="bi bi-pencil-square text-success me-2"></i>
+                            Content
+                        </h2>
+
+                        <p class="small text-muted mb-0">
+                            Enter the text displayed on the homepage.
+                        </p>
+                    </div>
+
+                    <div class="card-body p-4">
+
+                        <!-- KEY -->
+                        <div class="mb-4">
+
+                            {{ form.key.label(class="form-label fw-semibold") }}
+
+                            {{ form.key(
+                                class="form-control form-control-lg rounded-3"
+                            ) }}
+
+                            {% for error in form.key.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+
+                            <div class="form-text">
+                                Examples:
+                                <code>hero_1</code>,
+                                <code>hero_2</code>,
+                                <code>section_milling</code>
+                            </div>
+
+                        </div>
+
+
+                        <!-- HEADLINE -->
+                        <div class="mb-4">
+
+                            {{ form.headline.label(class="form-label fw-semibold") }}
+
+                            {{ form.headline(
+                                class="form-control form-control-lg rounded-3"
+                            ) }}
+
+                            {% for error in form.headline.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+
+                        </div>
+
+
+                        <!-- SUBHEADLINE -->
+                        <div class="mb-4">
+
+                            {{ form.subheadline.label(class="form-label fw-semibold") }}
+
+                            {{ form.subheadline(
+                                class="form-control rounded-3",
+                                rows="6"
+                            ) }}
+
+                            {% for error in form.subheadline.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+
+                        </div>
+
+
+                        <!-- BUTTON -->
+                        <div class="row g-3">
+
+                            <div class="col-md-6">
+
+                                {{ form.button_text.label(
+                                    class="form-label fw-semibold"
+                                ) }}
+
+                                {{ form.button_text(
+                                    class="form-control rounded-3"
+                                ) }}
+
+                                {% for error in form.button_text.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {{ error }}
+                                    </div>
+                                {% endfor %}
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                {{ form.button_url.label(
+                                    class="form-label fw-semibold"
+                                ) }}
+
+                                {{ form.button_url(
+                                    class="form-control rounded-3"
+                                ) }}
+
+                                {% for error in form.button_url.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {{ error }}
+                                    </div>
+                                {% endfor %}
+
+                                <div class="form-text">
+                                    Example: <code>/products</code>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==================================================
+                     IMAGE CARD
+                =================================================== -->
+
+                <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+                    <div class="card-header bg-white border-0 p-4 pb-2">
+
+                        <h2 class="h5 fw-bold mb-1">
+                            <i class="bi bi-image text-success me-2"></i>
+                            Homepage Image
+                        </h2>
+
+                        <p class="small text-muted mb-0">
+                            Upload a high-quality image for this content block.
+                        </p>
+
+                    </div>
+
+
+                    <div class="card-body p-4">
+
+                        {% if content and content.image_url %}
+
+                            <div class="mb-4">
+
+                                <label class="form-label fw-semibold">
+                                    Current Image
+                                </label>
+
+                                <div class="position-relative rounded-4 overflow-hidden bg-light">
+
+                                    <img
+                                        src="{{ content.image_url }}"
+                                        alt="{{ content.image_alt or content.key }}"
+                                        id="currentHomepageImage"
+                                        class="w-100 homepage-preview"
+                                        loading="lazy"
+                                        decoding="async"
+                                    >
+
+                                </div>
+
+                            </div>
+
+                        {% endif %}
+
+
+                        <div class="mb-4">
+
+                            {{ form.image.label(
+                                class="form-label fw-semibold"
+                            ) }}
+
+                            {{ form.image(
+                                class="form-control form-control-lg rounded-3",
+                                accept=".jpg,.jpeg,.png,.webp"
+                            ) }}
+
+                            {% for error in form.image.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+
+                            <div class="form-text">
+                                JPG, JPEG, PNG or WEBP. Maximum 5 MB.
+                            </div>
+
+                        </div>
+
+
+                        <!-- NEW IMAGE PREVIEW -->
+
+                        <div
+                            id="newImagePreviewWrapper"
+                            class="d-none"
+                        >
+
+                            <label class="form-label fw-semibold">
+                                New Image Preview
+                            </label>
+
+                            <div class="rounded-4 overflow-hidden bg-light">
+
+                                <img
+                                    id="newImagePreview"
+                                    src=""
+                                    alt="New homepage image preview"
+                                    class="w-100 homepage-preview"
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ALT TEXT -->
+
+                        <div class="mt-4">
+
+                            {{ form.image_alt.label(
+                                class="form-label fw-semibold"
+                            ) }}
+
+                            {{ form.image_alt(
+                                class="form-control rounded-3"
+                            ) }}
+
+                            {% for error in form.image_alt.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+
+                            <div class="form-text">
+                                Recommended for accessibility and SEO.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==================================================
+                     ADVANCED
+                =================================================== -->
+
+                <div class="card border-0 shadow-sm rounded-4">
+
+                    <div class="card-header bg-white border-0 p-4 pb-2">
+
+                        <h2 class="h5 fw-bold mb-1">
+                            <i class="bi bi-sliders text-success me-2"></i>
+                            Advanced Settings
+                        </h2>
+
+                    </div>
+
+
+                    <div class="card-body p-4">
+
+                        <div class="mb-4">
+
+                            {{ form.css_class.label(
+                                class="form-label fw-semibold"
+                            ) }}
+
+                            {{ form.css_class(
+                                class="form-control rounded-3"
+                            ) }}
+
+                            {% for error in form.css_class.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+
+                            <div class="form-text">
+                                Optional CSS class for custom homepage styling.
+                            </div>
+
+                        </div>
+
+
+                        <div>
+
+                            {{ form.sort_order.label(
+                                class="form-label fw-semibold"
+                            ) }}
+
+                            {{ form.sort_order(
+                                class="form-control rounded-3",
+                                min="0"
+                            ) }}
+
+                            {% for error in form.sort_order.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+
+                            <div class="form-text">
+                                Lower numbers appear first.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ==================================================
+                 SIDEBAR
+            =================================================== -->
+
+            <div class="col-12 col-lg-4">
+
+                <!-- PUBLISHING -->
+
+                <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+                    <div class="card-header bg-white border-0 p-4 pb-2">
+
+                        <h2 class="h5 fw-bold mb-1">
+                            <i class="bi bi-broadcast text-success me-2"></i>
+                            Publishing
+                        </h2>
+
+                    </div>
+
+
+                    <div class="card-body p-4">
+
+                        <div class="form-check form-switch fs-5 mb-2">
+
+                            {{ form.is_active(
+                                class="form-check-input",
+                                role="switch"
+                            ) }}
+
+                            {{ form.is_active.label(
+                                class="form-check-label fw-semibold"
+                            ) }}
+
+                        </div>
+
+                        <p class="small text-muted mb-0">
+                            Published content is visible on the public homepage.
+                            Hidden content remains available in the CMS.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SAVE -->
+
+                <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+                    <div class="card-body p-4">
+
+                        {{ form.submit(
+                            class="btn btn-success btn-lg rounded-3 w-100 fw-bold",
+                            value="Save Content"
+                        ) }}
+
+                        <a
+                            href="{{ url_for('admin_homepage.homepage') }}"
+                            class="btn btn-outline-secondary rounded-3 w-100 mt-2"
+                        >
+                            Cancel
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DELETE -->
+
+                {% if content %}
+
+                    <div class="card border-0 shadow-sm rounded-4 border-danger">
+
+                        <div class="card-body p-4">
+
+                            <h3 class="h6 fw-bold text-danger">
+                                <i class="bi bi-exclamation-triangle me-1"></i>
+                                Danger Zone
+                            </h3>
+
+                            <p class="small text-muted">
+                                Permanently remove this homepage content block
+                                and its uploaded image.
+                            </p>
+
+                            <form
+                                method="POST"
+                                action="{{ url_for(
+                                    'admin_homepage.delete_content',
+                                    content_id=content.id
+                                ) }}"
+                                onsubmit="return confirm(
+                                    'Delete this homepage content permanently?'
+                                );"
+                            >
+
+                                <input
+                                    type="hidden"
+                                    name="csrf_token"
+                                    value="{{ csrf_token() }}"
+                                >
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-outline-danger rounded-3 w-100"
+                                >
+                                    <i class="bi bi-trash me-1"></i>
+                                    Delete Content
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+<style>
+
+    .homepage-preview {
+        display: block;
+        width: 100%;
+        max-height: 420px;
+        object-fit: cover;
+    }
+
+    #newImagePreviewWrapper {
+        margin-top: 1rem;
+    }
+
+    .form-control:focus,
+    .form-check-input:focus {
+        border-color: #198754;
+        box-shadow: 0 0 0 .2rem rgba(25, 135, 84, .12);
+    }
+
+    .form-check-input:checked {
+        background-color: #198754;
+        border-color: #198754;
+    }
+
+    @media (max-width: 767.98px) {
+
+        .homepage-preview {
+            max-height: 280px;
+        }
+
+    }
+
+</style>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const imageInput = document.getElementById(
+        "{{ form.image.id }}"
+    );
+
+    const previewWrapper = document.getElementById(
+        "newImagePreviewWrapper"
+    );
+
+    const preview = document.getElementById(
+        "newImagePreview"
+    );
+
+
+    if (!imageInput) {
+        return;
+    }
+
+
+    imageInput.addEventListener("change", function () {
+
+        const file = this.files && this.files[0];
+
+        if (!file) {
+
+            previewWrapper.classList.add("d-none");
+            preview.removeAttribute("src");
+
+            return;
+        }
+
+
+        const allowedTypes = [
+            "image/jpeg",
+            "image/png",
+            "image/webp"
+        ];
+
+
+        if (!allowedTypes.includes(file.type)) {
+
+            alert(
+                "Please select a JPG, PNG or WEBP image."
+            );
+
+            this.value = "";
+
+            previewWrapper.classList.add("d-none");
+
+            return;
+        }
+
+
+        if (file.size > 5 * 1024 * 1024) {
+
+            alert(
+                "Image must be smaller than 5 MB."
+            );
+
+            this.value = "";
+
+            previewWrapper.classList.add("d-none");
+
+            return;
+        }
+
+
+        const reader = new FileReader();
+
+
+        reader.onload = function (event) {
+
+            preview.src = event.target.result;
+
+            previewWrapper.classList.remove("d-none");
+
+        };
+
+
+        reader.readAsDataURL(file);
+
+    });
+
+});
+
+</script>
+
+{% endblock %}

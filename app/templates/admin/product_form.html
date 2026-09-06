@@ -2,394 +2,199 @@
 
 {% block content %}
 
-<div class="container mt-4">
+<div class="container mt-4 mb-5">
 
     <!-- Header -->
-
     <div class="d-flex justify-content-between align-items-center mb-4">
-
         <div>
             <h1>{{ title }}</h1>
-
-            <p class="text-muted">
+            <p class="text-muted mb-0">
                 Manage your AgroMart product information.
             </p>
         </div>
 
-        <a
-            href="{{ url_for('admin_products.products') }}"
-            class="btn btn-outline-secondary"
-        >
+        <a href="{{ url_for('admin_products.products') }}" class="btn btn-outline-secondary">
             ← Back to Products
         </a>
-
     </div>
 
+    <!-- Global Form Validation Errors -->
+    {% if form.errors %}
+        <div class="alert alert-danger rounded-3 mb-4 shadow-sm">
+            <h6 class="fw-bold mb-2">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>Please fix the following form errors:
+            </h6>
+            <ul class="mb-0 ps-3">
+                {% for field, errors in form.errors.items() %}
+                    <li><strong>{{ field }}:</strong> {{ errors|join(', ') }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
 
-    <!-- Form -->
-
+    <!-- Main Product Form -->
     <div class="card shadow-sm">
+        <div class="card-body p-4">
 
-        <div class="card-body">
-
-            <form method="POST" enctype="multipart/form-data">
-
+            <form method="POST" action="" enctype="multipart/form-data">
                 {{ form.hidden_tag() }}
 
-                <div class="row">
+                <div class="row g-3">
 
                     <!-- Product Name -->
-
-                    <div class="col-md-6 mb-3">
-
-                        {{ form.name.label(
-                            class="form-label fw-bold"
-                        ) }}
-
-                        {{ form.name(
-                            class="form-control",
-                            placeholder="Example: Diesel Posho Mill"
-                        ) }}
-
+                    <div class="col-md-6">
+                        {{ form.name.label(class="form-label fw-bold") }}
+                        {{ form.name(class="form-control", placeholder="Example: Diesel Posho Mill") }}
                         {% for error in form.name.errors %}
-
-                            <div class="text-danger small">
-                                {{ error }}
-                            </div>
-
+                            <div class="text-danger small mt-1">{{ error }}</div>
                         {% endfor %}
-
                     </div>
-
 
                     <!-- Brand -->
-
-                    <div class="col-md-6 mb-3">
-
-                        {{ form.brand.label(
-                            class="form-label fw-bold"
-                        ) }}
-
-                        {{ form.brand(
-                            class="form-control",
-                            placeholder="Example: Lister"
-                        ) }}
-
+                    <div class="col-md-6">
+                        {{ form.brand.label(class="form-label fw-bold") }}
+                        {{ form.brand(class="form-control", placeholder="Example: Lister") }}
                         {% for error in form.brand.errors %}
-
-                            <div class="text-danger small">
-                                {{ error }}
-                            </div>
-
+                            <div class="text-danger small mt-1">{{ error }}</div>
                         {% endfor %}
-
                     </div>
+
                     <!-- Description -->
-
-                    <div class="col-12 mb-3">
-
-                        {{ form.description.label(
-                            class="form-label fw-bold"
-                        ) }}
-
-                        {{ form.description(
-                            class="form-control",
-                            rows="5",
-                            placeholder="Describe the product..."
-                        ) }}
-
+                    <div class="col-12">
+                        {{ form.description.label(class="form-label fw-bold") }}
+                        {{ form.description(class="form-control", rows="4", placeholder="Describe the product...") }}
                         {% for error in form.description.errors %}
-
-                            <div class="text-danger small">
-                                {{ error }}
-                            </div>
-
+                            <div class="text-danger small mt-1">{{ error }}</div>
                         {% endfor %}
-
                     </div>
-
 
                     <!-- Price -->
-
-                    <div class="col-md-4 mb-3">
-
-                        {{ form.price.label(
-                            class="form-label fw-bold"
-                        ) }}
-
-                        {{ form.price(
-                            class="form-control",
-                            placeholder="0.00"
-                        ) }}
-
+                    <div class="col-md-4">
+                        {{ form.price.label(class="form-label fw-bold") }}
+                        {{ form.price(class="form-control", placeholder="0.00") }}
+                        {% for error in form.price.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
                     </div>
-
 
                     <!-- Discount -->
-
-                    <div class="col-md-4 mb-3">
-
-                        {{ form.discount.label(
-                            class="form-label fw-bold"
-                        ) }}
-
-                        {{ form.discount(
-                            class="form-control",
-                            placeholder="0"
-                        ) }}
-
+                    <div class="col-md-4">
+                        {{ form.discount.label(class="form-label fw-bold") }}
+                        {{ form.discount(class="form-control", placeholder="0") }}
+                        {% for error in form.discount.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
                     </div>
-
 
                     <!-- Stock -->
-
-                    <div class="col-md-4 mb-3">
-
-                        {{ form.stock.label(
-                            class="form-label fw-bold"
-                        ) }}
-
-                        {{ form.stock(
-                            class="form-control",
-                            placeholder="0"
-                        ) }}
-
+                    <div class="col-md-4">
+                        {{ form.stock.label(class="form-label fw-bold") }}
+                        {{ form.stock(class="form-control", placeholder="0") }}
+                        {% for error in form.stock.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
                     </div>
-
 
                     <!-- SKU -->
-
-                    <div class="col-md-6 mb-3">
-
-                        {{ form.sku.label(
-                            class="form-label fw-bold"
-                        ) }}
-
-                        {{ form.sku(
-                            class="form-control",
-                            placeholder="Example: AGM-PM-001"
-                        ) }}
-
+                    <div class="col-md-6">
+                        {{ form.sku.label(class="form-label fw-bold") }}
+                        {{ form.sku(class="form-control", placeholder="Example: AGM-PM-001") }}
+                        {% for error in form.sku.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
                     </div>
-
 
                     <!-- Slug -->
-
-                    <div class="col-md-6 mb-3">
-
-                        {{ form.slug.label(
-                            class="form-label fw-bold"
-                        ) }}
-
-                        {{ form.slug(
-                            class="form-control",
-                            placeholder="example-product-name"
-                        ) }}
-
-                    </div>
-
-                    <!-- Product Image -->
-
-                <div class="col-12 mb-3">
-
-                    <label
-                        for="image"
-                        class="form-label fw-bold"
-                    >
-                        Product Image
-                    </label>
-
-                    <input
-                        type="file"
-                        name="images"
-                        id="image"
-                        class="form-control"
-                        accept=".jpg,.jpeg,.png,.webp"
-                    >
-
-                    <div class="form-text">
-                        Allowed formats: JPG, JPEG, PNG, WEBP.
-                        Maximum size: 5MB.
-                    </div>
-
-                </div>
-                            {% if product and product.images %}
-                <div class="mt-4">
-
-                    <h5>
-                        Existing Product Images
-                    </h5>
-
-                    <div class="row g-3">
-
-                        {% for image in product.images %}
-
-                            <div class="col-md-4 col-lg-3">
-
-                                <div class="card h-100">
-
-                                    <img
-                                        src="{{ image.image_url }}"
-                                        class="card-img-top"
-                                        alt="{{ product.name }}"
-                                        style="
-                                            height: 180px;
-                                            object-fit: cover;
-                                        "
-                                    >
-
-                                    <div class="card-body text-center">
-
-                                        {% if image.is_primary %}
-
-                                            <span class="badge bg-success mb-2">
-                                                Primary Image
-                                            </span>
-
-                                        {% else %}
-
-                                            <form
-                                                method="POST"
-                                                action="{{ url_for(
-                                                    'admin_products.set_primary_image',
-                                                    image_id=image.id
-                                                ) }}"
-                                                class="mb-2"
-                                            >
-
-                                                {{ form.hidden_tag() }}
-
-                                                <button
-                                                    type="submit"
-                                                    class="btn btn-sm btn-outline-success w-100"
-                                                >
-                                                    Set as Primary
-                                                </button>
-
-                                            </form>
-
-                                        {% endif %}
-
-                                        <form
-                                            method="POST"
-                                            action="{{ url_for(
-                                                'admin_products.delete_product_image',
-                                                image_id=image.id
-                                            ) }}"
-                                            onsubmit="return confirm(
-                                                'Are you sure you want to delete this image?'
-                                            );"
-                                        >
-
-                                            {{ form.hidden_tag() }}
-
-                                            <button
-                                                type="submit"
-                                                class="btn btn-sm btn-outline-danger w-100"
-                                            >
-                                                Delete Image
-                                            </button>
-
-                                        </form>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
+                    <div class="col-md-6">
+                        {{ form.slug.label(class="form-label fw-bold") }}
+                        {{ form.slug(class="form-control", placeholder="example-product-name") }}
+                        {% for error in form.slug.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
                         {% endfor %}
-
                     </div>
-
-                </div>
-            {% endif %}
-
 
                     <!-- Category -->
-
-                    <div class="col-md-6 mb-3">
-
-                        {{ form.category.label(
-                            class="form-label fw-bold"
-                        ) }}
-
-                        {{ form.category(
-                            class="form-select"
-                        ) }}
-
+                    <div class="col-md-6">
+                        {{ form.category.label(class="form-label fw-bold") }}
+                        {{ form.category(class="form-select") }}
                         {% for error in form.category.errors %}
-
-                            <div class="text-danger small">
-                                {{ error }}
-                            </div>
-
+                            <div class="text-danger small mt-1">{{ error }}</div>
                         {% endfor %}
-
                     </div>
 
-
                     <!-- Status -->
-
-                    <div class="col-md-6 mb-3">
-
-                        <label class="form-label fw-bold">
-                            Product Status
-                        </label>
-
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Product Status</label>
                         <div class="form-check">
-
-                            {{ form.is_active(
-                                class="form-check-input"
-                            ) }}
-
-                            {{ form.is_active.label(
-                                class="form-check-label"
-                            ) }}
-
+                            {{ form.is_active(class="form-check-input") }}
+                            {{ form.is_active.label(class="form-check-label") }}
                         </div>
-
                         <div class="form-check mt-2">
-
-                            {{ form.featured(
-                                class="form-check-input"
-                            ) }}
-
-                            {{ form.featured.label(
-                                class="form-check-label"
-                            ) }}
-
+                            {{ form.featured(class="form-check-input") }}
+                            {{ form.featured.label(class="form-check-label") }}
                         </div>
+                    </div>
 
+                    <!-- Upload New Product Image -->
+                    <div class="col-12 mt-3">
+                        <label for="image" class="form-label fw-bold">Upload New Image</label>
+                        <input type="file" name="images" id="image" class="form-control" accept=".jpg,.jpeg,.png,.webp">
+                        <div class="form-text">Allowed formats: JPG, JPEG, PNG, WEBP. Maximum size: 5MB.</div>
                     </div>
 
                 </div>
 
-
-                <!-- Buttons -->
-
-                <hr>
-
+                <!-- Submit & Cancel Buttons -->
+                <hr class="my-4">
                 <div class="d-flex gap-2">
-
-                    {{ form.submit(
-                        class="btn btn-success px-4"
-                    ) }}
-
-                    <a
-                        href="{{ url_for('admin_products.products') }}"
-                        class="btn btn-secondary"
-                    >
+                    {{ form.submit(class="btn btn-success px-4") }}
+                    <a href="{{ url_for('admin_products.products') }}" class="btn btn-secondary">
                         Cancel
                     </a>
-
                 </div>
 
             </form>
 
         </div>
-
     </div>
+
+    <!-- Existing Product Images (Placed OUTSIDE main form to avoid form nesting) -->
+    {% if product and product.images %}
+        <div class="card shadow-sm mt-4 p-4">
+            <h5 class="fw-bold mb-3">Existing Product Images</h5>
+            <div class="row g-3">
+                {% for image in product.images %}
+                    <div class="col-md-4 col-lg-3">
+                        <div class="card h-100 shadow-sm">
+                            <img src="{{ image.image_url }}" class="card-img-top" alt="{{ product.name }}" style="height: 180px; object-fit: cover;">
+                            
+                            <div class="card-body text-center p-2">
+                                {% if image.is_primary %}
+                                    <span class="badge bg-success w-100 mb-2 py-2">Primary Image</span>
+                                {% else %}
+                                    <!-- Standalone form for Set Primary -->
+                                    <form method="POST" action="{{ url_for('admin_products.set_primary_image', image_id=image.id) }}" class="mb-2">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() if csrf_token else '' }}">
+                                        <button type="submit" class="btn btn-sm btn-outline-success w-100">
+                                            Set as Primary
+                                        </button>
+                                    </form>
+                                {% endif %}
+
+                                <!-- Standalone form for Delete -->
+                                <form method="POST" action="{{ url_for('admin_products.delete_product_image', image_id=image.id) }}" onsubmit="return confirm('Are you sure you want to delete this image?');">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() if csrf_token else '' }}">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger w-100">
+                                        Delete Image
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
 
 </div>
 
