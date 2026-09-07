@@ -7,29 +7,48 @@
 <style>
 /* ============================================================
    BOMET MACHINERIES LTD.
-   PRODUCT DETAILS — MOBILE FIRST
+   PRODUCT DETAILS
+   Professional machinery ecommerce product page
+   Mobile-first responsive design
    ============================================================ */
 
 :root {
     --bm-green: #15803d;
     --bm-green-dark: #166534;
-    --bm-green-light: #dcfce7;
+    --bm-green-soft: #f0fdf4;
+
     --bm-yellow: #f59e0b;
-    --bm-yellow-light: #fef3c7;
+    --bm-yellow-dark: #d97706;
+    --bm-yellow-soft: #fffbeb;
+
     --bm-red: #dc2626;
-    --bm-red-light: #fee2e2;
+    --bm-red-soft: #fef2f2;
+
     --bm-text: #111827;
+    --bm-text-soft: #374151;
     --bm-muted: #6b7280;
+    --bm-muted-light: #9ca3af;
+
     --bm-border: #e5e7eb;
-    --bm-soft: #f8fafc;
-    --bm-radius: 18px;
-    --bm-shadow: 0 10px 30px rgba(0,0,0,.06);
-    --bm-shadow-lg: 0 18px 45px rgba(0,0,0,.10);
+    --bm-border-light: #f1f5f9;
+
+    --bm-background: #f8fafc;
+    --bm-white: #ffffff;
+
+    --bm-radius: 14px;
+    --bm-radius-sm: 10px;
+
+    --bm-shadow: 0 4px 18px rgba(15, 23, 42, .06);
+    --bm-shadow-hover: 0 10px 30px rgba(15, 23, 42, .10);
 }
+
+/* ============================================================
+   PAGE
+   ============================================================ */
 
 .product-details-page {
     width: 100%;
-    max-width: 1440px;
+    max-width: 1400px;
     margin: 0 auto;
 }
 
@@ -42,38 +61,41 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 6px;
+
     margin-bottom: 14px;
+
     color: var(--bm-muted);
     font-size: 12px;
-    line-height: 1.4;
+    line-height: 1.5;
 }
 
 .product-breadcrumb a {
     color: var(--bm-green);
     text-decoration: none;
-    font-weight: 700;
+    font-weight: 600;
 }
 
 .product-breadcrumb a:hover {
     color: var(--bm-green-dark);
-    text-decoration: underline;
 }
 
 .product-breadcrumb .separator {
-    color: #9ca3af;
+    color: #cbd5e1;
 }
 
 .product-breadcrumb .current {
-    max-width: 210px;
+    max-width: 220px;
+
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    color: #374151;
-    font-weight: 600;
+
+    color: var(--bm-text-soft);
+    font-weight: 500;
 }
 
 /* ============================================================
-   PRODUCT LAYOUT
+   MAIN PRODUCT LAYOUT
    ============================================================ */
 
 .product-details-row {
@@ -81,66 +103,81 @@
 }
 
 /* ============================================================
-   GALLERY
+   PRODUCT GALLERY
    ============================================================ */
 
 .product-gallery-card {
     position: relative;
+
     width: 100%;
-    height: min(112vw, 520px);
-    min-height: 350px;
+    height: min(110vw, 500px);
+    min-height: 340px;
+
     overflow: hidden;
-    background: #111827;
+
+    background: #f8fafc;
+
+    border: 1px solid var(--bm-border);
     border-radius: var(--bm-radius);
-    box-shadow: var(--bm-shadow-lg);
+
+    box-shadow: var(--bm-shadow);
 }
 
 .product-main-image-wrapper {
     position: absolute;
     inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     overflow: hidden;
-    background: #111827;
+
+    background:
+        radial-gradient(
+            circle at center,
+            #ffffff 0%,
+            #f8fafc 60%,
+            #f1f5f9 100%
+        );
 }
 
 .product-main-image {
     width: 100%;
     height: 100%;
+
     display: block;
-    object-fit: cover;
+
+    object-fit: contain;
+
+    padding: 18px;
+
     cursor: zoom-in;
+
     user-select: none;
     -webkit-user-drag: none;
-    transition: transform .35s ease, opacity .2s ease;
+
+    transition:
+        opacity .2s ease,
+        transform .3s ease;
 }
 
 .product-main-image:hover {
-    transform: scale(1.025);
+    transform: scale(1.015);
 }
 
 .product-image-fallback {
     position: absolute;
     inset: 0;
+
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg,#374151,#111827);
-    color: white;
-    font-size: 65px;
-}
 
-.product-gallery-gradient {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    pointer-events: none;
-    background:
-        linear-gradient(
-            to top,
-            rgba(0,0,0,.94) 0%,
-            rgba(0,0,0,.65) 24%,
-            rgba(0,0,0,.12) 65%,
-            rgba(0,0,0,.18) 100%
-        );
+    background: #f8fafc;
+
+    color: var(--bm-muted-light);
+    font-size: 60px;
 }
 
 /* ============================================================
@@ -149,40 +186,94 @@
 
 .gallery-top-bar {
     position: absolute;
+
     top: 0;
     left: 0;
     right: 0;
+
     z-index: 5;
-    padding: 12px;
+
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    gap: 8px;
+
+    padding: 12px;
+
+    pointer-events: none;
+}
+
+.gallery-brand,
+.gallery-discount {
+    pointer-events: auto;
 }
 
 .gallery-brand {
-    max-width: 62%;
+    max-width: 60%;
+
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+
+    padding: 6px 10px;
+
+    background: rgba(255,255,255,.94);
+
+    border: 1px solid rgba(229,231,235,.9);
+    border-radius: 999px;
+
+    color: var(--bm-text-soft);
+
+    font-size: 10px;
+    font-weight: 700;
+
+    box-shadow: 0 2px 10px rgba(0,0,0,.06);
+
+    backdrop-filter: blur(8px);
+}
+
+.gallery-brand i {
+    color: var(--bm-green);
 }
 
 .gallery-discount {
-    flex-shrink: 0;
+    padding: 6px 10px;
+
+    background: var(--bm-red);
+
+    border-radius: 999px;
+
+    color: white;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    box-shadow: 0 2px 10px rgba(220,38,38,.18);
 }
+
+/* ============================================================
+   IMAGE COUNTER
+   ============================================================ */
 
 .gallery-counter {
     position: absolute;
-    top: 58px;
+
+    top: 55px;
     right: 12px;
+
     z-index: 5;
+
     padding: 5px 9px;
-    border-radius: 50px;
-    background: rgba(0,0,0,.55);
+
+    background: rgba(17,24,39,.68);
+
+    border-radius: 999px;
+
     color: white;
+
     font-size: 10px;
-    font-weight: 800;
-    backdrop-filter: blur(5px);
+    font-weight: 700;
+
+    backdrop-filter: blur(8px);
 }
 
 /* ============================================================
@@ -191,14 +282,20 @@
 
 .gallery-navigation {
     position: absolute;
+
     top: 50%;
     left: 0;
     right: 0;
+
     z-index: 5;
+
     display: flex;
     justify-content: space-between;
-    padding: 0 8px;
+
+    padding: 0 9px;
+
     transform: translateY(-50%);
+
     pointer-events: none;
 }
 
@@ -206,26 +303,35 @@
 .lightbox-close,
 .lightbox-prev,
 .lightbox-next {
-    border: 0;
-    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+
+    border: 0;
+    border-radius: 50%;
+
     cursor: pointer;
 }
 
 .gallery-nav-btn {
-    width: 40px;
-    height: 40px;
-    background: rgba(0,0,0,.58);
+    width: 38px;
+    height: 38px;
+
+    background: rgba(17,24,39,.68);
+
     color: white;
+
     pointer-events: auto;
-    backdrop-filter: blur(6px);
-    transition: background .2s ease, transform .2s ease;
+
+    backdrop-filter: blur(8px);
+
+    transition:
+        background .2s ease,
+        transform .2s ease;
 }
 
 .gallery-nav-btn:hover {
-    background: rgba(0,0,0,.82);
+    background: rgba(17,24,39,.88);
     transform: scale(1.05);
 }
 
@@ -235,36 +341,47 @@
 
 .gallery-bottom {
     position: absolute;
+
     left: 0;
     right: 0;
     bottom: 0;
+
     z-index: 4;
-    padding: 15px 15px 78px;
-    color: white;
+
+    padding: 55px 15px 72px;
+
+    pointer-events: none;
+
+    background:
+        linear-gradient(
+            to top,
+            rgba(0,0,0,.62),
+            rgba(0,0,0,.16) 65%,
+            transparent
+        );
 }
 
 .gallery-category {
     display: inline-flex;
     align-items: center;
+
     max-width: 100%;
-    margin-bottom: 7px;
+
+    margin-bottom: 6px;
     padding: 5px 9px;
-    border-radius: 50px;
-    background: rgba(220,252,231,.96);
-    color: var(--bm-green-dark);
-    font-size: 10px;
-    font-weight: 800;
+
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-}
 
-.gallery-product-name {
-    margin: 0;
-    color: white;
-    font-size: 1.25rem;
-    font-weight: 850;
-    line-height: 1.15;
+    background: rgba(240,253,244,.95);
+
+    border-radius: 999px;
+
+    color: var(--bm-green-dark);
+
+    font-size: 9px;
+    font-weight: 750;
 }
 
 /* ============================================================
@@ -273,52 +390,78 @@
 
 .product-thumbnails-wrapper {
     position: absolute;
+
     left: 0;
     right: 0;
     bottom: 0;
+
     z-index: 6;
+
     padding: 0 10px 10px;
+
     pointer-events: none;
 }
 
 .product-thumbnails {
     display: flex;
     align-items: center;
+
     gap: 7px;
+
     overflow-x: auto;
+
     padding: 2px;
+
     scrollbar-width: thin;
+
     pointer-events: auto;
 }
 
 .product-thumbnail {
-    width: 45px;
-    height: 45px;
+    width: 46px;
+    height: 46px;
+
     flex: 0 0 auto;
+
     padding: 0;
-    border: 2px solid rgba(255,255,255,.55);
-    border-radius: 8px;
+
     overflow: hidden;
-    background: #111827;
+
+    background: rgba(255,255,255,.95);
+
+    border: 2px solid rgba(255,255,255,.7);
+    border-radius: 8px;
+
     cursor: pointer;
-    opacity: .7;
-    transition: opacity .2s ease, transform .2s ease, border-color .2s ease;
+
+    opacity: .72;
+
+    transition:
+        opacity .2s ease,
+        transform .2s ease,
+        border-color .2s ease;
 }
 
-.product-thumbnail:hover,
+.product-thumbnail:hover {
+    opacity: 1;
+    transform: translateY(-1px);
+}
+
 .product-thumbnail.active {
     opacity: 1;
-}
 
-.product-thumbnail.active {
-    border-color: #ffc107;
-    box-shadow: 0 0 0 2px rgba(255,193,7,.25);
+    border-color: var(--bm-yellow);
+
+    box-shadow:
+        0 0 0 2px rgba(245,158,11,.20);
 }
 
 .product-thumbnail img {
     width: 100%;
     height: 100%;
+
     display: block;
+
     object-fit: cover;
 }
 
@@ -328,62 +471,106 @@
 
 .product-info-card {
     height: 100%;
-    padding: 18px;
-    background: white;
+
+    padding: 17px;
+
+    background: var(--bm-white);
+
     border: 1px solid var(--bm-border);
     border-radius: var(--bm-radius);
+
     box-shadow: var(--bm-shadow);
 }
 
+/* ============================================================
+   PRODUCT META
+   ============================================================ */
+
 .product-meta {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-    margin-bottom: 14px;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 12px;
 }
 
 .product-sku {
-    width: 100%;
     min-width: 0;
+
     color: var(--bm-muted);
-    font-size: 12px;
+
+    font-size: 11px;
 }
 
 .product-sku strong {
-    color: #374151;
+    color: var(--bm-text-soft);
+    font-weight: 700;
+}
+
+#productSku {
+    color: var(--bm-muted);
 }
 
 .sku-copy-btn {
+    margin-left: 4px;
+
+    padding: 2px 5px;
+
     border: 0;
+
     background: transparent;
+
     color: var(--bm-green);
-    font-size: 11px;
-    font-weight: 800;
+
+    font-size: 10px;
+    font-weight: 700;
+
     cursor: pointer;
-    padding: 2px 0;
 }
+
+.sku-copy-btn:hover {
+    color: var(--bm-green-dark);
+}
+
+/* ============================================================
+   TITLE
+   ============================================================ */
 
 .product-title {
     margin: 0 0 8px;
+
     color: var(--bm-text);
-    font-size: 1.55rem;
-    font-weight: 850;
-    line-height: 1.15;
+
+    font-size: 1.5rem;
+    font-weight: 800;
+
+    line-height: 1.18;
+
+    letter-spacing: -.02em;
 }
+
+/* ============================================================
+   BRAND
+   ============================================================ */
 
 .product-brand {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    margin-bottom: 17px;
+
+    gap: 5px;
+
+    margin-bottom: 15px;
+
     color: var(--bm-muted);
-    font-size: 13px;
-    font-weight: 650;
+
+    font-size: 12px;
+    font-weight: 600;
 }
 
 .product-brand i {
-    color: #16a34a;
+    color: var(--bm-green);
 }
 
 /* ============================================================
@@ -391,111 +578,156 @@
    ============================================================ */
 
 .product-price-section {
-    margin-bottom: 20px;
-    padding: 15px;
-    background: linear-gradient(135deg,#f8fafc,#f0fdf4);
-    border: 1px solid var(--bm-border);
-    border-radius: 15px;
+    margin-bottom: 18px;
+    padding: 14px;
+
+    background: var(--bm-green-soft);
+
+    border: 1px solid #dcfce7;
+    border-radius: var(--bm-radius-sm);
 }
 
 .price-label {
     display: block;
+
     margin-bottom: 4px;
+
     color: var(--bm-muted);
-    font-size: 11px;
-    font-weight: 700;
+
+    font-size: 9px;
+    font-weight: 750;
+
     text-transform: uppercase;
-    letter-spacing: .04em;
+    letter-spacing: .06em;
 }
 
 .price-line {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     flex-wrap: wrap;
-    gap: 6px;
+
+    gap: 7px;
 }
 
 .current-price {
-    color: var(--bm-green);
-    font-size: 1.65rem;
+    color: var(--bm-green-dark);
+
+    font-size: 1.6rem;
     font-weight: 900;
+
     line-height: 1.1;
 }
 
 .original-price {
-    color: #9ca3af;
-    font-size: 12px;
+    color: var(--bm-muted-light);
+
+    font-size: 11px;
+
     text-decoration: line-through;
 }
 
 .save-badge {
     display: inline-flex;
     align-items: center;
+
     padding: 4px 7px;
-    background: var(--bm-red-light);
+
+    background: var(--bm-red-soft);
+
+    border-radius: 999px;
+
     color: #b91c1c;
-    border-radius: 50px;
-    font-size: 10px;
-    font-weight: 850;
+
+    font-size: 9px;
+    font-weight: 800;
 }
 
 .savings-text {
-    margin-top: 7px;
-    color: var(--bm-green);
-    font-size: 11px;
-    font-weight: 700;
+    margin-top: 6px;
+
+    color: var(--bm-green-dark);
+
+    font-size: 10px;
+    font-weight: 650;
 }
 
 /* ============================================================
-   DESCRIPTION / INFORMATION
+   DESCRIPTION
    ============================================================ */
 
 .section-title {
-    margin: 0 0 8px;
+    margin: 0 0 7px;
+
     color: var(--bm-text);
-    font-size: 1rem;
-    font-weight: 850;
+
+    font-size: .95rem;
+    font-weight: 800;
 }
 
 .product-description {
     color: #4b5563;
-    font-size: 13px;
-    line-height: 1.75;
+
+    font-size: 12px;
+    line-height: 1.7;
+
     white-space: pre-line;
     overflow-wrap: anywhere;
 }
 
+.product-description-empty {
+    color: var(--bm-muted);
+
+    font-style: italic;
+}
+
+/* ============================================================
+   PRODUCT INFORMATION GRID
+   ============================================================ */
+
 .product-info-grid {
     display: grid;
+
     grid-template-columns: repeat(2,minmax(0,1fr));
-    gap: 8px;
-    margin-top: 19px;
-    margin-bottom: 20px;
+
+    gap: 7px;
+
+    margin-top: 17px;
+    margin-bottom: 18px;
 }
 
 .info-item {
     min-width: 0;
-    padding: 11px;
-    background: #f9fafb;
-    border: 1px solid #f0f1f3;
-    border-radius: 11px;
+
+    padding: 10px;
+
+    background: #fafafa;
+
+    border: 1px solid var(--bm-border-light);
+    border-radius: var(--bm-radius-sm);
 }
 
 .info-item-label {
     display: block;
+
     margin-bottom: 3px;
-    color: #9ca3af;
-    font-size: 9px;
+
+    color: var(--bm-muted-light);
+
+    font-size: 8px;
     font-weight: 800;
+
     text-transform: uppercase;
     letter-spacing: .05em;
 }
 
 .info-item-value {
     display: block;
-    color: #374151;
-    font-size: 11px;
-    font-weight: 750;
+
+    color: var(--bm-text-soft);
+
+    font-size: 10px;
+    font-weight: 700;
+
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -507,7 +739,9 @@
 
 .purchase-section {
     margin-top: auto;
-    padding-top: 18px;
+
+    padding-top: 16px;
+
     border-top: 1px solid var(--bm-border);
 }
 
@@ -515,44 +749,67 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 10px;
-    margin-bottom: 11px;
+
+    gap: 12px;
+
+    margin-bottom: 10px;
 }
 
 .quantity-label {
-    color: #374151;
-    font-size: 12px;
-    font-weight: 850;
+    color: var(--bm-text-soft);
+
+    font-size: 11px;
+    font-weight: 800;
 }
 
 .quantity-stock {
-    color: #9ca3af;
-    font-size: 10px;
-    font-weight: 600;
+    margin-top: 2px;
+
+    color: var(--bm-muted);
+
+    font-size: 9px;
 }
+
+/* ============================================================
+   QUANTITY CONTROL
+   ============================================================ */
 
 .quantity-control {
     display: inline-flex;
     align-items: center;
-    height: 44px;
+
+    height: 42px;
+
     overflow: hidden;
-    border: 1px solid #d1d5db;
-    border-radius: 11px;
+
     background: white;
+
+    border: 1px solid #d1d5db;
+    border-radius: var(--bm-radius-sm);
 }
 
 .quantity-btn {
-    width: 40px;
+    width: 38px;
     height: 100%;
-    border: 0;
-    background: #f3f4f6;
-    color: #374151;
+
     display: flex;
     align-items: center;
     justify-content: center;
+
+    border: 0;
+
+    background: #f8fafc;
+
+    color: var(--bm-text-soft);
+
     cursor: pointer;
-    font-size: 15px;
-    font-weight: 900;
+
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.quantity-btn:hover:not(:disabled) {
+    background: #f1f5f9;
 }
 
 .quantity-btn:disabled {
@@ -561,18 +818,26 @@
 }
 
 .quantity-input {
-    width: 48px;
+    width: 44px;
     height: 100%;
+
     padding: 0;
+
     border: 0;
-    border-left: 1px solid #e5e7eb;
-    border-right: 1px solid #e5e7eb;
+    border-left: 1px solid var(--bm-border);
+    border-right: 1px solid var(--bm-border);
+
     outline: none;
+
     background: white;
-    color: #111827;
+
+    color: var(--bm-text);
+
     text-align: center;
-    font-size: 14px;
-    font-weight: 850;
+
+    font-size: 13px;
+    font-weight: 800;
+
     appearance: textfield;
 }
 
@@ -582,12 +847,14 @@
 }
 
 /* ============================================================
-   ACTIONS
+   PURCHASE BUTTONS
    ============================================================ */
 
 .purchase-action-grid {
     display: grid;
+
     grid-template-columns: 1fr 1fr;
+
     gap: 8px;
 }
 
@@ -598,26 +865,53 @@
 .add-cart-btn,
 .buy-now-btn {
     width: 100%;
-    min-height: 50px;
-    border-radius: 12px;
+    min-height: 48px;
+
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 7px;
-    font-size: 13px;
-    font-weight: 850;
+
+    gap: 6px;
+
+    border-radius: var(--bm-radius-sm);
+
+    font-size: 12px;
+    font-weight: 800;
+
+    transition:
+        transform .15s ease,
+        box-shadow .15s ease;
 }
 
-.add-cart-btn {
-    box-shadow: 0 5px 15px rgba(25,135,84,.17);
+.add-cart-btn:hover {
+    transform: translateY(-1px);
+
+    box-shadow: 0 7px 18px rgba(21,128,61,.18);
 }
 
 .buy-now-btn {
-    background: #ffc107;
-    border: 1px solid #ffc107;
+    background: var(--bm-yellow);
+
+    border: 1px solid var(--bm-yellow);
+
     color: #111827;
-    box-shadow: 0 5px 15px rgba(245,158,11,.16);
+
+    box-shadow: 0 4px 12px rgba(245,158,11,.14);
 }
+
+.buy-now-btn:hover {
+    background: var(--bm-yellow-dark);
+
+    border-color: var(--bm-yellow-dark);
+
+    color: white;
+
+    transform: translateY(-1px);
+}
+
+/* ============================================================
+   WISHLIST
+   ============================================================ */
 
 .wishlist-form {
     margin: 8px 0 0;
@@ -625,88 +919,475 @@
 
 .wishlist-btn {
     width: 100%;
-    min-height: 45px;
-    border-radius: 11px;
-    border: 1px solid #e5e7eb;
-    background: white;
-    color: #374151;
+    min-height: 43px;
+
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 7px;
+
+    gap: 6px;
+
+    background: white;
+
+    border: 1px solid var(--bm-border);
+    border-radius: var(--bm-radius-sm);
+
+    color: var(--bm-text-soft);
+
     cursor: pointer;
-    font-size: 12px;
-    font-weight: 750;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    transition:
+        background .15s ease,
+        border-color .15s ease,
+        color .15s ease;
 }
 
 .wishlist-btn:hover {
-    background: #fff1f2;
+    background: var(--bm-red-soft);
+
     border-color: #fecdd3;
-    color: #dc2626;
+
+    color: var(--bm-red);
 }
+
+/* ============================================================
+   SHARE
+   ============================================================ */
 
 .share-product-row {
     display: flex;
     justify-content: center;
-    margin-top: 8px;
+
+    margin-top: 5px;
 }
 
 .share-btn {
+    padding: 5px 9px;
+
     border: 0;
-    background: transparent;
-    color: #6b7280;
-    padding: 6px 10px;
     border-radius: 8px;
+
+    background: transparent;
+
+    color: var(--bm-muted);
+
     cursor: pointer;
-    font-size: 11px;
-    font-weight: 700;
+
+    font-size: 10px;
+    font-weight: 650;
 }
+
+.share-btn:hover {
+    background: #f8fafc;
+
+    color: var(--bm-green);
+}
+
+/* ============================================================
+   DELIVERY
+   ============================================================ */
 
 .delivery-note {
     display: flex;
     align-items: flex-start;
     justify-content: center;
+
     gap: 6px;
-    margin-top: 10px;
-    color: #6b7280;
-    font-size: 10px;
+
+    margin-top: 9px;
+
+    color: var(--bm-muted);
+
+    font-size: 9px;
     line-height: 1.5;
+
     text-align: center;
 }
 
 .delivery-note i {
-    color: #16a34a;
     flex-shrink: 0;
+
+    color: var(--bm-green);
+
+    margin-top: 1px;
 }
+
+/* ============================================================
+   TRUST FEATURES
+   ============================================================ */
 
 .trust-features {
     display: grid;
+
     grid-template-columns: repeat(3,1fr);
-    gap: 6px;
-    margin-top: 12px;
+
+    gap: 5px;
+
+    margin-top: 10px;
 }
 
 .trust-feature {
     min-width: 0;
-    padding: 9px 4px;
+
+    padding: 8px 3px;
+
+    background: #fafafa;
+
+    border: 1px solid var(--bm-border-light);
+    border-radius: 8px;
+
     text-align: center;
-    background: #f9fafb;
-    border-radius: 10px;
 }
 
 .trust-feature i {
     display: block;
-    margin-bottom: 4px;
-    color: #16a34a;
-    font-size: 15px;
+
+    margin-bottom: 3px;
+
+    color: var(--bm-green);
+
+    font-size: 14px;
 }
 
 .trust-feature span {
     display: block;
-    color: #6b7280;
+
+    color: var(--bm-muted);
+
+    font-size: 7px;
+    font-weight: 700;
+
+    line-height: 1.25;
+}
+
+/* ============================================================
+   RELATED SEARCHES
+   ============================================================ */
+
+.related-searches-section {
+    margin-top: 22px;
+
+    padding: 17px;
+
+    background: var(--bm-white);
+
+    border: 1px solid var(--bm-border);
+
+    border-radius: var(--bm-radius);
+
+    box-shadow: var(--bm-shadow);
+}
+
+.related-section-heading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    margin-bottom: 5px;
+}
+
+.related-section-heading i {
+    color: var(--bm-green);
+
+    font-size: 15px;
+}
+
+.related-section-title {
+    margin: 0;
+
+    color: var(--bm-text);
+
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+.related-section-subtitle {
+    margin: 0 0 13px;
+
+    color: var(--bm-muted);
+
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.related-search-list {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 7px;
+}
+
+.related-search-link {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 6px;
+
+    max-width: 100%;
+
+    padding: 8px 11px;
+
+    background: #f8fafc;
+
+    border: 1px solid var(--bm-border);
+
+    border-radius: 999px;
+
+    color: var(--bm-text-soft);
+
+    text-decoration: none;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    transition:
+        background .15s ease,
+        border-color .15s ease,
+        color .15s ease,
+        transform .15s ease;
+}
+
+.related-search-link:hover {
+    background: var(--bm-green-soft);
+
+    border-color: #bbf7d0;
+
+    color: var(--bm-green-dark);
+
+    transform: translateY(-1px);
+}
+
+.related-search-link i {
+    color: var(--bm-green);
+
+    font-size: 9px;
+}
+
+/* ============================================================
+   RELATED PRODUCTS / RECENTLY VIEWED
+   ============================================================ */
+
+.related-products-section {
+    margin-top: 22px;
+}
+
+.related-products-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 12px;
+}
+
+.related-products-title {
+    margin: 0;
+
+    color: var(--bm-text);
+
+    font-size: 1.05rem;
+    font-weight: 850;
+}
+
+.related-products-subtitle {
+    margin: 3px 0 0;
+
+    color: var(--bm-muted);
+
+    font-size: 10px;
+}
+
+.related-view-all {
+    flex-shrink: 0;
+
+    color: var(--bm-green);
+
+    text-decoration: none;
+
+    font-size: 10px;
+    font-weight: 750;
+}
+
+.related-view-all:hover {
+    color: var(--bm-green-dark);
+}
+
+.related-products-grid {
+    display: grid;
+
+    grid-template-columns: repeat(2,minmax(0,1fr));
+
+    gap: 9px;
+}
+
+.related-product-card {
+    position: relative;
+
+    min-width: 0;
+
+    overflow: hidden;
+
+    background: var(--bm-white);
+
+    border: 1px solid var(--bm-border);
+
+    border-radius: 12px;
+
+    box-shadow: 0 2px 10px rgba(15,23,42,.04);
+
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease,
+        border-color .18s ease;
+}
+
+.related-product-card:hover {
+    transform: translateY(-2px);
+
+    border-color: #d1d5db;
+
+    box-shadow: var(--bm-shadow-hover);
+}
+
+.related-product-image-link {
+    position: relative;
+
+    display: block;
+
+    aspect-ratio: 1 / 1;
+
+    overflow: hidden;
+
+    background: #f8fafc;
+}
+
+.related-product-image {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: contain;
+
+    padding: 10px;
+
+    transition: transform .25s ease;
+}
+
+.related-product-card:hover .related-product-image {
+    transform: scale(1.035);
+}
+
+.related-product-placeholder {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--bm-muted-light);
+
+    font-size: 30px;
+}
+
+.related-product-body {
+    padding: 9px;
+}
+
+.related-product-category {
+    display: block;
+
+    margin-bottom: 3px;
+
+    overflow: hidden;
+
+    color: var(--bm-green);
+
     font-size: 8px;
     font-weight: 750;
-    line-height: 1.25;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.related-product-name {
+    display: -webkit-box;
+
+    min-height: 31px;
+    margin: 0 0 6px;
+
+    overflow: hidden;
+
+    color: var(--bm-text);
+
+    font-size: 10px;
+    font-weight: 750;
+
+    line-height: 1.45;
+
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.related-product-name a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.related-product-name a:hover {
+    color: var(--bm-green-dark);
+}
+
+.related-product-price {
+    color: var(--bm-green-dark);
+
+    font-size: 11px;
+    font-weight: 900;
+}
+
+.related-product-original-price {
+    margin-left: 4px;
+
+    color: var(--bm-muted-light);
+
+    font-size: 8px;
+
+    text-decoration: line-through;
+}
+
+.related-product-stock {
+    margin-top: 4px;
+
+    color: var(--bm-muted);
+
+    font-size: 8px;
+}
+
+.related-product-stock.in-stock {
+    color: var(--bm-green);
+}
+
+.related-product-stock.out-stock {
+    color: var(--bm-red);
+}
+
+/* ============================================================
+   OUT OF STOCK
+   ============================================================ */
+
+.out-of-stock-btn {
+    width: 100%;
+    min-height: 48px;
+
+    border-radius: var(--bm-radius-sm);
+
+    font-size: 12px;
+    font-weight: 800;
 }
 
 /* ============================================================
@@ -715,13 +1396,19 @@
 
 .image-lightbox {
     position: fixed;
+
     inset: 0;
+
     z-index: 9999;
+
     display: none;
+
     align-items: center;
     justify-content: center;
-    padding: 10px;
-    background: rgba(0,0,0,.96);
+
+    padding: 12px;
+
+    background: rgba(3,7,18,.97);
 }
 
 .image-lightbox.show {
@@ -730,20 +1417,26 @@
 
 .lightbox-content {
     position: relative;
+
     width: 100%;
     height: 100%;
+
     max-width: 1500px;
     max-height: 950px;
+
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .lightbox-image {
-    max-width: 94%;
+    max-width: 92%;
     max-height: 82vh;
+
     object-fit: contain;
-    border-radius: 7px;
+
+    border-radius: 6px;
+
     user-select: none;
     -webkit-user-drag: none;
 }
@@ -752,42 +1445,56 @@
 .lightbox-prev,
 .lightbox-next {
     position: absolute;
+
     z-index: 3;
+
     width: 42px;
     height: 42px;
+
     background: rgba(255,255,255,.12);
+
     color: white;
-    backdrop-filter: blur(6px);
+
+    backdrop-filter: blur(8px);
 }
 
 .lightbox-close {
     top: 10px;
-    right: 10px;
+    right: 8px;
 }
 
 .lightbox-prev {
     left: 5px;
     top: 50%;
+
     transform: translateY(-50%);
 }
 
 .lightbox-next {
     right: 5px;
     top: 50%;
+
     transform: translateY(-50%);
 }
 
 .lightbox-counter {
     position: absolute;
+
     left: 50%;
     bottom: 12px;
+
     transform: translateX(-50%);
+
     padding: 5px 10px;
+
     background: rgba(0,0,0,.55);
+
+    border-radius: 999px;
+
     color: white;
-    border-radius: 50px;
+
     font-size: 10px;
-    font-weight: 800;
+    font-weight: 700;
 }
 
 /* ============================================================
@@ -796,23 +1503,36 @@
 
 .copy-feedback {
     position: fixed;
+
     left: 50%;
-    bottom: 20px;
+    bottom: 18px;
+
     z-index: 10000;
+
     padding: 9px 14px;
+
     background: #111827;
+
+    border-radius: 999px;
+
     color: white;
-    border-radius: 50px;
-    font-size: 11px;
-    font-weight: 800;
+
+    font-size: 10px;
+    font-weight: 750;
+
     opacity: 0;
     pointer-events: none;
+
     transform: translate(-50%,15px);
-    transition: opacity .2s ease, transform .2s ease;
+
+    transition:
+        opacity .2s ease,
+        transform .2s ease;
 }
 
 .copy-feedback.show {
     opacity: 1;
+
     transform: translate(-50%,0);
 }
 
@@ -820,35 +1540,43 @@
    TABLET
    ============================================================ */
 
-@media (min-width:576px) {
+@media (min-width: 576px) {
 
     .product-gallery-card {
-        height: 500px;
+        height: 520px;
     }
 
-    .gallery-bottom {
-        padding: 20px 20px 90px;
-    }
-
-    .gallery-product-name {
-        font-size: 1.55rem;
-    }
-
-    .product-thumbnail {
-        width: 55px;
-        height: 55px;
+    .product-main-image {
+        padding: 25px;
     }
 
     .product-info-card {
-        padding: 24px;
+        padding: 22px;
     }
 
     .product-title {
-        font-size: 1.8rem;
+        font-size: 1.75rem;
     }
 
     .current-price {
-        font-size: 1.85rem;
+        font-size: 1.8rem;
+    }
+
+    .product-thumbnail {
+        width: 54px;
+        height: 54px;
+    }
+
+    .product-description {
+        font-size: 13px;
+    }
+
+    .related-products-grid {
+        grid-template-columns: repeat(3,minmax(0,1fr));
+    }
+
+    .related-searches-section {
+        padding: 20px;
     }
 }
 
@@ -856,7 +1584,7 @@
    DESKTOP
    ============================================================ */
 
-@media (min-width:768px) {
+@media (min-width: 768px) {
 
     .product-details-page {
         padding-left: 8px;
@@ -864,151 +1592,181 @@
     }
 
     .product-breadcrumb {
-        margin-bottom: 20px;
+        margin-bottom: 18px;
+
         font-size: 13px;
     }
 
     .product-breadcrumb .current {
-        max-width: 320px;
+        max-width: 350px;
     }
 
     .product-gallery-card {
-        height: 600px;
-        border-radius: 22px;
+        height: 590px;
+
+        border-radius: 18px;
+    }
+
+    .product-main-image {
+        padding: 35px;
     }
 
     .gallery-top-bar {
-        padding: 18px;
+        padding: 16px;
     }
 
     .gallery-counter {
-        top: 75px;
-        right: 18px;
+        top: 65px;
+        right: 16px;
+
         font-size: 11px;
     }
 
     .gallery-navigation {
-        padding: 0 15px;
+        padding: 0 14px;
     }
 
     .gallery-nav-btn {
-        width: 46px;
-        height: 46px;
+        width: 44px;
+        height: 44px;
     }
 
     .gallery-bottom {
-        padding: 25px 25px 100px;
-    }
-
-    .gallery-product-name {
-        font-size: 2rem;
+        padding: 35px 20px 85px;
     }
 
     .product-thumbnails-wrapper {
-        padding: 0 24px 20px;
+        padding: 0 18px 17px;
     }
 
     .product-thumbnail {
-        width: 62px;
-        height: 62px;
-        border-radius: 10px;
+        width: 60px;
+        height: 60px;
+
+        border-radius: 9px;
     }
 
     .product-info-card {
-        padding: 30px;
-        border-radius: 22px;
-    }
+        padding: 28px;
 
-    .product-meta {
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .product-sku {
-        width: auto;
+        border-radius: 18px;
     }
 
     .product-title {
-        font-size: 2.15rem;
+        font-size: 2rem;
     }
 
     .product-brand {
-        font-size: 14px;
+        font-size: 13px;
     }
 
     .product-price-section {
-        padding: 18px;
+        padding: 17px;
     }
 
     .current-price {
-        font-size: 2.15rem;
+        font-size: 2rem;
     }
 
     .product-description {
         font-size: 14px;
+        line-height: 1.75;
     }
 
     .info-item {
-        padding: 13px;
+        padding: 12px;
     }
 
     .info-item-label {
-        font-size: 10px;
+        font-size: 9px;
     }
 
     .info-item-value {
-        font-size: 12px;
-    }
-
-    .quantity-label {
-        font-size: 13px;
-    }
-
-    .quantity-stock {
         font-size: 11px;
     }
 
+    .quantity-label {
+        font-size: 12px;
+    }
+
+    .quantity-stock {
+        font-size: 10px;
+    }
+
     .quantity-control {
-        height: 48px;
+        height: 46px;
     }
 
     .quantity-btn {
-        width: 44px;
+        width: 42px;
     }
 
     .quantity-input {
-        width: 55px;
+        width: 52px;
     }
 
     .add-cart-btn,
     .buy-now-btn {
-        min-height: 54px;
-        font-size: 14px;
+        min-height: 52px;
+
+        font-size: 13px;
     }
 
     .wishlist-btn {
-        min-height: 48px;
+        min-height: 46px;
     }
 
     .delivery-note {
-        font-size: 11px;
+        font-size: 10px;
     }
 
     .trust-feature {
-        padding: 11px 7px;
+        padding: 9px 5px;
     }
 
     .trust-feature i {
-        font-size: 17px;
+        font-size: 16px;
     }
 
     .trust-feature span {
-        font-size: 10px;
+        font-size: 8px;
+    }
+
+    .related-searches-section {
+        padding: 22px;
+    }
+
+    .related-section-title {
+        font-size: 1.1rem;
+    }
+
+    .related-section-subtitle {
+        font-size: 11px;
+    }
+
+    .related-products-grid {
+        grid-template-columns: repeat(4,minmax(0,1fr));
+        gap: 12px;
+    }
+
+    .related-product-body {
+        padding: 11px;
+    }
+
+    .related-product-name {
+        font-size: 11px;
+    }
+
+    .related-product-price {
+        font-size: 12px;
     }
 }
 
-@media (min-width:1200px) {
+/* ============================================================
+   LARGE DESKTOP
+   ============================================================ */
+
+@media (min-width: 1200px) {
 
     .product-details-page {
         padding-left: 0;
@@ -1016,15 +1774,27 @@
     }
 
     .product-gallery-card {
-        height: 680px;
+        height: 650px;
+    }
+
+    .product-main-image {
+        padding: 45px;
     }
 
     .product-info-card {
-        padding: 34px;
+        padding: 32px;
     }
 
     .product-title {
-        font-size: 2.35rem;
+        font-size: 2.2rem;
+    }
+
+    .current-price {
+        font-size: 2.2rem;
+    }
+
+    .related-products-grid {
+        grid-template-columns: repeat(5,minmax(0,1fr));
     }
 }
 
@@ -1032,35 +1802,67 @@
    SMALL PHONES
    ============================================================ */
 
-@media (max-width:360px) {
+@media (max-width: 360px) {
 
     .product-gallery-card {
-        height: 350px;
-        min-height: 350px;
+        height: 330px;
+        min-height: 330px;
     }
 
-    .product-title {
-        font-size: 1.4rem;
-    }
-
-    .current-price {
-        font-size: 1.45rem;
+    .product-main-image {
+        padding: 12px;
     }
 
     .product-info-card {
         padding: 14px;
     }
 
+    .product-title {
+        font-size: 1.35rem;
+    }
+
+    .current-price {
+        font-size: 1.45rem;
+    }
+
     .purchase-action-grid {
         grid-template-columns: 1fr;
     }
+
+    .related-products-grid {
+        grid-template-columns: repeat(2,minmax(0,1fr));
+    }
+
+    .related-search-link {
+        font-size: 9px;
+        padding: 7px 9px;
+    }
+}
+
+/* ============================================================
+   ACCESSIBILITY
+   ============================================================ */
+
+.gallery-nav-btn:focus-visible,
+.lightbox-close:focus-visible,
+.lightbox-prev:focus-visible,
+.lightbox-next:focus-visible,
+.product-thumbnail:focus-visible,
+.quantity-btn:focus-visible,
+.wishlist-btn:focus-visible,
+.share-btn:focus-visible,
+.sku-copy-btn:focus-visible,
+.related-search-link:focus-visible,
+.related-product-card a:focus-visible {
+    outline: 3px solid rgba(21,128,61,.25);
+    outline-offset: 2px;
 }
 
 /* ============================================================
    REDUCED MOTION
    ============================================================ */
 
-@media (prefers-reduced-motion:reduce) {
+@media (prefers-reduced-motion: reduce) {
 
     *,
     *::before,
@@ -1073,53 +1875,58 @@
 
 <div class="container-fluid py-2 py-md-4 py-lg-5">
 
-```
 <div class="product-details-page">
 
-    <!-- ========================================================
+    <!-- ====================================================
          BREADCRUMB
-    ======================================================== -->
+    ===================================================== -->
 
-    <nav class="product-breadcrumb" aria-label="Breadcrumb">
+    <nav
+        class="product-breadcrumb"
+        aria-label="Product breadcrumb"
+    >
 
-        <a href="{{ url_for('product.products') }}">
-            Products
+        <a href="{{ url_for('home.home') }}">
+            Home
         </a>
 
-        <span class="separator">/</span>
+        <span class="separator">
+            /
+        </span>
 
         {% if product.category %}
 
-            <a href="{{ url_for(
-                'product.category_products',
-                slug=product.category.slug
-            ) }}">
+            <a
+                href="{{ url_for(
+                    'product.category_products',
+                    slug=product.category.slug
+                ) }}"
+            >
                 {{ product.category.name }}
             </a>
 
-            <span class="separator">/</span>
+            <span class="separator">
+                /
+            </span>
 
         {% endif %}
 
-        <span
-            class="current"
-            title="{{ product.name }}"
-        >
+        <span class="current">
             {{ product.name }}
         </span>
 
     </nav>
 
 
-    <!-- ========================================================
-         PRODUCT
-    ======================================================== -->
+    <!-- ====================================================
+         MAIN PRODUCT
+    ===================================================== -->
 
     <div class="row g-3 g-lg-4 product-details-row">
 
-        <!-- ====================================================
-             GALLERY
-        ==================================================== -->
+        <!-- ==================================================
+             PRODUCT GALLERY
+        =================================================== -->
 
         <div class="col-12 col-lg-6">
 
@@ -1133,6 +1940,9 @@
                         | first
                     %}
 
+
+                    <!-- MAIN IMAGE -->
+
                     <div
                         class="product-main-image-wrapper"
                         id="productGallery"
@@ -1140,12 +1950,24 @@
 
                         <img
                             id="mainProductImage"
-                            src="{{ primary_image.image_url if primary_image else product.images[0].image_url }}"
+
+                            src="{{
+                                primary_image.image_url
+                                if primary_image
+                                else product.images[0].image_url
+                            }}"
+
                             alt="{{ product.name }}"
+
                             class="product-main-image"
+
                             draggable="false"
+
                             loading="eager"
+
                             fetchpriority="high"
+
+                            decoding="async"
                         >
 
                     </div>
@@ -1156,33 +1978,24 @@
                         class="product-image-fallback"
                         aria-label="No product image available"
                     >
-                        🌾
+                        <i class="bi bi-image"></i>
                     </div>
 
                 {% endif %}
 
 
-                <div class="product-gallery-gradient"></div>
-
-
-                <!-- TOP BADGES -->
+                <!-- GALLERY TOP -->
 
                 <div class="gallery-top-bar">
 
                     {% if product.brand %}
 
-                        <span class="
-                            badge
-                            bg-light
-                            text-dark
-                            rounded-pill
-                            px-3
-                            py-2
-                            shadow-sm
-                            gallery-brand
-                        ">
-                            <i class="bi bi-tag me-1"></i>
+                        <span class="gallery-brand">
+
+                            <i class="bi bi-patch-check-fill me-1"></i>
+
                             {{ product.brand }}
+
                         </span>
 
                     {% else %}
@@ -1194,17 +2007,10 @@
 
                     {% if product.discount and product.discount > 0 %}
 
-                        <span class="
-                            badge
-                            bg-danger
-                            rounded-pill
-                            fw-bold
-                            px-3
-                            py-2
-                            shadow-sm
-                            gallery-discount
-                        ">
+                        <span class="gallery-discount">
+
                             {{ product.discount }}% OFF
+
                         </span>
 
                     {% endif %}
@@ -1219,6 +2025,7 @@
                     <div
                         class="gallery-counter"
                         id="galleryCounter"
+                        aria-live="polite"
                     >
                         1 / {{ product.images|length }}
                     </div>
@@ -1241,6 +2048,7 @@
                             <i class="bi bi-chevron-left"></i>
                         </button>
 
+
                         <button
                             type="button"
                             id="nextImage"
@@ -1255,24 +2063,23 @@
                 {% endif %}
 
 
-                <!-- GALLERY TITLE -->
+                <!-- CATEGORY -->
 
-                <div class="gallery-bottom">
+                {% if product.category %}
 
-                    {% if product.category %}
+                    <div class="gallery-bottom">
 
                         <span class="gallery-category">
+
                             <i class="bi bi-grid me-1"></i>
+
                             {{ product.category.name }}
+
                         </span>
 
-                    {% endif %}
+                    </div>
 
-                    <h1 class="gallery-product-name">
-                        {{ product.name }}
-                    </h1>
-
-                </div>
+                {% endif %}
 
 
                 <!-- THUMBNAILS -->
@@ -1297,20 +2104,28 @@
 
                                 <button
                                     type="button"
+
                                     class="
                                         product-thumbnail
                                         {% if image_is_active %}active{% endif %}
                                     "
+
                                     data-index="{{ loop.index0 }}"
+
                                     data-image="{{ image.image_url }}"
+
                                     aria-label="View product image {{ loop.index }}"
+
                                     aria-current="{{ 'true' if image_is_active else 'false' }}"
                                 >
 
                                     <img
                                         src="{{ image.image_url }}"
+
                                         alt="{{ product.name }} image {{ loop.index }}"
+
                                         loading="lazy"
+
                                         decoding="async"
                                     >
 
@@ -1329,15 +2144,15 @@
         </div>
 
 
-        <!-- ====================================================
+        <!-- ==================================================
              PRODUCT INFORMATION
-        ==================================================== -->
+        =================================================== -->
 
         <div class="col-12 col-lg-6">
 
             <div class="product-info-card d-flex flex-column">
 
-                <!-- SKU + STOCK -->
+                <!-- META -->
 
                 <div class="product-meta">
 
@@ -1358,8 +2173,10 @@
                                 aria-label="Copy product SKU"
                                 title="Copy SKU"
                             >
+
                                 <i class="bi bi-copy"></i>
                                 Copy
+
                             </button>
 
                         {% endif %}
@@ -1369,41 +2186,50 @@
 
                     {% if product.stock > 0 %}
 
-                        <span class="
-                            badge
-                            bg-success-subtle
-                            text-success
-                            border
-                            border-success-subtle
-                            rounded-pill
-                            px-3
-                            py-2
-                        ">
+                        <span
+                            class="
+                                badge
+                                bg-success-subtle
+                                text-success
+                                border
+                                border-success-subtle
+                                rounded-pill
+                                px-2
+                                py-1
+                            "
+                        >
 
                             <i class="bi bi-check-circle me-1"></i>
 
                             In Stock
 
                             {% if product.stock <= 10 %}
+
                                 · {{ product.stock }} left
+
                             {% endif %}
 
                         </span>
 
                     {% else %}
 
-                        <span class="
-                            badge
-                            bg-danger-subtle
-                            text-danger
-                            border
-                            border-danger-subtle
-                            rounded-pill
-                            px-3
-                            py-2
-                        ">
+                        <span
+                            class="
+                                badge
+                                bg-danger-subtle
+                                text-danger
+                                border
+                                border-danger-subtle
+                                rounded-pill
+                                px-2
+                                py-1
+                            "
+                        >
+
                             <i class="bi bi-x-circle me-1"></i>
+
                             Out of Stock
+
                         </span>
 
                     {% endif %}
@@ -1413,24 +2239,27 @@
 
                 <!-- TITLE -->
 
-                <h2 class="product-title">
+                <h1 class="product-title">
                     {{ product.name }}
-                </h2>
+                </h1>
 
+
+                <!-- BRAND -->
 
                 {% if product.brand %}
 
                     <div class="product-brand">
+
                         <i class="bi bi-patch-check-fill"></i>
+
                         {{ product.brand }}
+
                     </div>
 
                 {% endif %}
 
 
-                <!-- =================================================
-                     PRICE
-                ================================================= -->
+                <!-- PRICE -->
 
                 <div class="product-price-section">
 
@@ -1439,9 +2268,11 @@
                     </span>
 
                     {% set final_price =
-                        discounted_price if discounted_price is defined
+                        discounted_price
+                        if discounted_price is defined
                         else product.price
                     %}
+
 
                     {% if product.discount and product.discount > 0 %}
 
@@ -1464,6 +2295,7 @@
                             </span>
 
                         </div>
+
 
                         <div class="savings-text">
 
@@ -1490,15 +2322,13 @@
                 </div>
 
 
-                <!-- =================================================
-                     DESCRIPTION
-                ================================================= -->
+                <!-- PRODUCT OVERVIEW -->
 
                 <div>
 
-                    <h3 class="section-title">
+                    <h2 class="section-title">
                         Product Overview
-                    </h3>
+                    </h2>
 
                     {% if product.description %}
 
@@ -1508,9 +2338,8 @@
 
                     {% else %}
 
-                        <div class="product-description">
-                            No detailed description is available
-                            for this product yet.
+                        <div class="product-description product-description-empty">
+                            Product details will be updated soon.
                         </div>
 
                     {% endif %}
@@ -1518,9 +2347,7 @@
                 </div>
 
 
-                <!-- =================================================
-                     PRODUCT INFORMATION
-                ================================================= -->
+                <!-- PRODUCT INFORMATION -->
 
                 <div class="product-info-grid">
 
@@ -1590,9 +2417,7 @@
                 </div>
 
 
-                <!-- =================================================
-                     PURCHASE
-                ================================================= -->
+                <!-- PURCHASE -->
 
                 <div class="purchase-section">
 
@@ -1689,8 +2514,13 @@
                                     type="submit"
                                     class="btn btn-success add-cart-btn"
                                 >
+
                                     <i class="bi bi-cart-plus"></i>
-                                    <span>Add to Cart</span>
+
+                                    <span>
+                                        Add to Cart
+                                    </span>
+
                                 </button>
 
                             </form>
@@ -1725,8 +2555,13 @@
                                     type="submit"
                                     class="btn buy-now-btn"
                                 >
+
                                     <i class="bi bi-lightning-charge-fill"></i>
-                                    <span>Buy Now</span>
+
+                                    <span>
+                                        Buy Now
+                                    </span>
+
                                 </button>
 
                             </form>
@@ -1759,12 +2594,18 @@
                                 {% if is_in_wishlist is defined and is_in_wishlist %}
 
                                     <i class="bi bi-heart-fill text-danger"></i>
-                                    <span>Remove from Wishlist</span>
+
+                                    <span>
+                                        Remove from Wishlist
+                                    </span>
 
                                 {% else %}
 
                                     <i class="bi bi-heart"></i>
-                                    <span>Add to Wishlist</span>
+
+                                    <span>
+                                        Add to Wishlist
+                                    </span>
 
                                 {% endif %}
 
@@ -1782,22 +2623,27 @@
                                 class="share-btn"
                                 id="shareProductButton"
                             >
+
                                 <i class="bi bi-share me-1"></i>
+
                                 Share Product
+
                             </button>
 
                         </div>
-
 
                     {% else %}
 
                         <button
                             type="button"
-                            class="btn btn-secondary w-100 py-3"
+                            class="btn btn-secondary out-of-stock-btn"
                             disabled
                         >
+
                             <i class="bi bi-x-circle me-2"></i>
+
                             Out of Stock
+
                         </button>
 
                     {% endif %}
@@ -1811,8 +2657,8 @@
 
                         <span>
                             Nationwide delivery available.
-                            Delivery availability and cost are confirmed
-                            during checkout.
+                            Delivery availability and cost are
+                            confirmed during checkout.
                         </span>
 
                     </div>
@@ -1823,18 +2669,35 @@
                     <div class="trust-features">
 
                         <div class="trust-feature">
+
                             <i class="bi bi-shield-check"></i>
-                            <span>Secure Shopping</span>
+
+                            <span>
+                                Secure Shopping
+                            </span>
+
                         </div>
 
+
                         <div class="trust-feature">
+
                             <i class="bi bi-truck"></i>
-                            <span>Nationwide Delivery</span>
+
+                            <span>
+                                Nationwide Delivery
+                            </span>
+
                         </div>
 
+
                         <div class="trust-feature">
+
                             <i class="bi bi-headset"></i>
-                            <span>Customer Support</span>
+
+                            <span>
+                                Customer Support
+                            </span>
+
                         </div>
 
                     </div>
@@ -1846,9 +2709,370 @@
         </div>
 
     </div>
+    <!-- ====================================================
+         RELATED PRODUCTS
+    ===================================================== -->
+
+    {% if related_products %}
+
+        <section
+            class="related-products-section"
+            aria-labelledby="relatedProductsTitle"
+        >
+
+            <div class="related-products-header">
+
+                <div>
+
+                    <h2
+                        class="related-products-title"
+                        id="relatedProductsTitle"
+                    >
+                        Related Products
+                    </h2>
+
+                    <p class="related-products-subtitle">
+                        Products related to {{ product.name }}
+                    </p>
+
+                </div>
+
+
+                {% if product.category %}
+
+                    <a
+                        href="{{ url_for(
+                            'product.category_products',
+                            slug=product.category.slug
+                        ) }}"
+
+                        class="related-view-all"
+                    >
+                        View category
+                        <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="related-products-grid">
+
+                {% for related in related_products %}
+
+                    <article class="related-product-card">
+
+                        <!-- IMAGE -->
+
+                        <a
+                            href="{{ url_for(
+                                'product.product_details',
+                                id=related.id
+                            ) }}"
+
+                            class="related-product-image-link"
+
+                            aria-label="View {{ related.name }}"
+                        >
+
+                            {% if related.images %}
+
+                                {% set related_primary =
+                                    related.images
+                                    | selectattr(
+                                        "is_primary",
+                                        "equalto",
+                                        true
+                                    )
+                                    | first
+                                %}
+
+                                <img
+                                    src="{{
+                                        related_primary.image_url
+                                        if related_primary
+                                        else related.images[0].image_url
+                                    }}"
+
+                                    alt="{{ related.name }}"
+
+                                    class="related-product-image"
+
+                                    loading="lazy"
+
+                                    decoding="async"
+                                >
+
+                            {% else %}
+
+                                <div
+                                    class="related-product-placeholder"
+                                    aria-hidden="true"
+                                >
+                                    <i class="bi bi-image"></i>
+                                </div>
+
+                            {% endif %}
+
+                        </a>
+
+
+                        <!-- BODY -->
+
+                        <div class="related-product-body">
+
+                            {% if related.category %}
+
+                                <span class="related-product-category">
+
+                                    {{ related.category.name }}
+
+                                </span>
+
+                            {% endif %}
+
+
+                            <h3 class="related-product-name">
+
+                                <a
+                                    href="{{ url_for(
+                                        'product.product_details',
+                                        id=related.id
+                                    ) }}"
+                                >
+                                    {{ related.name }}
+                                </a>
+
+                            </h3>
+
+
+                            <div class="related-product-price">
+
+                                {% set related_price =
+                                    related_product_prices[related.id]
+                                    if related_product_prices is defined
+                                    and related.id in related_product_prices
+                                    else related.price
+                                %}
+
+                                KSh
+                                {{ "{:,.2f}".format(related_price) }}
+
+                                {% if related.discount and related.discount > 0 %}
+
+                                    <span class="related-product-original-price">
+
+                                        KSh
+                                        {{ "{:,.2f}".format(related.price) }}
+
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            {% if related.stock > 0 %}
+
+                                <div class="related-product-stock in-stock">
+
+                                    <i class="bi bi-check-circle me-1"></i>
+
+                                    In stock
+
+                                </div>
+
+                            {% else %}
+
+                                <div class="related-product-stock out-stock">
+
+                                    <i class="bi bi-x-circle me-1"></i>
+
+                                    Out of stock
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </article>
+
+                {% endfor %}
+
+            </div>
+
+        </section>
+
+    {% endif %}
+
+
+    <!-- ====================================================
+         RECENTLY VIEWED
+    ===================================================== -->
+
+    {% if recently_viewed %}
+
+        <section
+            class="related-products-section"
+            aria-labelledby="recentlyViewedTitle"
+        >
+
+            <div class="related-products-header">
+
+                <div>
+
+                    <h2
+                        class="related-products-title"
+                        id="recentlyViewedTitle"
+                    >
+                        Recently Viewed
+                    </h2>
+
+                    <p class="related-products-subtitle">
+                        Products you may want to revisit
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="related-products-grid">
+
+                {% for recent in recently_viewed %}
+
+                    <article class="related-product-card">
+
+                        <a
+                            href="{{ url_for(
+                                'product.product_details',
+                                id=recent.id
+                            ) }}"
+
+                            class="related-product-image-link"
+
+                            aria-label="View {{ recent.name }}"
+                        >
+
+                            {% if recent.images %}
+
+                                {% set recent_primary =
+                                    recent.images
+                                    | selectattr(
+                                        "is_primary",
+                                        "equalto",
+                                        true
+                                    )
+                                    | first
+                                %}
+
+                                <img
+                                    src="{{
+                                        recent_primary.image_url
+                                        if recent_primary
+                                        else recent.images[0].image_url
+                                    }}"
+
+                                    alt="{{ recent.name }}"
+
+                                    class="related-product-image"
+
+                                    loading="lazy"
+
+                                    decoding="async"
+                                >
+
+                            {% else %}
+
+                                <div
+                                    class="related-product-placeholder"
+                                    aria-hidden="true"
+                                >
+                                    <i class="bi bi-image"></i>
+                                </div>
+
+                            {% endif %}
+
+                        </a>
+
+
+                        <div class="related-product-body">
+
+                            {% if recent.category %}
+
+                                <span class="related-product-category">
+                                    {{ recent.category.name }}
+                                </span>
+
+                            {% endif %}
+
+
+                            <h3 class="related-product-name">
+
+                                <a
+                                    href="{{ url_for(
+                                        'product.product_details',
+                                        id=recent.id
+                                    ) }}"
+                                >
+                                    {{ recent.name }}
+                                </a>
+
+                            </h3>
+
+
+                            <div class="related-product-price">
+
+                                {% set recent_price =
+                                    related_product_prices[recent.id]
+                                    if related_product_prices is defined
+                                    and recent.id in related_product_prices
+                                    else recent.price
+                                %}
+
+                                KSh
+                                {{ "{:,.2f}".format(recent_price) }}
+
+                            </div>
+
+
+                            {% if recent.stock > 0 %}
+
+                                <div class="related-product-stock in-stock">
+
+                                    <i class="bi bi-check-circle me-1"></i>
+
+                                    In stock
+
+                                </div>
+
+                            {% else %}
+
+                                <div class="related-product-stock out-stock">
+
+                                    <i class="bi bi-x-circle me-1"></i>
+
+                                    Out of stock
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </article>
+
+                {% endfor %}
+
+            </div>
+
+        </section>
+
+    {% endif %}
 
 </div>
-```
 
 </div>
 
@@ -1866,7 +3090,6 @@
     aria-label="Product image viewer"
 >
 
-```
 <div class="lightbox-content">
 
     <button
@@ -1913,9 +3136,11 @@
             <i class="bi bi-chevron-right"></i>
         </button>
 
+
         <div
             class="lightbox-counter"
             id="lightboxCounter"
+            aria-live="polite"
         >
             1 / {{ product.images|length }}
         </div>
@@ -1923,13 +3148,14 @@
     {% endif %}
 
 </div>
-```
 
 </div>
 
 {% endif %}
 
-<!-- COPY FEEDBACK -->
+<!-- ================================================================
+     COPY FEEDBACK
+================================================================ -->
 
 <div
     id="copyFeedback"
@@ -1941,51 +3167,84 @@
 </div>
 
 <script>
+
 document.addEventListener("DOMContentLoaded", function () {
 
     /* ============================================================
        IMAGE DATA
-    ============================================================ */
+       ============================================================ */
 
-    const imageElements = [
+    const images = [
+
         {% if product.images %}
+
             {% for image in product.images %}
-                {{ image.image_url|tojson }}{% if not loop.last %},{% endif %}
+
+                {{ image.image_url | tojson }}
+
+                {% if not loop.last %},{% endif %}
+
             {% endfor %}
+
         {% endif %}
+
     ];
 
-    const images = imageElements;
 
     let currentIndex = 0;
 
+
+    /* ============================================================
+       PRIMARY IMAGE INDEX
+       ============================================================ */
+
     const primaryIndex = [
+
         {% if product.images %}
+
             {% set primary_image =
                 product.images
                 | selectattr("is_primary", "equalto", true)
                 | first
             %}
+
+
             {% if primary_image %}
+
                 {% for image in product.images %}
+
                     {% if image.id == primary_image.id %}
+
                         {{ loop.index0 }}
+
                     {% endif %}
+
                 {% endfor %}
+
             {% else %}
+
                 0
+
             {% endif %}
+
         {% else %}
+
             0
+
         {% endif %}
+
     ];
 
-    currentIndex = primaryIndex || 0;
+
+    currentIndex =
+        Number.isInteger(primaryIndex)
+            ? primaryIndex
+            : 0;
 
 
     /* ============================================================
-       GALLERY
-    ============================================================ */
+       GALLERY ELEMENTS
+       ============================================================ */
 
     const mainImage =
         document.getElementById("mainProductImage");
@@ -2003,11 +3262,16 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("nextImage");
 
 
+    /* ============================================================
+       UPDATE GALLERY
+       ============================================================ */
+
     function updateGallery(index) {
 
         if (!images.length) {
             return;
         }
+
 
         currentIndex =
             (index + images.length) % images.length;
@@ -2015,42 +3279,80 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (mainImage) {
 
-            mainImage.style.opacity = "0.35";
+            mainImage.style.opacity = "0.45";
 
-            setTimeout(function () {
+
+            const nextSrc =
+                images[currentIndex];
+
+
+            const preload =
+                new Image();
+
+
+            preload.onload = function () {
 
                 mainImage.src =
-                    images[currentIndex];
+                    nextSrc;
 
-                mainImage.onload = function () {
-                    mainImage.style.opacity = "1";
-                };
+                requestAnimationFrame(function () {
 
-            }, 80);
+                    mainImage.style.opacity =
+                        "1";
+
+                });
+
+            };
+
+
+            preload.onerror = function () {
+
+                mainImage.src =
+                    nextSrc;
+
+                mainImage.style.opacity =
+                    "1";
+
+            };
+
+
+            preload.src =
+                nextSrc;
+
         }
 
 
-        thumbnails.forEach(function (thumbnail, index) {
+        thumbnails.forEach(function (
+            thumbnail,
+            index
+        ) {
 
             const active =
                 index === currentIndex;
+
 
             thumbnail.classList.toggle(
                 "active",
                 active
             );
 
+
             thumbnail.setAttribute(
                 "aria-current",
-                active ? "true" : "false"
+                active
+                    ? "true"
+                    : "false"
             );
 
+
             if (active) {
+
                 thumbnail.scrollIntoView({
                     behavior: "smooth",
                     block: "nearest",
                     inline: "center"
                 });
+
             }
 
         });
@@ -2066,6 +3368,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
+    /* ============================================================
+       THUMBNAILS
+       ============================================================ */
+
     thumbnails.forEach(function (thumbnail) {
 
         thumbnail.addEventListener(
@@ -2078,7 +3384,12 @@ document.addEventListener("DOMContentLoaded", function () {
                         10
                     );
 
-                updateGallery(index);
+
+                if (!Number.isNaN(index)) {
+
+                    updateGallery(index);
+
+                }
 
             }
         );
@@ -2086,35 +3397,41 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 
-    if (previousImage) {
+    /* ============================================================
+       PREVIOUS / NEXT
+       ============================================================ */
 
-        previousImage.addEventListener(
-            "click",
-            function () {
-                updateGallery(currentIndex - 1);
-            }
-        );
+    previousImage?.addEventListener(
+        "click",
+        function () {
 
-    }
+            updateGallery(
+                currentIndex - 1
+            );
+
+        }
+    );
 
 
-    if (nextImage) {
+    nextImage?.addEventListener(
+        "click",
+        function () {
 
-        nextImage.addEventListener(
-            "click",
-            function () {
-                updateGallery(currentIndex + 1);
-            }
-        );
+            updateGallery(
+                currentIndex + 1
+            );
 
-    }
+        }
+    );
 
 
     /* ============================================================
        MOBILE GALLERY SWIPE
-    ============================================================ */
+       ============================================================ */
 
     let galleryTouchStartX = 0;
+    let galleryTouchStartY = 0;
+
 
     if (mainImage) {
 
@@ -2126,8 +3443,12 @@ document.addEventListener("DOMContentLoaded", function () {
                     return;
                 }
 
+
                 galleryTouchStartX =
                     event.changedTouches[0].screenX;
+
+                galleryTouchStartY =
+                    event.changedTouches[0].screenY;
 
             },
             { passive: true }
@@ -2142,20 +3463,44 @@ document.addEventListener("DOMContentLoaded", function () {
                     return;
                 }
 
+
                 const endX =
                     event.changedTouches[0].screenX;
 
-                const difference =
+                const endY =
+                    event.changedTouches[0].screenY;
+
+
+                const differenceX =
                     endX - galleryTouchStartX;
 
-                if (Math.abs(difference) < 45) {
+                const differenceY =
+                    endY - galleryTouchStartY;
+
+
+                if (
+                    Math.abs(differenceX) < 45 ||
+                    Math.abs(differenceX) <
+                    Math.abs(differenceY)
+                ) {
+
                     return;
+
                 }
 
-                if (difference > 0) {
-                    updateGallery(currentIndex - 1);
+
+                if (differenceX > 0) {
+
+                    updateGallery(
+                        currentIndex - 1
+                    );
+
                 } else {
-                    updateGallery(currentIndex + 1);
+
+                    updateGallery(
+                        currentIndex + 1
+                    );
+
                 }
 
             },
@@ -2167,16 +3512,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /* ============================================================
        INITIAL GALLERY
-    ============================================================ */
+       ============================================================ */
 
     if (images.length) {
+
         updateGallery(currentIndex);
+
     }
 
 
     /* ============================================================
        QUANTITY
-    ============================================================ */
+       ============================================================ */
 
     const quantityInput =
         document.getElementById("productQuantity");
@@ -2206,14 +3553,18 @@ document.addEventListener("DOMContentLoaded", function () {
         function updateQuantity(value) {
 
             let quantity =
-                parseInt(value, 10);
+                parseInt(value,10);
+
 
             if (
                 Number.isNaN(quantity) ||
                 quantity < 1
             ) {
+
                 quantity = 1;
+
             }
+
 
             quantity =
                 Math.min(
@@ -2221,31 +3572,40 @@ document.addEventListener("DOMContentLoaded", function () {
                     maximumQuantity
                 );
 
+
             quantityInput.value =
                 quantity;
 
 
             if (cartQuantity) {
+
                 cartQuantity.value =
                     quantity;
+
             }
 
 
             if (buyNowQuantity) {
+
                 buyNowQuantity.value =
                     quantity;
+
             }
 
 
             if (decreaseButton) {
+
                 decreaseButton.disabled =
                     quantity <= 1;
+
             }
 
 
             if (increaseButton) {
+
                 increaseButton.disabled =
                     quantity >= maximumQuantity;
+
             }
 
         }
@@ -2284,9 +3644,11 @@ document.addEventListener("DOMContentLoaded", function () {
         quantityInput.addEventListener(
             "input",
             function () {
+
                 updateQuantity(
                     quantityInput.value
                 );
+
             }
         );
 
@@ -2294,9 +3656,11 @@ document.addEventListener("DOMContentLoaded", function () {
         quantityInput.addEventListener(
             "blur",
             function () {
+
                 updateQuantity(
                     quantityInput.value
                 );
+
             }
         );
 
@@ -2308,7 +3672,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /* ============================================================
        LIGHTBOX
-    ============================================================ */
+       ============================================================ */
 
     const lightbox =
         document.getElementById("imageLightbox");
@@ -2335,11 +3699,15 @@ document.addEventListener("DOMContentLoaded", function () {
             !lightboxImage ||
             !images.length
         ) {
+
             return;
+
         }
+
 
         lightboxImage.src =
             images[currentIndex];
+
 
         if (lightboxCounter) {
 
@@ -2357,15 +3725,23 @@ document.addEventListener("DOMContentLoaded", function () {
             !lightbox ||
             !images.length
         ) {
+
             return;
+
         }
+
 
         updateLightbox();
 
+
         lightbox.classList.add("show");
+
 
         document.body.style.overflow =
             "hidden";
+
+
+        lightboxClose?.focus();
 
     }
 
@@ -2376,9 +3752,12 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
+
         lightbox.classList.remove("show");
 
-        document.body.style.overflow = "";
+
+        document.body.style.overflow =
+            "";
 
     }
 
@@ -2402,12 +3781,18 @@ document.addEventListener("DOMContentLoaded", function () {
             if (
                 event.target === lightbox
             ) {
+
                 closeLightbox();
+
             }
 
         }
     );
 
+
+    /* ============================================================
+       LIGHTBOX NAVIGATION
+       ============================================================ */
 
     lightboxPrev?.addEventListener(
         "click",
@@ -2439,7 +3824,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /* ============================================================
        KEYBOARD GALLERY
-    ============================================================ */
+       ============================================================ */
 
     document.addEventListener(
         "keydown",
@@ -2449,16 +3834,24 @@ document.addEventListener("DOMContentLoaded", function () {
                 !lightbox ||
                 !lightbox.classList.contains("show")
             ) {
+
                 return;
+
             }
 
 
             if (event.key === "Escape") {
+
                 closeLightbox();
+
+                return;
+
             }
 
 
             if (event.key === "ArrowRight") {
+
+                event.preventDefault();
 
                 updateGallery(
                     currentIndex + 1
@@ -2470,6 +3863,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
             if (event.key === "ArrowLeft") {
+
+                event.preventDefault();
 
                 updateGallery(
                     currentIndex - 1
@@ -2485,9 +3880,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /* ============================================================
        LIGHTBOX SWIPE
-    ============================================================ */
+       ============================================================ */
 
     let lightboxTouchStartX = 0;
+    let lightboxTouchStartY = 0;
+
 
     lightboxImage?.addEventListener(
         "touchstart",
@@ -2497,8 +3894,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
+
             lightboxTouchStartX =
                 event.changedTouches[0].screenX;
+
+            lightboxTouchStartY =
+                event.changedTouches[0].screenY;
 
         },
         { passive: true }
@@ -2513,17 +3914,33 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
+
             const endX =
                 event.changedTouches[0].screenX;
 
-            const difference =
+            const endY =
+                event.changedTouches[0].screenY;
+
+
+            const differenceX =
                 endX - lightboxTouchStartX;
 
-            if (Math.abs(difference) < 45) {
+            const differenceY =
+                endY - lightboxTouchStartY;
+
+
+            if (
+                Math.abs(differenceX) < 45 ||
+                Math.abs(differenceX) <
+                Math.abs(differenceY)
+            ) {
+
                 return;
+
             }
 
-            if (difference > 0) {
+
+            if (differenceX > 0) {
 
                 updateGallery(
                     currentIndex - 1
@@ -2537,6 +3954,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             }
 
+
             updateLightbox();
 
         },
@@ -2546,16 +3964,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /* ============================================================
        COPY SKU
-    ============================================================ */
+       ============================================================ */
 
     const copySkuButton =
-        document.getElementById("copySkuButton");
+        document.getElementById(
+            "copySkuButton"
+        );
 
     const productSku =
-        document.getElementById("productSku");
+        document.getElementById(
+            "productSku"
+        );
 
     const copyFeedback =
-        document.getElementById("copyFeedback");
+        document.getElementById(
+            "copyFeedback"
+        );
+
+
+    let feedbackTimer;
 
 
     function showCopyFeedback(message) {
@@ -2564,16 +3991,32 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
+
         copyFeedback.textContent =
             message;
 
-        copyFeedback.classList.add("show");
 
-        setTimeout(function () {
+        copyFeedback.classList.add(
+            "show"
+        );
 
-            copyFeedback.classList.remove("show");
 
-        }, 1800);
+        clearTimeout(
+            feedbackTimer
+        );
+
+
+        feedbackTimer =
+            setTimeout(
+                function () {
+
+                    copyFeedback.classList.remove(
+                        "show"
+                    );
+
+                },
+                1800
+            );
 
     }
 
@@ -2585,19 +4028,57 @@ document.addEventListener("DOMContentLoaded", function () {
             const sku =
                 productSku?.textContent.trim();
 
+
             if (
                 !sku ||
                 sku === "N/A"
             ) {
+
                 return;
+
             }
 
 
             try {
 
-                await navigator.clipboard.writeText(
-                    sku
-                );
+                if (
+                    navigator.clipboard &&
+                    window.isSecureContext
+                ) {
+
+                    await navigator.clipboard.writeText(
+                        sku
+                    );
+
+                } else {
+
+                    const input =
+                        document.createElement(
+                            "input"
+                        );
+
+
+                    input.value =
+                        sku;
+
+
+                    document.body.appendChild(
+                        input
+                    );
+
+
+                    input.select();
+
+
+                    document.execCommand(
+                        "copy"
+                    );
+
+
+                    input.remove();
+
+                }
+
 
                 showCopyFeedback(
                     "SKU copied"
@@ -2605,21 +4086,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             } catch (error) {
 
-                const input =
-                    document.createElement("input");
-
-                input.value = sku;
-
-                document.body.appendChild(input);
-
-                input.select();
-
-                document.execCommand("copy");
-
-                input.remove();
-
                 showCopyFeedback(
-                    "SKU copied"
+                    "Unable to copy SKU"
                 );
 
             }
@@ -2630,19 +4098,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /* ============================================================
        SHARE PRODUCT
-    ============================================================ */
+       ============================================================ */
 
     const shareButton =
         document.getElementById(
             "shareProductButton"
         );
 
+
     shareButton?.addEventListener(
         "click",
         async function () {
 
             const productTitle =
-                {{ product.name|tojson }};
+                {{ product.name | tojson }};
+
 
             const productUrl =
                 window.location.href;
@@ -2666,22 +4136,42 @@ document.addEventListener("DOMContentLoaded", function () {
                     });
 
                 } catch (error) {
-                    /* User cancelled sharing. */
+
+                    /*
+                       User cancelled sharing.
+                    */
+
                 }
 
+
                 return;
+
             }
 
 
             try {
 
-                await navigator.clipboard.writeText(
-                    productUrl
-                );
+                if (
+                    navigator.clipboard &&
+                    window.isSecureContext
+                ) {
 
-                showCopyFeedback(
-                    "Product link copied"
-                );
+                    await navigator.clipboard.writeText(
+                        productUrl
+                    );
+
+
+                    showCopyFeedback(
+                        "Product link copied"
+                    );
+
+                } else {
+
+                    showCopyFeedback(
+                        "Copy the page URL to share"
+                    );
+
+                }
 
             } catch (error) {
 
@@ -2695,6 +4185,7 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
 });
+
 </script>
 
 {% endblock %}

@@ -1,1686 +1,972 @@
 {% extends "base.html" %}
 
 {% block title %}
-
 {% if category %}
-
 {{ category.name }} | Bomet Machineries Ltd.
-
 {% elif search %}
-
 Search: {{ search }} | Bomet Machineries Ltd.
-
 {% else %}
-
 Products | Bomet Machineries Ltd.
-
 {% endif %}
-
 {% endblock %}
-
 
 {% block content %}
 
 <style>
-
-    /* =========================================================
-       BOMET MACHINERIES LTD.
-       PRODUCT LISTING
-       MOBILE FIRST
-       ========================================================= */
-
     :root {
-
         --bomet-green: #198754;
         --bomet-green-dark: #146c43;
         --bomet-green-light: #eaf7ef;
-
         --bomet-dark: #17211b;
         --bomet-muted: #6c757d;
-
         --bomet-border: #e8ece9;
         --bomet-bg: #f7f9f8;
         --bomet-white: #ffffff;
-
         --bomet-danger: #dc3545;
         --bomet-danger-dark: #bb2d3b;
         --bomet-danger-light: #fff1f1;
-
         --bomet-shadow: 0 8px 28px rgba(0, 0, 0, 0.07);
         --bomet-shadow-hover: 0 14px 36px rgba(0, 0, 0, 0.12);
-
         --bomet-radius: 18px;
     }
 
-
-    /* =========================================================
-       PAGE
-       ========================================================= */
-
     .products-page {
-
         background: var(--bomet-bg);
-
         min-height: 100vh;
-
         padding-bottom: 60px;
-
     }
-
 
     .products-container {
-
         width: 100%;
-
         max-width: 1400px;
-
         margin: 0 auto;
-
         padding: 0 14px;
-
     }
 
-
-    /* =========================================================
-       BREADCRUMB
-       ========================================================= */
-
+    /* Breadcrumb */
     .products-breadcrumb {
-
         padding: 18px 0 10px;
-
     }
-
 
     .products-breadcrumb .breadcrumb {
-
         margin: 0;
-
         font-size: 13px;
-
     }
-
 
     .products-breadcrumb a {
-
         color: var(--bomet-green);
-
         text-decoration: none;
-
     }
-
 
     .products-breadcrumb a:hover {
-
         color: var(--bomet-green-dark);
-
         text-decoration: underline;
-
     }
-
 
     .products-breadcrumb .active {
-
         color: var(--bomet-muted);
-
     }
 
-
-    /* =========================================================
-       PAGE HEADER
-       ========================================================= */
-
+    /* Header */
     .products-header {
-
         background: var(--bomet-white);
-
         border-radius: var(--bomet-radius);
-
         padding: 20px;
-
         margin: 10px 0 18px;
-
         border: 1px solid var(--bomet-border);
-
     }
-
 
     .products-header h1 {
-
         margin: 0;
-
         color: var(--bomet-dark);
-
         font-size: 25px;
-
         font-weight: 800;
-
         line-height: 1.2;
-
     }
-
 
     .products-header p {
-
         margin: 8px 0 0;
-
         color: var(--bomet-muted);
-
         font-size: 14px;
-
         line-height: 1.6;
-
     }
-
 
     .products-header p strong {
-
         color: var(--bomet-dark);
-
     }
 
-
-    /* =========================================================
-       MOBILE FILTER BUTTON
-       ========================================================= */
-
+    /* Mobile filters */
     .filter-toggle-wrapper {
-
         margin-bottom: 15px;
-
     }
-
 
     .filter-toggle {
-
         width: 100%;
-
         min-height: 48px;
-
         border: 1px solid var(--bomet-border);
-
         background: var(--bomet-white);
-
         color: var(--bomet-dark);
-
         border-radius: 12px;
-
         font-weight: 700;
-
         display: flex;
-
         align-items: center;
-
         justify-content: center;
-
         gap: 8px;
-
-        transition:
-            border-color 0.2s ease,
-            color 0.2s ease,
-            background 0.2s ease;
-
+        transition: border-color 0.2s ease,
+                    color 0.2s ease,
+                    background 0.2s ease;
     }
-
 
     .filter-toggle:hover {
-
         border-color: var(--bomet-green);
-
         color: var(--bomet-green);
-
         background: var(--bomet-green-light);
-
     }
 
-
-    /* =========================================================
-       FILTER SIDEBAR
-       ========================================================= */
-
+    /* Sidebar */
     .products-sidebar {
-
         background: var(--bomet-white);
-
         border: 1px solid var(--bomet-border);
-
         border-radius: var(--bomet-radius);
-
         padding: 18px;
-
         margin-bottom: 20px;
-
     }
-
 
     .filter-title {
-
         font-size: 17px;
-
         font-weight: 800;
-
         color: var(--bomet-dark);
-
         margin-bottom: 18px;
-
     }
-
 
     .filter-section {
-
         margin-bottom: 22px;
-
     }
-
 
     .filter-section:last-child {
-
         margin-bottom: 0;
-
     }
-
 
     .filter-label {
-
         display: block;
-
         font-size: 13px;
-
         font-weight: 800;
-
         color: var(--bomet-dark);
-
         margin-bottom: 8px;
-
     }
 
+    /* Categories */
+    .category-links {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        max-height: 310px;
+        overflow-y: auto;
+        padding-right: 2px;
+    }
 
-    .filter-control {
-
-        width: 100%;
-
-        min-height: 44px;
-
-        border: 1px solid #dfe5e1;
-
+    .category-link {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        min-height: 42px;
+        padding: 9px 11px;
+        border: 1px solid transparent;
         border-radius: 10px;
-
-        padding: 9px 12px;
-
-        background: #fff;
-
         color: var(--bomet-dark);
-
-        font-size: 14px;
-
-        outline: none;
-
-        transition:
-            border-color 0.2s ease,
-            box-shadow 0.2s ease;
-
+        background: transparent;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 650;
+        transition: background 0.2s ease,
+                    color 0.2s ease,
+                    border-color 0.2s ease,
+                    transform 0.2s ease;
     }
 
+    .category-link:hover {
+        color: var(--bomet-green-dark);
+        background: var(--bomet-green-light);
+        border-color: #d5eadc;
+        text-decoration: none;
+        transform: translateX(2px);
+    }
+
+    .category-link.active {
+        color: #fff;
+        background: var(--bomet-green);
+        border-color: var(--bomet-green);
+    }
+
+    .category-link.active:hover {
+        color: #fff;
+        background: var(--bomet-green-dark);
+        border-color: var(--bomet-green-dark);
+    }
+
+    .category-link-icon {
+        width: 28px;
+        height: 28px;
+        flex: 0 0 28px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        background: rgba(25, 135, 84, 0.09);
+        color: var(--bomet-green);
+    }
+
+    .category-link.active .category-link-icon {
+        background: rgba(255, 255, 255, 0.16);
+        color: #fff;
+    }
+
+    .category-link-name {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .category-link-arrow {
+        font-size: 11px;
+        opacity: 0.65;
+    }
+
+    .category-links::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    .category-links::-webkit-scrollbar-thumb {
+        background: #d9e3dd;
+        border-radius: 999px;
+    }
+
+    /* Inputs */
+    .filter-control {
+        width: 100%;
+        min-height: 44px;
+        border: 1px solid #dfe5e1;
+        border-radius: 10px;
+        padding: 9px 12px;
+        background: #fff;
+        color: var(--bomet-dark);
+        font-size: 14px;
+        outline: none;
+        transition: border-color 0.2s ease,
+                    box-shadow 0.2s ease;
+    }
 
     .filter-control:focus {
-
         border-color: var(--bomet-green);
-
         box-shadow: 0 0 0 3px rgba(25, 135, 84, 0.1);
-
     }
-
 
     .price-row {
-
         display: grid;
-
         grid-template-columns: 1fr 1fr;
-
         gap: 8px;
-
     }
 
-
+    /* Buttons */
     .filter-actions {
-
         display: grid;
-
         grid-template-columns: 1fr;
-
         gap: 8px;
-
         margin-top: 18px;
-
     }
-
 
     .filter-btn {
-
         min-height: 44px;
-
         border-radius: 10px;
-
         font-weight: 700;
-
         border: none;
-
         text-decoration: none;
-
         display: flex;
-
         align-items: center;
-
         justify-content: center;
-
-        transition:
-            background 0.2s ease,
-            color 0.2s ease,
-            transform 0.2s ease;
-
+        transition: background 0.2s ease,
+                    color 0.2s ease,
+                    transform 0.2s ease;
     }
-
 
     .filter-btn:active {
-
         transform: scale(0.98);
-
     }
-
 
     .filter-btn-primary {
-
         background: var(--bomet-green);
-
         color: #fff;
-
     }
-
 
     .filter-btn-primary:hover {
-
         background: var(--bomet-green-dark);
-
         color: #fff;
-
     }
-
 
     .filter-btn-secondary {
-
         background: #f1f3f2;
-
         color: var(--bomet-dark);
-
     }
-
 
     .filter-btn-secondary:hover {
-
         background: #e4e8e6;
-
         color: var(--bomet-dark);
-
     }
 
-
-    /* =========================================================
-       PRODUCTS TOOLBAR
-       ========================================================= */
-
+    /* Toolbar */
     .products-toolbar {
-
         background: var(--bomet-white);
-
         border: 1px solid var(--bomet-border);
-
         border-radius: 14px;
-
         padding: 12px;
-
         margin-bottom: 15px;
-
         display: flex;
-
         flex-direction: column;
-
         gap: 12px;
-
     }
-
 
     .product-count {
-
         font-size: 14px;
-
         color: var(--bomet-muted);
-
     }
-
 
     .product-count strong {
-
         color: var(--bomet-dark);
-
     }
-
 
     .sort-form {
-
         width: 100%;
-
         margin: 0;
-
     }
-
 
     .sort-form select {
-
         width: 100%;
-
         min-height: 43px;
-
         border: 1px solid var(--bomet-border);
-
         border-radius: 10px;
-
         padding: 8px 12px;
-
         background: #fff;
-
         font-size: 14px;
-
         color: var(--bomet-dark);
-
         outline: none;
-
     }
-
 
     .sort-form select:focus {
-
         border-color: var(--bomet-green);
-
         box-shadow: 0 0 0 3px rgba(25, 135, 84, 0.1);
-
     }
 
-
-    /* =========================================================
-       PRODUCT GRID
-       ========================================================= */
-
+    /* Grid */
     .products-grid {
-
         display: grid;
-
         grid-template-columns: repeat(2, minmax(0, 1fr));
-
         gap: 12px;
-
     }
 
-
-    /* =========================================================
-       PRODUCT CARD
-       ========================================================= */
-
+    /* Card */
     .product-card {
-
         position: relative;
-
         min-width: 0;
-
         background: var(--bomet-white);
-
         border: 1px solid var(--bomet-border);
-
         border-radius: 15px;
-
         overflow: hidden;
-
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-
-        transition:
-            transform 0.2s ease,
-            box-shadow 0.2s ease,
-            border-color 0.2s ease;
-
+        transition: transform 0.2s ease,
+                    box-shadow 0.2s ease,
+                    border-color 0.2s ease;
     }
-
 
     .product-card:hover {
-
         transform: translateY(-3px);
-
         box-shadow: var(--bomet-shadow-hover);
-
         border-color: #dce7e0;
-
     }
-
-
-    /* =========================================================
-       CLICKABLE PRODUCT AREA
-       ========================================================= */
 
     .product-card-link {
-
         display: block;
-
         color: inherit;
-
         text-decoration: none;
-
         -webkit-tap-highlight-color: transparent;
-
     }
-
 
     .product-card-link:hover {
-
         color: inherit;
-
         text-decoration: none;
-
     }
-
 
     .product-card-link:focus-visible {
-
         outline: 3px solid rgba(25, 135, 84, 0.25);
-
         outline-offset: -3px;
-
     }
 
-
-    /* =========================================================
-       PRODUCT IMAGE
-       ========================================================= */
-
+    /* Images */
     .product-image-wrapper {
-
         position: relative;
-
         width: 100%;
-
         aspect-ratio: 1 / 1;
-
         background: #f7f8f8;
-
         overflow: hidden;
-
     }
-
 
     .product-image {
-
         width: 100%;
-
         height: 100%;
-
         object-fit: cover;
-
         display: block;
-
         transition: transform 0.35s ease;
-
     }
-
 
     .product-card:hover .product-image {
-
         transform: scale(1.035);
-
     }
-
 
     .product-image-placeholder {
-
         width: 100%;
-
         height: 100%;
-
         display: flex;
-
         align-items: center;
-
         justify-content: center;
-
         color: #a6afaa;
-
         font-size: 42px;
-
     }
 
-
-    /* =========================================================
-       FEATURED BADGE
-       ========================================================= */
-
+    /* Featured */
     .featured-badge {
-
         position: absolute;
-
         top: 9px;
-
         left: 9px;
-
         z-index: 2;
-
         background: var(--bomet-green);
-
         color: #fff;
-
         padding: 5px 8px;
-
         border-radius: 999px;
-
         font-size: 10px;
-
         font-weight: 800;
-
         text-transform: uppercase;
-
         letter-spacing: 0.3px;
-
         pointer-events: none;
-
     }
 
-
-    /* =========================================================
-       WISHLIST BUTTON
-       ========================================================= */
-
+    /* Wishlist */
     .wishlist-form {
-
         position: absolute;
-
         top: 8px;
-
         right: 8px;
-
         z-index: 20;
-
         margin: 0;
-
     }
-
 
     .wishlist-form form {
-
         margin: 0;
-
     }
-
 
     .product-wishlist {
-
         width: 40px;
-
         height: 40px;
-
         padding: 0;
-
         border: none;
-
         border-radius: 50%;
-
         background: rgba(255, 255, 255, 0.97);
-
         color: #68736d;
-
         display: flex;
-
         align-items: center;
-
         justify-content: center;
-
         font-size: 18px;
-
         line-height: 1;
-
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-
         cursor: pointer;
-
-        transition:
-            background 0.2s ease,
-            color 0.2s ease,
-            transform 0.2s ease,
-            box-shadow 0.2s ease;
-
+        transition: background 0.2s ease,
+                    color 0.2s ease,
+                    transform 0.2s ease,
+                    box-shadow 0.2s ease;
         -webkit-tap-highlight-color: transparent;
-
     }
-
 
     .product-wishlist:hover {
-
         background: #fff;
-
         color: var(--bomet-danger);
-
         transform: scale(1.06);
-
         box-shadow: 0 6px 16px rgba(0, 0, 0, 0.14);
-
     }
-
 
     .product-wishlist:active {
-
         transform: scale(0.92);
-
     }
-
 
     .product-wishlist:focus-visible {
-
         outline: 3px solid rgba(220, 53, 69, 0.2);
-
         outline-offset: 2px;
-
     }
-
-
-    /* =========================================================
-       WISHLISTED STATE
-       ========================================================= */
 
     .product-wishlist.is-wishlisted {
-
         color: var(--bomet-danger);
-
         background: var(--bomet-danger-light);
-
     }
-
 
     .product-wishlist.is-wishlisted:hover {
-
         color: var(--bomet-danger-dark);
-
         background: #ffe3e3;
-
     }
-
 
     .product-wishlist.is-wishlisted i {
-
         animation: wishlistHeartPop 0.25s ease;
-
     }
-
 
     @keyframes wishlistHeartPop {
-
-        0% {
-
-            transform: scale(0.7);
-
-        }
-
-        70% {
-
-            transform: scale(1.15);
-
-        }
-
-        100% {
-
-            transform: scale(1);
-
-        }
-
+        0% { transform: scale(0.7); }
+        70% { transform: scale(1.15); }
+        100% { transform: scale(1); }
     }
-
-
-    /* =========================================================
-       WISHLIST LOADING
-       ========================================================= */
 
     .product-wishlist.is-loading {
-
         pointer-events: none;
-
         opacity: 0.65;
-
     }
-
 
     .product-wishlist.is-loading i {
-
         animation: wishlistSpin 0.7s linear infinite;
-
     }
-
 
     @keyframes wishlistSpin {
-
-        from {
-
-            transform: rotate(0deg);
-
-        }
-
-        to {
-
-            transform: rotate(360deg);
-
-        }
-
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
     }
 
-
-    /* =========================================================
-       PRODUCT INFORMATION
-       ========================================================= */
-
+    /* Product information */
     .product-info {
-
         padding: 12px;
-
     }
-
 
     .product-category {
-
         color: var(--bomet-green);
-
         font-size: 10px;
-
         font-weight: 800;
-
         text-transform: uppercase;
-
         letter-spacing: 0.45px;
-
         margin-bottom: 5px;
-
         white-space: nowrap;
-
         overflow: hidden;
-
         text-overflow: ellipsis;
-
     }
-
 
     .product-name {
-
         color: var(--bomet-dark);
-
         font-size: 14px;
-
         font-weight: 750;
-
         line-height: 1.35;
-
         margin: 0 0 7px;
-
         display: -webkit-box;
-
         -webkit-line-clamp: 2;
-
         -webkit-box-orient: vertical;
-
         overflow: hidden;
-
         min-height: 38px;
-
     }
-
 
     .product-brand {
-
         color: var(--bomet-muted);
-
         font-size: 11px;
-
         margin-bottom: 8px;
-
         white-space: nowrap;
-
         overflow: hidden;
-
         text-overflow: ellipsis;
-
     }
 
-
-    /* =========================================================
-       PRICE
-       ========================================================= */
-
+    /* Price */
     .product-price-row {
-
         display: flex;
-
         align-items: baseline;
-
         flex-wrap: wrap;
-
         gap: 6px;
-
     }
-
 
     .product-price {
-
         color: var(--bomet-green-dark);
-
         font-size: 16px;
-
         font-weight: 900;
-
     }
-
 
     .product-old-price {
-
         color: #9aa19d;
-
         font-size: 11px;
-
         text-decoration: line-through;
-
     }
-
 
     .discount-badge {
-
         display: inline-flex;
-
         align-items: center;
-
         justify-content: center;
-
         background: var(--bomet-danger-light);
-
         color: var(--bomet-danger);
-
         padding: 3px 6px;
-
         border-radius: 5px;
-
         font-size: 9px;
-
         font-weight: 800;
-
     }
 
-
-    /* =========================================================
-       EMPTY STATE
-       ========================================================= */
-
+    /* Empty */
     .products-empty {
-
         background: #fff;
-
         border: 1px solid var(--bomet-border);
-
         border-radius: var(--bomet-radius);
-
         padding: 45px 20px;
-
         text-align: center;
-
     }
-
 
     .products-empty-icon {
-
         width: 68px;
-
         height: 68px;
-
         border-radius: 50%;
-
         background: var(--bomet-green-light);
-
         color: var(--bomet-green);
-
         display: flex;
-
         align-items: center;
-
         justify-content: center;
-
         margin: 0 auto 16px;
-
         font-size: 27px;
-
     }
-
 
     .products-empty h3 {
-
         color: var(--bomet-dark);
-
         font-size: 20px;
-
         font-weight: 800;
-
         margin-bottom: 8px;
-
     }
-
 
     .products-empty p {
-
         color: var(--bomet-muted);
-
         font-size: 14px;
-
         margin-bottom: 20px;
-
         line-height: 1.6;
-
     }
-
 
     .empty-btn {
-
         display: inline-flex;
-
         align-items: center;
-
         justify-content: center;
-
         min-height: 44px;
-
         padding: 0 18px;
-
         background: var(--bomet-green);
-
         color: #fff;
-
         border-radius: 10px;
-
         text-decoration: none;
-
         font-weight: 700;
-
-        transition:
-            background 0.2s ease,
-            transform 0.2s ease;
-
+        transition: background 0.2s ease,
+                    transform 0.2s ease;
     }
-
 
     .empty-btn:hover {
-
         background: var(--bomet-green-dark);
-
         color: #fff;
-
     }
-
 
     .empty-btn:active {
-
         transform: scale(0.98);
-
     }
 
-
-    /* =========================================================
-       PAGINATION
-       ========================================================= */
-
+    /* Pagination */
     .products-pagination {
-
         margin-top: 25px;
-
     }
-
 
     .products-pagination .pagination {
-
         justify-content: center;
-
         flex-wrap: wrap;
-
         gap: 4px;
-
     }
-
 
     .products-pagination .page-link {
-
         min-width: 38px;
-
         min-height: 38px;
-
         display: flex;
-
         align-items: center;
-
         justify-content: center;
-
         border-radius: 9px !important;
-
         border: 1px solid var(--bomet-border);
-
         color: var(--bomet-dark);
-
         font-size: 13px;
-
         background: #fff;
-
-        transition:
-            background 0.2s ease,
-            color 0.2s ease,
-            border-color 0.2s ease;
-
+        transition: background 0.2s ease,
+                    color 0.2s ease,
+                    border-color 0.2s ease;
     }
-
 
     .products-pagination .page-item.active .page-link {
-
         background: var(--bomet-green);
-
         border-color: var(--bomet-green);
-
         color: #fff;
-
     }
-
 
     .products-pagination .page-link:hover {
-
         background: var(--bomet-green-light);
-
         color: var(--bomet-green-dark);
-
         border-color: #cfe4d7;
-
     }
-
 
     .products-pagination .page-item.disabled .page-link {
-
         background: #f8f9f9;
-
         color: #adb5b1;
-
         cursor: not-allowed;
-
     }
 
-
-    /* =========================================================
-       TABLET
-       ========================================================= */
-
+    /* Tablet */
     @media (min-width: 576px) {
-
         .products-container {
-
             padding: 0 20px;
-
         }
-
 
         .products-header {
-
             padding: 24px;
-
         }
-
 
         .products-header h1 {
-
             font-size: 29px;
-
         }
-
 
         .products-grid {
-
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-
             gap: 16px;
-
         }
-
 
         .product-info {
-
             padding: 14px;
-
         }
-
 
         .product-name {
-
             font-size: 15px;
-
         }
-
 
         .product-price {
-
             font-size: 17px;
-
         }
-
 
         .product-wishlist {
-
             width: 42px;
-
             height: 42px;
-
         }
-
     }
 
-
-    /* =========================================================
-       TABLET / SMALL DESKTOP
-       ========================================================= */
-
+    /* Tablet / desktop */
     @media (min-width: 768px) {
-
         .products-container {
-
             padding: 0 24px;
-
         }
-
 
         .filter-toggle-wrapper {
-
             display: none;
-
         }
-
 
         .products-layout {
-
             display: grid;
-
             grid-template-columns: 240px minmax(0, 1fr);
-
             gap: 20px;
-
             align-items: start;
-
         }
-
 
         .products-sidebar {
-
             position: sticky;
-
             top: 20px;
-
             margin-bottom: 0;
-
         }
-
 
         .products-toolbar {
-
             flex-direction: row;
-
             align-items: center;
-
             justify-content: space-between;
-
         }
-
 
         .sort-form {
-
             width: 210px;
-
         }
-
 
         .products-grid {
-
             grid-template-columns: repeat(3, minmax(0, 1fr));
-
             gap: 18px;
-
         }
-
     }
-
-
-    /* =========================================================
-       DESKTOP
-       ========================================================= */
 
     @media (min-width: 992px) {
-
         .products-container {
-
             padding: 0 30px;
-
         }
-
 
         .products-header {
-
             padding: 28px;
-
             margin-top: 18px;
-
         }
-
 
         .products-header h1 {
-
             font-size: 34px;
-
         }
-
 
         .products-header p {
-
             font-size: 15px;
-
         }
-
 
         .products-layout {
-
             grid-template-columns: 270px minmax(0, 1fr);
-
             gap: 25px;
-
         }
-
 
         .products-grid {
-
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-
             gap: 20px;
-
         }
-
 
         .product-image-wrapper {
-
             aspect-ratio: 1 / 0.92;
-
         }
-
 
         .product-info {
-
             padding: 16px;
-
         }
-
 
         .product-name {
-
             font-size: 16px;
-
         }
-
 
         .product-price {
-
             font-size: 18px;
-
         }
-
 
         .product-wishlist {
-
             width: 44px;
-
             height: 44px;
-
         }
-
     }
-
-
-    /* =========================================================
-       LARGE DESKTOP
-       ========================================================= */
 
     @media (min-width: 1200px) {
-
         .products-container {
-
             padding: 0 40px;
-
         }
-
 
         .products-layout {
-
             grid-template-columns: 280px minmax(0, 1fr);
-
         }
-
 
         .products-grid {
-
             grid-template-columns: repeat(4, minmax(0, 1fr));
-
             gap: 22px;
-
         }
-
     }
 
-
-    /* =========================================================
-       REDUCED MOTION
-       ========================================================= */
-
     @media (prefers-reduced-motion: reduce) {
-
         .product-card,
         .product-image,
         .product-wishlist,
         .filter-btn,
         .empty-btn {
-
             transition: none;
-
         }
-
 
         .product-wishlist.is-wishlisted i,
         .product-wishlist.is-loading i {
-
             animation: none;
-
         }
-
     }
-
 </style>
 
-
 <div class="products-page">
-
     <div class="products-container">
+    <!-- Breadcrumb -->
+    <nav class="products-breadcrumb" aria-label="Breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{{ url_for('home.home') }}">Home</a>
+            </li>
 
-
-        <!-- =====================================================
-             BREADCRUMB
-             ===================================================== -->
-
-        <nav
-            class="products-breadcrumb"
-            aria-label="Breadcrumb"
-        >
-
-            <ol class="breadcrumb">
-
-                <li class="breadcrumb-item">
-
-                    <a href="{{ url_for('home.home') }}">
-                        Home
-                    </a>
-
-                </li>
-
-
-                <li
-                    class="breadcrumb-item active"
-                    aria-current="page"
-                >
-
-                    {% if category %}
-
-                        {{ category.name }}
-
-                    {% elif search %}
-
-                        Search
-
-                    {% else %}
-
-                        Products
-
-                    {% endif %}
-
-                </li>
-
-            </ol>
-
-        </nav>
-
-
-        <!-- =====================================================
-             PAGE HEADER
-             ===================================================== -->
-
-        <section class="products-header">
-
-            {% if category %}
-
-                <h1>
+            <li class="breadcrumb-item active" aria-current="page">
+                {% if category %}
                     {{ category.name }}
-                </h1>
-
-
-                {% if category.description %}
-
-                    <p>
-                        {{ category.description }}
-                    </p>
-
+                {% elif search %}
+                    Search
                 {% else %}
-
-                    <p>
-                        Browse quality
-                        {{ category.name|lower }}
-                        available from Bomet Machineries Ltd.
-                    </p>
-
+                    Products
                 {% endif %}
+            </li>
+        </ol>
+    </nav>
 
+    <!-- Header -->
+    <section class="products-header">
+        {% if category %}
+            <h1>{{ category.name }}</h1>
 
-            {% elif search %}
-
-                <h1>
-                    Search Results
-                </h1>
-
-
-                <p>
-
-                    Showing products matching
-
-                    <strong>
-                        "{{ search }}"
-                    </strong>
-
-                </p>
-
-
+            {% if category.description %}
+                <p>{{ category.description }}</p>
             {% else %}
-
-                <h1>
-                    Our Products
-                </h1>
-
-
                 <p>
-
-                    Quality agricultural machinery,
-                    equipment and spare parts from
-                    Bomet Machineries Ltd.
-
+                    Browse quality {{ category.name|lower }}
+                    available from Bomet Machineries Ltd.
                 </p>
-
             {% endif %}
 
-        </section>
+        {% elif search %}
+            <h1>Search Results</h1>
 
+            <p>
+                Showing products matching
+                <strong>"{{ search }}"</strong>
+            </p>
 
-        <!-- =====================================================
-             MOBILE FILTER BUTTON
-             ===================================================== -->
+        {% else %}
+            <h1>Our Products</h1>
 
-        <div class="filter-toggle-wrapper">
+            <p>
+                Quality agricultural machinery, equipment and
+                spare parts from Bomet Machineries Ltd.
+            </p>
+        {% endif %}
+    </section>
 
-            <button
-                class="filter-toggle"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#mobileProductFilters"
-                aria-expanded="false"
-                aria-controls="mobileProductFilters"
+    <!-- Mobile Filter Button -->
+    <div class="filter-toggle-wrapper">
+        <button
+            class="filter-toggle"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#mobileProductFilters"
+            aria-expanded="false"
+            aria-controls="mobileProductFilters"
+        >
+            <i class="bi bi-sliders"></i>
+            <span>Filters &amp; Categories</span>
+        </button>
+    </div>
+
+    <!-- Product Layout -->
+    <div class="products-layout">
+
+        <!-- Sidebar -->
+        <aside
+            class="products-sidebar collapse d-md-block"
+            id="mobileProductFilters"
+        >
+            <div class="filter-title">
+                <i class="bi bi-funnel me-1"></i>
+                Filter Products
+            </div>
+
+            <!-- FILTER FORM -->
+
+            {% if category %}
+                {% set filter_action = url_for(
+                    'product.category_products',
+                    slug=category.slug
+                ) %}
+            {% else %}
+                {% set filter_action = url_for('product.products') %}
+            {% endif %}
+
+            <form
+                method="GET"
+                action="{{ filter_action }}"
+                id="productFilterForm"
             >
-
-                <i class="bi bi-sliders"></i>
-
-                <span>
-                    Filters &amp; Categories
-                </span>
-
-            </button>
-
-        </div>
-
-
-        <!-- =====================================================
-             PRODUCT LAYOUT
-             ===================================================== -->
-
-        <div class="products-layout">
-
-
-            <!-- =================================================
-                 SIDEBAR
-                 ================================================= -->
-
-            <aside
-                class="products-sidebar collapse d-md-block"
-                id="mobileProductFilters"
-            >
-
-                <div class="filter-title">
-
-                    <i class="bi bi-funnel me-1"></i>
-
-                    Filter Products
-
-                </div>
-
 
                 <!-- SEARCH -->
-
                 <div class="filter-section">
-
                     <label
                         class="filter-label"
                         for="productSearch"
@@ -1688,690 +974,534 @@ Products | Bomet Machineries Ltd.
                         Search
                     </label>
 
-
                     <input
                         type="search"
                         id="productSearch"
                         class="filter-control"
                         placeholder="Search products..."
-                        value="{{ search }}"
-                        form="productFilterForm"
+                        value="{{ search|default('') }}"
                         name="search"
                         autocomplete="off"
                     >
-
                 </div>
 
-
-                <!-- FILTER FORM -->
-
-                <form
-                    method="GET"
-                    action="{{ url_for('product.products') }}"
-                    id="productFilterForm"
-                >
-
-
-                    <!-- CATEGORY -->
-
-                    <div class="filter-section">
-
-                        <label
-                            class="filter-label"
-                            for="categoryFilter"
-                        >
-                            Category
-                        </label>
-
-
-                        <select
-                            class="filter-control"
-                            id="categoryFilter"
-                            name="category"
-                        >
-
-                            <option value="">
-                                All Categories
-                            </option>
-
-
-                            {% for item in categories %}
-
-                                <option
-                                    value="{{ item.id }}"
-                                    {% if category_id|string == item.id|string %}
-                                        selected
-                                    {% endif %}
-                                >
-
-                                    {{ item.name }}
-
-                                </option>
-
-                            {% endfor %}
-
-                        </select>
-
+                <!-- CATEGORY NAVIGATION -->
+                <div class="filter-section">
+                    <div class="filter-label">
+                        Categories
                     </div>
 
-
-                    <!-- PRICE -->
-
-                    <div class="filter-section">
-
-                        <label class="filter-label">
-
-                            Price Range
-
-                        </label>
-
-
-                        <div class="price-row">
-
-                            <input
-                                type="number"
-                                class="filter-control"
-                                name="min_price"
-                                placeholder="Min"
-                                min="0"
-                                step="0.01"
-                                value="{{ min_price }}"
-                            >
-
-
-                            <input
-                                type="number"
-                                class="filter-control"
-                                name="max_price"
-                                placeholder="Max"
-                                min="0"
-                                step="0.01"
-                                value="{{ max_price }}"
-                            >
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- STOCK -->
-
-                    <div class="filter-section">
-
-                        <label
-                            class="filter-label"
-                            for="stockFilter"
-                        >
-
-                            Availability
-
-                        </label>
-
-
-                        <select
-                            class="filter-control"
-                            id="stockFilter"
-                            name="stock"
-                        >
-
-                            <option
-                                value=""
-                                {% if not stock_filter %}
-                                    selected
-                                {% endif %}
-                            >
-
-                                All Products
-
-                            </option>
-
-
-                            <option
-                                value="in_stock"
-                                {% if stock_filter == "in_stock" %}
-                                    selected
-                                {% endif %}
-                            >
-
-                                Available Products
-
-                            </option>
-
-
-                            <option
-                                value="out_of_stock"
-                                {% if stock_filter == "out_of_stock" %}
-                                    selected
-                                {% endif %}
-                            >
-
-                                Currently Unavailable
-
-                            </option>
-
-                        </select>
-
-                    </div>
-
-
-                    <!-- SORT -->
-
-                    <input
-                        type="hidden"
-                        name="sort"
-                        value="{{ sort }}"
+                    <nav
+                        class="category-links"
+                        aria-label="Product categories"
                     >
 
+                        <!-- ALL CATEGORIES -->
+                        <a
+                            href="{{ url_for('product.products') }}"
+                            class="category-link{% if not category %} active{% endif %}"
+                            {% if not category %}aria-current="page"{% endif %}
+                        >
+                            <span
+                                class="category-link-icon"
+                                aria-hidden="true"
+                            >
+                                <i class="bi bi-grid"></i>
+                            </span>
 
-                    <!-- ACTIONS -->
+                            <span class="category-link-name">
+                                All Categories
+                            </span>
 
-                    <div class="filter-actions">
+                            <i
+                                class="bi bi-chevron-right category-link-arrow"
+                                aria-hidden="true"
+                            ></i>
+                        </a>
 
-                        <button
-                            type="submit"
-                            class="filter-btn filter-btn-primary"
+                        <!-- CATEGORY LINKS -->
+                        {% for item in categories %}
+                            <a
+                                href="{{ url_for('product.category_products', slug=item.slug) }}"
+                                class="category-link{% if category and category.id == item.id %} active{% endif %}"
+                                {% if category and category.id == item.id %}aria-current="page"{% endif %}
+                            >
+                                <span
+                                    class="category-link-icon"
+                                    aria-hidden="true"
+                                >
+                                    <i class="bi bi-box-seam"></i>
+                                </span>
+
+                                <span class="category-link-name">
+                                    {{ item.name }}
+                                </span>
+
+                                <i
+                                    class="bi bi-chevron-right category-link-arrow"
+                                    aria-hidden="true"
+                                ></i>
+                            </a>
+                        {% endfor %}
+
+                    </nav>
+                </div>
+
+                <!-- PRICE -->
+                <div class="filter-section">
+                    <label class="filter-label">
+                        Price Range
+                    </label>
+
+                    <div class="price-row">
+                        <input
+                            type="number"
+                            class="filter-control"
+                            name="min_price"
+                            placeholder="Min"
+                            min="0"
+                            step="0.01"
+                            value="{{ min_price|default('') }}"
                         >
 
-                            <i class="bi bi-check2 me-1"></i>
+                        <input
+                            type="number"
+                            class="filter-control"
+                            name="max_price"
+                            placeholder="Max"
+                            min="0"
+                            step="0.01"
+                            value="{{ max_price|default('') }}"
+                        >
+                    </div>
+                </div>
 
-                            Apply Filters
+                <!-- STOCK -->
+                <div class="filter-section">
+                    <label
+                        class="filter-label"
+                        for="stockFilter"
+                    >
+                        Availability
+                    </label>
 
-                        </button>
+                    <select
+                        class="filter-control"
+                        id="stockFilter"
+                        name="stock"
+                    >
+                        <option
+                            value=""
+                            {% if not stock_filter %}selected{% endif %}
+                        >
+                            All Products
+                        </option>
 
+                        <option
+                            value="in_stock"
+                            {% if stock_filter == "in_stock" %}selected{% endif %}
+                        >
+                            Available Products
+                        </option>
 
+                        <option
+                            value="out_of_stock"
+                            {% if stock_filter == "out_of_stock" %}selected{% endif %}
+                        >
+                            Currently Unavailable
+                        </option>
+                    </select>
+                </div>
+
+                <!-- SORT -->
+                <input
+                    type="hidden"
+                    name="sort"
+                    value="{{ sort|default('newest') }}"
+                >
+
+                <!-- ACTIONS -->
+                <div class="filter-actions">
+                    <button
+                        type="submit"
+                        class="filter-btn filter-btn-primary"
+                    >
+                        <i class="bi bi-check2 me-1"></i>
+                        Apply Filters
+                    </button>
+
+                    {% if category %}
+                        <a
+                            href="{{ url_for(
+                                'product.category_products',
+                                slug=category.slug
+                            ) }}"
+                            class="filter-btn filter-btn-secondary"
+                        >
+                            <i class="bi bi-arrow-counterclockwise me-1"></i>
+                            Clear Filters
+                        </a>
+                    {% else %}
                         <a
                             href="{{ url_for('product.products') }}"
                             class="filter-btn filter-btn-secondary"
                         >
-
                             <i class="bi bi-arrow-counterclockwise me-1"></i>
-
                             Clear Filters
-
                         </a>
+                    {% endif %}
+                </div>
 
-                    </div>
+            </form>
+        </aside>
 
-                </form>
+        <!-- Product Content -->
+        <main>
 
-            </aside>
+            <!-- Toolbar -->
+            <div class="products-toolbar">
 
+                <div class="product-count">
+                    {% if product_count is defined %}
+                        <strong>{{ product_count }}</strong>
+                        product{% if product_count != 1 %}s{% endif %}
+                    {% else %}
+                        <strong>{{ products|length }}</strong>
+                        product{% if products|length != 1 %}s{% endif %}
+                    {% endif %}
+                </div>
 
-            <!-- =================================================
-                 PRODUCT CONTENT
-                 ================================================= -->
+                <!-- SORT FORM -->
 
-            <main>
+                {% if category %}
+                    {% set sort_action = url_for(
+                        'product.category_products',
+                        slug=category.slug
+                    ) %}
+                {% else %}
+                    {% set sort_action = url_for('product.products') %}
+                {% endif %}
 
+                <form
+                    method="GET"
+                    action="{{ sort_action }}"
+                    class="sort-form"
+                >
 
-                <!-- =================================================
-                     TOOLBAR
-                     ================================================= -->
+                    {% if search %}
+                        <input
+                            type="hidden"
+                            name="search"
+                            value="{{ search }}"
+                        >
+                    {% endif %}
 
-                <div class="products-toolbar">
+                    {% if not category and category_id %}
+                        <input
+                            type="hidden"
+                            name="category"
+                            value="{{ category_id }}"
+                        >
+                    {% endif %}
 
+                    {% if min_price %}
+                        <input
+                            type="hidden"
+                            name="min_price"
+                            value="{{ min_price }}"
+                        >
+                    {% endif %}
 
-                    <div class="product-count">
+                    {% if max_price %}
+                        <input
+                            type="hidden"
+                            name="max_price"
+                            value="{{ max_price }}"
+                        >
+                    {% endif %}
 
-                        {% if product_count is defined %}
+                    {% if stock_filter %}
+                        <input
+                            type="hidden"
+                            name="stock"
+                            value="{{ stock_filter }}"
+                        >
+                    {% endif %}
 
-                            <strong>
-                                {{ product_count }}
-                            </strong>
-
-                            product{% if product_count != 1 %}s{% endif %}
-
-                        {% else %}
-
-                            <strong>
-                                {{ products|length }}
-                            </strong>
-
-                            product{% if products|length != 1 %}s{% endif %}
-
-                        {% endif %}
-
-                    </div>
-
-
-                    <!-- SORT -->
-
-                    <form
-                        method="GET"
-                        action="{{ url_for('product.products') }}"
-                        class="sort-form"
+                    <label
+                        for="sortProducts"
+                        class="visually-hidden"
                     >
+                        Sort Products
+                    </label>
 
-
-                        {% if search %}
-
-                            <input
-                                type="hidden"
-                                name="search"
-                                value="{{ search }}"
-                            >
-
-                        {% endif %}
-
-
-                        {% if category_id %}
-
-                            <input
-                                type="hidden"
-                                name="category"
-                                value="{{ category_id }}"
-                            >
-
-                        {% endif %}
-
-
-                        {% if min_price %}
-
-                            <input
-                                type="hidden"
-                                name="min_price"
-                                value="{{ min_price }}"
-                            >
-
-                        {% endif %}
-
-
-                        {% if max_price %}
-
-                            <input
-                                type="hidden"
-                                name="max_price"
-                                value="{{ max_price }}"
-                            >
-
-                        {% endif %}
-
-
-                        {% if stock_filter %}
-
-                            <input
-                                type="hidden"
-                                name="stock"
-                                value="{{ stock_filter }}"
-                            >
-
-                        {% endif %}
-
-
-                        <label
-                            for="sortProducts"
-                            class="visually-hidden"
+                    <select
+                        id="sortProducts"
+                        name="sort"
+                        onchange="this.form.submit()"
+                    >
+                        <option
+                            value="newest"
+                            {% if sort == "newest" %}selected{% endif %}
                         >
+                            Newest
+                        </option>
 
-                            Sort Products
-
-                        </label>
-
-
-                        <select
-                            id="sortProducts"
-                            name="sort"
-                            onchange="this.form.submit()"
+                        <option
+                            value="featured"
+                            {% if sort == "featured" %}selected{% endif %}
                         >
+                            Featured
+                        </option>
 
-                            <option
-                                value="newest"
-                                {% if sort == "newest" %}
-                                    selected
-                                {% endif %}
+                        <option
+                            value="price_low"
+                            {% if sort == "price_low" %}selected{% endif %}
+                        >
+                            Price: Low to High
+                        </option>
+
+                        <option
+                            value="price_high"
+                            {% if sort == "price_high" %}selected{% endif %}
+                        >
+                            Price: High to Low
+                        </option>
+
+                        <option
+                            value="name_az"
+                            {% if sort == "name_az" %}selected{% endif %}
+                        >
+                            Name: A-Z
+                        </option>
+
+                        <option
+                            value="name_za"
+                            {% if sort == "name_za" %}selected{% endif %}
+                        >
+                            Name: Z-A
+                        </option>
+
+                        <option
+                            value="oldest"
+                            {% if sort == "oldest" %}selected{% endif %}
+                        >
+                            Oldest
+                        </option>
+                    </select>
+                </form>
+            </div>
+
+            <!-- PRODUCTS -->
+            {% if products %}
+
+                <div class="products-grid">
+
+                    {% for product in products %}
+
+                        {% set discounted = product_prices.get(
+                            product.id,
+                            product.price
+                        ) if product_prices is defined else product.price %}
+
+                        {% set is_wishlisted =
+                            current_user.is_authenticated
+                            and product.id in wishlist_product_ids|default([])
+                        %}
+
+                        <article class="product-card">
+
+                            <a
+                                href="{{ url_for(
+                                    'product.product_details',
+                                    id=product.id
+                                ) }}"
+                                class="product-card-link"
+                                aria-label="View {{ product.name }}"
                             >
 
-                                Newest
+                                <div class="product-image-wrapper">
 
-                            </option>
+                                    {% if product.featured %}
+                                        <span class="featured-badge">
+                                            Featured
+                                        </span>
+                                    {% endif %}
 
+                                    {% if product.images %}
 
-                            <option
-                                value="featured"
-                                {% if sort == "featured" %}
-                                    selected
-                                {% endif %}
-                            >
+                                        {% set primary_image = product.images
+                                            | selectattr(
+                                                'is_primary',
+                                                'equalto',
+                                                true
+                                            )
+                                            | first
+                                        %}
 
-                                Featured
+                                        {% if primary_image %}
+                                            <img
+                                                src="{{ primary_image.image_url }}"
+                                                alt="{{ product.name }}"
+                                                class="product-image"
+                                                loading="lazy"
+                                                decoding="async"
+                                            >
+                                        {% else %}
+                                            <img
+                                                src="{{ product.images[0].image_url }}"
+                                                alt="{{ product.name }}"
+                                                class="product-image"
+                                                loading="lazy"
+                                                decoding="async"
+                                            >
+                                        {% endif %}
 
-                            </option>
+                                    {% else %}
 
+                                        <div
+                                            class="product-image-placeholder"
+                                            aria-label="No product image available"
+                                        >
+                                            <i
+                                                class="bi bi-image"
+                                                aria-hidden="true"
+                                            ></i>
+                                        </div>
 
-                            <option
-                                value="price_low"
-                                {% if sort == "price_low" %}
-                                    selected
-                                {% endif %}
-                            >
+                                    {% endif %}
 
-                                Price: Low to High
+                                    <!-- Wishlist -->
+                                    <div
+                                        class="wishlist-form"
+                                        onclick="event.preventDefault(); event.stopPropagation();"
+                                    >
+                                        <form
+                                            method="POST"
+                                            action="{{ url_for(
+                                                'wishlist.toggle_wishlist',
+                                                product_id=product.id
+                                            ) }}"
+                                        >
+                                            <input
+                                                type="hidden"
+                                                name="csrf_token"
+                                                value="{{ csrf_token() }}"
+                                            >
 
-                            </option>
+                                            <button
+                                                type="submit"
+                                                class="product-wishlist{% if is_wishlisted %} is-wishlisted{% endif %}"
+                                                aria-label="{% if is_wishlisted %}Remove {{ product.name }} from wishlist{% else %}Add {{ product.name }} to wishlist{% endif %}"
+                                                title="{% if is_wishlisted %}Remove from wishlist{% else %}Add to wishlist{% endif %}"
+                                                aria-pressed="{{ 'true' if is_wishlisted else 'false' }}"
+                                            >
+                                                {% if is_wishlisted %}
+                                                    <i
+                                                        class="bi bi-heart-fill"
+                                                        aria-hidden="true"
+                                                    ></i>
+                                                {% else %}
+                                                    <i
+                                                        class="bi bi-heart"
+                                                        aria-hidden="true"
+                                                    ></i>
+                                                {% endif %}
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
 
+                                <div class="product-info">
 
-                            <option
-                                value="price_high"
-                                {% if sort == "price_high" %}
-                                    selected
-                                {% endif %}
-                            >
+                                    {% if product.category %}
+                                        <div class="product-category">
+                                            {{ product.category.name }}
+                                        </div>
+                                    {% endif %}
 
-                                Price: High to Low
+                                    <h2 class="product-name">
+                                        {{ product.name }}
+                                    </h2>
 
-                            </option>
+                                    {% if product.brand %}
+                                        <div class="product-brand">
+                                            {{ product.brand }}
+                                        </div>
+                                    {% endif %}
 
+                                    <div class="product-price-row">
+                                        <span class="product-price">
+                                            KSh
+                                            {{ "{:,.2f}".format(discounted|float) }}
+                                        </span>
 
-                            <option
-                                value="name_az"
-                                {% if sort == "name_az" %}
-                                    selected
-                                {% endif %}
-                            >
+                                        {% if product.discount and product.discount > 0 %}
 
-                                Name: A-Z
+                                            <span class="product-old-price">
+                                                KSh
+                                                {{ "{:,.2f}".format(product.price|float) }}
+                                            </span>
 
-                            </option>
+                                            <span class="discount-badge">
+                                                -{{ product.discount|int }}%
+                                            </span>
 
+                                        {% endif %}
+                                    </div>
 
-                            <option
-                                value="name_za"
-                                {% if sort == "name_za" %}
-                                    selected
-                                {% endif %}
-                            >
+                                </div>
 
-                                Name: Z-A
+                            </a>
 
-                            </option>
+                        </article>
 
-
-                            <option
-                                value="oldest"
-                                {% if sort == "oldest" %}
-                                    selected
-                                {% endif %}
-                            >
-
-                                Oldest
-
-                            </option>
-
-                        </select>
-
-                    </form>
+                    {% endfor %}
 
                 </div>
 
+                <!-- Pagination -->
+                {% if pagination and pagination.pages > 1 %}
 
-                <!-- =================================================
-                     PRODUCTS
-                     ================================================= -->
+                    {% if category %}
+                        {% set pagination_endpoint = 'product.category_products' %}
+                    {% else %}
+                        {% set pagination_endpoint = 'product.products' %}
+                    {% endif %}
 
-                {% if products %}
+                    <nav
+                        class="products-pagination"
+                        aria-label="Product pagination"
+                    >
+                        <ul class="pagination">
 
-                    <div class="products-grid">
+                            <!-- PREVIOUS -->
+                            <li
+                                class="page-item {% if not pagination.has_prev %}disabled{% endif %}"
+                            >
+                                {% if pagination.has_prev %}
 
-
-                        {% for product in products %}
-
-
-                            {% set discounted = product_prices.get(product.id, product.price) if product_prices is defined else product.price %}
-
-
-                            {% set is_wishlisted = current_user.is_authenticated and product.id in wishlist_product_ids|default([]) %}
-
-
-                            <!-- =================================================
-                                 PRODUCT CARD
-                                 ================================================= -->
-
-                            <article class="product-card">
-
-
-                                <!-- FULL CARD CLICKABLE -->
-
-                                <a
-                                    href="{{ url_for('product.product_details', id=product.id) }}"
-                                    class="product-card-link"
-                                    aria-label="View {{ product.name }}"
-                                >
-
-
-                                    <!-- PRODUCT IMAGE -->
-
-                                    <div class="product-image-wrapper">
-
-
-                                        {% if product.featured %}
-
-                                            <span class="featured-badge">
-
-                                                Featured
-
-                                            </span>
-
-                                        {% endif %}
-
-
-                                        {% if product.images %}
-
-
-                                            {% set primary_image = product.images
-                                                | selectattr('is_primary', 'equalto', true)
-                                                | first
-                                            %}
-
-
-                                            {% if primary_image %}
-
-                                                <img
-                                                    src="{{ primary_image.image_url }}"
-                                                    alt="{{ product.name }}"
-                                                    class="product-image"
-                                                    loading="lazy"
-                                                    decoding="async"
-                                                >
-
-                                            {% else %}
-
-                                                <img
-                                                    src="{{ product.images[0].image_url }}"
-                                                    alt="{{ product.name }}"
-                                                    class="product-image"
-                                                    loading="lazy"
-                                                    decoding="async"
-                                                >
-
-                                            {% endif %}
-
-
-                                        {% else %}
-
-
-                                            <div
-                                                class="product-image-placeholder"
-                                                aria-label="No product image available"
-                                            >
-
-                                                <i
-                                                    class="bi bi-image"
-                                                    aria-hidden="true"
-                                                ></i>
-
-                                            </div>
-
-
-                                        {% endif %}
-
-
-                                        <!-- WISHLIST -->
-
-                                        <div
-                                            class="wishlist-form"
-                                            onclick="event.preventDefault(); event.stopPropagation();"
+                                    {% if category %}
+                                        <a
+                                            class="page-link"
+                                            href="{{ url_for(
+                                                'product.category_products',
+                                                slug=category.slug,
+                                                page=pagination.prev_num,
+                                                search=search,
+                                                min_price=min_price,
+                                                max_price=max_price,
+                                                stock=stock_filter,
+                                                sort=sort
+                                            ) }}"
+                                            aria-label="Previous page"
                                         >
-
-                                            <form
-                                                method="POST"
-                                                action="{{ url_for(
-                                                    'wishlist.toggle_wishlist',
-                                                    product_id=product.id
-                                                ) }}"
-                                            >
-
-                                                <input
-                                                    type="hidden"
-                                                    name="csrf_token"
-                                                    value="{{ csrf_token() }}"
-                                                >
-
-
-                                                <button
-                                                    type="submit"
-                                                    class="product-wishlist{% if is_wishlisted %} is-wishlisted{% endif %}"
-                                                    aria-label="{% if is_wishlisted %}Remove {{ product.name }} from wishlist{% else %}Add {{ product.name }} to wishlist{% endif %}"
-                                                    title="{% if is_wishlisted %}Remove from wishlist{% else %}Add to wishlist{% endif %}"
-                                                    aria-pressed="{{ 'true' if is_wishlisted else 'false' }}"
-                                                >
-
-
-                                                    {% if is_wishlisted %}
-
-                                                        <i
-                                                            class="bi bi-heart-fill"
-                                                            aria-hidden="true"
-                                                        ></i>
-
-                                                    {% else %}
-
-                                                        <i
-                                                            class="bi bi-heart"
-                                                            aria-hidden="true"
-                                                        ></i>
-
-                                                    {% endif %}
-
-
-                                                </button>
-
-                                            </form>
-
-                                        </div>
-
-                                    </div>
-
-
-                                    <!-- PRODUCT INFORMATION -->
-
-                                    <div class="product-info">
-
-
-                                        {% if product.category %}
-
-                                            <div class="product-category">
-
-                                                {{ product.category.name }}
-
-                                            </div>
-
-                                        {% endif %}
-
-
-                                        <h2 class="product-name">
-
-                                            {{ product.name }}
-
-                                        </h2>
-
-
-                                        {% if product.brand %}
-
-                                            <div class="product-brand">
-
-                                                {{ product.brand }}
-
-                                            </div>
-
-                                        {% endif %}
-
-
-                                        <!-- PRICE -->
-
-                                        <div class="product-price-row">
-
-
-                                            <span class="product-price">
-
-                                                KSh
-                                                {{ "{:,.2f}".format(discounted|float) }}
-
-                                            </span>
-
-
-                                            {% if product.discount and product.discount > 0 %}
-
-
-                                                <span class="product-old-price">
-
-                                                    KSh
-                                                    {{ "{:,.2f}".format(product.price|float) }}
-
-                                                </span>
-
-
-                                                <span class="discount-badge">
-
-                                                    -{{ product.discount|int }}%
-
-                                                </span>
-
-
-                                            {% endif %}
-
-
-                                        </div>
-
-
-                                    </div>
-
-
-                                </a>
-
-
-                            </article>
-
-
-                        {% endfor %}
-
-
-                    </div>
-
-
-                    <!-- =================================================
-                         PAGINATION
-                         ================================================= -->
-
-                    {% if pagination and pagination.pages > 1 %}
-
-
-                        <nav
-                            class="products-pagination"
-                            aria-label="Product pagination"
-                        >
-
-                            <ul class="pagination">
-
-
-                                <!-- PREVIOUS -->
-
-                                <li
-                                    class="page-item {% if not pagination.has_prev %}disabled{% endif %}"
-                                >
-
-
-                                    {% if pagination.has_prev %}
-
+                                            <i
+                                                class="bi bi-chevron-left"
+                                                aria-hidden="true"
+                                            ></i>
+                                        </a>
+                                    {% else %}
                                         <a
                                             class="page-link"
                                             href="{{ url_for(
@@ -2386,51 +1516,59 @@ Products | Bomet Machineries Ltd.
                                             ) }}"
                                             aria-label="Previous page"
                                         >
-
                                             <i
                                                 class="bi bi-chevron-left"
                                                 aria-hidden="true"
                                             ></i>
-
                                         </a>
-
-
-                                    {% else %}
-
-
-                                        <span class="page-link">
-
-                                            <i
-                                                class="bi bi-chevron-left"
-                                                aria-hidden="true"
-                                            ></i>
-
-                                        </span>
-
-
                                     {% endif %}
 
+                                {% else %}
 
-                                </li>
+                                    <span class="page-link">
+                                        <i
+                                            class="bi bi-chevron-left"
+                                            aria-hidden="true"
+                                        ></i>
+                                    </span>
 
+                                {% endif %}
+                            </li>
 
-                                <!-- PAGE NUMBERS -->
+                            <!-- PAGE NUMBERS -->
+                            {% for page_num in pagination.iter_pages(
+                                left_edge=1,
+                                left_current=1,
+                                right_current=1,
+                                right_edge=1
+                            ) %}
 
-                                {% for page_num in pagination.iter_pages(
-                                    left_edge=1,
-                                    left_current=1,
-                                    right_current=1,
-                                    right_edge=1
-                                ) %}
+                                {% if page_num %}
 
+                                    <li
+                                        class="page-item{% if pagination.page == page_num %} active{% endif %}"
+                                    >
 
-                                    {% if page_num %}
-
-
-                                        <li
-                                            class="page-item {% if pagination.page == page_num %}active{% endif %}"
-                                        >
-
+                                        {% if category %}
+                                            <a
+                                                class="page-link"
+                                                href="{{ url_for(
+                                                    'product.category_products',
+                                                    slug=category.slug,
+                                                    page=page_num,
+                                                    search=search,
+                                                    min_price=min_price,
+                                                    max_price=max_price,
+                                                    stock=stock_filter,
+                                                    sort=sort
+                                                ) }}"
+                                                {% if pagination.page == page_num %}
+                                                    aria-current="page"
+                                                {% endif %}
+                                            >
+                                                {{ page_num }}
+                                            </a>
+                                        {% else %}
                                             <a
                                                 class="page-link"
                                                 href="{{ url_for(
@@ -2447,43 +1585,49 @@ Products | Bomet Machineries Ltd.
                                                     aria-current="page"
                                                 {% endif %}
                                             >
-
                                                 {{ page_num }}
-
                                             </a>
+                                        {% endif %}
 
-                                        </li>
+                                    </li>
 
+                                {% else %}
 
+                                    <li class="page-item disabled">
+                                        <span class="page-link">…</span>
+                                    </li>
+
+                                {% endif %}
+
+                            {% endfor %}
+
+                            <!-- NEXT -->
+                            <li
+                                class="page-item {% if not pagination.has_next %}disabled{% endif %}"
+                            >
+                                {% if pagination.has_next %}
+
+                                    {% if category %}
+                                        <a
+                                            class="page-link"
+                                            href="{{ url_for(
+                                                'product.category_products',
+                                                slug=category.slug,
+                                                page=pagination.next_num,
+                                                search=search,
+                                                min_price=min_price,
+                                                max_price=max_price,
+                                                stock=stock_filter,
+                                                sort=sort
+                                            ) }}"
+                                            aria-label="Next page"
+                                        >
+                                            <i
+                                                class="bi bi-chevron-right"
+                                                aria-hidden="true"
+                                            ></i>
+                                        </a>
                                     {% else %}
-
-
-                                        <li class="page-item disabled">
-
-                                            <span class="page-link">
-
-                                                …
-
-                                            </span>
-
-                                        </li>
-
-
-                                    {% endif %}
-
-
-                                {% endfor %}
-
-
-                                <!-- NEXT -->
-
-                                <li
-                                    class="page-item {% if not pagination.has_next %}disabled{% endif %}"
-                                >
-
-
-                                    {% if pagination.has_next %}
-
                                         <a
                                             class="page-link"
                                             href="{{ url_for(
@@ -2498,189 +1642,152 @@ Products | Bomet Machineries Ltd.
                                             ) }}"
                                             aria-label="Next page"
                                         >
-
                                             <i
                                                 class="bi bi-chevron-right"
                                                 aria-hidden="true"
                                             ></i>
-
                                         </a>
-
-
-                                    {% else %}
-
-
-                                        <span class="page-link">
-
-                                            <i
-                                                class="bi bi-chevron-right"
-                                                aria-hidden="true"
-                                            ></i>
-
-                                        </span>
-
-
                                     {% endif %}
 
+                                {% else %}
 
-                                </li>
+                                    <span class="page-link">
+                                        <i
+                                            class="bi bi-chevron-right"
+                                            aria-hidden="true"
+                                        ></i>
+                                    </span>
 
+                                {% endif %}
+                            </li>
 
-                            </ul>
+                        </ul>
+                    </nav>
 
-                        </nav>
+                {% endif %}
 
+            {% else %}
 
-                    {% endif %}
+                <!-- Empty State -->
+                <section class="products-empty">
 
+                    <div class="products-empty-icon">
+                        <i
+                            class="bi bi-search"
+                            aria-hidden="true"
+                        ></i>
+                    </div>
 
-                {% else %}
+                    <h3>No Products Found</h3>
 
+                    <p>
+                        We couldn't find any products matching
+                        your current search or filters.
+                    </p>
 
-                    <!-- =================================================
-                         EMPTY STATE
-                         ================================================= -->
-
-                    <section class="products-empty">
-
-
-                        <div class="products-empty-icon">
-
-                            <i
-                                class="bi bi-search"
-                                aria-hidden="true"
-                            ></i>
-
-                        </div>
-
-
-                        <h3>
-
-                            No Products Found
-
-                        </h3>
-
-
-                        <p>
-
-                            We couldn't find any products matching
-                            your current search or filters.
-
-                        </p>
-
-
+                    {% if category %}
+                        <a
+                            href="{{ url_for(
+                                'product.category_products',
+                                slug=category.slug
+                            ) }}"
+                            class="empty-btn"
+                        >
+                            <i class="bi bi-arrow-counterclockwise me-2"></i>
+                            View Category Products
+                        </a>
+                    {% else %}
                         <a
                             href="{{ url_for('product.products') }}"
                             class="empty-btn"
                         >
-
                             <i class="bi bi-arrow-counterclockwise me-2"></i>
-
                             View All Products
-
                         </a>
+                    {% endif %}
 
+                </section>
 
-                    </section>
+            {% endif %}
 
-
-                {% endif %}
-
-
-            </main>
-
-        </div>
-
+        </main>
     </div>
+</div>
 
 </div>
 
-
 <script>
-
 document.addEventListener("DOMContentLoaded", function () {
 
-    /*
-     * Keep the wishlist button independent
-     * from the clickable product card.
-     */
-
+    /* Keep wishlist independent from product card */
     document.querySelectorAll(".wishlist-form").forEach(function (wrapper) {
-
         wrapper.addEventListener("click", function (event) {
-
             event.preventDefault();
-
             event.stopPropagation();
-
         });
-
     });
 
-
     document.querySelectorAll(".wishlist-form form").forEach(function (form) {
-
         form.addEventListener("click", function (event) {
-
             event.preventDefault();
-
             event.stopPropagation();
-
         });
-
     });
 
-
-    /*
-     * Wishlist submission
-     */
-
+    /* Wishlist loading state */
     document.querySelectorAll(".wishlist-form form").forEach(function (form) {
-
         form.addEventListener("submit", function () {
 
             const button = form.querySelector(".product-wishlist");
 
-            if (!button) {
+            if (!button || button.classList.contains("is-loading")) {
                 return;
             }
-
-
-            if (button.classList.contains("is-loading")) {
-                return;
-            }
-
 
             button.classList.add("is-loading");
-
             button.disabled = true;
-
         });
-
     });
 
-
-    /*
-     * Prevent Enter from accidentally
-     * triggering the product card link.
-     */
-
+    /* Prevent Enter from triggering product card */
     document.querySelectorAll(".product-wishlist").forEach(function (button) {
-
         button.addEventListener("keydown", function (event) {
-
             if (event.key === "Enter") {
-
                 event.stopPropagation();
+            }
+        });
+    });
 
+    /* Close mobile filters after selecting a category */
+    document.querySelectorAll(".category-link").forEach(function (link) {
+
+        link.addEventListener("click", function () {
+
+            const panel = document.getElementById(
+                "mobileProductFilters"
+            );
+
+            if (
+                !panel ||
+                !panel.classList.contains("show")
+            ) {
+                return;
             }
 
+            if (
+                window.bootstrap &&
+                window.bootstrap.Collapse
+            ) {
+                const collapse =
+                    window.bootstrap.Collapse.getOrCreateInstance(panel);
+
+                collapse.hide();
+            }
         });
 
     });
 
 });
-
 </script>
 
 {% endblock %}

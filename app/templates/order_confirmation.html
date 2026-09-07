@@ -1,0 +1,1616 @@
+{% extends "base.html" %}
+
+{% block title %}Order Confirmation - Bomet Machineries Ltd.{% endblock %}
+
+{% block content %}
+
+<style>
+/* ============================================================
+   BOMET MACHINERIES LTD.
+   ORDER CONFIRMATION
+   Mobile-first professional ecommerce design
+   ============================================================ */
+
+:root {
+    --bm-green: #15803d;
+    --bm-green-dark: #166534;
+    --bm-green-soft: #f0fdf4;
+
+    --bm-yellow: #f59e0b;
+    --bm-yellow-dark: #d97706;
+    --bm-yellow-soft: #fffbeb;
+
+    --bm-red: #dc2626;
+    --bm-red-soft: #fef2f2;
+
+    --bm-blue: #2563eb;
+    --bm-blue-soft: #eff6ff;
+
+    --bm-text: #111827;
+    --bm-text-soft: #374151;
+    --bm-muted: #6b7280;
+    --bm-muted-light: #9ca3af;
+
+    --bm-border: #e5e7eb;
+    --bm-border-light: #f1f5f9;
+
+    --bm-background: #f8fafc;
+    --bm-white: #ffffff;
+
+    --bm-radius: 14px;
+    --bm-radius-sm: 10px;
+
+    --bm-shadow: 0 4px 18px rgba(15, 23, 42, 0.06);
+}
+
+/* ============================================================
+   PAGE
+   ============================================================ */
+
+.order-confirmation-page {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* ============================================================
+   SUCCESS HEADER
+   ============================================================ */
+
+.confirmation-success {
+    margin-bottom: 18px;
+    padding: 28px 18px;
+
+    background: var(--bm-white);
+
+    border: 1px solid var(--bm-border);
+    border-radius: var(--bm-radius);
+
+    box-shadow: var(--bm-shadow);
+
+    text-align: center;
+}
+
+.success-icon {
+    width: 68px;
+    height: 68px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 15px;
+
+    background: var(--bm-green-soft);
+
+    border: 1px solid #bbf7d0;
+    border-radius: 50%;
+
+    color: var(--bm-green);
+
+    font-size: 32px;
+}
+
+.confirmation-success h1 {
+    margin: 0 0 8px;
+
+    color: var(--bm-text);
+
+    font-size: 1.55rem;
+    font-weight: 850;
+
+    line-height: 1.2;
+}
+
+.confirmation-success p {
+    max-width: 620px;
+
+    margin: 0 auto;
+
+    color: var(--bm-muted);
+
+    font-size: 12px;
+    line-height: 1.65;
+}
+
+/* ============================================================
+   ORDER NUMBER
+   ============================================================ */
+
+.order-number-card {
+    margin-top: 17px;
+    padding: 14px;
+
+    background: var(--bm-green-soft);
+
+    border: 1px solid #dcfce7;
+    border-radius: var(--bm-radius-sm);
+}
+
+.order-number-label {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: var(--bm-muted);
+
+    font-size: 9px;
+    font-weight: 800;
+
+    text-transform: uppercase;
+    letter-spacing: .07em;
+}
+
+.order-number {
+    color: var(--bm-green-dark);
+
+    font-size: 1.15rem;
+    font-weight: 900;
+
+    word-break: break-word;
+}
+
+/* ============================================================
+   MAIN GRID
+   ============================================================ */
+
+.confirmation-grid {
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    gap: 14px;
+}
+
+/* ============================================================
+   CARD
+   ============================================================ */
+
+.confirmation-card {
+    background: var(--bm-white);
+
+    border: 1px solid var(--bm-border);
+    border-radius: var(--bm-radius);
+
+    box-shadow: var(--bm-shadow);
+
+    overflow: hidden;
+}
+
+.confirmation-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    padding: 15px;
+
+    border-bottom: 1px solid var(--bm-border-light);
+}
+
+.confirmation-card-title {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    margin: 0;
+
+    color: var(--bm-text);
+
+    font-size: .95rem;
+    font-weight: 850;
+}
+
+.confirmation-card-title i {
+    color: var(--bm-green);
+}
+
+.confirmation-card-body {
+    padding: 15px;
+}
+
+/* ============================================================
+   ORDER STATUS
+   ============================================================ */
+
+.order-status {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 5px 9px;
+
+    background: var(--bm-yellow-soft);
+
+    border: 1px solid #fde68a;
+    border-radius: 999px;
+
+    color: #92400e;
+
+    font-size: 9px;
+    font-weight: 800;
+}
+
+.order-status i {
+    font-size: 10px;
+}
+
+/* ============================================================
+   CUSTOMER / DELIVERY DETAILS
+   ============================================================ */
+
+.detail-list {
+    display: grid;
+
+    gap: 12px;
+}
+
+.detail-item {
+    display: grid;
+
+    grid-template-columns: 30px minmax(0, 1fr);
+
+    gap: 10px;
+
+    align-items: start;
+}
+
+.detail-icon {
+    width: 30px;
+    height: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #f8fafc;
+
+    border: 1px solid var(--bm-border-light);
+    border-radius: 8px;
+
+    color: var(--bm-green);
+
+    font-size: 13px;
+}
+
+.detail-label {
+    display: block;
+
+    margin-bottom: 2px;
+
+    color: var(--bm-muted-light);
+
+    font-size: 8px;
+    font-weight: 800;
+
+    text-transform: uppercase;
+    letter-spacing: .05em;
+}
+
+.detail-value {
+    display: block;
+
+    color: var(--bm-text-soft);
+
+    font-size: 11px;
+    font-weight: 650;
+
+    line-height: 1.55;
+
+    overflow-wrap: anywhere;
+}
+
+/* ============================================================
+   ORDER ITEMS
+   ============================================================ */
+
+.order-items {
+    display: grid;
+}
+
+.order-item {
+    display: grid;
+
+    grid-template-columns: 64px minmax(0, 1fr);
+
+    gap: 11px;
+
+    padding: 13px 0;
+
+    border-bottom: 1px solid var(--bm-border-light);
+}
+
+.order-item:first-child {
+    padding-top: 0;
+}
+
+.order-item:last-child {
+    padding-bottom: 0;
+
+    border-bottom: 0;
+}
+
+.order-item-image {
+    width: 64px;
+    height: 64px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    background: #f8fafc;
+
+    border: 1px solid var(--bm-border);
+    border-radius: 9px;
+}
+
+.order-item-image img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+}
+
+.order-item-image-placeholder {
+    color: var(--bm-muted-light);
+
+    font-size: 22px;
+}
+
+.order-item-name {
+    margin: 0 0 4px;
+
+    color: var(--bm-text);
+
+    font-size: 11px;
+    font-weight: 800;
+
+    line-height: 1.4;
+}
+
+.order-item-meta {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 5px 10px;
+
+    color: var(--bm-muted);
+
+    font-size: 9px;
+}
+
+.order-item-price {
+    margin-top: 7px;
+
+    color: var(--bm-green-dark);
+
+    font-size: 11px;
+    font-weight: 850;
+}
+
+/* ============================================================
+   TOTALS
+   ============================================================ */
+
+.order-totals {
+    margin-top: 16px;
+    padding-top: 14px;
+
+    border-top: 1px solid var(--bm-border);
+}
+
+.total-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 9px;
+
+    color: var(--bm-muted);
+
+    font-size: 10px;
+}
+
+.total-row strong {
+    color: var(--bm-text-soft);
+
+    font-weight: 750;
+}
+
+.total-row.grand-total {
+    margin-top: 12px;
+    margin-bottom: 0;
+    padding-top: 13px;
+
+    border-top: 1px dashed var(--bm-border);
+}
+
+.total-row.grand-total span {
+    color: var(--bm-text);
+
+    font-size: 12px;
+    font-weight: 850;
+}
+
+.total-row.grand-total strong {
+    color: var(--bm-green-dark);
+
+    font-size: 1.2rem;
+    font-weight: 900;
+}
+
+/* ============================================================
+   PAYMENT
+   ============================================================ */
+
+.payment-box {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 10px;
+
+    padding: 12px;
+
+    background: var(--bm-blue-soft);
+
+    border: 1px solid #dbeafe;
+    border-radius: var(--bm-radius-sm);
+}
+
+.payment-box-icon {
+    flex-shrink: 0;
+
+    width: 32px;
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: white;
+
+    border-radius: 8px;
+
+    color: var(--bm-blue);
+}
+
+.payment-box-title {
+    margin: 0 0 3px;
+
+    color: #1e3a8a;
+
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.payment-box-text {
+    margin: 0;
+
+    color: #475569;
+
+    font-size: 9px;
+    line-height: 1.55;
+}
+
+/* ============================================================
+   NEXT STEPS
+   ============================================================ */
+
+.next-steps {
+    display: grid;
+
+    gap: 8px;
+}
+
+.next-step {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 9px;
+
+    padding: 10px;
+
+    background: #fafafa;
+
+    border: 1px solid var(--bm-border-light);
+    border-radius: var(--bm-radius-sm);
+}
+
+.next-step-number {
+    width: 24px;
+    height: 24px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: var(--bm-green);
+
+    border-radius: 50%;
+
+    color: white;
+
+    font-size: 9px;
+    font-weight: 850;
+}
+
+.next-step-content strong {
+    display: block;
+
+    margin-bottom: 2px;
+
+    color: var(--bm-text-soft);
+
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.next-step-content span {
+    display: block;
+
+    color: var(--bm-muted);
+
+    font-size: 9px;
+    line-height: 1.45;
+}
+
+/* ============================================================
+   ACTIONS
+   ============================================================ */
+
+.confirmation-actions {
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    gap: 8px;
+
+    margin-top: 16px;
+}
+
+.confirmation-action {
+    min-height: 46px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 6px;
+
+    border-radius: var(--bm-radius-sm);
+
+    font-size: 11px;
+    font-weight: 800;
+
+    text-decoration: none;
+
+    transition:
+        transform .15s ease,
+        box-shadow .15s ease;
+}
+
+.confirmation-action:hover {
+    transform: translateY(-1px);
+}
+
+.confirmation-action-primary {
+    background: var(--bm-green);
+
+    border: 1px solid var(--bm-green);
+
+    color: white;
+
+    box-shadow: 0 4px 12px rgba(21, 128, 61, .14);
+}
+
+.confirmation-action-primary:hover {
+    background: var(--bm-green-dark);
+
+    color: white;
+
+    box-shadow: 0 7px 18px rgba(21, 128, 61, .18);
+}
+
+.confirmation-action-secondary {
+    background: white;
+
+    border: 1px solid var(--bm-border);
+
+    color: var(--bm-text-soft);
+}
+
+.confirmation-action-secondary:hover {
+    background: #f8fafc;
+
+    color: var(--bm-green-dark);
+}
+
+/* ============================================================
+   SUPPORT
+   ============================================================ */
+
+.support-note {
+    margin-top: 14px;
+    padding: 13px;
+
+    background: #fafafa;
+
+    border: 1px solid var(--bm-border-light);
+    border-radius: var(--bm-radius-sm);
+
+    text-align: center;
+}
+
+.support-note strong {
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: var(--bm-text-soft);
+
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.support-note span {
+    display: block;
+
+    color: var(--bm-muted);
+
+    font-size: 9px;
+    line-height: 1.5;
+}
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (min-width: 576px) {
+
+    .confirmation-success {
+        padding: 34px 25px;
+    }
+
+    .confirmation-success h1 {
+        font-size: 1.8rem;
+    }
+
+    .confirmation-success p {
+        font-size: 13px;
+    }
+
+    .confirmation-actions {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* ============================================================
+   DESKTOP
+   ============================================================ */
+
+@media (min-width: 768px) {
+
+    .order-confirmation-page {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    .confirmation-success {
+        margin-bottom: 22px;
+        padding: 42px 30px;
+
+        border-radius: 18px;
+    }
+
+    .success-icon {
+        width: 76px;
+        height: 76px;
+
+        font-size: 36px;
+    }
+
+    .confirmation-success h1 {
+        font-size: 2rem;
+    }
+
+    .confirmation-success p {
+        font-size: 13px;
+    }
+
+    .confirmation-grid {
+        grid-template-columns: minmax(0, 1.25fr) minmax(300px, .75fr);
+
+        align-items: start;
+
+        gap: 18px;
+    }
+
+    .confirmation-card-header {
+        padding: 17px 19px;
+    }
+
+    .confirmation-card-body {
+        padding: 19px;
+    }
+
+    .order-item {
+        grid-template-columns: 76px minmax(0, 1fr);
+    }
+
+    .order-item-image {
+        width: 76px;
+        height: 76px;
+    }
+
+    .order-item-name {
+        font-size: 12px;
+    }
+
+    .order-item-price {
+        font-size: 12px;
+    }
+}
+
+/* ============================================================
+   LARGE DESKTOP
+   ============================================================ */
+
+@media (min-width: 1200px) {
+
+    .order-confirmation-page {
+        max-width: 1180px;
+    }
+
+    .confirmation-grid {
+        grid-template-columns: minmax(0, 1.35fr) minmax(340px, .65fr);
+    }
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        transition: none !important;
+    }
+}
+</style>
+
+<div class="container-fluid py-3 py-md-4 py-lg-5">
+
+<main class="order-confirmation-page">
+
+    <!-- ====================================================
+         SUCCESS HEADER
+    ===================================================== -->
+
+    <section class="confirmation-success">
+
+        <div class="success-icon" aria-hidden="true">
+            <i class="bi bi-check-lg"></i>
+        </div>
+
+        <h1>
+            Order Confirmed
+        </h1>
+
+        <p>
+            Thank you for choosing
+            <strong>Bomet Machineries Ltd.</strong>.
+            Your order has been received successfully.
+            We will process your order and confirm the next steps.
+        </p>
+
+
+        <!-- ORDER NUMBER -->
+
+        {% if order is defined and order %}
+
+            <div class="order-number-card">
+
+                <span class="order-number-label">
+                    Order Number
+                </span>
+
+                <span class="order-number">
+                    #{{ order.id }}
+                </span>
+
+            </div>
+
+        {% elif order_id is defined %}
+
+            <div class="order-number-card">
+
+                <span class="order-number-label">
+                    Order Number
+                </span>
+
+                <span class="order-number">
+                    #{{ order_id }}
+                </span>
+
+            </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- ====================================================
+         MAIN CONTENT
+    ===================================================== -->
+
+    <div class="confirmation-grid">
+
+
+        <!-- ==================================================
+             LEFT COLUMN
+        =================================================== -->
+
+        <div>
+
+
+            <!-- =================================================
+                 ORDER ITEMS
+            ================================================== -->
+
+            <section class="confirmation-card">
+
+                <div class="confirmation-card-header">
+
+                    <h2 class="confirmation-card-title">
+
+                        <i class="bi bi-box-seam"></i>
+
+                        Order Items
+
+                    </h2>
+
+
+                    {% if order is defined and order.status %}
+
+                        <span class="order-status">
+
+                            <i class="bi bi-clock-history"></i>
+
+                            {{ order.status|replace("_", " ")|title }}
+
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="confirmation-card-body">
+
+                    <div class="order-items">
+
+
+                        {% if order is defined and order.items %}
+
+                            {% for item in order.items %}
+
+                                <article class="order-item">
+
+                                    <!-- IMAGE -->
+
+                                    <div class="order-item-image">
+
+                                        {% if item.product and item.product.images %}
+
+                                            {% set item_image =
+                                                item.product.images
+                                                | selectattr(
+                                                    "is_primary",
+                                                    "equalto",
+                                                    true
+                                                )
+                                                | first
+                                            %}
+
+                                            <img
+                                                src="{{
+                                                    item_image.image_url
+                                                    if item_image
+                                                    else item.product.images[0].image_url
+                                                }}"
+
+                                                alt="{{
+                                                    item.product.name
+                                                    if item.product
+                                                    else 'Product'
+                                                }}"
+
+                                                loading="lazy"
+
+                                                decoding="async"
+                                            >
+
+                                        {% else %}
+
+                                            <div
+                                                class="order-item-image-placeholder"
+                                                aria-hidden="true"
+                                            >
+
+                                                <i class="bi bi-image"></i>
+
+                                            </div>
+
+                                        {% endif %}
+
+                                    </div>
+
+
+                                    <!-- INFORMATION -->
+
+                                    <div>
+
+                                        <h3 class="order-item-name">
+
+                                            {% if item.product %}
+
+                                                {{ item.product.name }}
+
+                                            {% else %}
+
+                                                Product
+
+                                            {% endif %}
+
+                                        </h3>
+
+
+                                        <div class="order-item-meta">
+
+                                            <span>
+                                                Quantity:
+                                                {{ item.quantity }}
+                                            </span>
+
+
+                                            {% if item.product and item.product.sku %}
+
+                                                <span>
+                                                    SKU:
+                                                    {{ item.product.sku }}
+                                                </span>
+
+                                            {% endif %}
+
+                                        </div>
+
+
+                                        <div class="order-item-price">
+
+                                            KSh
+                                            {{ "{:,.2f}".format(
+                                                item.price * item.quantity
+                                            ) }}
+
+                                        </div>
+
+                                    </div>
+
+                                </article>
+
+                            {% endfor %}
+
+
+                        {% elif items is defined and items %}
+
+                            {% for item in items %}
+
+                                <article class="order-item">
+
+                                    <div class="order-item-image">
+
+                                        {% if item.product and item.product.images %}
+
+                                            {% set item_image =
+                                                item.product.images
+                                                | selectattr(
+                                                    "is_primary",
+                                                    "equalto",
+                                                    true
+                                                )
+                                                | first
+                                            %}
+
+                                            <img
+                                                src="{{
+                                                    item_image.image_url
+                                                    if item_image
+                                                    else item.product.images[0].image_url
+                                                }}"
+
+                                                alt="{{ item.product.name }}"
+
+                                                loading="lazy"
+
+                                                decoding="async"
+                                            >
+
+                                        {% else %}
+
+                                            <div
+                                                class="order-item-image-placeholder"
+                                            >
+                                                <i class="bi bi-image"></i>
+                                            </div>
+
+                                        {% endif %}
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <h3 class="order-item-name">
+
+                                            {{ item.product.name
+                                               if item.product
+                                               else "Product" }}
+
+                                        </h3>
+
+
+                                        <div class="order-item-meta">
+
+                                            <span>
+                                                Quantity:
+                                                {{ item.quantity }}
+                                            </span>
+
+
+                                            {% if item.product and item.product.sku %}
+
+                                                <span>
+                                                    SKU:
+                                                    {{ item.product.sku }}
+                                                </span>
+
+                                            {% endif %}
+
+                                        </div>
+
+
+                                        <div class="order-item-price">
+
+                                            KSh
+                                            {{ "{:,.2f}".format(
+                                                item.price * item.quantity
+                                            ) }}
+
+                                        </div>
+
+                                    </div>
+
+                                </article>
+
+                            {% endfor %}
+
+
+                        {% else %}
+
+                            <div
+                                class="text-center py-3 text-muted"
+                            >
+
+                                <i class="bi bi-box-seam fs-4 d-block mb-2"></i>
+
+                                <small>
+                                    Your order items will appear here.
+                                </small>
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- =================================================
+                         TOTALS
+                    ================================================== -->
+
+                    {% if order is defined and order %}
+
+                        <div class="order-totals">
+
+                            {% if order.subtotal is defined %}
+
+                                <div class="total-row">
+
+                                    <span>
+                                        Subtotal
+                                    </span>
+
+                                    <strong>
+                                        KSh
+                                        {{ "{:,.2f}".format(order.subtotal) }}
+                                    </strong>
+
+                                </div>
+
+                            {% endif %}
+
+
+                            {% if order.shipping_cost is defined %}
+
+                                <div class="total-row">
+
+                                    <span>
+                                        Delivery
+                                    </span>
+
+                                    <strong>
+
+                                        {% if order.shipping_cost > 0 %}
+
+                                            KSh
+                                            {{ "{:,.2f}".format(
+                                                order.shipping_cost
+                                            ) }}
+
+                                        {% else %}
+
+                                            To be confirmed
+
+                                        {% endif %}
+
+                                    </strong>
+
+                                </div>
+
+                            {% endif %}
+
+
+                            {% if order.total is defined %}
+
+                                <div class="total-row grand-total">
+
+                                    <span>
+                                        Order Total
+                                    </span>
+
+                                    <strong>
+                                        KSh
+                                        {{ "{:,.2f}".format(order.total) }}
+                                    </strong>
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 PAYMENT
+            ================================================== -->
+
+            <section class="confirmation-card mt-3">
+
+                <div class="confirmation-card-header">
+
+                    <h2 class="confirmation-card-title">
+
+                        <i class="bi bi-credit-card"></i>
+
+                        Payment & Processing
+
+                    </h2>
+
+                </div>
+
+
+                <div class="confirmation-card-body">
+
+                    <div class="payment-box">
+
+                        <div class="payment-box-icon">
+
+                            <i class="bi bi-shield-check"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <h3 class="payment-box-title">
+                                Order received securely
+                            </h3>
+
+                            <p class="payment-box-text">
+                                Your order has been recorded.
+                                Payment confirmation and delivery
+                                arrangements will be handled according
+                                to the selected checkout method.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+
+        <!-- ==================================================
+             RIGHT COLUMN
+        =================================================== -->
+
+        <aside>
+
+
+            <!-- =================================================
+                 CUSTOMER / DELIVERY
+            ================================================== -->
+
+            <section class="confirmation-card">
+
+                <div class="confirmation-card-header">
+
+                    <h2 class="confirmation-card-title">
+
+                        <i class="bi bi-truck"></i>
+
+                        Delivery Details
+
+                    </h2>
+
+                </div>
+
+
+                <div class="confirmation-card-body">
+
+                    <div class="detail-list">
+
+
+                        {% if order is defined and order.customer_name is defined %}
+
+                            <div class="detail-item">
+
+                                <div class="detail-icon">
+
+                                    <i class="bi bi-person"></i>
+
+                                </div>
+
+                                <div>
+
+                                    <span class="detail-label">
+                                        Customer
+                                    </span>
+
+                                    <span class="detail-value">
+                                        {{ order.customer_name }}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        {% elif order is defined and order.user %}
+
+                            <div class="detail-item">
+
+                                <div class="detail-icon">
+
+                                    <i class="bi bi-person"></i>
+
+                                </div>
+
+                                <div>
+
+                                    <span class="detail-label">
+                                        Customer
+                                    </span>
+
+                                    <span class="detail-value">
+
+                                        {{ order.user.name
+                                           if order.user.name is defined
+                                           else order.user.email }}
+
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        {% endif %}
+
+
+                        {% if order is defined and order.email is defined %}
+
+                            <div class="detail-item">
+
+                                <div class="detail-icon">
+
+                                    <i class="bi bi-envelope"></i>
+
+                                </div>
+
+                                <div>
+
+                                    <span class="detail-label">
+                                        Email
+                                    </span>
+
+                                    <span class="detail-value">
+                                        {{ order.email }}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        {% endif %}
+
+
+                        {% if order is defined and order.phone is defined %}
+
+                            <div class="detail-item">
+
+                                <div class="detail-icon">
+
+                                    <i class="bi bi-telephone"></i>
+
+                                </div>
+
+                                <div>
+
+                                    <span class="detail-label">
+                                        Phone
+                                    </span>
+
+                                    <span class="detail-value">
+                                        {{ order.phone }}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        {% endif %}
+
+
+                        {% if order is defined and order.shipping_address is defined %}
+
+                            <div class="detail-item">
+
+                                <div class="detail-icon">
+
+                                    <i class="bi bi-geo-alt"></i>
+
+                                </div>
+
+                                <div>
+
+                                    <span class="detail-label">
+                                        Delivery Address
+                                    </span>
+
+                                    <span class="detail-value">
+                                        {{ order.shipping_address }}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        {% endif %}
+
+
+                        <div class="detail-item">
+
+                            <div class="detail-icon">
+
+                                <i class="bi bi-map"></i>
+
+                            </div>
+
+                            <div>
+
+                                <span class="detail-label">
+                                    Delivery
+                                </span>
+
+                                <span class="detail-value">
+                                    Nationwide delivery available.
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 NEXT STEPS
+            ================================================== -->
+
+            <section class="confirmation-card mt-3">
+
+                <div class="confirmation-card-header">
+
+                    <h2 class="confirmation-card-title">
+
+                        <i class="bi bi-list-check"></i>
+
+                        What Happens Next?
+
+                    </h2>
+
+                </div>
+
+
+                <div class="confirmation-card-body">
+
+                    <div class="next-steps">
+
+                        <div class="next-step">
+
+                            <div class="next-step-number">
+                                1
+                            </div>
+
+                            <div class="next-step-content">
+
+                                <strong>
+                                    Order review
+                                </strong>
+
+                                <span>
+                                    Our team reviews your order and
+                                    confirms product availability.
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="next-step">
+
+                            <div class="next-step-number">
+                                2
+                            </div>
+
+                            <div class="next-step-content">
+
+                                <strong>
+                                    Order confirmation
+                                </strong>
+
+                                <span>
+                                    We confirm payment and delivery
+                                    arrangements with you.
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="next-step">
+
+                            <div class="next-step-number">
+                                3
+                            </div>
+
+                            <div class="next-step-content">
+
+                                <strong>
+                                    Dispatch & delivery
+                                </strong>
+
+                                <span>
+                                    Your machinery or equipment is
+                                    prepared and arranged for delivery.
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 ACTIONS
+            ================================================== -->
+
+            <div class="confirmation-actions">
+
+                <a
+                    href="{{ url_for('home.home') }}"
+                    class="confirmation-action confirmation-action-primary"
+                >
+
+                    <i class="bi bi-house"></i>
+
+                    Continue Shopping
+
+                </a>
+
+
+                {% if current_user.is_authenticated %}
+
+                    <a
+                        href="{{ url_for('orders.orders') }}"
+                        class="confirmation-action confirmation-action-secondary"
+                    >
+
+                        <i class="bi bi-receipt"></i>
+
+                        View My Orders
+
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- =================================================
+                 SUPPORT
+            ================================================== -->
+
+            <div class="support-note">
+
+                <strong>
+                    Need help with your order?
+                </strong>
+
+                <span>
+                    Contact Bomet Machineries Ltd. if you need
+                    assistance with payment, delivery or your order.
+                </span>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+</main>
+
+</div>
+
+{% endblock %}
