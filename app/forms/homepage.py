@@ -1,21 +1,41 @@
 from flask_wtf import FlaskForm
-from flask_wtf.file import FileAllowed, FileField, FileSize, FileRequired
+from flask_wtf.file import FileAllowed, FileField
+
 from wtforms import (
-    StringField,
-    TextAreaField,
     BooleanField,
     IntegerField,
+    StringField,
     SubmitField,
+    TextAreaField,
 )
-from wtforms.validators import DataRequired, Length, Optional, URL, NumberRange
+
+from wtforms.validators import (
+    DataRequired,
+    Length,
+    NumberRange,
+    Optional,
+)
 
 
 class HomepageContentForm(FlaskForm):
+    """
+    Form for managing the existing HomepageContent records.
+
+    This remains separate from HomepageSectionForm so the
+    existing homepage content system continues to work.
+    """
+
     key = StringField(
         "Content Key",
         validators=[
-            DataRequired(),
-            Length(max=100),
+            DataRequired(
+                message="A content key is required."
+            ),
+            Length(
+                min=2,
+                max=100,
+                message="Content key must be between 2 and 100 characters.",
+            ),
         ],
         render_kw={
             "placeholder": "e.g. hero_1, section_milling",
@@ -26,7 +46,10 @@ class HomepageContentForm(FlaskForm):
         "Headline",
         validators=[
             Optional(),
-            Length(max=255),
+            Length(
+                max=255,
+                message="Headline cannot exceed 255 characters.",
+            ),
         ],
         render_kw={
             "placeholder": "Enter headline",
@@ -37,6 +60,10 @@ class HomepageContentForm(FlaskForm):
         "Subheadline / Description",
         validators=[
             Optional(),
+            Length(
+                max=5000,
+                message="Description cannot exceed 5,000 characters.",
+            ),
         ],
         render_kw={
             "rows": 5,
@@ -48,7 +75,10 @@ class HomepageContentForm(FlaskForm):
         "Button Text",
         validators=[
             Optional(),
-            Length(max=100),
+            Length(
+                max=100,
+                message="Button text cannot exceed 100 characters.",
+            ),
         ],
         render_kw={
             "placeholder": "e.g. Shop Now",
@@ -59,7 +89,10 @@ class HomepageContentForm(FlaskForm):
         "Button URL",
         validators=[
             Optional(),
-            Length(max=500),
+            Length(
+                max=500,
+                message="Button URL cannot exceed 500 characters.",
+            ),
         ],
         render_kw={
             "placeholder": "/products",
@@ -74,10 +107,6 @@ class HomepageContentForm(FlaskForm):
                 ["jpg", "jpeg", "png", "webp"],
                 "Only JPG, JPEG, PNG and WEBP images are allowed.",
             ),
-            FileSize(
-                max_size=5 * 1024 * 1024,
-                message="Image must be smaller than 5 MB.",
-            ),
         ],
     )
 
@@ -85,7 +114,10 @@ class HomepageContentForm(FlaskForm):
         "Image Alt Text",
         validators=[
             Optional(),
-            Length(max=255),
+            Length(
+                max=255,
+                message="Image alt text cannot exceed 255 characters.",
+            ),
         ],
         render_kw={
             "placeholder": "Describe the image for accessibility",
@@ -96,7 +128,10 @@ class HomepageContentForm(FlaskForm):
         "CSS Class",
         validators=[
             Optional(),
-            Length(max=255),
+            Length(
+                max=255,
+                message="CSS class cannot exceed 255 characters.",
+            ),
         ],
         render_kw={
             "placeholder": "Optional CSS class",
@@ -112,9 +147,19 @@ class HomepageContentForm(FlaskForm):
         "Display Order",
         validators=[
             Optional(),
-            NumberRange(min=0),
+            NumberRange(
+                min=0,
+                max=9999,
+                message="Display order must be between 0 and 9999.",
+            ),
         ],
         default=0,
+        render_kw={
+            "min": 0,
+            "max": 9999,
+        },
     )
 
-    submit = SubmitField("Save Content")
+    submit = SubmitField(
+        "Save Content"
+    )
