@@ -1,0 +1,274 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Homepage Settings | Bomet Machineries Ltd.{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid py-4">
+
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+
+        <div>
+            <h1 class="h3 fw-bold mb-1">
+                Homepage Settings
+            </h1>
+
+            <p class="text-muted mb-0">
+                Control your homepage SEO, announcement bar and global settings.
+            </p>
+        </div>
+
+        <a
+            href="{{ url_for('admin_homepage.index') }}"
+            class="btn btn-outline-secondary"
+        >
+            ← Back to Homepage CMS
+        </a>
+
+    </div>
+
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show">
+                    {{ message }}
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                    ></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+
+    <form
+        method="POST"
+        novalidate
+    >
+
+        {{ form.hidden_tag() }}
+
+
+        <!-- GENERAL -->
+
+        <div class="card border-0 shadow-sm mb-4">
+
+            <div class="card-header bg-white py-3">
+                <h2 class="h5 mb-0 fw-bold">
+                    General Settings
+                </h2>
+            </div>
+
+            <div class="card-body">
+
+                <div class="mb-4">
+
+                    {{ form.site_title.label(class="form-label fw-semibold") }}
+
+                    {{ form.site_title(
+                        class="form-control",
+                        value=form.site_title.data or ""
+                    ) }}
+
+                    {% for error in form.site_title.errors %}
+                        <div class="text-danger small mt-1">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                    <div class="form-text">
+                        Used as the homepage browser title and SEO title.
+                    </div>
+
+                </div>
+
+
+                <div class="form-check form-switch">
+
+                    {{ form.is_active(
+                        class="form-check-input",
+                        id="is_active"
+                    ) }}
+
+                    {{ form.is_active.label(
+                        class="form-check-label fw-semibold",
+                        for="is_active"
+                    ) }}
+
+                    <div class="form-text">
+                        Disable this if you want to temporarily take the homepage offline.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SEO -->
+
+        <div class="card border-0 shadow-sm mb-4">
+
+            <div class="card-header bg-white py-3">
+                <h2 class="h5 mb-0 fw-bold">
+                    SEO Settings
+                </h2>
+            </div>
+
+            <div class="card-body">
+
+                <div class="mb-4">
+
+                    {{ form.meta_description.label(
+                        class="form-label fw-semibold"
+                    ) }}
+
+                    {{ form.meta_description(
+                        class="form-control",
+                        rows="4"
+                    ) }}
+
+                    {% for error in form.meta_description.errors %}
+                        <div class="text-danger small mt-1">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                    <div class="form-text">
+                        Recommended: concise description of Bomet Machineries Ltd.
+                    </div>
+
+                </div>
+
+
+                <div class="mb-4">
+
+                    {{ form.meta_keywords.label(
+                        class="form-label fw-semibold"
+                    ) }}
+
+                    {{ form.meta_keywords(
+                        class="form-control",
+                        rows="3"
+                    ) }}
+
+                    {% for error in form.meta_keywords.errors %}
+                        <div class="text-danger small mt-1">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+
+                <div>
+
+                    {{ form.og_image_url.label(
+                        class="form-label fw-semibold"
+                    ) }}
+
+                    {{ form.og_image_url(
+                        class="form-control"
+                    ) }}
+
+                    {% for error in form.og_image_url.errors %}
+                        <div class="text-danger small mt-1">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+
+                    <div class="form-text">
+                        Image used when the homepage is shared on social media.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ANNOUNCEMENT -->
+
+        <div class="card border-0 shadow-sm mb-4">
+
+            <div class="card-header bg-white py-3">
+                <h2 class="h5 mb-0 fw-bold">
+                    Announcement Bar
+                </h2>
+            </div>
+
+            <div class="card-body">
+
+                <div class="mb-4">
+
+                    {{ form.announcement_text.label(
+                        class="form-label fw-semibold"
+                    ) }}
+
+                    {{ form.announcement_text(
+                        class="form-control"
+                    ) }}
+
+                </div>
+
+
+                <div class="mb-4">
+
+                    {{ form.announcement_url.label(
+                        class="form-label fw-semibold"
+                    ) }}
+
+                    {{ form.announcement_url(
+                        class="form-control"
+                    ) }}
+
+                </div>
+
+
+                <div class="form-check form-switch">
+
+                    {{ form.announcement_active(
+                        class="form-check-input",
+                        id="announcement_active"
+                    ) }}
+
+                    {{ form.announcement_active.label(
+                        class="form-check-label fw-semibold",
+                        for="announcement_active"
+                    ) }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SAVE -->
+
+        <div class="d-flex justify-content-end gap-2">
+
+            <a
+                href="{{ url_for('admin_homepage.index') }}"
+                class="btn btn-light border"
+            >
+                Cancel
+            </a>
+
+            {{ form.submit(
+                class="btn btn-primary px-4"
+            ) }}
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

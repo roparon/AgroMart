@@ -1,11 +1,13 @@
 from collections import defaultdict
 
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request
 from sqlalchemy.orm import joinedload, selectinload
 
 from app.models.category import Category
 from app.models.product import Product
 from app.models.homepage_content import HomepageContent
+from app.models.homepage_section import HomepageSection
+from app.models.homepage_setting import HomepageSetting
 
 
 home_bp = Blueprint("home", __name__)
@@ -14,46 +16,100 @@ home_bp = Blueprint("home", __name__)
 @home_bp.route("/")
 def home():
     """
-    Bomet Machineries Ltd. homepage.
+    Public homepage for Bomet Machineries Ltd.
 
     Loads:
-    - Active CMS homepage content
-    - Active product categories
-    - Up to 6 active/featured products per category
+    - Homepage settings
+    - Published homepage sections
+    - Published legacy homepage content
+    - Active categories
+    - Featured/active products grouped by category
 
-    The queries use eager loading to reduce database round-trips
-    when accessing product categories and product images.
+    Administrators may use ?preview=1 to preview unpublished
+    homepage sections/content.
     """
 
     # ==========================================================
-    # 1. HOMEPAGE CMS CONTENT
+    # 1. PREVIEW MODE
     # ==========================================================
 
-    homepage_items = (
-        HomepageContent.query
+    preview = (
+        request.args.get("preview", "").lower()
+        in {"1", "true", "yes", "on"}
+    )
+
+    # Only administrators can use preview mode.
+    if preview:
+        from flask_login import current_user
+
+        if (
+            not current_user.is_authenticated
+            or not current_user.is_admin
+        ):
+            preview = False
+
+    # ==========================================================
+    # 2. HOMEPAGE SETTINGS
+    # ==========================================================
+
+    settings = (
+        HomepageSetting.query
         .filter(
-            HomepageContent.is_active.is_(True)
+            HomepageSetting.is_active.is_(True)
         )
+        .first()
+    )
+
+    # If no active settings exist, create a safe fallback object
+    # for the template without writing anything to the database.
+    if settings is None:
+        settings = HomepageSetting(
+            site_title="Bomet Machineries Ltd.",
+            is_active=True,
+            announcement_active=False,
+        )
+
+    # ==========================================================
+    # 3. HOMEPAGE SECTIONS
+    # ==========================================================
+
+    sections_query = (
+        HomepageSection.query
+        .order_by(
+            HomepageSection.sort_order.asc(),
+            HomepageSection.id.asc(),
+        )
+    )
+
+    if not preview:
+        sections_query = sections_query.filter(
+            HomepageSection.is_active.is_(True)
+        )
+
+    sections = sections_query.all()
+
+    # ==========================================================
+    # 4. LEGACY HOMEPAGE CONTENT
+    # ==========================================================
+    #
+    # Keep the old HomepageContent system available so existing
+    # homepage content does not suddenly disappear.
+    #
+
+    content_query = (
+        HomepageContent.query
         .order_by(
             HomepageContent.sort_order.asc(),
             HomepageContent.id.asc(),
         )
-        .all()
     )
 
-    # Convert:
-    #
-    # [
-    #     HomepageContent(key="hero_1"),
-    #     HomepageContent(key="hero_2"),
-    # ]
-    #
-    # into:
-    #
-    # {
-    #     "hero_1": HomepageContent(...),
-    #     "hero_2": HomepageContent(...),
-    # }
+    if not preview:
+        content_query = content_query.filter(
+            HomepageContent.is_active.is_(True)
+        )
+
+    homepage_items = content_query.all()
 
     cms = {
         item.key: item
@@ -61,7 +117,7 @@ def home():
     }
 
     # ==========================================================
-    # 2. ACTIVE CATEGORIES
+    # 5. ACTIVE CATEGORIES
     # ==========================================================
 
     categories = (
@@ -76,22 +132,17 @@ def home():
     )
 
     # ==========================================================
-    # 3. HOMEPAGE PRODUCT POOL
+    # 6. HOMEPAGE PRODUCT POOL
     # ==========================================================
     #
-    # Instead of running a separate query for every category,
-    # fetch one controlled pool of products.
+    # Fetch a controlled pool instead of querying separately for
+    # every category.
     #
     # joinedload(Product.category)
-    #     -> loads the product's category together with the
-    #        product query.
+    #     Loads the product category efficiently.
     #
     # selectinload(Product.images)
-    #     -> loads product images efficiently in a second
-    #        controlled query rather than one query per product.
-    #
-    # 60 products gives the homepage enough data to populate
-    # multiple categories without loading the entire catalog.
+    #     Loads product images in a separate efficient query.
     #
 
     homepage_products = (
@@ -112,7 +163,7 @@ def home():
     )
 
     # ==========================================================
-    # 4. GROUP PRODUCTS BY CATEGORY
+    # 7. GROUP PRODUCTS BY CATEGORY
     # ==========================================================
 
     featured_by_category = defaultdict(list)
@@ -126,22 +177,58 @@ def home():
             continue
 
         # Maximum 6 products per category.
-        if len(featured_by_category[category_id]) >= 6:
+        if len(
+            featured_by_category[category_id]
+        ) >= 6:
             continue
 
-        featured_by_category[category_id].append(product)
+        featured_by_category[
+            category_id
+        ].append(product)
 
-    # Convert defaultdict to normal dict before sending it
-    # to Jinja.
-    featured_by_category = dict(featured_by_category)
+    featured_by_category = dict(
+        featured_by_category
+    )
 
     # ==========================================================
-    # 5. RENDER HOMEPAGE
+    # 8. PRODUCTS BY CATEGORY NAME
+    # ==========================================================
+    #
+    # This is useful for CMS sections that refer to a category
+    # by slug/name through their JSON config.
+    #
+
+    featured_categories = {}
+
+    for category in categories:
+        featured_categories[
+            category.id
+        ] = featured_by_category.get(
+            category.id,
+            [],
+        )
+
+    # ==========================================================
+    # 9. RENDER HOMEPAGE
     # ==========================================================
 
     return render_template(
         "index.html",
+
+        # New CMS system
+        settings=settings,
+        sections=sections,
+
+        # Legacy CMS system
         cms=cms,
+        homepage_items=homepage_items,
+
+        # Catalog data
         categories=categories,
+        homepage_products=homepage_products,
         featured_by_category=featured_by_category,
+        featured_categories=featured_categories,
+
+        # Preview state
+        preview=preview,
     )

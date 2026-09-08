@@ -1,0 +1,959 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ page_title|default("Homepage Section") }} | Bomet Machineries Ltd.
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid py-4 py-lg-5">
+
+```
+<!-- =========================================================
+     HEADER
+========================================================== -->
+<div class="d-flex flex-column flex-lg-row
+            justify-content-between
+            align-items-lg-center
+            gap-3 mb-4">
+
+    <div>
+        <div class="d-flex align-items-center gap-2 mb-1">
+            <a href="{{ url_for('admin_homepage.homepage') }}"
+               class="btn btn-light border rounded-3"
+               title="Back to Homepage CMS">
+                <i class="bi bi-arrow-left"></i>
+            </a>
+
+            <i class="bi bi-layout-text-window-reverse
+                      text-success fs-3"></i>
+
+            <h1 class="fw-bold mb-0">
+                {{ page_title|default("Homepage Section") }}
+            </h1>
+        </div>
+
+        <p class="text-muted mb-0 ms-lg-5">
+            Create and configure a section displayed on the Bomet
+            Machineries Ltd. homepage.
+        </p>
+    </div>
+
+    <div class="d-flex flex-wrap gap-2">
+
+        <a href="{{ url_for('admin_homepage.homepage') }}"
+           class="btn btn-outline-secondary rounded-3 px-3">
+            <i class="bi bi-x-lg me-1"></i>
+            Cancel
+        </a>
+
+        <a href="{{ url_for('admin_homepage.preview') }}"
+           target="_blank"
+           class="btn btn-outline-success rounded-3 px-3">
+            <i class="bi bi-eye me-1"></i>
+            Preview
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     FLASH MESSAGES
+========================================================== -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+
+    {% if messages %}
+
+        {% for category, message in messages %}
+
+            <div class="alert
+                {% if category == 'success' %}
+                    alert-success
+                {% elif category == 'danger' %}
+                    alert-danger
+                {% elif category == 'warning' %}
+                    alert-warning
+                {% else %}
+                    alert-info
+                {% endif %}
+                alert-dismissible fade show rounded-4 border-0 shadow-sm"
+                role="alert">
+
+                <div class="d-flex align-items-start gap-2">
+
+                    <i class="bi
+                        {% if category == 'success' %}
+                            bi-check-circle-fill
+                        {% elif category == 'danger' %}
+                            bi-exclamation-triangle-fill
+                        {% elif category == 'warning' %}
+                            bi-exclamation-circle-fill
+                        {% else %}
+                            bi-info-circle-fill
+                        {% endif %}
+                        fs-5">
+                    </i>
+
+                    <div>
+                        {{ message }}
+                    </div>
+
+                </div>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Close">
+                </button>
+
+            </div>
+
+        {% endfor %}
+
+    {% endif %}
+
+{% endwith %}
+
+
+<!-- =========================================================
+     FORM
+========================================================== -->
+<form method="POST"
+      enctype="multipart/form-data"
+      novalidate>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+
+    {{ form.hidden_tag() }}
+
+
+
+    <div class="row g-4">
+
+        <!-- =================================================
+             MAIN CONTENT
+        ================================================== -->
+        <div class="col-12 col-xl-8">
+
+            <!-- BASIC INFORMATION -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+                <div class="card-header bg-white border-0
+                            rounded-top-4 pt-4 px-4">
+
+                    <div class="d-flex align-items-center gap-2">
+
+                        <div class="bg-success bg-opacity-10
+                                    rounded-3 p-2">
+
+                            <i class="bi bi-pencil-square
+                                      text-success fs-5"></i>
+
+                        </div>
+
+                        <div>
+                            <h2 class="h5 fw-bold mb-0">
+                                Section Information
+                            </h2>
+
+                            <p class="text-muted small mb-0">
+                                Define the identity and type of this section.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-body px-4 pb-4">
+
+                    <!-- KEY -->
+                    <div class="mb-4">
+
+                        {{ form.key.label(class="form-label fw-semibold") }}
+
+                        {{ form.key(
+                            class="form-control form-control-lg rounded-3
+                            " ~ (" is-invalid" if form.key.errors else "")
+                        ) }}
+
+                        {% if form.key.errors %}
+
+                            <div class="invalid-feedback">
+                                {% for error in form.key.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+
+                        {% else %}
+
+                            <div class="form-text">
+                                Use a unique identifier such as
+                                <code>hero_main</code>,
+                                <code>featured_products</code>, or
+                                <code>trust_section</code>.
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- SECTION TYPE -->
+                    <div class="mb-4">
+
+                        {{ form.section_type.label(
+                            class="form-label fw-semibold"
+                        ) }}
+
+                        {{ form.section_type(
+                            class="form-select form-select-lg rounded-3
+                            " ~ (" is-invalid" if form.section_type.errors else "")
+                        ) }}
+
+                        {% if form.section_type.errors %}
+
+                            <div class="invalid-feedback">
+                                {% for error in form.section_type.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+
+                        {% else %}
+
+                            <div class="form-text">
+                                Choose how this section should behave
+                                on the homepage.
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- TITLE -->
+                    <div class="mb-4">
+
+                        {{ form.title.label(
+                            class="form-label fw-semibold"
+                        ) }}
+
+                        {{ form.title(
+                            class="form-control form-control-lg rounded-3
+                            " ~ (" is-invalid" if form.title.errors else "")
+                        ) }}
+
+                        {% if form.title.errors %}
+
+                            <div class="invalid-feedback">
+                                {% for error in form.title.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- SUBTITLE -->
+                    <div class="mb-4">
+
+                        {{ form.subtitle.label(
+                            class="form-label fw-semibold"
+                        ) }}
+
+                        {{ form.subtitle(
+                            class="form-control rounded-3
+                            " ~ (" is-invalid" if form.subtitle.errors else ""),
+                            rows="3"
+                        ) }}
+
+                        {% if form.subtitle.errors %}
+
+                            <div class="invalid-feedback">
+                                {% for error in form.subtitle.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- CONTENT -->
+                    <div class="mb-0">
+
+                        {{ form.content.label(
+                            class="form-label fw-semibold"
+                        ) }}
+
+                        {{ form.content(
+                            class="form-control rounded-3
+                            " ~ (" is-invalid" if form.content.errors else ""),
+                            rows="8"
+                        ) }}
+
+                        {% if form.content.errors %}
+
+                            <div class="invalid-feedback">
+                                {% for error in form.content.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+
+                        {% else %}
+
+                            <div class="form-text">
+                                Add supporting text or section content.
+                                HTML should only be used where your
+                                section implementation explicitly supports it.
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 IMAGE
+            ================================================== -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+                <div class="card-header bg-white border-0
+                            rounded-top-4 pt-4 px-4">
+
+                    <div class="d-flex align-items-center gap-2">
+
+                        <div class="bg-primary bg-opacity-10
+                                    rounded-3 p-2">
+
+                            <i class="bi bi-image text-primary fs-5"></i>
+
+                        </div>
+
+                        <div>
+                            <h2 class="h5 fw-bold mb-0">
+                                Section Image
+                            </h2>
+
+                            <p class="text-muted small mb-0">
+                                Add a visual for this homepage section.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-body px-4 pb-4">
+
+                    {% if section is defined and section.image_url %}
+
+                        <div class="mb-4">
+
+                            <div class="small text-muted fw-semibold mb-2">
+                                Current Image
+                            </div>
+
+                            <div class="position-relative
+                                        rounded-4 overflow-hidden
+                                        border bg-light">
+
+                                <img src="{{ section.image_url }}"
+                                     alt="{{ section.image_alt or section.title or section.key }}"
+                                     class="w-100"
+                                     style="max-height:380px;object-fit:cover;"
+                                     loading="lazy">
+
+                            </div>
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <div class="mb-4">
+
+                        {{ form.image.label(
+                            class="form-label fw-semibold"
+                        ) }}
+
+                        {{ form.image(
+                            class="form-control rounded-3
+                            " ~ (" is-invalid" if form.image.errors else ""),
+                            accept=".jpg,.jpeg,.png,.webp"
+                        ) }}
+
+                        {% if form.image.errors %}
+
+                            <div class="invalid-feedback">
+                                {% for error in form.image.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+
+                        {% else %}
+
+                            <div class="form-text">
+                                Supported formats: JPG, JPEG, PNG and WEBP.
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- IMAGE PREVIEW -->
+                    <div id="imagePreviewWrapper"
+                         class="d-none mb-4">
+
+                        <div class="small text-muted fw-semibold mb-2">
+                            New Image Preview
+                        </div>
+
+                        <div class="rounded-4 overflow-hidden border bg-light">
+
+                            <img id="imagePreview"
+                                 src=""
+                                 alt="Selected image preview"
+                                 class="w-100"
+                                 style="max-height:380px;object-fit:cover;">
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ALT TEXT -->
+                    <div class="mb-0">
+
+                        {{ form.image_alt.label(
+                            class="form-label fw-semibold"
+                        ) }}
+
+                        {{ form.image_alt(
+                            class="form-control rounded-3
+                            " ~ (" is-invalid" if form.image_alt.errors else "")
+                        ) }}
+
+                        {% if form.image_alt.errors %}
+
+                            <div class="invalid-feedback">
+                                {% for error in form.image_alt.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+
+                        {% else %}
+
+                            <div class="form-text">
+                                Describe the image for accessibility and SEO.
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 CALL TO ACTION
+            ================================================== -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+                <div class="card-header bg-white border-0
+                            rounded-top-4 pt-4 px-4">
+
+                    <div class="d-flex align-items-center gap-2">
+
+                        <div class="bg-warning bg-opacity-10
+                                    rounded-3 p-2">
+
+                            <i class="bi bi-cursor-fill
+                                      text-warning fs-5"></i>
+
+                        </div>
+
+                        <div>
+                            <h2 class="h5 fw-bold mb-0">
+                                Call To Action
+                            </h2>
+
+                            <p class="text-muted small mb-0">
+                                Optional button displayed within this section.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-body px-4 pb-4">
+
+                    <div class="row g-3">
+
+                        <div class="col-12 col-md-6">
+
+                            {{ form.button_text.label(
+                                class="form-label fw-semibold"
+                            ) }}
+
+                            {{ form.button_text(
+                                class="form-control rounded-3
+                                " ~ (" is-invalid" if form.button_text.errors else "")
+                            ) }}
+
+                            {% if form.button_text.errors %}
+
+                                <div class="invalid-feedback">
+                                    {% for error in form.button_text.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="col-12 col-md-6">
+
+                            {{ form.button_url.label(
+                                class="form-label fw-semibold"
+                            ) }}
+
+                            {{ form.button_url(
+                                class="form-control rounded-3
+                                " ~ (" is-invalid" if form.button_url.errors else "")
+                            ) }}
+
+                            {% if form.button_url.errors %}
+
+                                <div class="invalid-feedback">
+                                    {% for error in form.button_url.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+
+                            {% else %}
+
+                                <div class="form-text">
+                                    Example:
+                                    <code>/products</code>
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 ADVANCED CONFIGURATION
+            ================================================== -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+                <div class="card-header bg-white border-0
+                            rounded-top-4 pt-4 px-4">
+
+                    <div class="d-flex align-items-center gap-2">
+
+                        <div class="bg-dark bg-opacity-10
+                                    rounded-3 p-2">
+
+                            <i class="bi bi-braces text-dark fs-5"></i>
+
+                        </div>
+
+                        <div>
+                            <h2 class="h5 fw-bold mb-0">
+                                Advanced Configuration
+                            </h2>
+
+                            <p class="text-muted small mb-0">
+                                Optional JSON configuration for advanced
+                                section behavior.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-body px-4 pb-4">
+
+                    {{ form.config.label(
+                        class="form-label fw-semibold"
+                    ) }}
+
+                    {{ form.config(
+                        class="form-control rounded-3 font-monospace
+                        " ~ (" is-invalid" if form.config.errors else ""),
+                        rows="10",
+                        spellcheck="false"
+                    ) }}
+
+                    {% if form.config.errors %}
+
+                        <div class="invalid-feedback">
+                            {% for error in form.config.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+
+                    {% else %}
+
+                        <div class="form-text">
+                            Example:
+                            <pre class="bg-light rounded-3 p-3 mt-2 mb-0 small"><code>{
+```
+
+"columns": 4,
+"limit": 8,
+"show_price": true,
+"show_button": true
+}</code></pre> </div>
+
+```
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             SIDEBAR
+        ================================================== -->
+        <div class="col-12 col-xl-4">
+
+            <!-- PUBLISH -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+                <div class="card-header bg-white border-0
+                            rounded-top-4 pt-4 px-4">
+
+                    <div class="d-flex align-items-center gap-2">
+
+                        <i class="bi bi-send-check text-success"></i>
+
+                        <h2 class="h6 fw-bold mb-0">
+                            Publishing
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-body px-4 pb-4">
+
+                    <div class="form-check form-switch mb-3">
+
+                        {{ form.is_active(
+                            class="form-check-input",
+                            role="switch",
+                            id="is_active"
+                        ) }}
+
+                        {{ form.is_active.label(
+                            class="form-check-label fw-semibold",
+                            for="is_active"
+                        ) }}
+
+                    </div>
+
+                    <div class="small text-muted">
+                        Published sections are displayed on the
+                        public homepage when their section type is
+                        supported by the homepage renderer.
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- DISPLAY ORDER -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+                <div class="card-header bg-white border-0
+                            rounded-top-4 pt-4 px-4">
+
+                    <div class="d-flex align-items-center gap-2">
+
+                        <i class="bi bi-sort-numeric-down text-primary"></i>
+
+                        <h2 class="h6 fw-bold mb-0">
+                            Display Order
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-body px-4 pb-4">
+
+                    {{ form.sort_order.label(
+                        class="form-label fw-semibold"
+                    ) }}
+
+                    {{ form.sort_order(
+                        class="form-control rounded-3
+                        " ~ (" is-invalid" if form.sort_order.errors else ""),
+                        min="0",
+                        max="9999"
+                    ) }}
+
+                    {% if form.sort_order.errors %}
+
+                        <div class="invalid-feedback">
+                            {% for error in form.sort_order.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+
+                    {% else %}
+
+                        <div class="form-text">
+                            Lower numbers appear first.
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- CSS CLASS -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+                <div class="card-header bg-white border-0
+                            rounded-top-4 pt-4 px-4">
+
+                    <div class="d-flex align-items-center gap-2">
+
+                        <i class="bi bi-code-slash text-secondary"></i>
+
+                        <h2 class="h6 fw-bold mb-0">
+                            Custom CSS Class
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-body px-4 pb-4">
+
+                    {{ form.css_class.label(
+                        class="form-label fw-semibold"
+                    ) }}
+
+                    {{ form.css_class(
+                        class="form-control rounded-3
+                        " ~ (" is-invalid" if form.css_class.errors else "")
+                    ) }}
+
+                    {% if form.css_class.errors %}
+
+                        <div class="invalid-feedback">
+                            {% for error in form.css_class.errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+
+                    {% else %}
+
+                        <div class="form-text">
+                            Optional CSS classes applied to this section.
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- SECTION TYPE HELP -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+                <div class="card-body p-4">
+
+                    <div class="d-flex align-items-start gap-3">
+
+                        <div class="bg-info bg-opacity-10
+                                    rounded-3 p-2 flex-shrink-0">
+
+                            <i class="bi bi-info-circle
+                                      text-info fs-5"></i>
+
+                        </div>
+
+                        <div>
+
+                            <h3 class="h6 fw-bold">
+                                Section Types
+                            </h3>
+
+                            <p class="small text-muted mb-2">
+                                Available section types include:
+                            </p>
+
+                            <div class="d-flex flex-wrap gap-1">
+
+                                <span class="badge bg-light text-dark border">
+                                    Hero
+                                </span>
+
+                                <span class="badge bg-light text-dark border">
+                                    Intro
+                                </span>
+
+                                <span class="badge bg-light text-dark border">
+                                    Categories
+                                </span>
+
+                                <span class="badge bg-light text-dark border">
+                                    Products
+                                </span>
+
+                                <span class="badge bg-light text-dark border">
+                                    Image + T<ext
+                                </span>
+
+                                <span class="badge bg-light text-dark border">
+                                    Trust
+                                </span>
+
+                                <span class="badge bg-light text-dark border">
+                                    Services
+                                </span>
+
+                                <span class="badge bg-light text-dark border">
+                                    Banner
+                                </span>
+
+                                <span class="badge bg-light text-dark border">
+                                    CTA
+                                </span>
+
+                                <span class="badge bg-light text-dark border">
+                                    Spare Parts
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- SAVE -->
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-body p-4">
+
+                    {{ form.submit(
+                        class="btn btn-success btn-lg rounded-3
+                               w-100 fw-semibold"
+                    ) }}
+
+                    <a href="{{ url_for('admin_homepage.homepage') }}"
+                       class="btn btn-light border rounded-3
+                              w-100 mt-2">
+                        Cancel
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</form>
+```
+
+</div>
+
+<!-- =============================================================
+     IMAGE PREVIEW
+============================================================== -->
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const input = document.getElementById("image");
+    const previewWrapper =
+        document.getElementById("imagePreviewWrapper");
+    const preview =
+        document.getElementById("imagePreview");
+
+    if (!input || !previewWrapper || !preview) {
+        return;
+    }
+
+    input.addEventListener("change", function () {
+
+        const file = this.files && this.files[0];
+
+        if (!file) {
+            previewWrapper.classList.add("d-none");
+            preview.removeAttribute("src");
+            return;
+        }
+
+        if (!file.type.startsWith("image/")) {
+            previewWrapper.classList.add("d-none");
+            preview.removeAttribute("src");
+            return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = function (event) {
+
+            preview.src = event.target.result;
+            previewWrapper.classList.remove("d-none");
+
+        };
+
+        reader.readAsDataURL(file);
+
+    });
+
+});
+</script>
+
+{% endblock %}
