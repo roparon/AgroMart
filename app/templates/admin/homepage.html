@@ -501,7 +501,8 @@ Homepage CMS | Bomet Machineries Ltd.
                                                   ) }}"
                                                   class="d-inline">
 
-                                                {{ csrf_token() }}
+                                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                                
 
                                                 <button type="submit"
                                                         class="btn btn-outline-secondary
@@ -530,7 +531,7 @@ Homepage CMS | Bomet Machineries Ltd.
                                                       'Delete this homepage section permanently?'
                                                   );">
 
-                                                {{ csrf_token() }}
+                                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
                                                 <button type="submit"
                                                         class="btn btn-outline-danger
@@ -806,7 +807,7 @@ Homepage CMS | Bomet Machineries Ltd.
                                                           content_id=item.id
                                                       ) }}">
 
-                                                    {{ csrf_token() }}
+                                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
                                                     <button type="submit"
                                                             class="btn btn-outline-secondary
@@ -839,7 +840,7 @@ Homepage CMS | Bomet Machineries Ltd.
                                                   'Delete this homepage content permanently?'
                                               );">
 
-                                            {{ csrf_token() }}
+                                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
                                             <button type="submit"
                                                     class="btn btn-outline-danger

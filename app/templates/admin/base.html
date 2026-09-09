@@ -1,0 +1,2484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
+
+    <meta
+        name="csrf-token"
+        content="{{ csrf_token() }}"
+    >
+
+    <meta
+        name="theme-color"
+        content="#075c35"
+    >
+
+    <title>
+        {% block title %}
+            Admin | Bomet Machineries Ltd.
+        {% endblock %}
+    </title>
+
+    <meta
+        name="description"
+        content="Bomet Machineries Ltd. administration dashboard."
+    >
+
+    <!-- ============================================================
+         FONTS
+    ============================================================= -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- ============================================================
+         BOOTSTRAP
+    ============================================================= -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <!-- ============================================================
+         BOOTSTRAP ICONS
+    ============================================================= -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        /* ==========================================================
+           01. DESIGN TOKENS
+           Centralized values keep the interface consistent and easy
+           to retheme without changing individual components.
+        ========================================================== */
+
+        :root {
+            --color-primary: #087443;
+            --color-primary-dark: #075c35;
+            --color-primary-deep: #043b23;
+            --color-primary-light: #12a05c;
+
+            --color-primary-soft: #eaf7ef;
+            --color-primary-pale: #f4faf6;
+
+            --color-white: #ffffff;
+            --color-page: #f4f7f5;
+            --color-surface: #ffffff;
+            --color-surface-muted: #f8faf9;
+
+            --color-text: #17231c;
+            --color-text-secondary: #46534b;
+            --color-text-muted: #77827b;
+
+            --color-border: #e2e9e5;
+            --color-border-strong: #d4dfd8;
+
+            --color-danger: #b4232d;
+            --color-danger-bg: #fff5f6;
+            --color-danger-border: #efc9cd;
+
+            --color-warning: #8c6500;
+            --color-warning-bg: #fff8e5;
+
+            --color-info: #176da8;
+            --color-info-bg: #edf7fd;
+
+            --sidebar-width: 17rem;
+            --header-height: 4.25rem;
+
+            --radius-xs: .5rem;
+            --radius-sm: .625rem;
+            --radius-md: .8125rem;
+            --radius-lg: 1rem;
+            --radius-xl: 1.25rem;
+
+            --space-1: .25rem;
+            --space-2: .5rem;
+            --space-3: .75rem;
+            --space-4: 1rem;
+            --space-5: 1.25rem;
+            --space-6: 1.5rem;
+            --space-7: 1.75rem;
+            --space-8: 2rem;
+
+            --shadow-xs:
+                0 1px 2px rgba(16, 42, 28, .035);
+
+            --shadow-sm:
+                0 4px 14px rgba(16, 42, 28, .055);
+
+            --shadow-md:
+                0 10px 28px rgba(16, 42, 28, .075);
+
+            --shadow-lg:
+                0 18px 48px rgba(16, 42, 28, .12);
+
+            --focus-ring:
+                0 0 0 .2rem rgba(8, 116, 67, .16);
+
+            --transition-fast:
+                .16s ease;
+
+            --transition:
+                .22s cubic-bezier(.4, 0, .2, 1);
+        }
+
+
+        /* ==========================================================
+           02. RESET & GLOBAL
+        ========================================================== */
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 100%;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+
+            background: var(--color-page);
+            color: var(--color-text);
+
+            font-family:
+                "Inter",
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            font-size: .875rem;
+            line-height: 1.5;
+
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+        }
+
+        button,
+        input,
+        textarea,
+        select {
+            font: inherit;
+        }
+
+        button,
+        a {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        ::selection {
+            background: var(--color-primary-soft);
+            color: var(--color-primary-deep);
+        }
+
+
+        /* ==========================================================
+           03. ACCESSIBILITY & FOCUS
+        ========================================================== */
+
+        :focus-visible {
+            outline: .15rem solid var(--color-primary);
+            outline-offset: .15rem;
+            box-shadow: var(--focus-ring);
+        }
+
+        button:focus-visible,
+        a:focus-visible,
+        input:focus-visible,
+        textarea:focus-visible,
+        select:focus-visible {
+            outline: .15rem solid var(--color-primary);
+            outline-offset: .1rem;
+        }
+
+
+        /* ==========================================================
+           04. SCROLLBARS
+        ========================================================== */
+
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #cbd6cf transparent;
+        }
+
+        *::-webkit-scrollbar {
+            width: .4rem;
+            height: .4rem;
+        }
+
+        *::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        *::-webkit-scrollbar-thumb {
+            background: #cbd6cf;
+            border-radius: 999px;
+        }
+
+
+        /* ==========================================================
+           05. HEADER / TOPBAR
+        ========================================================== */
+
+        .admin-header {
+            position: fixed;
+            inset: 0 0 auto 0;
+            z-index: 1040;
+
+            height: var(--header-height);
+
+            background: rgba(255, 255, 255, .96);
+            border-bottom: 1px solid var(--color-border);
+
+            box-shadow: var(--shadow-xs);
+
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
+
+        .admin-header-inner {
+            width: 100%;
+            height: 100%;
+
+            display: flex;
+            align-items: center;
+
+            gap: var(--space-2);
+            padding: 0 var(--space-3);
+        }
+
+
+        /* ==========================================================
+           06. MOBILE MENU
+        ========================================================== */
+
+        .admin-menu-btn {
+            width: 2.75rem;
+            min-width: 2.75rem;
+            height: 2.75rem;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            flex: 0 0 2.75rem;
+
+            border: 1px solid transparent;
+            border-radius: var(--radius-md);
+
+            background: transparent;
+            color: var(--color-text);
+
+            font-size: 1.25rem;
+
+            cursor: pointer;
+
+            transition:
+                background var(--transition-fast),
+                color var(--transition-fast),
+                border-color var(--transition-fast),
+                transform var(--transition-fast);
+        }
+
+        .admin-menu-btn:hover {
+            background: var(--color-primary-soft);
+            border-color: rgba(8, 116, 67, .08);
+            color: var(--color-primary);
+        }
+
+        .admin-menu-btn:active {
+            transform: scale(.95);
+        }
+
+
+        /* ==========================================================
+           07. HEADER BRAND
+        ========================================================== */
+
+        .admin-brand {
+            min-width: 0;
+
+            display: flex;
+            align-items: center;
+
+            gap: var(--space-3);
+
+            color: var(--color-text);
+        }
+
+        .admin-logo {
+            width: 2.5rem;
+            height: 2.5rem;
+
+            flex: 0 0 2.5rem;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: var(--radius-md);
+
+            background: var(--color-primary);
+            color: var(--color-white);
+
+            font-size: 1.05rem;
+
+            box-shadow:
+                0 .35rem .9rem rgba(8, 116, 67, .16);
+        }
+
+        .admin-brand-copy {
+            min-width: 0;
+        }
+
+        .admin-brand-name {
+            display: block;
+
+            max-width: 12rem;
+
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+
+            color: var(--color-primary-dark);
+
+            font-family:
+                "Plus Jakarta Sans",
+                "Inter",
+                system-ui,
+                sans-serif;
+
+            font-size: .8rem;
+            font-weight: 800;
+            line-height: 1.2;
+
+            letter-spacing: -.02em;
+        }
+
+        .admin-brand-subtitle {
+            display: block;
+
+            margin-top: .15rem;
+
+            color: var(--color-text-muted);
+
+            font-size: .58rem;
+            font-weight: 500;
+            line-height: 1.2;
+        }
+
+
+        /* ==========================================================
+           08. HEADER ACTIONS
+        ========================================================== */
+
+        .admin-header-actions {
+            margin-left: auto;
+
+            display: flex;
+            align-items: center;
+
+            gap: var(--space-1);
+        }
+
+        .admin-header-action {
+            width: 2.75rem;
+            height: 2.75rem;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            border: 1px solid transparent;
+            border-radius: var(--radius-md);
+
+            background: transparent;
+            color: var(--color-text-muted);
+
+            font-size: 1.05rem;
+
+            transition:
+                background var(--transition-fast),
+                border-color var(--transition-fast),
+                color var(--transition-fast);
+        }
+
+        .admin-header-action:hover {
+            background: var(--color-primary-soft);
+            border-color: rgba(8, 116, 67, .08);
+            color: var(--color-primary);
+        }
+
+
+        /* ==========================================================
+           09. USER AVATAR
+        ========================================================== */
+
+        .admin-user-avatar {
+            width: 2.75rem;
+            height: 2.75rem;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            border: 1px solid #cfe4d7;
+            border-radius: 50%;
+
+            background: var(--color-primary-soft);
+            color: var(--color-primary-dark);
+
+            font-size: .72rem;
+            font-weight: 800;
+
+            transition:
+                background var(--transition-fast),
+                border-color var(--transition-fast),
+                transform var(--transition-fast);
+        }
+
+        .admin-user-avatar:hover {
+            background: #dff2e7;
+            border-color: #bcd9c8;
+            transform: translateY(-1px);
+        }
+
+
+        /* ==========================================================
+           10. SIDEBAR
+        ========================================================== */
+
+        .admin-sidebar {
+            position: fixed;
+            inset: 0 auto 0 0;
+            z-index: 1050;
+
+            width: var(--sidebar-width);
+
+            display: flex;
+            flex-direction: column;
+
+            background: var(--color-primary-deep);
+            color: var(--color-white);
+
+            transform: translateX(-105%);
+            transition: transform .28s cubic-bezier(.4, 0, .2, 1);
+
+            box-shadow: var(--shadow-lg);
+        }
+
+        .admin-sidebar.show {
+            transform: translateX(0);
+        }
+
+
+        /* ==========================================================
+           11. SIDEBAR HEADER
+        ========================================================== */
+
+        .admin-sidebar-header {
+            min-height: 4.75rem;
+
+            display: flex;
+            align-items: center;
+
+            padding: var(--space-4);
+
+            border-bottom: 1px solid rgba(255, 255, 255, .09);
+        }
+
+        .admin-sidebar-brand {
+            min-width: 0;
+
+            display: flex;
+            align-items: center;
+
+            gap: var(--space-3);
+
+            color: var(--color-white);
+        }
+
+        .admin-sidebar-brand .admin-logo {
+            width: 2.65rem;
+            height: 2.65rem;
+            flex-basis: 2.65rem;
+
+            background: rgba(255, 255, 255, .08);
+            border: 1px solid rgba(255, 255, 255, .12);
+
+            box-shadow: none;
+        }
+
+        .admin-sidebar-brand-copy {
+            min-width: 0;
+        }
+
+        .admin-sidebar-brand strong {
+            display: block;
+
+            font-family:
+                "Plus Jakarta Sans",
+                "Inter",
+                system-ui,
+                sans-serif;
+
+            font-size: .78rem;
+            font-weight: 700;
+            line-height: 1.25;
+        }
+
+        .admin-sidebar-brand small {
+            display: block;
+
+            margin-top: .2rem;
+
+            color: rgba(255, 255, 255, .52);
+
+            font-size: .58rem;
+            font-weight: 500;
+        }
+
+        .admin-sidebar-close {
+            width: 2.75rem;
+            height: 2.75rem;
+
+            flex: 0 0 2.75rem;
+
+            margin-left: auto;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            border: 1px solid rgba(255, 255, 255, .1);
+            border-radius: var(--radius-md);
+
+            background: rgba(255, 255, 255, .06);
+            color: var(--color-white);
+
+            cursor: pointer;
+
+            transition:
+                background var(--transition-fast),
+                border-color var(--transition-fast);
+        }
+
+        .admin-sidebar-close:hover {
+            background: rgba(255, 255, 255, .12);
+            border-color: rgba(255, 255, 255, .16);
+        }
+
+
+        /* ==========================================================
+           12. SIDEBAR NAVIGATION
+        ========================================================== */
+
+        .admin-sidebar-body {
+            flex: 1;
+
+            overflow-y: auto;
+
+            padding:
+                var(--space-3)
+                var(--space-2)
+                var(--space-5);
+        }
+
+        .admin-nav-section {
+            margin-top: var(--space-5);
+        }
+
+        .admin-nav-section:first-child {
+            margin-top: 0;
+        }
+
+        .admin-nav-label {
+            padding:
+                var(--space-3)
+                var(--space-3)
+                var(--space-2);
+
+            color: rgba(255, 255, 255, .4);
+
+            font-size: .58rem;
+            font-weight: 700;
+
+            letter-spacing: .04em;
+        }
+
+        .admin-nav-link {
+            position: relative;
+
+            min-height: 2.875rem;
+
+            display: flex;
+            align-items: center;
+
+            gap: var(--space-3);
+
+            margin: .125rem 0;
+
+            padding:
+                .5rem
+                .75rem;
+
+            border: 1px solid transparent;
+            border-radius: var(--radius-sm);
+
+            color: rgba(255, 255, 255, .68);
+
+            font-size: .72rem;
+            font-weight: 600;
+
+            transition:
+                background var(--transition-fast),
+                border-color var(--transition-fast),
+                color var(--transition-fast),
+                transform var(--transition-fast);
+        }
+
+        .admin-nav-link i {
+            width: 1.35rem;
+            flex: 0 0 1.35rem;
+
+            text-align: center;
+
+            color: rgba(255, 255, 255, .45);
+
+            font-size: 1rem;
+
+            transition: color var(--transition-fast);
+        }
+
+        .admin-nav-link:hover {
+            background: rgba(255, 255, 255, .07);
+            border-color: rgba(255, 255, 255, .05);
+            color: var(--color-white);
+
+            transform: translateX(.125rem);
+        }
+
+        .admin-nav-link:hover i {
+            color: rgba(255, 255, 255, .88);
+        }
+
+        .admin-nav-link.active {
+            background: rgba(255, 255, 255, .105);
+            border-color: rgba(255, 255, 255, .06);
+
+            color: var(--color-white);
+
+            box-shadow:
+                inset .2rem 0 0 #78d79c;
+        }
+
+        .admin-nav-link.active i {
+            color: #91dfad;
+        }
+
+
+        /* ==========================================================
+           13. SIDEBAR FOOTER
+        ========================================================== */
+
+        .admin-sidebar-footer {
+            padding:
+                var(--space-2)
+                var(--space-2)
+                calc(var(--space-3) + env(safe-area-inset-bottom));
+
+            border-top: 1px solid rgba(255, 255, 255, .09);
+        }
+
+
+        /* ==========================================================
+           14. SIDEBAR MOBILE OVERLAY
+        ========================================================== */
+
+        .admin-sidebar-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 1045;
+
+            background: rgba(4, 20, 12, .58);
+
+            opacity: 0;
+            visibility: hidden;
+
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+
+            transition:
+                opacity .25s ease,
+                visibility .25s ease;
+        }
+
+        .admin-sidebar-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+
+        /* ==========================================================
+           15. MAIN CONTENT
+        ========================================================== */
+
+        .admin-main {
+            min-height: 100vh;
+
+            padding:
+                calc(var(--header-height) + var(--space-5))
+                var(--space-3)
+                calc(5rem + env(safe-area-inset-bottom));
+        }
+
+        .admin-container {
+            width: 100%;
+            max-width: 95rem;
+
+            margin: 0 auto;
+        }
+
+
+        /* ==========================================================
+           16. PAGE HEADER
+        ========================================================== */
+
+        .admin-page-header {
+            margin-bottom: var(--space-6);
+        }
+
+        .admin-breadcrumb {
+            display: flex;
+            align-items: center;
+
+            gap: var(--space-2);
+
+            margin-bottom: var(--space-2);
+
+            color: var(--color-text-muted);
+
+            font-size: .65rem;
+            font-weight: 500;
+        }
+
+        .admin-breadcrumb a {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        .admin-page-title {
+            margin: 0;
+
+            color: var(--color-text);
+
+            font-family:
+                "Plus Jakarta Sans",
+                "Inter",
+                system-ui,
+                sans-serif;
+
+            font-size: clamp(1.35rem, 4vw, 1.8rem);
+            font-weight: 800;
+            line-height: 1.2;
+
+            letter-spacing: -.035em;
+        }
+
+        .admin-page-subtitle {
+            max-width: 46rem;
+
+            margin: var(--space-2) 0 0;
+
+            color: var(--color-text-muted);
+
+            font-size: .72rem;
+            font-weight: 400;
+            line-height: 1.65;
+        }
+
+
+        /* ==========================================================
+           17. CARDS / PANELS
+        ========================================================== */
+
+        .admin-card {
+            position: relative;
+
+            overflow: hidden;
+
+            background: var(--color-surface);
+
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+
+            box-shadow: var(--shadow-sm);
+
+            transition:
+                border-color var(--transition),
+                box-shadow var(--transition);
+        }
+
+        .admin-card:hover {
+            border-color: var(--color-border-strong);
+            box-shadow: var(--shadow-md);
+        }
+
+        .admin-card-header {
+            min-height: 3.75rem;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: var(--space-3);
+
+            padding:
+                var(--space-4);
+
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .admin-card-title {
+            margin: 0;
+
+            color: var(--color-text);
+
+            font-family:
+                "Plus Jakarta Sans",
+                "Inter",
+                system-ui,
+                sans-serif;
+
+            font-size: .78rem;
+            font-weight: 700;
+
+            letter-spacing: -.01em;
+        }
+
+        .admin-card-subtitle {
+            margin: .25rem 0 0;
+
+            color: var(--color-text-muted);
+
+            font-size: .63rem;
+            font-weight: 400;
+        }
+
+        .admin-card-body {
+            padding: var(--space-4);
+        }
+
+
+        /* ==========================================================
+           18. STATISTICS
+        ========================================================== */
+
+        .admin-stat-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: var(--space-3);
+
+            margin-bottom: var(--space-5);
+        }
+
+        .admin-stat-card {
+            position: relative;
+
+            min-width: 0;
+            overflow: hidden;
+
+            padding: var(--space-4);
+
+            background: var(--color-surface);
+
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+
+            box-shadow: var(--shadow-xs);
+
+            transition:
+                border-color var(--transition),
+                box-shadow var(--transition),
+                transform var(--transition);
+        }
+
+        .admin-stat-card::after {
+            content: "";
+
+            position: absolute;
+
+            width: 5rem;
+            height: 5rem;
+
+            top: -2rem;
+            right: -2rem;
+
+            border-radius: 50%;
+
+            background: var(--color-primary-soft);
+
+            opacity: .55;
+        }
+
+        .admin-stat-card:hover {
+            border-color: var(--color-border-strong);
+            box-shadow: var(--shadow-md);
+
+            transform: translateY(-.125rem);
+        }
+
+        .admin-stat-icon {
+            position: relative;
+            z-index: 1;
+
+            width: 2.4rem;
+            height: 2.4rem;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            margin-bottom: var(--space-3);
+
+            border-radius: var(--radius-sm);
+
+            background: var(--color-primary-soft);
+            color: var(--color-primary);
+
+            font-size: 1rem;
+        }
+
+        .admin-stat-value {
+            position: relative;
+            z-index: 1;
+
+            display: block;
+
+            color: var(--color-text);
+
+            font-family:
+                "Plus Jakarta Sans",
+                "Inter",
+                system-ui,
+                sans-serif;
+
+            font-size: clamp(1.15rem, 4vw, 1.45rem);
+            font-weight: 800;
+            line-height: 1.1;
+
+            letter-spacing: -.04em;
+        }
+
+        .admin-stat-label {
+            position: relative;
+            z-index: 1;
+
+            display: block;
+
+            margin-top: var(--space-2);
+
+            color: var(--color-text-muted);
+
+            font-size: .62rem;
+            font-weight: 500;
+        }
+
+
+        /* ==========================================================
+           19. BUTTONS
+        ========================================================== */
+
+        .admin-btn {
+            min-width: 2.75rem;
+            min-height: 2.75rem;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            gap: var(--space-2);
+
+            padding:
+                .625rem
+                .875rem;
+
+            border-radius: var(--radius-sm);
+
+            font-size: .69rem;
+            font-weight: 700;
+
+            white-space: nowrap;
+
+            cursor: pointer;
+
+            transition:
+                background var(--transition-fast),
+                border-color var(--transition-fast),
+                color var(--transition-fast),
+                box-shadow var(--transition-fast),
+                transform var(--transition-fast);
+        }
+
+        .admin-btn:active {
+            transform: scale(.97);
+        }
+
+        .admin-btn-primary {
+            border: 1px solid var(--color-primary);
+            background: var(--color-primary);
+            color: var(--color-white);
+
+            box-shadow:
+                0 .3rem .8rem rgba(8, 116, 67, .13);
+        }
+
+        .admin-btn-primary:hover {
+            border-color: var(--color-primary-dark);
+            background: var(--color-primary-dark);
+            color: var(--color-white);
+
+            box-shadow:
+                0 .45rem 1rem rgba(8, 116, 67, .18);
+        }
+
+        .admin-btn-light {
+            border: 1px solid var(--color-border-strong);
+            background: var(--color-white);
+            color: var(--color-text-secondary);
+        }
+
+        .admin-btn-light:hover {
+            border-color: #b9d1c2;
+            background: var(--color-primary-pale);
+            color: var(--color-primary-dark);
+        }
+
+        .admin-btn-danger {
+            border: 1px solid var(--color-danger-border);
+            background: var(--color-danger-bg);
+            color: var(--color-danger);
+        }
+
+        .admin-btn-danger:hover {
+            border-color: #e4aeb4;
+            background: #fdebed;
+        }
+
+
+        /* ==========================================================
+           20. FORM ELEMENTS
+        ========================================================== */
+
+        .admin-form-group {
+            margin-bottom: var(--space-5);
+        }
+
+        .admin-form-label {
+            display: block;
+
+            margin-bottom: var(--space-2);
+
+            color: var(--color-text);
+
+            font-size: .68rem;
+            font-weight: 700;
+        }
+
+        .admin-form-control,
+        .admin-form-select,
+        .admin-form-group input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+        .admin-form-group textarea,
+        .admin-form-group select {
+            width: 100%;
+            min-height: 2.75rem;
+
+            padding:
+                .625rem
+                .75rem;
+
+            border: 1px solid var(--color-border-strong);
+            border-radius: var(--radius-sm);
+
+            outline: none;
+
+            background: var(--color-white);
+            color: var(--color-text);
+
+            font-size: .72rem;
+
+            transition:
+                border-color var(--transition-fast),
+                background var(--transition-fast),
+                box-shadow var(--transition-fast);
+        }
+
+        .admin-form-group textarea,
+        textarea.admin-form-control {
+            min-height: 7rem;
+            resize: vertical;
+        }
+
+        .admin-form-control::placeholder,
+        .admin-form-group input::placeholder,
+        .admin-form-group textarea::placeholder {
+            color: #9aa69f;
+        }
+
+        .admin-form-control:hover,
+        .admin-form-group input:hover,
+        .admin-form-group textarea:hover,
+        .admin-form-group select:hover {
+            border-color: #b9c9c0;
+        }
+
+        .admin-form-control:focus,
+        .admin-form-group input:focus,
+        .admin-form-group textarea:focus,
+        .admin-form-group select:focus {
+            border-color: var(--color-primary);
+            background: var(--color-white);
+            box-shadow: var(--focus-ring);
+        }
+
+        .admin-form-help {
+            margin-top: var(--space-1);
+
+            color: var(--color-text-muted);
+
+            font-size: .61rem;
+            line-height: 1.55;
+        }
+
+        .admin-form-error {
+            margin-top: var(--space-1);
+
+            color: var(--color-danger);
+
+            font-size: .61rem;
+            font-weight: 600;
+        }
+
+
+        /* ==========================================================
+           21. CHECKBOXES
+        ========================================================== */
+
+        .admin-check {
+            display: flex;
+            align-items: flex-start;
+
+            gap: var(--space-3);
+
+            padding: var(--space-3) 0;
+        }
+
+        .admin-check input {
+            width: 1.125rem;
+            height: 1.125rem;
+
+            flex: 0 0 1.125rem;
+
+            margin-top: .1rem;
+
+            accent-color: var(--color-primary);
+        }
+
+        .admin-check label {
+            color: var(--color-text-secondary);
+
+            font-size: .68rem;
+            font-weight: 500;
+
+            line-height: 1.5;
+        }
+
+
+        /* ==========================================================
+           22. TABLES
+        ========================================================== */
+
+        .admin-table-wrap {
+            width: 100%;
+
+            overflow-x: auto;
+
+            border-radius: var(--radius-md);
+
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .admin-table {
+            width: 100%;
+            min-width: 42rem;
+
+            margin: 0;
+
+            border-collapse: separate;
+            border-spacing: 0;
+
+            font-size: .67rem;
+            vertical-align: middle;
+        }
+
+        .admin-table th {
+            padding:
+                .75rem;
+
+            background: var(--color-surface-muted);
+
+            color: var(--color-text-muted);
+
+            border-bottom: 1px solid var(--color-border);
+
+            font-size: .58rem;
+            font-weight: 700;
+
+            letter-spacing: .025em;
+
+            white-space: nowrap;
+        }
+
+        .admin-table td {
+            padding:
+                .8rem .75rem;
+
+            color: var(--color-text-secondary);
+
+            border-bottom: 1px solid #edf1ee;
+        }
+
+        .admin-table tbody tr {
+            transition: background var(--transition-fast);
+        }
+
+        .admin-table tbody tr:hover {
+            background: #fbfdfc;
+        }
+
+        .admin-table tbody tr:last-child td {
+            border-bottom: 0;
+        }
+
+
+        /* ==========================================================
+           23. BADGES
+        ========================================================== */
+
+        .admin-badge {
+            min-height: 1.625rem;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            gap: var(--space-1);
+
+            padding:
+                .25rem
+                .55rem;
+
+            border-radius: 999px;
+
+            font-size: .56rem;
+            font-weight: 700;
+
+            white-space: nowrap;
+        }
+
+        .admin-badge-success {
+            background: #e8f7ef;
+            color: #137443;
+        }
+
+        .admin-badge-warning {
+            background: var(--color-warning-bg);
+            color: var(--color-warning);
+        }
+
+        .admin-badge-danger {
+            background: #fdebed;
+            color: var(--color-danger);
+        }
+
+        .admin-badge-info {
+            background: var(--color-info-bg);
+            color: var(--color-info);
+        }
+
+        .admin-badge-muted {
+            background: #eef2ef;
+            color: #66736b;
+        }
+
+
+        /* ==========================================================
+           24. FLASH / ALERT MESSAGES
+        ========================================================== */
+
+        .admin-flash-container {
+            position: fixed;
+
+            top: calc(var(--header-height) + var(--space-3));
+            left: var(--space-3);
+            right: var(--space-3);
+
+            z-index: 1100;
+
+            pointer-events: none;
+        }
+
+        .admin-flash {
+            pointer-events: auto;
+
+            margin-bottom: var(--space-2);
+
+            padding:
+                .75rem
+                2.75rem
+                .75rem
+                .875rem;
+
+            border: 1px solid transparent;
+            border-radius: var(--radius-md);
+
+            box-shadow: var(--shadow-lg);
+
+            font-size: .68rem;
+            font-weight: 600;
+        }
+
+
+        /* ==========================================================
+           25. EMPTY STATES
+        ========================================================== */
+
+        .admin-empty {
+            padding:
+                clamp(2rem, 7vw, 3rem)
+                var(--space-5);
+
+            text-align: center;
+
+            color: var(--color-text-muted);
+        }
+
+        .admin-empty-icon {
+            width: 3rem;
+            height: 3rem;
+
+            margin:
+                0 auto
+                var(--space-3);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: var(--radius-md);
+
+            background: var(--color-primary-soft);
+            color: var(--color-primary);
+
+            font-size: 1.1rem;
+        }
+
+        .admin-empty-title {
+            margin:
+                0
+                0
+                var(--space-1);
+
+            color: var(--color-text);
+
+            font-family:
+                "Plus Jakarta Sans",
+                "Inter",
+                system-ui,
+                sans-serif;
+
+            font-size: .8rem;
+            font-weight: 700;
+        }
+
+        .admin-empty-text {
+            margin: 0;
+
+            font-size: .64rem;
+            line-height: 1.6;
+        }
+
+
+        /* ==========================================================
+           26. MOBILE BOTTOM NAVIGATION
+        ========================================================== */
+
+        .admin-bottom-nav {
+            position: fixed;
+
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            z-index: 1035;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(5, minmax(0, 1fr));
+
+            gap: .125rem;
+
+            padding:
+                .35rem
+                .35rem
+                calc(.35rem + env(safe-area-inset-bottom));
+
+            background: rgba(255, 255, 255, .97);
+
+            border-top: 1px solid var(--color-border);
+
+            box-shadow:
+                0 -.5rem 1.5rem rgba(12, 40, 25, .07);
+
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
+
+        .admin-bottom-item {
+            min-height: 3.1rem;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            gap: .15rem;
+
+            border-radius: var(--radius-sm);
+
+            color: var(--color-text-muted);
+
+            font-size: .53rem;
+            font-weight: 600;
+
+            transition:
+                background var(--transition-fast),
+                color var(--transition-fast);
+        }
+
+        .admin-bottom-item i {
+            font-size: 1rem;
+        }
+
+        .admin-bottom-item:hover {
+            background: var(--color-surface-muted);
+            color: var(--color-primary);
+        }
+
+        .admin-bottom-item.active {
+            background: var(--color-primary-soft);
+            color: var(--color-primary);
+        }
+
+
+        /* ==========================================================
+           27. UTILITY CLASSES
+        ========================================================== */
+
+        .admin-divider {
+            height: 1px;
+
+            margin:
+                var(--space-5)
+                0;
+
+            background: var(--color-border);
+        }
+
+        .admin-muted {
+            color: var(--color-text-muted) !important;
+        }
+
+        .admin-text-green {
+            color: var(--color-primary) !important;
+        }
+
+        .admin-fw-800 {
+            font-weight: 800 !important;
+        }
+
+        .admin-radius {
+            border-radius: var(--radius-lg);
+        }
+
+
+        /* ==========================================================
+           28. TABLET
+        ========================================================== */
+
+        @media (min-width: 36rem) {
+
+            .admin-header-inner {
+                padding:
+                    0
+                    var(--space-5);
+            }
+
+            .admin-main {
+                padding:
+                    calc(var(--header-height) + var(--space-6))
+                    var(--space-5)
+                    5rem;
+            }
+
+            .admin-stat-grid {
+                gap: var(--space-4);
+            }
+
+            .admin-stat-card {
+                padding: var(--space-5);
+            }
+
+            .admin-card-header,
+            .admin-card-body {
+                padding: var(--space-5);
+            }
+
+            .admin-page-header {
+                margin-bottom: var(--space-7);
+            }
+
+            .admin-brand-name {
+                max-width: 18rem;
+            }
+        }
+
+
+        /* ==========================================================
+           29. DESKTOP
+        ========================================================== */
+
+        @media (min-width: 62rem) {
+
+            .admin-header {
+                left: var(--sidebar-width);
+            }
+
+            .admin-menu-btn {
+                display: none;
+            }
+
+            .admin-sidebar {
+                transform: translateX(0);
+            }
+
+            .admin-sidebar-close {
+                display: none;
+            }
+
+            .admin-sidebar-overlay {
+                display: none;
+            }
+
+            .admin-main {
+                margin-left: var(--sidebar-width);
+
+                padding:
+                    calc(var(--header-height) + var(--space-7))
+                    var(--space-7)
+                    var(--space-8);
+            }
+
+            .admin-bottom-nav {
+                display: none;
+            }
+
+            .admin-stat-grid {
+                grid-template-columns:
+                    repeat(4, minmax(0, 1fr));
+
+                gap: var(--space-4);
+            }
+
+            .admin-stat-card {
+                min-height: 9rem;
+            }
+
+            .admin-flash-container {
+                left: auto;
+                right: var(--space-7);
+
+                width: min(27rem, calc(100vw - var(--space-7)));
+            }
+
+            .admin-card-header {
+                min-height: 4rem;
+            }
+        }
+
+
+        /* ==========================================================
+           30. LARGE DESKTOP
+        ========================================================== */
+
+        @media (min-width: 75rem) {
+
+            .admin-main {
+                padding-left: var(--space-8);
+                padding-right: var(--space-8);
+            }
+
+            .admin-header-inner {
+                padding-left: var(--space-7);
+                padding-right: var(--space-7);
+            }
+        }
+
+        @media (min-width: 90rem) {
+
+            .admin-main {
+                padding-left: clamp(
+                    var(--space-8),
+                    4vw,
+                    3.5rem
+                );
+
+                padding-right: clamp(
+                    var(--space-8),
+                    4vw,
+                    3.5rem
+                );
+            }
+        }
+
+
+        /* ==========================================================
+           31. REDUCED MOTION
+        ========================================================== */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition: none !important;
+                animation: none !important;
+            }
+        }
+
+    </style>
+
+    {% block extra_css %}{% endblock %}
+    {% block styles %}{% endblock %}
+
+</head>
+
+
+<body>
+
+<!-- ============================================================
+     HEADER
+============================================================= -->
+
+<header class="admin-header">
+
+    <div class="admin-header-inner">
+
+        <button
+            type="button"
+            class="admin-menu-btn"
+            id="adminMenuButton"
+            aria-label="Open admin navigation"
+            aria-controls="adminSidebar"
+            aria-expanded="false"
+        >
+            <i class="bi bi-list"></i>
+        </button>
+
+
+        <a
+            href="{{ url_for('dashboard.dashboard') }}"
+            class="admin-brand"
+        >
+            <span class="admin-logo">
+                <i class="bi bi-gear-wide-connected"></i>
+            </span>
+
+            <span class="admin-brand-copy">
+                <span class="admin-brand-name">
+                    Bomet Machineries
+                </span>
+
+                <span class="admin-brand-subtitle">
+                    Admin Control Center
+                </span>
+            </span>
+        </a>
+
+
+        <div class="admin-header-actions">
+
+            <a
+                href="{{ url_for('home.home') }}"
+                class="admin-header-action"
+                title="View Store"
+                aria-label="View Store"
+            >
+                <i class="bi bi-shop-window"></i>
+            </a>
+
+
+            {% if current_user.is_authenticated %}
+
+                <a
+                    href="{{ url_for('auth.admin_profile') }}"
+                    class="admin-user-avatar"
+                    title="Administrator profile"
+                    aria-label="Administrator profile"
+                >
+
+                    {% if current_user.first_name %}
+
+                        {{ current_user.first_name[0]|upper }}
+
+                    {% else %}
+
+                        <i class="bi bi-person"></i>
+
+                    {% endif %}
+
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- ============================================================
+     SIDEBAR OVERLAY
+============================================================= -->
+
+<div
+    class="admin-sidebar-overlay"
+    id="adminSidebarOverlay"
+></div>
+
+
+<!-- ============================================================
+     SIDEBAR
+============================================================= -->
+
+<aside
+    class="admin-sidebar"
+    id="adminSidebar"
+    aria-label="Admin navigation"
+>
+
+    <!-- SIDEBAR HEADER -->
+
+    <div class="admin-sidebar-header">
+
+        <a
+            href="{{ url_for('dashboard.dashboard') }}"
+            class="admin-sidebar-brand"
+        >
+
+            <span class="admin-logo">
+                <i class="bi bi-gear-wide-connected"></i>
+            </span>
+
+            <span class="admin-sidebar-brand-copy">
+
+                <strong>
+                    Bomet Machineries
+                </strong>
+
+                <small>
+                    Management System
+                </small>
+
+            </span>
+
+        </a>
+
+
+        <button
+            type="button"
+            class="admin-sidebar-close"
+            id="adminSidebarClose"
+            aria-label="Close navigation"
+        >
+            <i class="bi bi-x-lg"></i>
+        </button>
+
+    </div>
+
+
+    <!-- SIDEBAR BODY -->
+
+    <div class="admin-sidebar-body">
+
+
+        <!-- OVERVIEW -->
+
+        <div class="admin-nav-section">
+
+            <div class="admin-nav-label">
+                Overview
+            </div>
+
+
+            <a
+                href="{{ url_for('dashboard.dashboard') }}"
+                class="admin-nav-link
+                    {% if request.endpoint == 'dashboard.dashboard' %}
+                        active
+                    {% endif %}
+                "
+            >
+
+                <i class="bi bi-grid-1x2-fill"></i>
+
+                <span>Dashboard</span>
+
+            </a>
+
+        </div>
+
+
+        <!-- CATALOG -->
+
+        <div class="admin-nav-section">
+
+            <div class="admin-nav-label">
+                Store Management
+            </div>
+
+
+            <a
+                href="{{ url_for('admin_products.products') }}"
+                class="admin-nav-link
+                    {% if request.endpoint and request.endpoint.startswith('admin_products.') %}
+                        active
+                    {% endif %}
+                "
+            >
+
+                <i class="bi bi-box-seam"></i>
+
+                <span>Products</span>
+
+            </a>
+
+
+            <a
+                href="{{ url_for('admin_categories.categories') }}"
+                class="admin-nav-link
+                    {% if request.endpoint and request.endpoint.startswith('categories.') %}
+                        active
+                    {% endif %}
+                "
+            >
+
+                <i class="bi bi-tags"></i>
+
+                <span>Categories</span>
+
+            </a>
+
+        </div>
+
+
+        <!-- SALES -->
+
+        <div class="admin-nav-section">
+
+            <div class="admin-nav-label">
+                Sales
+            </div>
+
+
+            <a
+                href="{{ url_for('orders.orders') }}"
+                class="admin-nav-link
+                    {% if request.endpoint and request.endpoint.startswith('orders.') %}
+                        active
+                    {% endif %}
+                "
+            >
+
+                <i class="bi bi-receipt-cutoff"></i>
+
+                <span>Orders</span>
+
+            </a>
+
+
+            <a
+                href="{{ url_for('customers.customers') }}"
+                class="admin-nav-link
+                    {% if request.endpoint and request.endpoint.startswith('customers.') %}
+                        active
+                    {% endif %}
+                "
+            >
+
+                <i class="bi bi-people"></i>
+
+                <span>Customers</span>
+
+            </a>
+
+        </div>
+
+
+        <!-- WEBSITE -->
+
+        <div class="admin-nav-section">
+
+            <div class="admin-nav-label">
+                Website
+            </div>
+
+
+            <a
+                href="{{ url_for('admin_homepage.homepage') }}"
+                class="admin-nav-link
+                    {% if request.endpoint and request.endpoint.startswith('admin_homepage.') %}
+                        active
+                    {% endif %}
+                "
+            >
+
+                <i class="bi bi-window-stack"></i>
+
+                <span>Homepage CMS</span>
+
+            </a>
+
+
+            <a
+                href="{{ url_for('admin_homepage.settings') }}"
+                class="admin-nav-link
+                    {% if request.endpoint == 'admin_homepage.settings' %}
+                        active
+                    {% endif %}
+                "
+            >
+
+                <i class="bi bi-sliders"></i>
+
+                <span>Homepage Settings</span>
+
+            </a>
+
+        </div>
+
+
+        <!-- ACCOUNT -->
+
+        <div class="admin-nav-section">
+
+            <div class="admin-nav-label">
+                Account
+            </div>
+
+
+            <a
+                href="{{ url_for('auth.admin_profile') }}"
+                class="admin-nav-link"
+            >
+
+                <i class="bi bi-person-gear"></i>
+
+                <span>Admin Profile</span>
+
+            </a>
+
+
+            <a
+                href="{{ url_for('auth.logout') }}"
+                class="admin-nav-link"
+            >
+
+                <i class="bi bi-box-arrow-right"></i>
+
+                <span>Logout</span>
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- SIDEBAR FOOTER -->
+
+    <div class="admin-sidebar-footer">
+
+        <a
+            href="{{ url_for('home.home') }}"
+            class="admin-nav-link"
+        >
+
+            <i class="bi bi-arrow-up-right-circle"></i>
+
+            <span>View Store</span>
+
+        </a>
+
+    </div>
+
+</aside>
+
+
+<!-- ============================================================
+     FLASH MESSAGES
+============================================================= -->
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+
+    {% if messages %}
+
+        <div class="admin-flash-container">
+
+            {% for category, message in messages %}
+
+                <div
+                    class="
+                        alert
+                        alert-{{
+                            'danger'
+                            if category == 'error'
+                            else category
+                        }}
+                        alert-dismissible
+                        fade
+                        show
+                        admin-flash
+                    "
+                    role="alert"
+                >
+
+                    {{ message }}
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Close"
+                    ></button>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+{% endwith %}
+
+
+<!-- ============================================================
+     MAIN CONTENT
+============================================================= -->
+
+<main class="admin-main">
+
+    <div class="admin-container">
+
+        {% block content %}{% endblock %}
+
+    </div>
+
+</main>
+
+
+<!-- ============================================================
+     MOBILE BOTTOM NAVIGATION
+============================================================= -->
+
+<nav
+    class="admin-bottom-nav"
+    aria-label="Admin quick navigation"
+>
+
+
+    <a
+        href="{{ url_for('dashboard.dashboard') }}"
+        class="admin-bottom-item
+            {% if request.endpoint == 'dashboard.dashboard' %}
+                active
+            {% endif %}
+        "
+    >
+
+        <i class="bi bi-grid-1x2-fill"></i>
+
+        <span>Dashboard</span>
+
+    </a>
+
+
+    <a
+        href="{{ url_for('admin_products.products') }}"
+        class="admin-bottom-item
+            {% if request.endpoint and request.endpoint.startswith('admin_products.') %}
+                active
+            {% endif %}
+        "
+    >
+
+        <i class="bi bi-box-seam"></i>
+
+        <span>Products</span>
+
+    </a>
+
+
+    <a
+        href="{{ url_for('admin_homepage.homepage') }}"
+        class="admin-bottom-item
+            {% if request.endpoint and request.endpoint.startswith('admin_homepage.') %}
+                active
+            {% endif %}
+        "
+    >
+
+        <i class="bi bi-window-stack"></i>
+
+        <span>Website</span>
+
+    </a>
+
+
+    <a
+        href="{{ url_for('orders.orders') }}"
+        class="admin-bottom-item
+            {% if request.endpoint and request.endpoint.startswith('orders.') %}
+                active
+            {% endif %}
+        "
+    >
+
+        <i class="bi bi-receipt"></i>
+
+        <span>Orders</span>
+
+    </a>
+
+
+    <a
+        href="{{ url_for('auth.admin_profile') }}"
+        class="admin-bottom-item"
+    >
+
+        <i class="bi bi-person-gear"></i>
+
+        <span>Profile</span>
+
+    </a>
+
+</nav>
+
+
+<!-- ============================================================
+     BOOTSTRAP
+============================================================= -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+></script>
+
+
+<!-- ============================================================
+     ADMIN NAVIGATION JAVASCRIPT
+     FUNCTIONAL LOGIC PRESERVED
+============================================================= -->
+
+<script>
+(function () {
+
+    "use strict";
+
+
+    const sidebar =
+        document.getElementById("adminSidebar");
+
+    const overlay =
+        document.getElementById("adminSidebarOverlay");
+
+    const menuButton =
+        document.getElementById("adminMenuButton");
+
+    const closeButton =
+        document.getElementById("adminSidebarClose");
+
+
+    if (!sidebar || !overlay || !menuButton) {
+        return;
+    }
+
+
+    function openSidebar() {
+
+        sidebar.classList.add("show");
+
+        overlay.classList.add("show");
+
+        menuButton.setAttribute(
+            "aria-expanded",
+            "true"
+        );
+
+        document.body.style.overflow = "hidden";
+    }
+
+
+    function closeSidebar() {
+
+        sidebar.classList.remove("show");
+
+        overlay.classList.remove("show");
+
+        menuButton.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+
+        document.body.style.overflow = "";
+    }
+
+
+    menuButton.addEventListener(
+        "click",
+        openSidebar
+    );
+
+
+    if (closeButton) {
+
+        closeButton.addEventListener(
+            "click",
+            closeSidebar
+        );
+
+    }
+
+
+    overlay.addEventListener(
+        "click",
+        closeSidebar
+    );
+
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (event.key === "Escape") {
+                closeSidebar();
+            }
+
+        }
+    );
+
+
+    sidebar
+        .querySelectorAll("a")
+        .forEach(function (link) {
+
+            link.addEventListener(
+                "click",
+                function () {
+
+                    if (window.innerWidth < 992) {
+                        closeSidebar();
+                    }
+
+                }
+            );
+
+        });
+
+
+    window.addEventListener(
+        "resize",
+        function () {
+
+            if (window.innerWidth >= 992) {
+                closeSidebar();
+            }
+
+        }
+    );
+
+
+})();
+</script>
+
+
+<!-- ============================================================
+     GLOBAL ADMIN HELPERS
+============================================================= -->
+
+<script>
+(function () {
+
+    "use strict";
+
+
+    /*
+     * Automatically dismiss Bootstrap alerts.
+     */
+
+    document
+        .querySelectorAll(".admin-flash")
+        .forEach(function (alert) {
+
+            setTimeout(function () {
+
+                if (
+                    typeof bootstrap !== "undefined" &&
+                    bootstrap.Alert
+                ) {
+
+                    const instance =
+                        bootstrap.Alert.getOrCreateInstance(
+                            alert
+                        );
+
+                    instance.close();
+                }
+
+            }, 6000);
+
+        });
+
+
+    /*
+     * Add CSRF token automatically to same-origin
+     * AJAX requests made with fetch().
+     */
+
+    const csrfMeta =
+        document.querySelector(
+            'meta[name="csrf-token"]'
+        );
+
+
+    if (csrfMeta) {
+
+        const csrfToken =
+            csrfMeta.getAttribute("content");
+
+
+        const originalFetch =
+            window.fetch;
+
+
+        window.fetch = function (
+            resource,
+            options
+        ) {
+
+            options =
+                options || {};
+
+
+            const method =
+                (
+                    options.method ||
+                    "GET"
+                ).toUpperCase();
+
+
+            if (
+                method !== "GET" &&
+                method !== "HEAD" &&
+                method !== "OPTIONS"
+            ) {
+
+                options.headers =
+                    options.headers || {};
+
+
+                if (
+                    options.headers instanceof Headers
+                ) {
+
+                    options.headers.set(
+                        "X-CSRFToken",
+                        csrfToken
+                    );
+
+                } else {
+
+                    options.headers[
+                        "X-CSRFToken"
+                    ] = csrfToken;
+
+                }
+
+            }
+
+
+            return originalFetch(
+                resource,
+                options
+            );
+
+        };
+
+    }
+
+})();
+</script>
+
+
+{% block extra_js %}{% endblock %}
+{% block scripts %}{% endblock %}
+
+
+</body>
+</html>
