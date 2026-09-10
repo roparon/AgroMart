@@ -442,6 +442,16 @@
         border-color .2s ease;
 }
 
+.product-thumbnail.image-unavailable {
+    opacity: .35;
+    cursor: not-allowed;
+}
+
+.product-thumbnail.image-unavailable:hover {
+    opacity: .35;
+    transform: none;
+}
+
 .product-thumbnail:hover {
     opacity: 1;
     transform: translateY(-1px);
@@ -3180,15 +3190,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
             {% for image in product.images %}
 
-                {{ image.image_url | tojson }}
+                {% if image.image_url %}
 
-                {% if not loop.last %},{% endif %}
+                    {{ image.image_url | tojson }}
+
+                    {% if not loop.last %},{% endif %}
+
+                {% endif %}
 
             {% endfor %}
 
         {% endif %}
 
-    ];
+    ].filter(function (src) {
+        return typeof src === "string" &&
+               src.trim().length > 0;
+    });
 
 
     let currentIndex = 0;
@@ -3307,11 +3324,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
             preload.onerror = function () {
 
-                mainImage.src =
-                    nextSrc;
+                /*
+                 * Do NOT assign a broken image URL to the main image.
+                 * The old code did this and caused the browser to show
+                 * the broken/blank image icon when a thumbnail URL was
+                 * missing or invalid.
+                 *
+                 * Keep the currently displayed valid image instead.
+                 */
+                mainImage.style.opacity = "1";
 
-                mainImage.style.opacity =
-                    "1";
+                const failedThumbnail =
+                    thumbnails[currentIndex];
+
+                if (failedThumbnail) {
+                    failedThumbnail.classList.add("image-unavailable");
+                    failedThumbnail.setAttribute(
+                        "aria-disabled",
+                        "true"
+                    );
+                }
 
             };
 
@@ -3385,7 +3417,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     );
 
 
-                if (!Number.isNaN(index)) {
+                if (
+                    !Number.isNaN(index) &&
+                    !thumbnail.classList.contains("image-unavailable")
+                ) {
 
                     updateGallery(index);
 
