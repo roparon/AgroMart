@@ -857,15 +857,13 @@
 }
 
 /* ============================================================
-   PURCHASE BUTTONS
+   PURCHASE ACTIONS
    ============================================================ */
 
 .purchase-action-grid {
     display: grid;
-
     grid-template-columns: 1fr 1fr;
-
-    gap: 8px;
+    gap: 7px;
 }
 
 .purchase-action-form {
@@ -873,50 +871,83 @@
 }
 
 .add-cart-btn,
-.buy-now-btn {
+.buy-now-btn,
+.wishlist-btn,
+.whatsapp-enquiry-btn {
     width: 100%;
-    min-height: 48px;
+    min-height: 44px;
 
     display: inline-flex;
     align-items: center;
     justify-content: center;
 
-    gap: 6px;
+    gap: 5px;
 
     border-radius: var(--bm-radius-sm);
 
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 800;
+
+    line-height: 1.2;
+    text-decoration: none;
 
     transition:
         transform .15s ease,
-        box-shadow .15s ease;
+        box-shadow .15s ease,
+        background .15s ease,
+        border-color .15s ease,
+        color .15s ease;
+}
+
+/* ============================================================
+   ADD TO CART
+   ============================================================ */
+
+.add-cart-btn {
+    min-height: 44px;
 }
 
 .add-cart-btn:hover {
     transform: translateY(-1px);
-
-    box-shadow: 0 7px 18px rgba(21,128,61,.18);
+    box-shadow: 0 6px 15px rgba(21,128,61,.16);
 }
 
-.buy-now-btn {
-    background: var(--bm-yellow);
+/* ============================================================
+   BUY NOW
+   ============================================================ */
 
+.buy-now-btn {
+    min-height: 44px;
+
+    background: var(--bm-yellow);
     border: 1px solid var(--bm-yellow);
 
     color: #111827;
 
-    box-shadow: 0 4px 12px rgba(245,158,11,.14);
+    box-shadow: 0 3px 10px rgba(245,158,11,.12);
 }
 
 .buy-now-btn:hover {
     background: var(--bm-yellow-dark);
-
     border-color: var(--bm-yellow-dark);
-
     color: white;
 
     transform: translateY(-1px);
+}
+
+/* ============================================================
+   SECONDARY PRODUCT ACTIONS
+   WISHLIST + WHATSAPP
+   ============================================================ */
+
+.product-secondary-actions {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 7px;
+
+    margin-top: 7px;
 }
 
 /* ============================================================
@@ -924,35 +955,19 @@
    ============================================================ */
 
 .wishlist-form {
-    margin: 8px 0 0;
+    margin: 0;
 }
 
 .wishlist-btn {
-    width: 100%;
-    min-height: 43px;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    gap: 6px;
+    min-height: 40px;
 
     background: white;
 
     border: 1px solid var(--bm-border);
-    border-radius: var(--bm-radius-sm);
 
     color: var(--bm-text-soft);
 
     cursor: pointer;
-
-    font-size: 11px;
-    font-weight: 700;
-
-    transition:
-        background .15s ease,
-        border-color .15s ease,
-        color .15s ease;
 }
 
 .wishlist-btn:hover {
@@ -961,6 +976,48 @@
     border-color: #fecdd3;
 
     color: var(--bm-red);
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 5px 12px rgba(220,38,38,.10);
+}
+
+.wishlist-btn .bi-heart-fill {
+    color: var(--bm-red);
+}
+
+/* ============================================================
+   WHATSAPP ENQUIRY
+   ============================================================ */
+
+.whatsapp-enquiry-btn {
+    min-height: 40px;
+
+    background: #25d366;
+
+    border: 1px solid #25d366;
+
+    color: #ffffff;
+
+    cursor: pointer;
+
+    box-shadow: 0 3px 10px rgba(37,211,102,.12);
+}
+
+.whatsapp-enquiry-btn:hover {
+    background: #1ebe5d;
+
+    border-color: #1ebe5d;
+
+    color: #ffffff;
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 6px 15px rgba(37,211,102,.18);
+}
+
+.whatsapp-enquiry-btn i {
+    font-size: 15px;
 }
 
 /* ============================================================
@@ -1581,6 +1638,11 @@
         font-size: 13px;
     }
 
+    .whatsapp-enquiry-btn {
+        min-height: 50px;
+        font-size: 13px;
+    }
+
     .related-products-grid {
         grid-template-columns: repeat(3,minmax(0,1fr));
     }
@@ -1715,15 +1777,20 @@
         width: 52px;
     }
 
+    /* ========================================================
+       UPDATED PURCHASE / SECONDARY ACTION SIZES
+       ======================================================== */
+
     .add-cart-btn,
     .buy-now-btn {
-        min-height: 52px;
-
-        font-size: 13px;
+        min-height: 46px;
+        font-size: 12px;
     }
 
-    .wishlist-btn {
-        min-height: 46px;
+    .wishlist-btn,
+    .whatsapp-enquiry-btn {
+        min-height: 42px;
+        font-size: 11px;
     }
 
     .delivery-note {
@@ -1839,6 +1906,11 @@
         grid-template-columns: 1fr;
     }
 
+    .whatsapp-enquiry-btn {
+        min-height: 48px;
+        font-size: 11px;
+    }
+
     .related-products-grid {
         grid-template-columns: repeat(2,minmax(0,1fr));
     }
@@ -1860,6 +1932,7 @@
 .product-thumbnail:focus-visible,
 .quantity-btn:focus-visible,
 .wishlist-btn:focus-visible,
+.whatsapp-enquiry-btn:focus-visible,
 .share-btn:focus-visible,
 .sku-copy-btn:focus-visible,
 .related-search-link:focus-visible,
@@ -1887,697 +1960,606 @@
 
 <div class="product-details-page">
 
-    <!-- ====================================================
-         BREADCRUMB
-    ===================================================== -->
+<!-- ====================================================
+     BREADCRUMB
+===================================================== -->
 
-    <nav
-        class="product-breadcrumb"
-        aria-label="Product breadcrumb"
-    >
+<nav
+    class="product-breadcrumb"
+    aria-label="Product breadcrumb"
+>
 
-        <a href="{{ url_for('home.home') }}">
-            Home
+    <a href="{{ url_for('home.home') }}">
+        Home
+    </a>
+
+    <span class="separator">
+        /
+    </span>
+
+    {% if product.category %}
+
+        <a
+            href="{{ url_for(
+                'product.category_products',
+                slug=product.category.slug
+            ) }}"
+        >
+            {{ product.category.name }}
         </a>
 
         <span class="separator">
             /
         </span>
 
-        {% if product.category %}
+    {% endif %}
 
-            <a
-                href="{{ url_for(
-                    'product.category_products',
-                    slug=product.category.slug
-                ) }}"
-            >
-                {{ product.category.name }}
-            </a>
+    <span class="current">
+        {{ product.name }}
+    </span>
 
-            <span class="separator">
-                /
-            </span>
-
-        {% endif %}
-
-        <span class="current">
-            {{ product.name }}
-        </span>
-
-    </nav>
+</nav>
 
 
-    <!-- ====================================================
-         MAIN PRODUCT
-    ===================================================== -->
+<!-- ====================================================
+     MAIN PRODUCT
+===================================================== -->
 
-    <div class="row g-3 g-lg-4 product-details-row">
+<div class="row g-3 g-lg-4 product-details-row">
 
-        <!-- ==================================================
-             PRODUCT GALLERY
-        =================================================== -->
+    <!-- ==================================================
+         PRODUCT GALLERY
+    =================================================== -->
 
-        <div class="col-12 col-lg-6">
+    <div class="col-12 col-lg-6">
 
-            <div class="product-gallery-card">
+        <div class="product-gallery-card">
 
-                {% if product.images %}
+            {% if product.images %}
 
-                    {% set primary_image =
-                        product.images
-                        | selectattr("is_primary", "equalto", true)
-                        | first
-                    %}
+                {% set primary_image =
+                    product.images
+                    | selectattr("is_primary", "equalto", true)
+                    | first
+                %}
 
 
-                    <!-- MAIN IMAGE -->
+                <!-- MAIN IMAGE -->
 
-                    <div
-                        class="product-main-image-wrapper"
-                        id="productGallery"
+                <div
+                    class="product-main-image-wrapper"
+                    id="productGallery"
+                >
+
+                    <img
+                        id="mainProductImage"
+
+                        src="{{
+                            primary_image.image_url
+                            if primary_image
+                            else product.images[0].image_url
+                        }}"
+
+                        alt="{{ product.name }}"
+
+                        class="product-main-image"
+
+                        draggable="false"
+
+                        loading="eager"
+
+                        fetchpriority="high"
+
+                        decoding="async"
                     >
 
-                        <img
-                            id="mainProductImage"
+                </div>
 
-                            src="{{
-                                primary_image.image_url
-                                if primary_image
-                                else product.images[0].image_url
-                            }}"
+            {% else %}
 
-                            alt="{{ product.name }}"
+                <div
+                    class="product-image-fallback"
+                    aria-label="No product image available"
+                >
+                    <i class="bi bi-image"></i>
+                </div>
 
-                            class="product-main-image"
+            {% endif %}
 
-                            draggable="false"
 
-                            loading="eager"
+            <!-- GALLERY TOP -->
 
-                            fetchpriority="high"
+            <div class="gallery-top-bar">
 
-                            decoding="async"
-                        >
+                {% if product.brand %}
 
-                    </div>
+                    <span class="gallery-brand">
+
+                        <i class="bi bi-patch-check-fill me-1"></i>
+
+                        {{ product.brand }}
+
+                    </span>
 
                 {% else %}
 
-                    <div
-                        class="product-image-fallback"
-                        aria-label="No product image available"
-                    >
-                        <i class="bi bi-image"></i>
-                    </div>
+                    <span></span>
 
                 {% endif %}
 
 
-                <!-- GALLERY TOP -->
+                {% if product.discount and product.discount > 0 %}
 
-                <div class="gallery-top-bar">
+                    <span class="gallery-discount">
 
-                    {% if product.brand %}
+                        {{ product.discount }}% OFF
 
-                        <span class="gallery-brand">
+                    </span>
 
-                            <i class="bi bi-patch-check-fill me-1"></i>
+                {% endif %}
 
-                            {{ product.brand }}
-
-                        </span>
-
-                    {% else %}
-
-                        <span></span>
-
-                    {% endif %}
+            </div>
 
 
-                    {% if product.discount and product.discount > 0 %}
+            <!-- IMAGE COUNTER -->
 
-                        <span class="gallery-discount">
+            {% if product.images|length > 1 %}
 
-                            {{ product.discount }}% OFF
+                <div
+                    class="gallery-counter"
+                    id="galleryCounter"
+                    aria-live="polite"
+                >
+                    1 / {{ product.images|length }}
+                </div>
 
-                        </span>
+            {% endif %}
+
+
+            <!-- IMAGE NAVIGATION -->
+
+            {% if product.images|length > 1 %}
+
+                <div class="gallery-navigation">
+
+                    <button
+                        type="button"
+                        id="previousImage"
+                        class="gallery-nav-btn"
+                        aria-label="Previous product image"
+                    >
+                        <i class="bi bi-chevron-left"></i>
+                    </button>
+
+
+                    <button
+                        type="button"
+                        id="nextImage"
+                        class="gallery-nav-btn"
+                        aria-label="Next product image"
+                    >
+                        <i class="bi bi-chevron-right"></i>
+                    </button>
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- CATEGORY -->
+
+            {% if product.category %}
+
+                <div class="gallery-bottom">
+
+                    <span class="gallery-category">
+
+                        <i class="bi bi-grid me-1"></i>
+
+                        {{ product.category.name }}
+
+                    </span>
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- THUMBNAILS -->
+
+            {% if product.images|length > 1 %}
+
+                <div class="product-thumbnails-wrapper">
+
+                    <div
+                        class="product-thumbnails"
+                        id="productThumbnails"
+                        aria-label="Product images"
+                    >
+
+                        {% for image in product.images %}
+
+                            {% set image_is_active =
+                                (primary_image and image.id == primary_image.id)
+                                or
+                                (not primary_image and loop.first)
+                            %}
+
+                            <button
+                                type="button"
+
+                                class="
+                                    product-thumbnail
+                                    {% if image_is_active %}active{% endif %}
+                                "
+
+                                data-index="{{ loop.index0 }}"
+
+                                data-image="{{ image.image_url }}"
+
+                                aria-label="View product image {{ loop.index }}"
+
+                                aria-current="{{ 'true' if image_is_active else 'false' }}"
+                            >
+
+                                <img
+                                    src="{{ image.image_url }}"
+
+                                    alt="{{ product.name }} image {{ loop.index }}"
+
+                                    loading="lazy"
+
+                                    decoding="async"
+                                >
+
+                            </button>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         PRODUCT INFORMATION
+    =================================================== -->
+
+    <div class="col-12 col-lg-6">
+
+        <div class="product-info-card d-flex flex-column">
+
+            <!-- META -->
+
+            <div class="product-meta">
+
+                <div class="product-sku">
+
+                    <strong>SKU:</strong>
+
+                    <span id="productSku">
+                        {{ product.sku or "N/A" }}
+                    </span>
+
+                    {% if product.sku %}
+
+                        <button
+                            type="button"
+                            class="sku-copy-btn"
+                            id="copySkuButton"
+                            aria-label="Copy product SKU"
+                            title="Copy SKU"
+                        >
+
+                            <i class="bi bi-copy"></i>
+                            Copy
+
+                        </button>
 
                     {% endif %}
 
                 </div>
 
 
-                <!-- IMAGE COUNTER -->
+                {% if product.stock > 0 %}
 
-                {% if product.images|length > 1 %}
-
-                    <div
-                        class="gallery-counter"
-                        id="galleryCounter"
-                        aria-live="polite"
+                    <span
+                        class="
+                            badge
+                            bg-success-subtle
+                            text-success
+                            border
+                            border-success-subtle
+                            rounded-pill
+                            px-2
+                            py-1
+                        "
                     >
-                        1 / {{ product.images|length }}
-                    </div>
+
+                        <i class="bi bi-check-circle me-1"></i>
+
+                        In Stock
+
+                        {% if product.stock <= 10 %}
+
+                            · {{ product.stock }} left
+
+                        {% endif %}
+
+                    </span>
+
+                {% else %}
+
+                    <span
+                        class="
+                            badge
+                            bg-danger-subtle
+                            text-danger
+                            border
+                            border-danger-subtle
+                            rounded-pill
+                            px-2
+                            py-1
+                        "
+                    >
+
+                        <i class="bi bi-x-circle me-1"></i>
+
+                        Out of Stock
+
+                    </span>
 
                 {% endif %}
 
-
-                <!-- IMAGE NAVIGATION -->
-
-                {% if product.images|length > 1 %}
-
-                    <div class="gallery-navigation">
-
-                        <button
-                            type="button"
-                            id="previousImage"
-                            class="gallery-nav-btn"
-                            aria-label="Previous product image"
-                        >
-                            <i class="bi bi-chevron-left"></i>
-                        </button>
+            </div>
 
 
-                        <button
-                            type="button"
-                            id="nextImage"
-                            class="gallery-nav-btn"
-                            aria-label="Next product image"
-                        >
-                            <i class="bi bi-chevron-right"></i>
-                        </button>
+            <!-- TITLE -->
 
-                    </div>
-
-                {% endif %}
+            <h1 class="product-title">
+                {{ product.name }}
+            </h1>
 
 
-                <!-- CATEGORY -->
+            <!-- BRAND -->
 
-                {% if product.category %}
+            {% if product.brand %}
 
-                    <div class="gallery-bottom">
+                <div class="product-brand">
 
-                        <span class="gallery-category">
+                    <i class="bi bi-patch-check-fill"></i>
 
-                            <i class="bi bi-grid me-1"></i>
+                    {{ product.brand }}
 
-                            {{ product.category.name }}
+                </div>
 
+            {% endif %}
+
+
+            <!-- PRICE -->
+
+            <div class="product-price-section">
+
+                <span class="price-label">
+                    Unit Price
+                </span>
+
+                {% set final_price =
+                    discounted_price
+                    if discounted_price is defined
+                    else product.price
+                %}
+
+
+                {% if product.discount and product.discount > 0 %}
+
+                    {% set savings =
+                        product.price - final_price
+                    %}
+
+                    <div class="price-line">
+
+                        <span class="current-price">
+                            KSh {{ "{:,.2f}".format(final_price) }}
+                        </span>
+
+                        <span class="original-price">
+                            KSh {{ "{:,.2f}".format(product.price) }}
+                        </span>
+
+                        <span class="save-badge">
+                            SAVE {{ product.discount }}%
                         </span>
 
                     </div>
 
-                {% endif %}
 
+                    <div class="savings-text">
 
-                <!-- THUMBNAILS -->
+                        <i class="bi bi-tag-fill me-1"></i>
 
-                {% if product.images|length > 1 %}
+                        You save
+                        KSh {{ "{:,.2f}".format(savings) }}
+                        per unit
 
-                    <div class="product-thumbnails-wrapper">
+                    </div>
 
-                        <div
-                            class="product-thumbnails"
-                            id="productThumbnails"
-                            aria-label="Product images"
-                        >
+                {% else %}
 
-                            {% for image in product.images %}
+                    <div class="price-line">
 
-                                {% set image_is_active =
-                                    (primary_image and image.id == primary_image.id)
-                                    or
-                                    (not primary_image and loop.first)
-                                %}
-
-                                <button
-                                    type="button"
-
-                                    class="
-                                        product-thumbnail
-                                        {% if image_is_active %}active{% endif %}
-                                    "
-
-                                    data-index="{{ loop.index0 }}"
-
-                                    data-image="{{ image.image_url }}"
-
-                                    aria-label="View product image {{ loop.index }}"
-
-                                    aria-current="{{ 'true' if image_is_active else 'false' }}"
-                                >
-
-                                    <img
-                                        src="{{ image.image_url }}"
-
-                                        alt="{{ product.name }} image {{ loop.index }}"
-
-                                        loading="lazy"
-
-                                        decoding="async"
-                                    >
-
-                                </button>
-
-                            {% endfor %}
-
-                        </div>
+                        <span class="current-price">
+                            KSh {{ "{:,.2f}".format(final_price) }}
+                        </span>
 
                     </div>
 
                 {% endif %}
 
             </div>
+             <!-- PURCHASE -->
 
-        </div>
+            <div class="purchase-section">
+
+                {% if product.stock > 0 %}
+
+                    <!-- QUANTITY -->
+
+                    <div class="quantity-row">
+
+                        <div>
+
+                            <div class="quantity-label">
+                                Quantity
+                            </div>
+
+                            <div class="quantity-stock">
+                                Maximum {{ product.stock }}
+                            </div>
+
+                        </div>
 
 
-        <!-- ==================================================
-             PRODUCT INFORMATION
-        =================================================== -->
-
-        <div class="col-12 col-lg-6">
-
-            <div class="product-info-card d-flex flex-column">
-
-                <!-- META -->
-
-                <div class="product-meta">
-
-                    <div class="product-sku">
-
-                        <strong>SKU:</strong>
-
-                        <span id="productSku">
-                            {{ product.sku or "N/A" }}
-                        </span>
-
-                        {% if product.sku %}
+                        <div
+                            class="quantity-control"
+                            aria-label="Product quantity"
+                        >
 
                             <button
                                 type="button"
-                                class="sku-copy-btn"
-                                id="copySkuButton"
-                                aria-label="Copy product SKU"
-                                title="Copy SKU"
+                                class="quantity-btn"
+                                id="decreaseQuantity"
+                                aria-label="Decrease quantity"
                             >
-
-                                <i class="bi bi-copy"></i>
-                                Copy
-
+                                <i class="bi bi-dash"></i>
                             </button>
 
-                        {% endif %}
 
-                    </div>
-
-
-                    {% if product.stock > 0 %}
-
-                        <span
-                            class="
-                                badge
-                                bg-success-subtle
-                                text-success
-                                border
-                                border-success-subtle
-                                rounded-pill
-                                px-2
-                                py-1
-                            "
-                        >
-
-                            <i class="bi bi-check-circle me-1"></i>
-
-                            In Stock
-
-                            {% if product.stock <= 10 %}
-
-                                · {{ product.stock }} left
-
-                            {% endif %}
-
-                        </span>
-
-                    {% else %}
-
-                        <span
-                            class="
-                                badge
-                                bg-danger-subtle
-                                text-danger
-                                border
-                                border-danger-subtle
-                                rounded-pill
-                                px-2
-                                py-1
-                            "
-                        >
-
-                            <i class="bi bi-x-circle me-1"></i>
-
-                            Out of Stock
-
-                        </span>
-
-                    {% endif %}
-
-                </div>
-
-
-                <!-- TITLE -->
-
-                <h1 class="product-title">
-                    {{ product.name }}
-                </h1>
-
-
-                <!-- BRAND -->
-
-                {% if product.brand %}
-
-                    <div class="product-brand">
-
-                        <i class="bi bi-patch-check-fill"></i>
-
-                        {{ product.brand }}
-
-                    </div>
-
-                {% endif %}
-
-
-                <!-- PRICE -->
-
-                <div class="product-price-section">
-
-                    <span class="price-label">
-                        Unit Price
-                    </span>
-
-                    {% set final_price =
-                        discounted_price
-                        if discounted_price is defined
-                        else product.price
-                    %}
-
-
-                    {% if product.discount and product.discount > 0 %}
-
-                        {% set savings =
-                            product.price - final_price
-                        %}
-
-                        <div class="price-line">
-
-                            <span class="current-price">
-                                KSh {{ "{:,.2f}".format(final_price) }}
-                            </span>
-
-                            <span class="original-price">
-                                KSh {{ "{:,.2f}".format(product.price) }}
-                            </span>
-
-                            <span class="save-badge">
-                                SAVE {{ product.discount }}%
-                            </span>
-
-                        </div>
-
-
-                        <div class="savings-text">
-
-                            <i class="bi bi-tag-fill me-1"></i>
-
-                            You save
-                            KSh {{ "{:,.2f}".format(savings) }}
-                            per unit
-
-                        </div>
-
-                    {% else %}
-
-                        <div class="price-line">
-
-                            <span class="current-price">
-                                KSh {{ "{:,.2f}".format(final_price) }}
-                            </span>
-
-                        </div>
-
-                    {% endif %}
-
-                </div>
-
-
-                <!-- PRODUCT OVERVIEW -->
-
-                <div>
-
-                    <h2 class="section-title">
-                        Product Overview
-                    </h2>
-
-                    {% if product.description %}
-
-                        <div class="product-description">
-                            {{ product.description }}
-                        </div>
-
-                    {% else %}
-
-                        <div class="product-description product-description-empty">
-                            Product details will be updated soon.
-                        </div>
-
-                    {% endif %}
-
-                </div>
-
-
-                <!-- PRODUCT INFORMATION -->
-
-                <div class="product-info-grid">
-
-                    <div class="info-item">
-
-                        <span class="info-item-label">
-                            Category
-                        </span>
-
-                        <span class="info-item-value">
-
-                            {% if product.category %}
-                                {{ product.category.name }}
-                            {% else %}
-                                General
-                            {% endif %}
-
-                        </span>
-
-                    </div>
-
-
-                    <div class="info-item">
-
-                        <span class="info-item-label">
-                            Availability
-                        </span>
-
-                        <span class="info-item-value">
-
-                            {% if product.stock > 0 %}
-                                Available
-                            {% else %}
-                                Currently unavailable
-                            {% endif %}
-
-                        </span>
-
-                    </div>
-
-
-                    <div class="info-item">
-
-                        <span class="info-item-label">
-                            Stock
-                        </span>
-
-                        <span class="info-item-value">
-                            {{ product.stock }} unit(s)
-                        </span>
-
-                    </div>
-
-
-                    <div class="info-item">
-
-                        <span class="info-item-label">
-                            Delivery
-                        </span>
-
-                        <span class="info-item-value">
-                            Nationwide
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-                <!-- PURCHASE -->
-
-                <div class="purchase-section">
-
-                    {% if product.stock > 0 %}
-
-                        <!-- QUANTITY -->
-
-                        <div class="quantity-row">
-
-                            <div>
-
-                                <div class="quantity-label">
-                                    Quantity
-                                </div>
-
-                                <div class="quantity-stock">
-                                    Maximum {{ product.stock }}
-                                </div>
-
-                            </div>
-
-
-                            <div
-                                class="quantity-control"
+                            <input
+                                type="number"
+                                id="productQuantity"
+                                class="quantity-input"
+                                value="1"
+                                min="1"
+                                max="{{ product.stock }}"
+                                inputmode="numeric"
                                 aria-label="Product quantity"
                             >
 
-                                <button
-                                    type="button"
-                                    class="quantity-btn"
-                                    id="decreaseQuantity"
-                                    aria-label="Decrease quantity"
-                                >
-                                    <i class="bi bi-dash"></i>
-                                </button>
 
-
-                                <input
-                                    type="number"
-                                    id="productQuantity"
-                                    class="quantity-input"
-                                    value="1"
-                                    min="1"
-                                    max="{{ product.stock }}"
-                                    inputmode="numeric"
-                                    aria-label="Product quantity"
-                                >
-
-
-                                <button
-                                    type="button"
-                                    class="quantity-btn"
-                                    id="increaseQuantity"
-                                    aria-label="Increase quantity"
-                                >
-                                    <i class="bi bi-plus"></i>
-                                </button>
-
-                            </div>
+                            <button
+                                type="button"
+                                class="quantity-btn"
+                                id="increaseQuantity"
+                                aria-label="Increase quantity"
+                            >
+                                <i class="bi bi-plus"></i>
+                            </button>
 
                         </div>
 
+                    </div>
 
-                        <!-- ACTION BUTTONS -->
 
-                        <div class="purchase-action-grid">
+                    <!-- ACTION BUTTONS -->
 
-                            <!-- ADD TO CART -->
+                    <div class="purchase-action-grid">
 
-                            <form
-                                action="{{ url_for(
-                                    'cart.add_to_cart',
-                                    product_id=product.id
-                                ) }}"
-                                method="POST"
-                                class="purchase-action-form"
-                                id="addToCartForm"
+                        <!-- ADD TO CART -->
+
+                        <form
+                            action="{{ url_for(
+                                'cart.add_to_cart',
+                                product_id=product.id
+                            ) }}"
+                            method="POST"
+                            class="purchase-action-form"
+                            id="addToCartForm"
+                        >
+
+                            <input
+                                type="hidden"
+                                name="csrf_token"
+                                value="{{ csrf_token() }}"
                             >
 
-                                <input
-                                    type="hidden"
-                                    name="csrf_token"
-                                    value="{{ csrf_token() }}"
-                                >
-
-                                <input
-                                    type="hidden"
-                                    name="quantity"
-                                    id="cartQuantity"
-                                    value="1"
-                                >
-
-                                <button
-                                    type="submit"
-                                    class="btn btn-success add-cart-btn"
-                                >
-
-                                    <i class="bi bi-cart-plus"></i>
-
-                                    <span>
-                                        Add to Cart
-                                    </span>
-
-                                </button>
-
-                            </form>
-
-
-                            <!-- BUY NOW -->
-
-                            <form
-                                action="{{ url_for(
-                                    'cart.buy_now',
-                                    product_id=product.id
-                                ) }}"
-                                method="POST"
-                                class="purchase-action-form"
-                                id="buyNowForm"
+                            <input
+                                type="hidden"
+                                name="quantity"
+                                id="cartQuantity"
+                                value="1"
                             >
 
-                                <input
-                                    type="hidden"
-                                    name="csrf_token"
-                                    value="{{ csrf_token() }}"
-                                >
+                            <button
+                                type="submit"
+                                class="btn btn-success add-cart-btn"
+                            >
 
-                                <input
-                                    type="hidden"
-                                    name="quantity"
-                                    id="buyNowQuantity"
-                                    value="1"
-                                >
+                                <i class="bi bi-cart-plus"></i>
 
-                                <button
-                                    type="submit"
-                                    class="btn buy-now-btn"
-                                >
+                                <span>
+                                    Add to Cart
+                                </span>
 
-                                    <i class="bi bi-lightning-charge-fill"></i>
+                            </button>
 
-                                    <span>
-                                        Buy Now
-                                    </span>
+                        </form>
 
-                                </button>
 
-                            </form>
+                        <!-- BUY NOW -->
 
-                        </div>
+                        <form
+                            action="{{ url_for(
+                                'cart.buy_now',
+                                product_id=product.id
+                            ) }}"
+                            method="POST"
+                            class="purchase-action-form"
+                            id="buyNowForm"
+                        >
 
+                            <input
+                                type="hidden"
+                                name="csrf_token"
+                                value="{{ csrf_token() }}"
+                            >
+
+                            <input
+                                type="hidden"
+                                name="quantity"
+                                id="buyNowQuantity"
+                                value="1"
+                            >
+
+                            <button
+                                type="submit"
+                                class="btn buy-now-btn"
+                            >
+
+                                <i class="bi bi-lightning-charge-fill"></i>
+
+                                <span>
+                                    Buy Now
+                                </span>
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+
+                    <!-- ==================================================
+                         SECONDARY PRODUCT ACTIONS
+                    =================================================== -->
+
+                    <div class="product-secondary-actions">
 
                         <!-- WISHLIST -->
 
@@ -2599,14 +2581,15 @@
                             <button
                                 type="submit"
                                 class="wishlist-btn"
+                                aria-label="{% if is_in_wishlist is defined and is_in_wishlist %}Remove {{ product.name }} from wishlist{% else %}Add {{ product.name }} to wishlist{% endif %}"
                             >
 
                                 {% if is_in_wishlist is defined and is_in_wishlist %}
 
-                                    <i class="bi bi-heart-fill text-danger"></i>
+                                    <i class="bi bi-heart-fill"></i>
 
                                     <span>
-                                        Remove from Wishlist
+                                        Wishlisted
                                     </span>
 
                                 {% else %}
@@ -2614,7 +2597,7 @@
                                     <i class="bi bi-heart"></i>
 
                                     <span>
-                                        Add to Wishlist
+                                        Wishlist
                                     </span>
 
                                 {% endif %}
@@ -2624,91 +2607,216 @@
                         </form>
 
 
-                        <!-- SHARE -->
+                        <!-- WHATSAPP ENQUIRY -->
 
-                        <div class="share-product-row">
+                        <a
+                            href="https://wa.me/254710160300"
+                            class="whatsapp-enquiry-btn"
+                            id="whatsappEnquiryButton"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="Enquire about {{ product.name }} on WhatsApp"
 
-                            <button
-                                type="button"
-                                class="share-btn"
-                                id="shareProductButton"
-                            >
+                            data-product-name="{{ product.name|e }}"
+                            data-product-sku="{{ product.sku or 'N/A' }}"
+                            data-product-price="{{ '{:,.2f}'.format(final_price) }}"
+                        >
 
-                                <i class="bi bi-share me-1"></i>
+                            <i
+                                class="bi bi-whatsapp"
+                                aria-hidden="true"
+                            ></i>
 
-                                Share Product
+                            <span>
+                                WhatsApp
+                            </span>
 
-                            </button>
+                        </a>
 
-                        </div>
+                    </div>
 
-                    {% else %}
+
+
+            <!-- PRODUCT OVERVIEW -->
+
+            <div>
+
+                <h2 class="section-title">
+                    Product Overview
+                </h2>
+
+                {% if product.description %}
+
+                    <div class="product-description">
+                        {{ product.description }}
+                    </div>
+
+                {% else %}
+
+                    <div class="product-description product-description-empty">
+                        Product details will be updated soon.
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- PRODUCT INFORMATION -->
+
+            <div class="product-info-grid">
+
+                <div class="info-item">
+
+                    <span class="info-item-label">
+                        Category
+                    </span>
+
+                    <span class="info-item-value">
+
+                        {% if product.category %}
+                            {{ product.category.name }}
+                        {% else %}
+                            General
+                        {% endif %}
+
+                    </span>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <span class="info-item-label">
+                        Availability
+                    </span>
+
+                    <span class="info-item-value">
+
+                        {% if product.stock > 0 %}
+                            Available
+                        {% else %}
+                            Currently unavailable
+                        {% endif %}
+
+                    </span>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <span class="info-item-label">
+                        Stock
+                    </span>
+
+                    <span class="info-item-value">
+                        {{ product.stock }} unit(s)
+                    </span>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <span class="info-item-label">
+                        Delivery
+                    </span>
+
+                    <span class="info-item-value">
+                        Nationwide
+                    </span>
+
+                </div>
+
+            </div>
+
+
+           
+
+                    <!-- SHARE -->
+
+                    <div class="share-product-row">
 
                         <button
                             type="button"
-                            class="btn btn-secondary out-of-stock-btn"
-                            disabled
+                            class="share-btn"
+                            id="shareProductButton"
                         >
 
-                            <i class="bi bi-x-circle me-2"></i>
+                            <i class="bi bi-share me-1"></i>
 
-                            Out of Stock
+                            Share Product
 
                         </button>
 
-                    {% endif %}
+                    </div>
+
+                {% else %}
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary out-of-stock-btn"
+                        disabled
+                    >
+
+                        <i class="bi bi-x-circle me-2"></i>
+
+                        Out of Stock
+
+                    </button>
+
+                {% endif %}
 
 
-                    <!-- DELIVERY -->
+                <!-- DELIVERY -->
 
-                    <div class="delivery-note">
+                <div class="delivery-note">
 
-                        <i class="bi bi-truck"></i>
+                    <i class="bi bi-truck"></i>
+
+                    <span>
+                        Nationwide delivery available.
+                        Delivery availability and cost are
+                        confirmed during checkout.
+                    </span>
+
+                </div>
+
+
+                <!-- TRUST -->
+
+                <div class="trust-features">
+
+                    <div class="trust-feature">
+
+                        <i class="bi bi-shield-check"></i>
 
                         <span>
-                            Nationwide delivery available.
-                            Delivery availability and cost are
-                            confirmed during checkout.
+                            Secure Shopping
                         </span>
 
                     </div>
 
 
-                    <!-- TRUST -->
+                    <div class="trust-feature">
 
-                    <div class="trust-features">
+                        <i class="bi bi-truck"></i>
 
-                        <div class="trust-feature">
+                        <span>
+                            Nationwide Delivery
+                        </span>
 
-                            <i class="bi bi-shield-check"></i>
-
-                            <span>
-                                Secure Shopping
-                            </span>
-
-                        </div>
+                    </div>
 
 
-                        <div class="trust-feature">
+                    <div class="trust-feature">
 
-                            <i class="bi bi-truck"></i>
+                        <i class="bi bi-headset"></i>
 
-                            <span>
-                                Nationwide Delivery
-                            </span>
-
-                        </div>
-
-
-                        <div class="trust-feature">
-
-                            <i class="bi bi-headset"></i>
-
-                            <span>
-                                Customer Support
-                            </span>
-
-                        </div>
+                        <span>
+                            Customer Support
+                        </span>
 
                     </div>
 
@@ -2719,368 +2827,372 @@
         </div>
 
     </div>
-    <!-- ====================================================
-         RELATED PRODUCTS
-    ===================================================== -->
 
-    {% if related_products %}
-
-        <section
-            class="related-products-section"
-            aria-labelledby="relatedProductsTitle"
-        >
-
-            <div class="related-products-header">
-
-                <div>
-
-                    <h2
-                        class="related-products-title"
-                        id="relatedProductsTitle"
-                    >
-                        Related Products
-                    </h2>
-
-                    <p class="related-products-subtitle">
-                        Products related to {{ product.name }}
-                    </p>
-
-                </div>
+</div>
 
 
-                {% if product.category %}
+<!-- ====================================================
+     RELATED PRODUCTS
+===================================================== -->
+
+{% if related_products %}
+
+    <section
+        class="related-products-section"
+        aria-labelledby="relatedProductsTitle"
+    >
+
+        <div class="related-products-header">
+
+            <div>
+
+                <h2
+                    class="related-products-title"
+                    id="relatedProductsTitle"
+                >
+                    Related Products
+                </h2>
+
+                <p class="related-products-subtitle">
+                    Products related to {{ product.name }}
+                </p>
+
+            </div>
+
+
+            {% if product.category %}
+
+                <a
+                    href="{{ url_for(
+                        'product.category_products',
+                        slug=product.category.slug
+                    ) }}"
+
+                    class="related-view-all"
+                >
+                    View category
+                    <i class="bi bi-arrow-right ms-1"></i>
+                </a>
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="related-products-grid">
+
+            {% for related in related_products %}
+
+                <article class="related-product-card">
+
+                    <!-- IMAGE -->
 
                     <a
                         href="{{ url_for(
-                            'product.category_products',
-                            slug=product.category.slug
+                            'product.product_details',
+                            id=related.id
                         ) }}"
 
-                        class="related-view-all"
+                        class="related-product-image-link"
+
+                        aria-label="View {{ related.name }}"
                     >
-                        View category
-                        <i class="bi bi-arrow-right ms-1"></i>
+
+                        {% if related.images %}
+
+                            {% set related_primary =
+                                related.images
+                                | selectattr(
+                                    "is_primary",
+                                    "equalto",
+                                    true
+                                )
+                                | first
+                            %}
+
+                            <img
+                                src="{{
+                                    related_primary.image_url
+                                    if related_primary
+                                    else related.images[0].image_url
+                                }}"
+
+                                alt="{{ related.name }}"
+
+                                class="related-product-image"
+
+                                loading="lazy"
+
+                                decoding="async"
+                            >
+
+                        {% else %}
+
+                            <div
+                                class="related-product-placeholder"
+                                aria-hidden="true"
+                            >
+                                <i class="bi bi-image"></i>
+                            </div>
+
+                        {% endif %}
+
                     </a>
 
-                {% endif %}
 
-            </div>
+                    <!-- BODY -->
 
+                    <div class="related-product-body">
 
-            <div class="related-products-grid">
+                        {% if related.category %}
 
-                {% for related in related_products %}
+                            <span class="related-product-category">
 
-                    <article class="related-product-card">
+                                {{ related.category.name }}
 
-                        <!-- IMAGE -->
+                            </span>
 
-                        <a
-                            href="{{ url_for(
-                                'product.product_details',
-                                id=related.id
-                            ) }}"
-
-                            class="related-product-image-link"
-
-                            aria-label="View {{ related.name }}"
-                        >
-
-                            {% if related.images %}
-
-                                {% set related_primary =
-                                    related.images
-                                    | selectattr(
-                                        "is_primary",
-                                        "equalto",
-                                        true
-                                    )
-                                    | first
-                                %}
-
-                                <img
-                                    src="{{
-                                        related_primary.image_url
-                                        if related_primary
-                                        else related.images[0].image_url
-                                    }}"
-
-                                    alt="{{ related.name }}"
-
-                                    class="related-product-image"
-
-                                    loading="lazy"
-
-                                    decoding="async"
-                                >
-
-                            {% else %}
-
-                                <div
-                                    class="related-product-placeholder"
-                                    aria-hidden="true"
-                                >
-                                    <i class="bi bi-image"></i>
-                                </div>
-
-                            {% endif %}
-
-                        </a>
+                        {% endif %}
 
 
-                        <!-- BODY -->
+                        <h3 class="related-product-name">
 
-                        <div class="related-product-body">
+                            <a
+                                href="{{ url_for(
+                                    'product.product_details',
+                                    id=related.id
+                                ) }}"
+                            >
+                                {{ related.name }}
+                            </a>
 
-                            {% if related.category %}
+                        </h3>
 
-                                <span class="related-product-category">
 
-                                    {{ related.category.name }}
+                        <div class="related-product-price">
+
+                            {% set related_price =
+                                related_product_prices[related.id]
+                                if related_product_prices is defined
+                                and related.id in related_product_prices
+                                else related.price
+                            %}
+
+                            KSh
+                            {{ "{:,.2f}".format(related_price) }}
+
+                            {% if related.discount and related.discount > 0 %}
+
+                                <span class="related-product-original-price">
+
+                                    KSh
+                                    {{ "{:,.2f}".format(related.price) }}
 
                                 </span>
 
                             {% endif %}
 
-
-                            <h3 class="related-product-name">
-
-                                <a
-                                    href="{{ url_for(
-                                        'product.product_details',
-                                        id=related.id
-                                    ) }}"
-                                >
-                                    {{ related.name }}
-                                </a>
-
-                            </h3>
+                        </div>
 
 
-                            <div class="related-product-price">
+                        {% if related.stock > 0 %}
 
-                                {% set related_price =
-                                    related_product_prices[related.id]
-                                    if related_product_prices is defined
-                                    and related.id in related_product_prices
-                                    else related.price
-                                %}
+                            <div class="related-product-stock in-stock">
 
-                                KSh
-                                {{ "{:,.2f}".format(related_price) }}
+                                <i class="bi bi-check-circle me-1"></i>
 
-                                {% if related.discount and related.discount > 0 %}
-
-                                    <span class="related-product-original-price">
-
-                                        KSh
-                                        {{ "{:,.2f}".format(related.price) }}
-
-                                    </span>
-
-                                {% endif %}
+                                In stock
 
                             </div>
 
+                        {% else %}
 
-                            {% if related.stock > 0 %}
+                            <div class="related-product-stock out-stock">
 
-                                <div class="related-product-stock in-stock">
+                                <i class="bi bi-x-circle me-1"></i>
 
-                                    <i class="bi bi-check-circle me-1"></i>
+                                Out of stock
 
-                                    In stock
+                            </div>
 
-                                </div>
+                        {% endif %}
 
-                            {% else %}
+                    </div>
 
-                                <div class="related-product-stock out-stock">
+                </article>
 
-                                    <i class="bi bi-x-circle me-1"></i>
+            {% endfor %}
 
-                                    Out of stock
+        </div>
 
-                                </div>
+    </section>
 
-                            {% endif %}
+{% endif %}
 
-                        </div>
 
-                    </article>
+<!-- ====================================================
+     RECENTLY VIEWED
+===================================================== -->
 
-                {% endfor %}
+{% if recently_viewed %}
+
+    <section
+        class="related-products-section"
+        aria-labelledby="recentlyViewedTitle"
+    >
+
+        <div class="related-products-header">
+
+            <div>
+
+                <h2
+                    class="related-products-title"
+                    id="recentlyViewedTitle"
+                >
+                    Recently Viewed
+                </h2>
+
+                <p class="related-products-subtitle">
+                    Products you may want to revisit
+                </p>
 
             </div>
 
-        </section>
-
-    {% endif %}
+        </div>
 
 
-    <!-- ====================================================
-         RECENTLY VIEWED
-    ===================================================== -->
+        <div class="related-products-grid">
 
-    {% if recently_viewed %}
+            {% for recent in recently_viewed %}
 
-        <section
-            class="related-products-section"
-            aria-labelledby="recentlyViewedTitle"
-        >
+                <article class="related-product-card">
 
-            <div class="related-products-header">
+                    <a
+                        href="{{ url_for(
+                            'product.product_details',
+                            id=recent.id
+                        ) }}"
 
-                <div>
+                        class="related-product-image-link"
 
-                    <h2
-                        class="related-products-title"
-                        id="recentlyViewedTitle"
+                        aria-label="View {{ recent.name }}"
                     >
-                        Recently Viewed
-                    </h2>
 
-                    <p class="related-products-subtitle">
-                        Products you may want to revisit
-                    </p>
+                        {% if recent.images %}
 
-                </div>
+                            {% set recent_primary =
+                                recent.images
+                                | selectattr(
+                                    "is_primary",
+                                    "equalto",
+                                    true
+                                )
+                                | first
+                            %}
 
-            </div>
+                            <img
+                                src="{{
+                                    recent_primary.image_url
+                                    if recent_primary
+                                    else recent.images[0].image_url
+                                }}"
 
+                                alt="{{ recent.name }}"
 
-            <div class="related-products-grid">
+                                class="related-product-image"
 
-                {% for recent in recently_viewed %}
+                                loading="lazy"
 
-                    <article class="related-product-card">
+                                decoding="async"
+                            >
 
-                        <a
-                            href="{{ url_for(
-                                'product.product_details',
-                                id=recent.id
-                            ) }}"
+                        {% else %}
 
-                            class="related-product-image-link"
-
-                            aria-label="View {{ recent.name }}"
-                        >
-
-                            {% if recent.images %}
-
-                                {% set recent_primary =
-                                    recent.images
-                                    | selectattr(
-                                        "is_primary",
-                                        "equalto",
-                                        true
-                                    )
-                                    | first
-                                %}
-
-                                <img
-                                    src="{{
-                                        recent_primary.image_url
-                                        if recent_primary
-                                        else recent.images[0].image_url
-                                    }}"
-
-                                    alt="{{ recent.name }}"
-
-                                    class="related-product-image"
-
-                                    loading="lazy"
-
-                                    decoding="async"
-                                >
-
-                            {% else %}
-
-                                <div
-                                    class="related-product-placeholder"
-                                    aria-hidden="true"
-                                >
-                                    <i class="bi bi-image"></i>
-                                </div>
-
-                            {% endif %}
-
-                        </a>
-
-
-                        <div class="related-product-body">
-
-                            {% if recent.category %}
-
-                                <span class="related-product-category">
-                                    {{ recent.category.name }}
-                                </span>
-
-                            {% endif %}
-
-
-                            <h3 class="related-product-name">
-
-                                <a
-                                    href="{{ url_for(
-                                        'product.product_details',
-                                        id=recent.id
-                                    ) }}"
-                                >
-                                    {{ recent.name }}
-                                </a>
-
-                            </h3>
-
-
-                            <div class="related-product-price">
-
-                                {% set recent_price =
-                                    related_product_prices[recent.id]
-                                    if related_product_prices is defined
-                                    and recent.id in related_product_prices
-                                    else recent.price
-                                %}
-
-                                KSh
-                                {{ "{:,.2f}".format(recent_price) }}
-
+                            <div
+                                class="related-product-placeholder"
+                                aria-hidden="true"
+                            >
+                                <i class="bi bi-image"></i>
                             </div>
 
+                        {% endif %}
 
-                            {% if recent.stock > 0 %}
+                    </a>
 
-                                <div class="related-product-stock in-stock">
 
-                                    <i class="bi bi-check-circle me-1"></i>
+                    <div class="related-product-body">
 
-                                    In stock
+                        {% if recent.category %}
 
-                                </div>
+                            <span class="related-product-category">
+                                {{ recent.category.name }}
+                            </span>
 
-                            {% else %}
+                        {% endif %}
 
-                                <div class="related-product-stock out-stock">
 
-                                    <i class="bi bi-x-circle me-1"></i>
+                        <h3 class="related-product-name">
 
-                                    Out of stock
+                            <a
+                                href="{{ url_for(
+                                    'product.product_details',
+                                    id=recent.id
+                                ) }}"
+                            >
+                                {{ recent.name }}
+                            </a>
 
-                                </div>
+                        </h3>
 
-                            {% endif %}
+
+                        <div class="related-product-price">
+
+                            {% set recent_price =
+                                related_product_prices[recent.id]
+                                if related_product_prices is defined
+                                and recent.id in related_product_prices
+                                else recent.price
+                            %}
+
+                            KSh
+                            {{ "{:,.2f}".format(recent_price) }}
 
                         </div>
 
-                    </article>
 
-                {% endfor %}
+                        {% if recent.stock > 0 %}
 
-            </div>
+                            <div class="related-product-stock in-stock">
 
-        </section>
+                                <i class="bi bi-check-circle me-1"></i>
 
-    {% endif %}
+                                In stock
+
+                            </div>
+
+                        {% else %}
+
+                            <div class="related-product-stock out-stock">
+
+                                <i class="bi bi-x-circle me-1"></i>
+
+                                Out of stock
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </article>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+{% endif %}
 
 </div>
 
@@ -3102,60 +3214,60 @@
 
 <div class="lightbox-content">
 
+<button
+    type="button"
+    class="lightbox-close"
+    id="lightboxClose"
+    aria-label="Close image viewer"
+>
+    <i class="bi bi-x-lg"></i>
+</button>
+
+
+{% if product.images|length > 1 %}
+
     <button
         type="button"
-        class="lightbox-close"
-        id="lightboxClose"
-        aria-label="Close image viewer"
+        class="lightbox-prev"
+        id="lightboxPrev"
+        aria-label="Previous image"
     >
-        <i class="bi bi-x-lg"></i>
+        <i class="bi bi-chevron-left"></i>
+    </button>
+
+{% endif %}
+
+
+<img
+    id="lightboxImage"
+    class="lightbox-image"
+    src=""
+    alt="{{ product.name }}"
+    draggable="false"
+>
+
+
+{% if product.images|length > 1 %}
+
+    <button
+        type="button"
+        class="lightbox-next"
+        id="lightboxNext"
+        aria-label="Next image"
+    >
+        <i class="bi bi-chevron-right"></i>
     </button>
 
 
-    {% if product.images|length > 1 %}
-
-        <button
-            type="button"
-            class="lightbox-prev"
-            id="lightboxPrev"
-            aria-label="Previous image"
-        >
-            <i class="bi bi-chevron-left"></i>
-        </button>
-
-    {% endif %}
-
-
-    <img
-        id="lightboxImage"
-        class="lightbox-image"
-        src=""
-        alt="{{ product.name }}"
-        draggable="false"
+    <div
+        class="lightbox-counter"
+        id="lightboxCounter"
+        aria-live="polite"
     >
+        1 / {{ product.images|length }}
+    </div>
 
-
-    {% if product.images|length > 1 %}
-
-        <button
-            type="button"
-            class="lightbox-next"
-            id="lightboxNext"
-            aria-label="Next image"
-        >
-            <i class="bi bi-chevron-right"></i>
-        </button>
-
-
-        <div
-            class="lightbox-counter"
-            id="lightboxCounter"
-            aria-live="polite"
-        >
-            1 / {{ product.images|length }}
-        </div>
-
-    {% endif %}
+{% endif %}
 
 </div>
 
@@ -3324,25 +3436,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
             preload.onerror = function () {
 
-                /*
-                 * Do NOT assign a broken image URL to the main image.
-                 * The old code did this and caused the browser to show
-                 * the broken/blank image icon when a thumbnail URL was
-                 * missing or invalid.
-                 *
-                 * Keep the currently displayed valid image instead.
-                 */
                 mainImage.style.opacity = "1";
+
 
                 const failedThumbnail =
                     thumbnails[currentIndex];
 
+
                 if (failedThumbnail) {
-                    failedThumbnail.classList.add("image-unavailable");
+
+                    failedThumbnail.classList.add(
+                        "image-unavailable"
+                    );
+
                     failedThumbnail.setAttribute(
                         "aria-disabled",
                         "true"
                     );
+
                 }
 
             };
@@ -4129,6 +4240,84 @@ document.addEventListener("DOMContentLoaded", function () {
 
         }
     );
+
+
+    /* ============================================================
+       WHATSAPP PRODUCT ENQUIRY
+       ============================================================ */
+
+    const whatsappEnquiryButton =
+        document.getElementById(
+            "whatsappEnquiryButton"
+        );
+
+    if (whatsappEnquiryButton) {
+
+        whatsappEnquiryButton.addEventListener(
+            "click",
+            function () {
+
+                const productName =
+                    whatsappEnquiryButton.dataset.productName ||
+                    "this product";
+
+                const productSku =
+                    whatsappEnquiryButton.dataset.productSku ||
+                    "N/A";
+
+                const productPrice =
+                    whatsappEnquiryButton.dataset.productPrice ||
+                    "";
+
+                const quantityInput =
+                    document.getElementById(
+                        "cartQuantity"
+                    );
+
+                const quantity =
+                    quantityInput?.value || "1";
+
+                const productUrl =
+                    window.location.href;
+
+
+                const message = [
+                    "Hello Bomet Machineries Ltd.,",
+                    "",
+                    "I would like to enquire about this product.",
+                    "",
+                    `Product: ${productName}`,
+                    `SKU: ${productSku}`,
+                    productPrice
+                        ? `Price: KSh ${productPrice}`
+                        : "",
+                    `Quantity: ${quantity}`,
+                    "",
+                    "Product link:",
+                    productUrl,
+                    "",
+                    "Please share availability, delivery and payment details."
+                ]
+                .filter(Boolean)
+                .join("\n");
+
+
+                const whatsappUrl =
+                    "https://wa.me/254710160300?text=" +
+                    encodeURIComponent(message);
+
+
+                /*
+                 * Update the existing link instead of opening
+                 * a popup. This is more reliable on mobile.
+                 */
+                whatsappEnquiryButton.href =
+                    whatsappUrl;
+
+            }
+        );
+
+    }
 
 
     /* ============================================================
