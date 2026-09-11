@@ -10,7 +10,7 @@ from flask import (
 
 from flask_login import current_user
 
-from sqlalchemy import or_, and_
+from sqlalchemy import or_, and_, func
 from sqlalchemy.orm import joinedload, selectinload
 
 from app.models.product import Product
@@ -235,9 +235,13 @@ def get_listing_parameters():
         type=str,
     ).strip()
 
+    # --------------------------------------------------------
+    # RANDOM IS NOW THE DEFAULT
+    # --------------------------------------------------------
+
     sort = request.args.get(
         "sort",
-        "newest",
+        "random",
         type=str,
     ).strip()
 
@@ -289,6 +293,7 @@ def get_listing_parameters():
     # --------------------------------------------------------
 
     allowed_sorts = {
+        "random",
         "newest",
         "featured",
         "price_low",
@@ -299,7 +304,7 @@ def get_listing_parameters():
     }
 
     if sort not in allowed_sorts:
-        sort = "newest"
+        sort = "random"
 
     return {
         "search": search,
@@ -380,10 +385,67 @@ def apply_listing_filters(
     return query
 
 
+def get_random_order_expression(query):
+    """
+    Return the correct random-order SQL expression
+    for the active database.
+
+    MySQL / MariaDB:
+        RAND()
+
+    SQLite / PostgreSQL and most other databases:
+        RANDOM()
+    """
+
+    try:
+        bind = query.session.get_bind()
+
+        if bind is not None:
+
+            dialect_name = (
+                bind.dialect.name.lower()
+            )
+
+            if dialect_name in {
+                "mysql",
+                "mariadb",
+            }:
+                return func.rand()
+
+    except Exception:
+        # If the database dialect cannot be determined,
+        # fall back to SQLAlchemy's standard RANDOM().
+        pass
+
+    return func.random()
+
+
 def apply_sorting(query, sort):
     """
-    Apply consistent product sorting.
+    Apply product sorting.
+
+    RANDOM is the default storefront behavior.
+
+    This means customers do not continually see the same
+    product in the same position when they revisit or
+    refresh the product listing.
+
+    Explicit sorting options remain available.
     """
+
+    # --------------------------------------------------------
+    # RANDOM
+    # --------------------------------------------------------
+
+    if sort == "random":
+
+        return query.order_by(
+            get_random_order_expression(query)
+        )
+
+    # --------------------------------------------------------
+    # PRICE: LOW TO HIGH
+    # --------------------------------------------------------
 
     if sort == "price_low":
 
@@ -392,12 +454,20 @@ def apply_sorting(query, sort):
             Product.id.desc(),
         )
 
+    # --------------------------------------------------------
+    # PRICE: HIGH TO LOW
+    # --------------------------------------------------------
+
     if sort == "price_high":
 
         return query.order_by(
             Product.price.desc(),
             Product.id.desc(),
         )
+
+    # --------------------------------------------------------
+    # NAME A-Z
+    # --------------------------------------------------------
 
     if sort == "name_az":
 
@@ -406,6 +476,10 @@ def apply_sorting(query, sort):
             Product.id.desc(),
         )
 
+    # --------------------------------------------------------
+    # NAME Z-A
+    # --------------------------------------------------------
+
     if sort == "name_za":
 
         return query.order_by(
@@ -413,12 +487,20 @@ def apply_sorting(query, sort):
             Product.id.desc(),
         )
 
+    # --------------------------------------------------------
+    # OLDEST
+    # --------------------------------------------------------
+
     if sort == "oldest":
 
         return query.order_by(
             Product.created_at.asc(),
             Product.id.asc(),
         )
+
+    # --------------------------------------------------------
+    # FEATURED
+    # --------------------------------------------------------
 
     if sort == "featured":
 
@@ -428,10 +510,12 @@ def apply_sorting(query, sort):
             Product.id.desc(),
         )
 
-    # Default: newest
+    # --------------------------------------------------------
+    # DEFAULT = RANDOM
+    # --------------------------------------------------------
+
     return query.order_by(
-        Product.created_at.desc(),
-        Product.id.desc(),
+        get_random_order_expression(query)
     )
 
 

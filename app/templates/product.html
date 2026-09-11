@@ -1022,7 +1022,7 @@ Products | Bomet Machineries Ltd.
                         <!-- CATEGORY LINKS -->
                         {% for item in categories %}
                             <a
-                                href="{{ url_for('product.category_products', slug=item.slug) }}"
+                                href="{{ url_for('product.products', category=item.id) }}"
                                 class="category-link{% if category and category.id == item.id %} active{% endif %}"
                                 {% if category and category.id == item.id %}aria-current="page"{% endif %}
                             >
