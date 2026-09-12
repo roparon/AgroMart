@@ -1,156 +1,499 @@
 <!DOCTYPE html>
+
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>Welcome to Bomet Machineries Ltd</title>
-</head>
-
-<body
-    style="
-        margin:0;
-        padding:0;
-        background:#f4f6f8;
-        font-family:Arial,Helvetica,sans-serif;
-        color:#333;
-    "
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
 >
 
+<title>Welcome to Bomet Machineries Ltd</title>
+
+<style>
+    /* =========================================================
+       BOMET MACHINERIES LTD.
+       MOBILE-FRIENDLY EMAIL STYLING
+       ========================================================= */
+
+    body {
+        margin: 0;
+        padding: 0;
+        background: #f4f7f5;
+        font-family: Arial, Helvetica, sans-serif;
+        color: #263238;
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+    }
+
+    table {
+        border-collapse: collapse;
+    }
+
+    img {
+        border: 0;
+        display: block;
+        max-width: 100%;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    .email-wrapper {
+        width: 100%;
+        padding: 32px 15px;
+    }
+
+    .email-container {
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 4px 18px rgba(15, 23, 42, 0.08);
+    }
+
+    .email-header {
+        padding: 32px 25px;
+        text-align: center;
+        background: #166534;
+        color: #ffffff;
+    }
+
+    .brand-name {
+        margin: 0;
+        font-size: 27px;
+        line-height: 1.25;
+        font-weight: 700;
+        letter-spacing: -0.3px;
+    }
+
+    .brand-tagline {
+        margin: 8px 0 0;
+        font-size: 14px;
+        line-height: 1.5;
+        color: #dcfce7;
+    }
+
+    .header-accent {
+        width: 45px;
+        height: 3px;
+        margin: 16px auto 0;
+        background: #f59e0b;
+        border-radius: 10px;
+    }
+
+    .email-content {
+        padding: 34px 35px;
+    }
+
+    .welcome-title {
+        margin: 0 0 18px;
+        font-size: 23px;
+        line-height: 1.35;
+        font-weight: 700;
+        color: #111827;
+    }
+
+    .content-text {
+        margin: 0 0 15px;
+        font-size: 15px;
+        line-height: 1.7;
+        color: #4b5563;
+    }
+
+    .highlight-box {
+        margin: 25px 0;
+        padding: 17px 18px;
+        background: #f0fdf4;
+        border: 1px solid #dcfce7;
+        border-left: 4px solid #15803d;
+        border-radius: 8px;
+    }
+
+    .highlight-text {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.6;
+        color: #166534;
+    }
+
+    .button-wrapper {
+        padding: 8px 0 25px;
+        text-align: center;
+    }
+
+    .shop-button {
+        display: inline-block;
+        padding: 14px 25px;
+        background: #15803d;
+        color: #ffffff !important;
+        border-radius: 7px;
+        font-size: 14px;
+        line-height: 1.2;
+        font-weight: 700;
+    }
+
+    .support-note {
+        margin: 5px 0 0;
+        padding-top: 20px;
+        border-top: 1px solid #e5e7eb;
+        font-size: 13px;
+        line-height: 1.6;
+        color: #6b7280;
+    }
+
+    .email-footer {
+        padding: 20px 25px;
+        text-align: center;
+        background: #f8fafc;
+        border-top: 1px solid #eef2f7;
+    }
+
+    .footer-company {
+        margin: 0 0 6px;
+        font-size: 13px;
+        font-weight: 700;
+        color: #374151;
+    }
+
+    .footer-copy {
+        margin: 0;
+        font-size: 11px;
+        line-height: 1.5;
+        color: #9ca3af;
+    }
+
+    /* =========================================================
+       MOBILE
+       ========================================================= */
+
+    @media only screen and (max-width: 620px) {
+
+        .email-wrapper {
+            padding: 18px 10px !important;
+        }
+
+        .email-container {
+            border-radius: 10px !important;
+        }
+
+        .email-header {
+            padding: 27px 20px !important;
+        }
+
+        .brand-name {
+            font-size: 23px !important;
+        }
+
+        .brand-tagline {
+            font-size: 13px !important;
+        }
+
+        .email-content {
+            padding: 28px 22px !important;
+        }
+
+        .welcome-title {
+            font-size: 21px !important;
+        }
+
+        .content-text {
+            font-size: 14px !important;
+            line-height: 1.65 !important;
+        }
+
+        .highlight-box {
+            margin: 22px 0 !important;
+            padding: 15px !important;
+        }
+
+        .shop-button {
+            display: block !important;
+            width: auto !important;
+            padding: 14px 18px !important;
+        }
+
+        .email-footer {
+            padding: 18px 20px !important;
+        }
+    }
+</style>
+
+</head>
+
+<body>
+
 <table
+    role="presentation"
     width="100%"
     cellpadding="0"
     cellspacing="0"
-    style="padding:30px 15px;"
+    border="0"
+    style="width:100%;"
 >
+    <tr>
+        <td
+            align="center"
+            class="email-wrapper"
+            style="
+                width:100%;
+                padding:32px 15px;
+                background:#f4f7f5;
+            "
+        >
 
-<tr>
-<td align="center">
+            <table
+                role="presentation"
+                width="600"
+                cellpadding="0"
+                cellspacing="0"
+                border="0"
+                class="email-container"
+                style="
+                    width:100%;
+                    max-width:600px;
+                    background:#ffffff;
+                    border-radius:14px;
+                    overflow:hidden;
+                "
+            >
 
-<table
-    width="600"
-    cellpadding="0"
-    cellspacing="0"
-    style="
-        max-width:600px;
-        width:100%;
-        background:#ffffff;
-        border-radius:12px;
-        overflow:hidden;
-    "
->
+                <!-- HEADER -->
+                <tr>
+                    <td
+                        class="email-header"
+                        align="center"
+                        style="
+                            padding:32px 25px;
+                            text-align:center;
+                            background:#166534;
+                            color:#ffffff;
+                        "
+                    >
 
-<tr>
-<td
-    style="
-        padding:30px;
-        text-align:center;
-        background:#1b5e20;
-        color:#ffffff;
-    "
->
+                        <h1
+                            class="brand-name"
+                            style="
+                                margin:0;
+                                font-size:27px;
+                                line-height:1.25;
+                                font-weight:700;
+                                color:#ffffff;
+                            "
+                        >
+                            Bomet Machineries Ltd
+                        </h1>
 
-<h1
-    style="
-        margin:0;
-        font-size:30px;
-    "
->
-    Bomet Machineries Ltd
-</h1>
+                        <p
+                            class="brand-tagline"
+                            style="
+                                margin:8px 0 0;
+                                font-size:14px;
+                                line-height:1.5;
+                                color:#dcfce7;
+                            "
+                        >
+                            Agricultural Equipment &amp; Machinery
+                        </p>
 
-<p
-    style="
-        margin:8px 0 0;
-        font-size:14px;
-    "
->
-    Agricultural Equipment & Machinery
-</p>
+                        <div
+                            class="header-accent"
+                            style="
+                                width:45px;
+                                height:3px;
+                                margin:16px auto 0;
+                                background:#f59e0b;
+                                border-radius:10px;
+                            "
+                        ></div>
 
-</td>
-</tr>
+                    </td>
+                </tr>
 
+                <!-- CONTENT -->
+                <tr>
+                    <td
+                        class="email-content"
+                        style="
+                            padding:34px 35px;
+                            background:#ffffff;
+                        "
+                    >
 
-<tr>
-<td style="padding:35px;">
+                        <h2
+                            class="welcome-title"
+                            style="
+                                margin:0 0 18px;
+                                font-size:23px;
+                                line-height:1.35;
+                                font-weight:700;
+                                color:#111827;
+                            "
+                        >
+                            Welcome, {{ user.first_name }}! 👋
+                        </h2>
 
-<h2>
-    Welcome, {{ user.first_name }}! 👋
-</h2>
+                        <p
+                            class="content-text"
+                            style="
+                                margin:0 0 15px;
+                                font-size:15px;
+                                line-height:1.7;
+                                color:#4b5563;
+                            "
+                        >
+                            Thank you for creating your
+                            Bomet Machineries Ltd account.
+                        </p>
 
-<p>
-    Thank you for creating your Bomet Machineries Ltd account.
-</p>
+                        <p
+                            class="content-text"
+                            style="
+                                margin:0 0 15px;
+                                font-size:15px;
+                                line-height:1.7;
+                                color:#4b5563;
+                            "
+                        >
+                            Your account has been successfully
+                            created. You can now browse our
+                            agricultural machinery, equipment,
+                            tools and spare parts.
+                        </p>
 
-<p>
-    Your account has been successfully created and
-    you can now browse our agricultural machinery,
-    equipment, tools and spare parts.
-</p>
+                        <!-- HIGHLIGHT -->
+                        <table
+                            role="presentation"
+                            width="100%"
+                            cellpadding="0"
+                            cellspacing="0"
+                            border="0"
+                            style="width:100%;"
+                        >
+                            <tr>
+                                <td
+                                    class="highlight-box"
+                                    style="
+                                        padding:17px 18px;
+                                        background:#f0fdf4;
+                                        border:1px solid #dcfce7;
+                                        border-left:4px solid #15803d;
+                                        border-radius:8px;
+                                    "
+                                >
+                                    <p
+                                        class="highlight-text"
+                                        style="
+                                            margin:0;
+                                            font-size:14px;
+                                            line-height:1.6;
+                                            color:#166534;
+                                        "
+                                    >
+                                        We're happy to have you with us.
+                                        Your account is ready whenever
+                                        you're ready to explore.
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
 
-<p>
-    We're happy to have you with us.
-</p>
+                        <!-- CTA -->
+                        <div
+                            class="button-wrapper"
+                            style="
+                                padding:8px 0 25px;
+                                text-align:center;
+                            "
+                        >
+                            <a
+                                href="{{ url_for('home.home', _external=True) }}"
+                                class="shop-button"
+                                style="
+                                    display:inline-block;
+                                    padding:14px 25px;
+                                    background:#15803d;
+                                    color:#ffffff;
+                                    text-decoration:none;
+                                    border-radius:7px;
+                                    font-size:14px;
+                                    line-height:1.2;
+                                    font-weight:700;
+                                "
+                            >
+                                Shop Bomet Machineries Ltd
+                            </a>
+                        </div>
 
-<div style="text-align:center;margin:30px 0;">
+                        <!-- SECURITY NOTE -->
+                        <p
+                            class="support-note"
+                            style="
+                                margin:5px 0 0;
+                                padding-top:20px;
+                                border-top:1px solid #e5e7eb;
+                                font-size:13px;
+                                line-height:1.6;
+                                color:#6b7280;
+                            "
+                        >
+                            If you did not create this account,
+                            please contact our support team
+                            immediately.
+                        </p>
 
-<a
-    href="{{ url_for('home.home', _external=True) }}"
-    style="
-        display:inline-block;
-        padding:13px 25px;
-        background:#1b5e20;
-        color:#ffffff;
-        text-decoration:none;
-        border-radius:6px;
-        font-weight:bold;
-    "
->
-    Shop Bomet Machineries Ltd
-</a>
+                    </td>
+                </tr>
 
-</div>
+                <!-- FOOTER -->
+                <tr>
+                    <td
+                        class="email-footer"
+                        align="center"
+                        style="
+                            padding:20px 25px;
+                            text-align:center;
+                            background:#f8fafc;
+                            border-top:1px solid #eef2f7;
+                        "
+                    >
 
-<p>
-    If you did not create this account, please contact
-    our support team immediately.
-</p>
+                        <p
+                            class="footer-company"
+                            style="
+                                margin:0 0 6px;
+                                font-size:13px;
+                                font-weight:700;
+                                color:#374151;
+                            "
+                        >
+                            Bomet Machineries Ltd
+                        </p>
 
-</td>
-</tr>
+                        <p
+                            class="footer-copy"
+                            style="
+                                margin:0;
+                                font-size:11px;
+                                line-height:1.5;
+                                color:#9ca3af;
+                            "
+                        >
+                            © Bomet Machineries Ltd.
+                            All rights reserved.
+                        </p>
 
+                    </td>
+                </tr>
 
-<tr>
-<td
-    style="
-        padding:20px;
-        text-align:center;
-        background:#f4f6f8;
-        font-size:12px;
-        color:#777;
-    "
->
+            </table>
 
-<p style="margin:0;">
-    © Bomet Machineries Ltd. All rights reserved.
-</p>
-
-</td>
-</tr>
-
+        </td>
+    </tr>
 </table>
-
-</td>
-</tr>
-
-</table>
-
 </body>
-
 </html>

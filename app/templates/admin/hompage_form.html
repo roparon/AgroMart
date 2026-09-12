@@ -4,176 +4,821 @@
 
 {% block content %}
 
-<div class="container py-4 py-lg-5">
+<style>
+    /* =========================================================
+       BOMET MACHINERIES LTD.
+       HOMEPAGE CMS — MOBILE FIRST
+       ========================================================= */
 
-    <!-- HEADER -->
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    .homepage-cms-page {
+        width: 100%;
+        max-width: 1450px;
+        margin: 0 auto;
+        padding: 14px;
+        color: #111827;
+    }
+
+    /* =========================================================
+       PAGE HEADER
+       ========================================================= */
+
+    .cms-header {
+        margin-bottom: 18px;
+    }
+
+    .cms-breadcrumb {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 7px;
+
+        color: #6b7280;
+        font-size: 11px;
+        font-weight: 600;
+        text-decoration: none;
+
+        transition: color .15s ease;
+    }
+
+    .cms-breadcrumb:hover {
+        color: #15803d;
+    }
+
+    .cms-breadcrumb i {
+        color: #15803d;
+        font-size: 12px;
+    }
+
+    .cms-kicker {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 5px;
+
+        color: #15803d;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+    }
+
+    .cms-kicker i {
+        font-size: 11px;
+    }
+
+    .cms-header-row {
+        display: flex;
+        flex-direction: column;
+        gap: 13px;
+    }
+
+    .cms-header h1 {
+        margin: 0;
+        color: #111827;
+        font-size: 22px;
+        font-weight: 800;
+        line-height: 1.25;
+        word-break: break-word;
+    }
+
+    .cms-header-description {
+        margin: 5px 0 0;
+        max-width: 680px;
+
+        color: #6b7280;
+        font-size: 12px;
+        line-height: 1.55;
+    }
+
+    .cms-all-content-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+
+        width: 100%;
+        min-height: 42px;
+
+        border-radius: 10px !important;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    /* =========================================================
+       MAIN LAYOUT
+       ========================================================= */
+
+    .cms-layout {
+        --bs-gutter-x: 1rem;
+        --bs-gutter-y: 1rem;
+    }
+
+    .cms-main-column,
+    .cms-sidebar {
+        min-width: 0;
+    }
+
+    /* =========================================================
+       CMS CARDS
+       ========================================================= */
+
+    .cms-card {
+        overflow: hidden;
+
+        background: #fff;
+        border: 1px solid #e5e7eb !important;
+        border-radius: 14px !important;
+
+        box-shadow: 0 4px 18px rgba(15, 23, 42, .05) !important;
+    }
+
+    .cms-card + .cms-card {
+        margin-top: 14px;
+    }
+
+    .cms-card-header {
+        padding: 15px 16px 9px;
+        background: #fff;
+        border: 0;
+    }
+
+    .cms-section-title {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        margin: 0;
+
+        color: #111827;
+        font-size: 15px;
+        font-weight: 800;
+        line-height: 1.3;
+    }
+
+    .cms-section-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 31px;
+        height: 31px;
+        flex: 0 0 31px;
+
+        border-radius: 9px;
+        background: #f0fdf4;
+        color: #15803d;
+        font-size: 14px;
+    }
+
+    .cms-section-description {
+        margin: 4px 0 0 40px;
+
+        color: #6b7280;
+        font-size: 11px;
+        line-height: 1.5;
+    }
+
+    .cms-card-body {
+        padding: 15px 16px 17px;
+    }
+
+    /* =========================================================
+       FORM STYLING
+       ========================================================= */
+
+    .cms-form-group {
+        margin-bottom: 17px;
+    }
+
+    .cms-form-group:last-child {
+        margin-bottom: 0;
+    }
+
+    .cms-label {
+        display: block;
+        margin-bottom: 6px;
+
+        color: #374151;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .cms-label .required {
+        color: #dc2626;
+    }
+
+    .cms-help {
+        margin-top: 5px;
+        color: #9ca3af;
+        font-size: 10px;
+        line-height: 1.5;
+    }
+
+    .cms-help code {
+        padding: 2px 5px;
+
+        background: #f8fafc;
+        border: 1px solid #e5e7eb;
+        border-radius: 5px;
+
+        color: #166534;
+        font-size: 10px;
+    }
+
+    .cms-form-control {
+        min-height: 42px;
+
+        border: 1px solid #dfe3e8 !important;
+        border-radius: 9px !important;
+
+        color: #111827;
+        font-size: 13px;
+        background: #fff;
+
+        transition:
+            border-color .15s ease,
+            box-shadow .15s ease,
+            background .15s ease;
+    }
+
+    .cms-form-control:hover {
+        border-color: #cbd5e1 !important;
+    }
+
+    .cms-form-control:focus {
+        border-color: #198754 !important;
+        box-shadow: 0 0 0 .2rem rgba(25, 135, 84, .10) !important;
+    }
+
+    textarea.cms-form-control {
+        min-height: 125px;
+        resize: vertical;
+        line-height: 1.55;
+    }
+
+    input[type="file"].cms-form-control {
+        padding: 8px 10px;
+        font-size: 11px;
+    }
+
+    .cms-error {
+        margin-top: 5px;
+        color: #dc2626;
+        font-size: 10px;
+        font-weight: 600;
+    }
+
+    /* =========================================================
+       IMAGE PREVIEW
+       ========================================================= */
+
+    .image-preview-label {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 7px;
+    }
+
+    .image-preview-label-text {
+        color: #374151;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .image-preview-box {
+        position: relative;
+        overflow: hidden;
+
+        width: 100%;
+        background: #f8fafc;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+    }
+
+    .homepage-preview {
+        display: block;
+        width: 100%;
+        height: 210px;
+        object-fit: cover;
+        background: #f8fafc;
+    }
+
+    .image-preview-caption {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 6px;
+
+        color: #9ca3af;
+        font-size: 10px;
+    }
+
+    .image-preview-caption i {
+        color: #15803d;
+    }
+
+    #newImagePreviewWrapper {
+        margin-top: 17px !important;
+    }
+
+    /* =========================================================
+       ADVANCED SETTINGS
+       ========================================================= */
+
+    .advanced-note {
+        display: flex;
+        align-items: flex-start;
+        gap: 9px;
+
+        margin-bottom: 16px;
+        padding: 11px 12px;
+
+        background: #f8fafc;
+        border: 1px solid #f1f5f9;
+        border-radius: 10px;
+
+        color: #64748b;
+        font-size: 10px;
+        line-height: 1.5;
+    }
+
+    .advanced-note i {
+        margin-top: 1px;
+        color: #15803d;
+        font-size: 13px;
+    }
+
+    /* =========================================================
+       SIDEBAR / PUBLISHING
+       ========================================================= */
+
+    .publish-status-box {
+        display: flex;
+        align-items: flex-start;
+        gap: 11px;
+
+        margin-bottom: 10px;
+        padding: 12px;
+
+        background: #f0fdf4;
+        border: 1px solid #dcfce7;
+        border-radius: 11px;
+    }
+
+    .publish-status-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 34px;
+        height: 34px;
+        flex: 0 0 34px;
+
+        border-radius: 9px;
+        background: #fff;
+        color: #15803d;
+        box-shadow: 0 2px 7px rgba(15, 23, 42, .05);
+    }
+
+    .publish-status-title {
+        margin: 0 0 2px;
+        color: #166534;
+        font-size: 12px;
+        font-weight: 800;
+    }
+
+    .publish-status-text {
+        margin: 0;
+        color: #4b5563;
+        font-size: 10px;
+        line-height: 1.45;
+    }
+
+    .cms-switch {
+        margin: 0;
+        padding-left: 2.7em;
+    }
+
+    .cms-switch .form-check-input {
+        cursor: pointer;
+        width: 2.3em;
+        height: 1.25em;
+        margin-left: -2.7em;
+    }
+
+    .cms-switch .form-check-label {
+        padding-top: 2px;
+        color: #374151;
+        font-size: 12px;
+    }
+
+    .cms-switch .form-check-input:focus {
+        border-color: #198754;
+        box-shadow: 0 0 0 .2rem rgba(25, 135, 84, .10);
+    }
+
+    .cms-switch .form-check-input:checked {
+        background-color: #198754;
+        border-color: #198754;
+    }
+
+    .publishing-help {
+        margin: 10px 0 0;
+
+        color: #6b7280;
+        font-size: 10px;
+        line-height: 1.55;
+    }
+
+    /* =========================================================
+       ACTIONS
+       ========================================================= */
+
+    .cms-save-btn,
+    .cms-cancel-btn,
+    .cms-delete-btn {
+        min-height: 43px;
+        border-radius: 9px !important;
+
+        font-size: 12px;
+        font-weight: 800;
+    }
+
+    .cms-save-btn {
+        box-shadow: 0 3px 10px rgba(25, 135, 84, .14);
+    }
+
+    .cms-save-btn:hover {
+        box-shadow: 0 5px 14px rgba(25, 135, 84, .18);
+    }
+
+    /* =========================================================
+       DANGER ZONE
+       ========================================================= */
+
+    .danger-card {
+        border-color: #fecaca !important;
+        box-shadow: 0 4px 18px rgba(220, 38, 38, .04) !important;
+    }
+
+    .danger-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 6px;
+
+        color: #b91c1c;
+        font-size: 13px;
+        font-weight: 800;
+    }
+
+    .danger-header-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 29px;
+        height: 29px;
+
+        border-radius: 8px;
+        background: #fef2f2;
+        color: #dc2626;
+    }
+
+    .danger-description {
+        margin: 0 0 13px;
+
+        color: #6b7280;
+        font-size: 10px;
+        line-height: 1.55;
+    }
+
+    /* =========================================================
+       TABLET
+       ========================================================= */
+
+    @media (min-width: 576px) {
+
+        .homepage-cms-page {
+            padding: 20px;
+        }
+
+        .cms-header h1 {
+            font-size: 25px;
+        }
+
+        .cms-header-description {
+            font-size: 12px;
+        }
+
+        .cms-all-content-btn {
+            width: auto;
+            padding-left: 16px;
+            padding-right: 16px;
+        }
+
+        .homepage-preview {
+            height: 270px;
+        }
+    }
+
+    /* =========================================================
+       DESKTOP
+       ========================================================= */
+
+    @media (min-width: 768px) {
+
+        .homepage-cms-page {
+            padding: 25px;
+        }
+
+        .cms-header-row {
+            flex-direction: row;
+            align-items: flex-end;
+            justify-content: space-between;
+        }
+
+        .cms-header {
+            margin-bottom: 22px;
+        }
+
+        .cms-card-header {
+            padding: 17px 20px 9px;
+        }
+
+        .cms-card-body {
+            padding: 17px 20px 20px;
+        }
+
+        .homepage-preview {
+            height: 320px;
+        }
+    }
+
+    @media (min-width: 992px) {
+
+        .homepage-cms-page {
+            padding: 30px;
+        }
+
+        .cms-header h1 {
+            font-size: 28px;
+        }
+
+        .cms-header-description {
+            font-size: 13px;
+        }
+
+        .cms-card-header {
+            padding: 19px 22px 10px;
+        }
+
+        .cms-card-body {
+            padding: 19px 22px 22px;
+        }
+
+        .cms-section-title {
+            font-size: 16px;
+        }
+
+        .homepage-preview {
+            height: 350px;
+        }
+
+        .cms-sidebar {
+            position: sticky;
+            top: 20px;
+        }
+    }
+
+    @media (min-width: 1200px) {
+
+        .homepage-cms-page {
+            padding-left: 35px;
+            padding-right: 35px;
+        }
+
+        .homepage-preview {
+            height: 390px;
+        }
+    }
+
+    /* =========================================================
+       REDUCED MOTION
+       ========================================================= */
+
+    @media (prefers-reduced-motion: reduce) {
+
+        .cms-breadcrumb,
+        .cms-form-control,
+        .cms-save-btn {
+            transition: none;
+        }
+    }
+</style>
+
+<div class="homepage-cms-page">
+
+<!-- =====================================================
+     PAGE HEADER
+     ===================================================== -->
+
+<div class="cms-header">
+
+    <a
+        href="{{ url_for('admin_homepage.homepage') }}"
+        class="cms-breadcrumb"
+    >
+        <i class="bi bi-arrow-left"></i>
+        <span>Homepage CMS</span>
+    </a>
+
+    <div class="cms-header-row">
 
         <div>
-            <div class="d-flex align-items-center gap-2 mb-2">
-                <a
-                    href="{{ url_for('admin_homepage.homepage') }}"
-                    class="text-decoration-none text-muted"
-                >
-                    <i class="bi bi-arrow-left"></i>
-                    Homepage CMS
-                </a>
+
+            <div class="cms-kicker">
+                <i class="bi bi-window-stack"></i>
+                <span>Homepage Content</span>
             </div>
 
-            <h1 class="fw-bold mb-1">
+            <h1>
                 {{ page_title }}
             </h1>
 
-            <p class="text-muted mb-0">
+            <p class="cms-header-description">
                 Configure homepage text, imagery, buttons and publishing settings.
             </p>
+
         </div>
+
 
         <a
             href="{{ url_for('admin_homepage.homepage') }}"
-            class="btn btn-outline-secondary rounded-3"
+            class="btn btn-outline-secondary cms-all-content-btn"
         >
-            <i class="bi bi-grid me-1"></i>
-            All Content
+            <i class="bi bi-grid"></i>
+            <span>All Content</span>
         </a>
 
     </div>
 
+</div>
 
-    <form
-        method="POST"
-        enctype="multipart/form-data"
-        novalidate
-        id="homepageContentForm"
-    >
 
-        {{ form.hidden_tag() }}
+<form
+    method="POST"
+    enctype="multipart/form-data"
+    novalidate
+    id="homepageContentForm"
+>
 
-        <div class="row g-4">
+    {{ form.hidden_tag() }}
 
-            <!-- ==================================================
-                 MAIN CONTENT
-            =================================================== -->
+    <div class="row cms-layout">
 
-            <div class="col-12 col-lg-8">
+        <!-- ==================================================
+             MAIN CONTENT
+        =================================================== -->
 
-                <!-- CONTENT CARD -->
-                <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div class="col-12 col-lg-8 cms-main-column">
 
-                    <div class="card-header bg-white border-0 p-4 pb-2">
-                        <h2 class="h5 fw-bold mb-1">
-                            <i class="bi bi-pencil-square text-success me-2"></i>
-                            Content
-                        </h2>
+            <!-- CONTENT CARD -->
 
-                        <p class="small text-muted mb-0">
-                            Enter the text displayed on the homepage.
-                        </p>
+            <div class="cms-card">
+
+                <div class="cms-card-header">
+
+                    <h2 class="cms-section-title">
+
+                        <span class="cms-section-icon">
+                            <i class="bi bi-pencil-square"></i>
+                        </span>
+
+                        <span>Content</span>
+
+                    </h2>
+
+                    <p class="cms-section-description">
+                        Enter the text displayed on the homepage.
+                    </p>
+
+                </div>
+
+
+                <div class="cms-card-body">
+
+                    <!-- KEY -->
+
+                    <div class="cms-form-group">
+
+                        {{ form.key.label(class="cms-label") }}
+
+                        {{ form.key(
+                            class="form-control cms-form-control"
+                        ) }}
+
+                        {% for error in form.key.errors %}
+                            <div class="cms-error">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+
+                        <div class="cms-help">
+                            Examples:
+                            <code>hero_1</code>,
+                            <code>hero_2</code>,
+                            <code>section_milling</code>
+                        </div>
+
                     </div>
 
-                    <div class="card-body p-4">
 
-                        <!-- KEY -->
-                        <div class="mb-4">
+                    <!-- HEADLINE -->
 
-                            {{ form.key.label(class="form-label fw-semibold") }}
+                    <div class="cms-form-group">
 
-                            {{ form.key(
-                                class="form-control form-control-lg rounded-3"
-                            ) }}
+                        {{ form.headline.label(class="cms-label") }}
 
-                            {% for error in form.key.errors %}
-                                <div class="text-danger small mt-1">
-                                    {{ error }}
-                                </div>
-                            {% endfor %}
+                        {{ form.headline(
+                            class="form-control cms-form-control"
+                        ) }}
 
-                            <div class="form-text">
-                                Examples:
-                                <code>hero_1</code>,
-                                <code>hero_2</code>,
-                                <code>section_milling</code>
+                        {% for error in form.headline.errors %}
+                            <div class="cms-error">
+                                {{ error }}
                             </div>
+                        {% endfor %}
 
-                        </div>
-
-
-                        <!-- HEADLINE -->
-                        <div class="mb-4">
-
-                            {{ form.headline.label(class="form-label fw-semibold") }}
-
-                            {{ form.headline(
-                                class="form-control form-control-lg rounded-3"
-                            ) }}
-
-                            {% for error in form.headline.errors %}
-                                <div class="text-danger small mt-1">
-                                    {{ error }}
-                                </div>
-                            {% endfor %}
-
-                        </div>
+                    </div>
 
 
-                        <!-- SUBHEADLINE -->
-                        <div class="mb-4">
+                    <!-- SUBHEADLINE -->
 
-                            {{ form.subheadline.label(class="form-label fw-semibold") }}
+                    <div class="cms-form-group">
 
-                            {{ form.subheadline(
-                                class="form-control rounded-3",
-                                rows="6"
-                            ) }}
+                        {{ form.subheadline.label(class="cms-label") }}
 
-                            {% for error in form.subheadline.errors %}
-                                <div class="text-danger small mt-1">
-                                    {{ error }}
-                                </div>
-                            {% endfor %}
+                        {{ form.subheadline(
+                            class="form-control cms-form-control",
+                            rows="6"
+                        ) }}
 
-                        </div>
+                        {% for error in form.subheadline.errors %}
+                            <div class="cms-error">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+
+                    </div>
 
 
-                        <!-- BUTTON -->
-                        <div class="row g-3">
+                    <!-- BUTTON -->
 
-                            <div class="col-md-6">
+                    <div class="row g-3">
+
+                        <div class="col-12 col-md-6">
+
+                            <div class="cms-form-group">
 
                                 {{ form.button_text.label(
-                                    class="form-label fw-semibold"
+                                    class="cms-label"
                                 ) }}
 
                                 {{ form.button_text(
-                                    class="form-control rounded-3"
+                                    class="form-control cms-form-control"
                                 ) }}
 
                                 {% for error in form.button_text.errors %}
-                                    <div class="text-danger small mt-1">
+                                    <div class="cms-error">
                                         {{ error }}
                                     </div>
                                 {% endfor %}
 
                             </div>
 
+                        </div>
 
-                            <div class="col-md-6">
+
+                        <div class="col-12 col-md-6">
+
+                            <div class="cms-form-group">
 
                                 {{ form.button_url.label(
-                                    class="form-label fw-semibold"
+                                    class="cms-label"
                                 ) }}
 
                                 {{ form.button_url(
-                                    class="form-control rounded-3"
+                                    class="form-control cms-form-control"
                                 ) }}
 
                                 {% for error in form.button_url.errors %}
-                                    <div class="text-danger small mt-1">
+                                    <div class="cms-error">
                                         {{ error }}
                                     </div>
                                 {% endfor %}
 
-                                <div class="form-text">
+                                <div class="cms-help">
                                     Example: <code>/products</code>
                                 </div>
 
@@ -185,195 +830,151 @@
 
                 </div>
 
-
-                <!-- ==================================================
-                     IMAGE CARD
-                =================================================== -->
-
-                <div class="card border-0 shadow-sm rounded-4 mb-4">
-
-                    <div class="card-header bg-white border-0 p-4 pb-2">
-
-                        <h2 class="h5 fw-bold mb-1">
-                            <i class="bi bi-image text-success me-2"></i>
-                            Homepage Image
-                        </h2>
-
-                        <p class="small text-muted mb-0">
-                            Upload a high-quality image for this content block.
-                        </p>
-
-                    </div>
+            </div>
 
 
-                    <div class="card-body p-4">
+            <!-- ==================================================
+                 IMAGE CARD
+            =================================================== -->
 
-                        {% if content and content.image_url %}
+            <div class="cms-card">
 
-                            <div class="mb-4">
+                <div class="cms-card-header">
 
-                                <label class="form-label fw-semibold">
-                                    Current Image
-                                </label>
+                    <h2 class="cms-section-title">
 
-                                <div class="position-relative rounded-4 overflow-hidden bg-light">
+                        <span class="cms-section-icon">
+                            <i class="bi bi-image"></i>
+                        </span>
 
-                                    <img
-                                        src="{{ content.image_url }}"
-                                        alt="{{ content.image_alt or content.key }}"
-                                        id="currentHomepageImage"
-                                        class="w-100 homepage-preview"
-                                        loading="lazy"
-                                        decoding="async"
-                                    >
+                        <span>Homepage Image</span>
 
-                                </div>
+                    </h2>
 
-                            </div>
-
-                        {% endif %}
-
-
-                        <div class="mb-4">
-
-                            {{ form.image.label(
-                                class="form-label fw-semibold"
-                            ) }}
-
-                            {{ form.image(
-                                class="form-control form-control-lg rounded-3",
-                                accept=".jpg,.jpeg,.png,.webp"
-                            ) }}
-
-                            {% for error in form.image.errors %}
-                                <div class="text-danger small mt-1">
-                                    {{ error }}
-                                </div>
-                            {% endfor %}
-
-                            <div class="form-text">
-                                JPG, JPEG, PNG or WEBP. Maximum 5 MB.
-                            </div>
-
-                        </div>
-
-
-                        <!-- NEW IMAGE PREVIEW -->
-
-                        <div
-                            id="newImagePreviewWrapper"
-                            class="d-none"
-                        >
-
-                            <label class="form-label fw-semibold">
-                                New Image Preview
-                            </label>
-
-                            <div class="rounded-4 overflow-hidden bg-light">
-
-                                <img
-                                    id="newImagePreview"
-                                    src=""
-                                    alt="New homepage image preview"
-                                    class="w-100 homepage-preview"
-                                >
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- ALT TEXT -->
-
-                        <div class="mt-4">
-
-                            {{ form.image_alt.label(
-                                class="form-label fw-semibold"
-                            ) }}
-
-                            {{ form.image_alt(
-                                class="form-control rounded-3"
-                            ) }}
-
-                            {% for error in form.image_alt.errors %}
-                                <div class="text-danger small mt-1">
-                                    {{ error }}
-                                </div>
-                            {% endfor %}
-
-                            <div class="form-text">
-                                Recommended for accessibility and SEO.
-                            </div>
-
-                        </div>
-
-                    </div>
+                    <p class="cms-section-description">
+                        Upload a high-quality image for this content block.
+                    </p>
 
                 </div>
 
 
-                <!-- ==================================================
-                     ADVANCED
-                =================================================== -->
+                <div class="cms-card-body">
 
-                <div class="card border-0 shadow-sm rounded-4">
+                    {% if content and content.image_url %}
 
-                    <div class="card-header bg-white border-0 p-4 pb-2">
+                        <div class="cms-form-group">
 
-                        <h2 class="h5 fw-bold mb-1">
-                            <i class="bi bi-sliders text-success me-2"></i>
-                            Advanced Settings
-                        </h2>
+                            <div class="image-preview-label">
 
-                    </div>
+                                <span class="image-preview-label-text">
+                                    Current Image
+                                </span>
 
+                            </div>
 
-                    <div class="card-body p-4">
+                            <div class="image-preview-box">
 
-                        <div class="mb-4">
+                                <img
+                                    src="{{ content.image_url }}"
+                                    alt="{{ content.image_alt or content.key }}"
+                                    id="currentHomepageImage"
+                                    class="w-100 homepage-preview"
+                                    loading="lazy"
+                                    decoding="async"
+                                >
 
-                            {{ form.css_class.label(
-                                class="form-label fw-semibold"
-                            ) }}
+                            </div>
 
-                            {{ form.css_class(
-                                class="form-control rounded-3"
-                            ) }}
-
-                            {% for error in form.css_class.errors %}
-                                <div class="text-danger small mt-1">
-                                    {{ error }}
-                                </div>
-                            {% endfor %}
-
-                            <div class="form-text">
-                                Optional CSS class for custom homepage styling.
+                            <div class="image-preview-caption">
+                                <i class="bi bi-check-circle-fill"></i>
+                                <span>Currently uploaded homepage image</span>
                             </div>
 
                         </div>
 
+                    {% endif %}
 
-                        <div>
 
-                            {{ form.sort_order.label(
-                                class="form-label fw-semibold"
-                            ) }}
+                    <!-- IMAGE UPLOAD -->
 
-                            {{ form.sort_order(
-                                class="form-control rounded-3",
-                                min="0"
-                            ) }}
+                    <div class="cms-form-group">
 
-                            {% for error in form.sort_order.errors %}
-                                <div class="text-danger small mt-1">
-                                    {{ error }}
-                                </div>
-                            {% endfor %}
+                        {{ form.image.label(
+                            class="cms-label"
+                        ) }}
 
-                            <div class="form-text">
-                                Lower numbers appear first.
+                        {{ form.image(
+                            class="form-control cms-form-control",
+                            accept=".jpg,.jpeg,.png,.webp"
+                        ) }}
+
+                        {% for error in form.image.errors %}
+                            <div class="cms-error">
+                                {{ error }}
                             </div>
+                        {% endfor %}
 
+                        <div class="cms-help">
+                            JPG, JPEG, PNG or WEBP. Maximum 5 MB.
+                        </div>
+
+                    </div>
+
+
+                    <!-- NEW IMAGE PREVIEW -->
+
+                    <div
+                        id="newImagePreviewWrapper"
+                        class="d-none"
+                    >
+
+                        <div class="image-preview-label">
+
+                            <span class="image-preview-label-text">
+                                New Image Preview
+                            </span>
+
+                        </div>
+
+                        <div class="image-preview-box">
+
+                            <img
+                                id="newImagePreview"
+                                src=""
+                                alt="New homepage image preview"
+                                class="w-100 homepage-preview"
+                            >
+
+                        </div>
+
+                        <div class="image-preview-caption">
+                            <i class="bi bi-eye"></i>
+                            <span>Preview of the selected image</span>
+                        </div>
+
+                    </div>
+
+
+                    <!-- ALT TEXT -->
+
+                    <div class="cms-form-group mt-4">
+
+                        {{ form.image_alt.label(
+                            class="cms-label"
+                        ) }}
+
+                        {{ form.image_alt(
+                            class="form-control cms-form-control"
+                        ) }}
+
+                        {% for error in form.image_alt.errors %}
+                            <div class="cms-error">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+
+                        <div class="cms-help">
+                            Recommended for accessibility and SEO.
                         </div>
 
                     </div>
@@ -384,167 +985,255 @@
 
 
             <!-- ==================================================
-                 SIDEBAR
+                 ADVANCED
             =================================================== -->
 
-            <div class="col-12 col-lg-4">
+            <div class="cms-card">
 
-                <!-- PUBLISHING -->
+                <div class="cms-card-header">
 
-                <div class="card border-0 shadow-sm rounded-4 mb-4">
+                    <h2 class="cms-section-title">
 
-                    <div class="card-header bg-white border-0 p-4 pb-2">
+                        <span class="cms-section-icon">
+                            <i class="bi bi-sliders"></i>
+                        </span>
 
-                        <h2 class="h5 fw-bold mb-1">
-                            <i class="bi bi-broadcast text-success me-2"></i>
-                            Publishing
-                        </h2>
+                        <span>Advanced Settings</span>
 
-                    </div>
-
-
-                    <div class="card-body p-4">
-
-                        <div class="form-check form-switch fs-5 mb-2">
-
-                            {{ form.is_active(
-                                class="form-check-input",
-                                role="switch"
-                            ) }}
-
-                            {{ form.is_active.label(
-                                class="form-check-label fw-semibold"
-                            ) }}
-
-                        </div>
-
-                        <p class="small text-muted mb-0">
-                            Published content is visible on the public homepage.
-                            Hidden content remains available in the CMS.
-                        </p>
-
-                    </div>
+                    </h2>
 
                 </div>
 
 
-                <!-- SAVE -->
+                <div class="cms-card-body">
 
-                <div class="card border-0 shadow-sm rounded-4 mb-4">
+                    <div class="advanced-note">
 
-                    <div class="card-body p-4">
+                        <i class="bi bi-info-circle"></i>
 
-                        {{ form.submit(
-                            class="btn btn-success btn-lg rounded-3 w-100 fw-bold",
-                            value="Save Content"
+                        <span>
+                            These settings control how this content block
+                            is identified, styled and positioned on the homepage.
+                        </span>
+
+                    </div>
+
+
+                    <div class="cms-form-group">
+
+                        {{ form.css_class.label(
+                            class="cms-label"
                         ) }}
 
-                        <a
-                            href="{{ url_for('admin_homepage.homepage') }}"
-                            class="btn btn-outline-secondary rounded-3 w-100 mt-2"
-                        >
-                            Cancel
-                        </a>
+                        {{ form.css_class(
+                            class="form-control cms-form-control"
+                        ) }}
 
-                    </div>
+                        {% for error in form.css_class.errors %}
+                            <div class="cms-error">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
 
-                </div>
-
-
-                <!-- DELETE -->
-
-                {% if content %}
-
-                    <div class="card border-0 shadow-sm rounded-4 border-danger">
-
-                        <div class="card-body p-4">
-
-                            <h3 class="h6 fw-bold text-danger">
-                                <i class="bi bi-exclamation-triangle me-1"></i>
-                                Danger Zone
-                            </h3>
-
-                            <p class="small text-muted">
-                                Permanently remove this homepage content block
-                                and its uploaded image.
-                            </p>
-
-                            <form
-                                method="POST"
-                                action="{{ url_for(
-                                    'admin_homepage.delete_content',
-                                    content_id=content.id
-                                ) }}"
-                                onsubmit="return confirm(
-                                    'Delete this homepage content permanently?'
-                                );"
-                            >
-
-                                <input
-                                    type="hidden"
-                                    name="csrf_token"
-                                    value="{{ csrf_token() }}"
-                                >
-
-                                <button
-                                    type="submit"
-                                    class="btn btn-outline-danger rounded-3 w-100"
-                                >
-                                    <i class="bi bi-trash me-1"></i>
-                                    Delete Content
-                                </button>
-
-                            </form>
-
+                        <div class="cms-help">
+                            Optional CSS class for custom homepage styling.
                         </div>
 
                     </div>
 
-                {% endif %}
+
+                    <div class="cms-form-group">
+
+                        {{ form.sort_order.label(
+                            class="cms-label"
+                        ) }}
+
+                        {{ form.sort_order(
+                            class="form-control cms-form-control",
+                            min="0"
+                        ) }}
+
+                        {% for error in form.sort_order.errors %}
+                            <div class="cms-error">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+
+                        <div class="cms-help">
+                            Lower numbers appear first.
+                        </div>
+
+                    </div>
+
+                </div>
 
             </div>
 
         </div>
 
-    </form>
+
+        <!-- ==================================================
+             SIDEBAR
+        =================================================== -->
+
+        <div class="col-12 col-lg-4 cms-sidebar">
+
+            <!-- PUBLISHING -->
+
+            <div class="cms-card">
+
+                <div class="cms-card-header">
+
+                    <h2 class="cms-section-title">
+
+                        <span class="cms-section-icon">
+                            <i class="bi bi-broadcast"></i>
+                        </span>
+
+                        <span>Publishing</span>
+
+                    </h2>
+
+                </div>
+
+
+                <div class="cms-card-body">
+
+                    <div class="publish-status-box">
+
+                        <span class="publish-status-icon">
+                            <i class="bi bi-globe2"></i>
+                        </span>
+
+                        <div>
+
+                            <p class="publish-status-title">
+                                Homepage Visibility
+                            </p>
+
+                            <p class="publish-status-text">
+                                Control whether this content is visible
+                                on the public homepage.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-check form-switch cms-switch">
+
+                        {{ form.is_active(
+                            class="form-check-input",
+                            role="switch"
+                        ) }}
+
+                        {{ form.is_active.label(
+                            class="form-check-label fw-semibold"
+                        ) }}
+
+                    </div>
+
+                    <p class="publishing-help">
+                        Published content is visible on the public homepage.
+                        Hidden content remains available in the CMS.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- SAVE -->
+
+            <div class="cms-card">
+
+                <div class="cms-card-body">
+
+                    {{ form.submit(
+                        class="btn btn-success cms-save-btn w-100 fw-bold",
+                        value="Save Content"
+                    ) }}
+
+                    <a
+                        href="{{ url_for('admin_homepage.homepage') }}"
+                        class="btn btn-outline-secondary cms-cancel-btn w-100 mt-2"
+                    >
+                        <i class="bi bi-x-lg me-1"></i>
+                        Cancel
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- DELETE -->
+
+            {% if content %}
+
+                <div class="cms-card danger-card">
+
+                    <div class="cms-card-body">
+
+                        <div class="danger-header">
+
+                            <span class="danger-header-icon">
+                                <i class="bi bi-exclamation-triangle"></i>
+                            </span>
+
+                            <span>
+                                Danger Zone
+                            </span>
+
+                        </div>
+
+                        <p class="danger-description">
+                            Permanently remove this homepage content block
+                            and its uploaded image.
+                        </p>
+
+
+                        <form
+                            method="POST"
+                            action="{{ url_for(
+                                'admin_homepage.delete_content',
+                                content_id=content.id
+                            ) }}"
+                            onsubmit="return confirm(
+                                'Delete this homepage content permanently?'
+                            );"
+                        >
+
+                            <input
+                                type="hidden"
+                                name="csrf_token"
+                                value="{{ csrf_token() }}"
+                            >
+
+                            <button
+                                type="submit"
+                                class="btn btn-outline-danger cms-delete-btn w-100"
+                            >
+                                <i class="bi bi-trash me-1"></i>
+                                Delete Content
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</form>
 
 </div>
-
-
-<style>
-
-    .homepage-preview {
-        display: block;
-        width: 100%;
-        max-height: 420px;
-        object-fit: cover;
-    }
-
-    #newImagePreviewWrapper {
-        margin-top: 1rem;
-    }
-
-    .form-control:focus,
-    .form-check-input:focus {
-        border-color: #198754;
-        box-shadow: 0 0 0 .2rem rgba(25, 135, 84, .12);
-    }
-
-    .form-check-input:checked {
-        background-color: #198754;
-        border-color: #198754;
-    }
-
-    @media (max-width: 767.98px) {
-
-        .homepage-preview {
-            max-height: 280px;
-        }
-
-    }
-
-</style>
-
 
 <script>
 

@@ -8,100 +8,166 @@ Order {{ order.order_code }} | AgroMart Admin
 
 <style>
     /* =========================================================
-       MOBILE FIRST — ORDER DETAILS
+       AGROMART — ORDER DETAILS
+       Lightweight mobile-first styling
        ========================================================= */
 
     .order-detail-page {
         width: 100%;
-        padding: 16px;
+        max-width: 1450px;
+        margin: 0 auto;
+        padding: 14px;
         box-sizing: border-box;
+        color: #111827;
     }
 
-
     /* =========================================================
-       HEADER
+       PAGE HEADER
        ========================================================= */
 
-    .order-header {
+    .order-page-top {
         margin-bottom: 18px;
+    }
+
+    .back-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        width: 100%;
+        min-height: 42px;
+        margin-bottom: 14px;
+        padding: 9px 14px;
+        box-sizing: border-box;
+
+        background: #f8fafc;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+
+        color: #374151;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 700;
+
+        transition:
+            background .15s ease,
+            border-color .15s ease,
+            color .15s ease,
+            transform .15s ease;
+    }
+
+    .back-btn:hover {
+        background: #f0fdf4;
+        border-color: #bbf7d0;
+        color: #166534;
+    }
+
+    .back-btn:active {
+        transform: scale(.985);
+    }
+
+    .order-kicker {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        margin-bottom: 5px;
+
+        color: #15803d;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+    }
+
+    .order-kicker i {
+        font-size: 12px;
+    }
+
+    .order-header {
+        margin: 0;
     }
 
     .order-header h1 {
         margin: 0;
-        font-size: 22px;
-        line-height: 1.3;
-        color: #1f2937;
+        color: #111827;
+        font-size: 21px;
+        font-weight: 800;
+        line-height: 1.25;
         word-break: break-word;
     }
 
     .order-header p {
         margin: 6px 0 0;
         color: #6b7280;
-        font-size: 13px;
+        font-size: 12px;
+        line-height: 1.5;
     }
-
-    .back-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        width: 100%;
-        min-height: 44px;
-        margin-bottom: 16px;
-
-        box-sizing: border-box;
-
-        background: #f3f4f6;
-        color: #374151;
-
-        text-decoration: none;
-        border-radius: 8px;
-
-        font-size: 14px;
-        font-weight: 700;
-    }
-
-    .back-btn:active {
-        transform: scale(.98);
-    }
-
 
     /* =========================================================
-       GRID
+       MAIN GRID
        ========================================================= */
 
     .order-grid {
         display: flex;
         flex-direction: column;
-        gap: 16px;
+        gap: 14px;
     }
 
+    .order-left-column,
+    .order-right-column {
+        min-width: 0;
+    }
 
     /* =========================================================
        CARDS
        ========================================================= */
 
-    .card {
+    .order-card {
         width: 100%;
         box-sizing: border-box;
+        padding: 16px;
 
-        background: #ffffff;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
 
-        border-radius: 12px;
-
-        padding: 18px;
-
-        box-shadow:
-            0 3px 15px rgba(0, 0, 0, .06);
+        box-shadow: 0 4px 18px rgba(15, 23, 42, .05);
     }
 
-    .card h2 {
-        margin: 0 0 18px;
-
-        font-size: 17px;
-        color: #1f2937;
+    .order-card + .order-card {
+        margin-top: 14px;
     }
 
+    .card-heading {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        margin-bottom: 15px;
+    }
+
+    .card-heading-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 32px;
+        height: 32px;
+        flex: 0 0 32px;
+
+        border-radius: 9px;
+        background: #f0fdf4;
+        color: #15803d;
+        font-size: 14px;
+    }
+
+    .card-heading h2 {
+        min-width: 0;
+        margin: 0;
+        color: #111827;
+        font-size: 15px;
+        font-weight: 800;
+        line-height: 1.3;
+    }
 
     /* =========================================================
        ORDER INFORMATION
@@ -109,29 +175,36 @@ Order {{ order.order_code }} | AgroMart Admin
 
     .order-summary {
         display: grid;
-        grid-template-columns: 1fr;
-        gap: 16px;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    .info-item {
+        min-width: 0;
+        padding: 11px 10px;
+
+        background: #f8fafc;
+        border: 1px solid #f1f5f9;
+        border-radius: 10px;
     }
 
     .info-label {
-        margin-bottom: 5px;
-
-        font-size: 10px;
-        font-weight: 700;
-
-        text-transform: uppercase;
-        letter-spacing: .04em;
-
+        margin-bottom: 4px;
         color: #9ca3af;
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: .06em;
+        line-height: 1.3;
+        text-transform: uppercase;
     }
 
     .info-value {
         color: #111827;
-        font-size: 14px;
-        font-weight: 600;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1.45;
         word-break: break-word;
     }
-
 
     /* =========================================================
        STATUS
@@ -141,14 +214,25 @@ Order {{ order.order_code }} | AgroMart Admin
         display: inline-flex;
         align-items: center;
         justify-content: center;
+        gap: 5px;
 
-        min-height: 28px;
-        padding: 5px 11px;
+        min-height: 26px;
+        padding: 4px 9px;
 
         border-radius: 999px;
 
-        font-size: 11px;
-        font-weight: 700;
+        font-size: 10px;
+        font-weight: 800;
+        line-height: 1.2;
+        white-space: nowrap;
+    }
+
+    .status::before {
+        content: "";
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: currentColor;
     }
 
     .status-pending {
@@ -181,7 +265,6 @@ Order {{ order.order_code }} | AgroMart Admin
         color: #b91c1c;
     }
 
-
     /* =========================================================
        PRODUCTS
        ========================================================= */
@@ -189,98 +272,238 @@ Order {{ order.order_code }} | AgroMart Admin
     .items-wrapper {
         width: 100%;
         overflow-x: auto;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
         -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
     }
 
     .items-table {
         width: 100%;
-        min-width: 580px;
+        min-width: 560px;
         border-collapse: collapse;
+        background: #fff;
     }
 
     .items-table th {
-        padding: 12px 10px;
-
+        padding: 10px;
         background: #f8fafc;
+        border-bottom: 1px solid #e5e7eb;
 
         color: #64748b;
-
-        font-size: 10px;
-        font-weight: 700;
-
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: .05em;
         text-align: left;
         text-transform: uppercase;
+        white-space: nowrap;
     }
 
     .items-table td {
-        padding: 14px 10px;
-
+        padding: 12px 10px;
         border-bottom: 1px solid #f1f5f9;
 
         color: #374151;
-        font-size: 13px;
+        font-size: 12px;
+        vertical-align: middle;
+    }
+
+    .items-table tbody tr:last-child td {
+        border-bottom: 0;
+    }
+
+    .items-table tbody tr:hover {
+        background: #fcfdfd;
+    }
+
+    .product-cell {
+        min-width: 190px;
     }
 
     .product-name {
-        font-weight: 700;
+        display: block;
+        max-width: 280px;
+
+        overflow: hidden;
         color: #111827;
+        font-size: 12px;
+        font-weight: 750;
+        line-height: 1.4;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .quantity-value {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        min-width: 30px;
+        min-height: 25px;
+        padding: 3px 7px;
+
+        background: #f8fafc;
+        border: 1px solid #e5e7eb;
+        border-radius: 7px;
+
+        color: #374151;
+        font-size: 11px;
+        font-weight: 800;
     }
 
     .price {
-        font-weight: 700;
+        color: #15803d !important;
+        font-weight: 800 !important;
+        white-space: nowrap;
     }
 
+    .empty-items {
+        margin: 0;
+        padding: 18px 8px;
+        color: #6b7280;
+        font-size: 12px;
+        text-align: center;
+    }
 
     /* =========================================================
-       TOTAL
+       ORDER TOTAL
        ========================================================= */
 
     .order-total {
         display: flex;
-        justify-content: space-between;
         align-items: center;
+        justify-content: space-between;
+        gap: 12px;
 
-        gap: 15px;
-
-        padding-top: 17px;
-        margin-top: 8px;
+        margin-top: 12px;
+        padding: 14px 2px 0;
 
         border-top: 2px solid #e5e7eb;
 
-        font-size: 17px;
+        color: #111827;
+        font-size: 15px;
         font-weight: 800;
     }
 
     .order-total span:last-child {
+        color: #15803d;
+        font-size: 16px;
         white-space: nowrap;
     }
 
+    /* =========================================================
+       CUSTOMER
+       ========================================================= */
+
+    .customer-panel {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+    }
+
+    .customer-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 40px;
+        height: 40px;
+        flex: 0 0 40px;
+
+        border-radius: 10px;
+        background: #eff6ff;
+        color: #2563eb;
+        font-size: 17px;
+    }
+
+    .customer-id {
+        color: #166534;
+        font-size: 14px;
+        font-weight: 800;
+        line-height: 1.4;
+    }
 
     /* =========================================================
        SHIPPING
        ========================================================= */
 
     .shipping-address {
-        color: #374151;
+        padding: 12px;
 
-        font-size: 14px;
+        background: #f8fafc;
+        border: 1px solid #f1f5f9;
+        border-radius: 10px;
+
+        color: #374151;
+        font-size: 12px;
         line-height: 1.7;
 
         white-space: pre-line;
         word-break: break-word;
     }
 
-
     /* =========================================================
-       CUSTOMER
+       PAYMENT
        ========================================================= */
 
-    .customer-id {
-        color: #166534;
-        font-size: 15px;
-        font-weight: 800;
+    .payment-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+
+        padding: 10px 0;
+        border-bottom: 1px solid #f1f5f9;
     }
 
+    .payment-row:last-child {
+        padding-bottom: 0;
+        border-bottom: 0;
+    }
+
+    .payment-row .info-label {
+        margin-bottom: 0;
+    }
+
+    .payment-row .info-value {
+        text-align: right;
+    }
+
+    /* =========================================================
+       SMALL MOBILE
+       ========================================================= */
+
+    @media (max-width: 420px) {
+
+        .order-detail-page {
+            padding: 12px;
+        }
+
+        .order-card {
+            padding: 14px;
+            border-radius: 12px;
+        }
+
+        .order-summary {
+            gap: 8px;
+        }
+
+        .info-item {
+            padding: 9px 8px;
+        }
+
+        .info-value {
+            font-size: 11px;
+        }
+
+        .order-total {
+            font-size: 14px;
+        }
+
+        .order-total span:last-child {
+            font-size: 15px;
+        }
+    }
 
     /* =========================================================
        TABLET
@@ -289,24 +512,25 @@ Order {{ order.order_code }} | AgroMart Admin
     @media (min-width: 600px) {
 
         .order-detail-page {
-            padding: 22px;
-        }
-
-        .order-header h1 {
-            font-size: 26px;
-        }
-
-        .order-summary {
-            grid-template-columns: 1fr 1fr;
+            padding: 20px;
         }
 
         .back-btn {
             width: auto;
-            display: inline-flex;
-            padding: 0 18px;
+        }
+
+        .order-header h1 {
+            font-size: 25px;
+        }
+
+        .order-header p {
+            font-size: 13px;
+        }
+
+        .order-card {
+            padding: 19px;
         }
     }
-
 
     /* =========================================================
        DESKTOP
@@ -315,51 +539,78 @@ Order {{ order.order_code }} | AgroMart Admin
     @media (min-width: 992px) {
 
         .order-detail-page {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 30px;
+            padding: 28px;
+        }
+
+        .order-page-top {
+            margin-bottom: 22px;
+        }
+
+        .order-header h1 {
+            font-size: 28px;
         }
 
         .order-grid {
             display: grid;
-            grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+            grid-template-columns: minmax(0, 2fr) minmax(270px, .9fr);
             align-items: start;
-            gap: 22px;
+            gap: 20px;
         }
 
-        .card {
-            padding: 24px;
+        .order-card {
+            padding: 21px;
         }
 
-        .card h2 {
-            font-size: 19px;
+        .card-heading {
+            margin-bottom: 17px;
         }
 
-        .order-summary {
-            grid-template-columns: 1fr 1fr;
+        .card-heading h2 {
+            font-size: 16px;
+        }
+
+        .order-card + .order-card {
+            margin-top: 16px;
+        }
+    }
+
+    @media (min-width: 1200px) {
+
+        .order-detail-page {
+            padding: 30px;
+        }
+
+        .order-grid {
+            grid-template-columns: minmax(0, 2.15fr) minmax(300px, .85fr);
+            gap: 24px;
+        }
+
+        .order-card {
+            padding: 23px;
         }
     }
 </style>
 
-
 <div class="order-detail-page">
 
+<!-- =====================================================
+     PAGE HEADER
+     ===================================================== -->
 
-    <!-- =====================================================
-         BACK BUTTON
-         ===================================================== -->
+<div class="order-page-top">
 
     <a
         href="{{ url_for('orders.orders') }}"
         class="back-btn"
     >
-        ← Back to Orders
+        <i class="bi bi-arrow-left"></i>
+        <span>Back to Orders</span>
     </a>
 
-
-    <!-- =====================================================
-         HEADER
-         ===================================================== -->
+    <div class="order-kicker">
+        <i class="bi bi-receipt"></i>
+        <span>Order Details</span>
+    </div>
 
     <div class="order-header">
 
@@ -373,247 +624,274 @@ Order {{ order.order_code }} | AgroMart Admin
 
     </div>
 
-
-    <div class="order-grid">
-
-
-        <!-- =================================================
-             LEFT COLUMN
-             ================================================= -->
-
-        <div>
+</div>
 
 
-            <!-- ORDER INFORMATION -->
+<div class="order-grid">
 
-            <div class="card">
+    <!-- =================================================
+         LEFT COLUMN
+         ================================================= -->
+
+    <div class="order-left-column">
+
+        <!-- ORDER INFORMATION -->
+
+        <div class="order-card">
+
+            <div class="card-heading">
+
+                <span class="card-heading-icon">
+                    <i class="bi bi-info-circle"></i>
+                </span>
 
                 <h2>
                     Order Information
                 </h2>
 
-                <div class="order-summary">
+            </div>
 
+            <div class="order-summary">
 
-                    <div>
+                <div class="info-item">
 
-                        <div class="info-label">
-                            Order Code
-                        </div>
-
-                        <div class="info-value">
-                            {{ order.order_code }}
-                        </div>
-
+                    <div class="info-label">
+                        Order Code
                     </div>
 
-
-                    <div>
-
-                        <div class="info-label">
-                            Order Date
-                        </div>
-
-                        <div class="info-value">
-
-                            {% if order.created_at %}
-
-                                {{ order.created_at.strftime(
-                                    "%d %B %Y, %I:%M %p"
-                                ) }}
-
-                            {% else %}
-
-                                —
-
-                            {% endif %}
-
-                        </div>
-
+                    <div class="info-value">
+                        {{ order.order_code }}
                     </div>
 
+                </div>
 
-                    <div>
 
-                        <div class="info-label">
-                            Payment Method
-                        </div>
+                <div class="info-item">
 
-                        <div class="info-value">
-                            {{ order.payment_method or "—" }}
-                        </div>
-
+                    <div class="info-label">
+                        Order Date
                     </div>
 
+                    <div class="info-value">
 
-                    <div>
+                        {% if order.created_at %}
 
-                        <div class="info-label">
-                            Status
-                        </div>
+                            {{ order.created_at.strftime(
+                                "%d %B %Y, %I:%M %p"
+                            ) }}
 
-                        {% set status_class =
-                            order.status|lower|replace(" ", "-")
-                        %}
+                        {% else %}
 
-                        <span class="status status-{{ status_class }}">
-                            {{ order.status }}
-                        </span>
+                            —
+
+                        {% endif %}
 
                     </div>
 
                 </div>
 
-            </div>
 
+                <div class="info-item">
 
-            <!-- =================================================
-                 PRODUCTS
-                 ================================================= -->
-
-            <div
-                class="card"
-                style="margin-top: 16px;"
-            >
-
-                <h2>
-                    Products Ordered
-                </h2>
-
-
-                {% if order.items %}
-
-                    <div class="items-wrapper">
-
-                        <table class="items-table">
-
-                            <thead>
-
-                                <tr>
-
-                                    <th>
-                                        Product
-                                    </th>
-
-                                    <th>
-                                        Quantity
-                                    </th>
-
-                                    <th>
-                                        Unit Price
-                                    </th>
-
-                                    <th>
-                                        Subtotal
-                                    </th>
-
-                                </tr>
-
-                            </thead>
-
-
-                            <tbody>
-
-                                {% for item in order.items %}
-
-                                    <tr>
-
-                                        <td>
-
-                                            <span class="product-name">
-
-                                                {% if item.product %}
-
-                                                    {{ item.product.name }}
-
-                                                {% else %}
-
-                                                    Product
-                                                    #{{ item.product_id }}
-
-                                                {% endif %}
-
-                                            </span>
-
-                                        </td>
-
-
-                                        <td>
-                                            {{ item.quantity }}
-                                        </td>
-
-
-                                        <td>
-                                            KSh
-                                            {{ "{:,.2f}".format(
-                                                item.price
-                                            ) }}
-                                        </td>
-
-
-                                        <td class="price">
-
-                                            KSh
-                                            {{ "{:,.2f}".format(
-                                                item.price *
-                                                item.quantity
-                                            ) }}
-
-                                        </td>
-
-                                    </tr>
-
-                                {% endfor %}
-
-                            </tbody>
-
-                        </table>
-
+                    <div class="info-label">
+                        Payment Method
                     </div>
 
-
-                    <div class="order-total">
-
-                        <span>
-                            Total
-                        </span>
-
-                        <span>
-                            KSh
-                            {{ "{:,.2f}".format(
-                                order.total_amount
-                            ) }}
-                        </span>
-
+                    <div class="info-value">
+                        {{ order.payment_method or "—" }}
                     </div>
 
-                {% else %}
+                </div>
 
-                    <p>
-                        No products found for this order.
-                    </p>
 
-                {% endif %}
+                <div class="info-item">
+
+                    <div class="info-label">
+                        Status
+                    </div>
+
+                    {% set status_class =
+                        order.status|lower|replace(" ", "-")
+                    %}
+
+                    <span class="status status-{{ status_class }}">
+                        {{ order.status }}
+                    </span>
+
+                </div>
 
             </div>
 
         </div>
 
 
-        <!-- =================================================
-             RIGHT COLUMN
-             ================================================= -->
+        <!-- PRODUCTS -->
 
-        <div>
+        <div class="order-card">
+
+            <div class="card-heading">
+
+                <span class="card-heading-icon">
+                    <i class="bi bi-box-seam"></i>
+                </span>
+
+                <h2>
+                    Products Ordered
+                </h2>
+
+            </div>
 
 
-            <!-- CUSTOMER -->
+            {% if order.items %}
 
-            <div class="card">
+                <div class="items-wrapper">
+
+                    <table class="items-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Product
+                                </th>
+
+                                <th>
+                                    Quantity
+                                </th>
+
+                                <th>
+                                    Unit Price
+                                </th>
+
+                                <th>
+                                    Subtotal
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for item in order.items %}
+
+                                <tr>
+
+                                    <td class="product-cell">
+
+                                        <span class="product-name">
+
+                                            {% if item.product %}
+
+                                                {{ item.product.name }}
+
+                                            {% else %}
+
+                                                Product
+                                                #{{ item.product_id }}
+
+                                            {% endif %}
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <span class="quantity-value">
+                                            {{ item.quantity }}
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+                                        KSh
+                                        {{ "{:,.2f}".format(
+                                            item.price
+                                        ) }}
+                                    </td>
+
+
+                                    <td class="price">
+
+                                        KSh
+                                        {{ "{:,.2f}".format(
+                                            item.price *
+                                            item.quantity
+                                        ) }}
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                <div class="order-total">
+
+                    <span>
+                        Total
+                    </span>
+
+                    <span>
+                        KSh
+                        {{ "{:,.2f}".format(
+                            order.total_amount
+                        ) }}
+                    </span>
+
+                </div>
+
+            {% else %}
+
+                <p class="empty-items">
+                    No products found for this order.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         RIGHT COLUMN
+         ================================================= -->
+
+    <div class="order-right-column">
+
+        <!-- CUSTOMER -->
+
+        <div class="order-card">
+
+            <div class="card-heading">
+
+                <span class="card-heading-icon">
+                    <i class="bi bi-person"></i>
+                </span>
 
                 <h2>
                     Customer
                 </h2>
+
+            </div>
+
+            <div class="customer-panel">
+
+                <span class="customer-icon">
+                    <i class="bi bi-person-fill"></i>
+                </span>
 
                 <div>
 
@@ -629,67 +907,76 @@ Order {{ order.order_code }} | AgroMart Admin
 
             </div>
 
+        </div>
 
-            <!-- SHIPPING -->
 
-            <div
-                class="card"
-                style="margin-top: 16px;"
-            >
+        <!-- SHIPPING -->
+
+        <div class="order-card">
+
+            <div class="card-heading">
+
+                <span class="card-heading-icon">
+                    <i class="bi bi-geo-alt"></i>
+                </span>
 
                 <h2>
                     Shipping Address
                 </h2>
 
-                <div class="shipping-address">
+            </div>
 
-                    {{ order.shipping_address
-                        or "No shipping address provided."
-                    }}
+            <div class="shipping-address">
 
-                </div>
+                {{ order.shipping_address
+                    or "No shipping address provided."
+                }}
 
             </div>
 
+        </div>
 
-            <!-- PAYMENT -->
 
-            <div
-                class="card"
-                style="margin-top: 16px;"
-            >
+        <!-- PAYMENT -->
+
+        <div class="order-card">
+
+            <div class="card-heading">
+
+                <span class="card-heading-icon">
+                    <i class="bi bi-credit-card"></i>
+                </span>
 
                 <h2>
                     Payment
                 </h2>
 
+            </div>
 
-                <div>
+            <div class="payment-row">
 
-                    <div class="info-label">
-                        Method
-                    </div>
-
-                    <div class="info-value">
-                        {{ order.payment_method or "Not specified" }}
-                    </div>
-
+                <div class="info-label">
+                    Method
                 </div>
 
+                <div class="info-value">
+                    {{ order.payment_method or "Not specified" }}
+                </div>
 
-                <div style="margin-top: 18px;">
+            </div>
 
-                    <div class="info-label">
-                        Amount
-                    </div>
 
-                    <div class="info-value">
-                        KSh
-                        {{ "{:,.2f}".format(
-                            order.total_amount
-                        ) }}
-                    </div>
+            <div class="payment-row">
 
+                <div class="info-label">
+                    Amount
+                </div>
+
+                <div class="info-value">
+                    KSh
+                    {{ "{:,.2f}".format(
+                        order.total_amount
+                    ) }}
                 </div>
 
             </div>
@@ -697,6 +984,8 @@ Order {{ order.order_code }} | AgroMart Admin
         </div>
 
     </div>
+
+</div>
 
 </div>
 

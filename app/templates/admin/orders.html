@@ -2,53 +2,110 @@
 
 {% block title %}Orders | AgroMart Admin{% endblock %}
 
-{% block content %}
+{% block styles %}
 
 <style>
-    /* =========================================================
-       MOBILE FIRST — ORDERS PAGE
-       ========================================================= */
+    /* ==========================================================
+       BOMET MACHINERIES LTD.
+       ORDERS ADMIN — PROFESSIONAL MOBILE-FIRST UI
+       ========================================================== */
+
+    :root {
+        --bm-green: #15803d;
+        --bm-green-dark: #166534;
+        --bm-green-soft: #f0fdf4;
+
+        --bm-yellow: #f59e0b;
+        --bm-yellow-soft: #fffbeb;
+
+        --bm-red: #dc2626;
+        --bm-red-soft: #fef2f2;
+
+        --bm-blue: #2563eb;
+        --bm-blue-soft: #eff6ff;
+
+        --bm-purple: #7c3aed;
+        --bm-purple-soft: #f5f3ff;
+
+        --bm-cyan: #0891b2;
+        --bm-cyan-soft: #ecfeff;
+
+        --bm-text: #111827;
+        --bm-text-soft: #374151;
+        --bm-muted: #6b7280;
+
+        --bm-border: #e5e7eb;
+        --bm-border-light: #f1f5f9;
+
+        --bm-background: #f8fafc;
+        --bm-white: #ffffff;
+
+        --bm-radius: 14px;
+        --bm-radius-sm: 10px;
+
+        --bm-shadow: 0 4px 18px rgba(15, 23, 42, .06);
+        --bm-shadow-hover: 0 8px 24px rgba(15, 23, 42, .09);
+    }
 
     .orders-page {
         width: 100%;
+        max-width: 1450px;
+        margin: 0 auto;
         padding: 16px;
         box-sizing: border-box;
     }
+
+    /* ==========================================================
+       HEADER
+       ========================================================== */
 
     .orders-header {
         margin-bottom: 18px;
     }
 
+    .orders-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--bm-green);
+        font-size: .72rem;
+        font-weight: 800;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+        margin-bottom: 5px;
+    }
+
     .orders-header h1 {
         margin: 0;
-        font-size: 24px;
+        font-size: 1.55rem;
         line-height: 1.2;
-        color: #1f2937;
+        letter-spacing: -.02em;
+        color: var(--bm-text);
+        font-weight: 800;
     }
 
     .orders-header p {
         margin: 6px 0 0;
-        font-size: 14px;
-        color: #6b7280;
+        font-size: .82rem;
+        color: var(--bm-muted);
     }
 
-
-    /* =========================================================
+    /* ==========================================================
        ORDERS CONTAINER
-       ========================================================= */
+       ========================================================== */
 
     .orders-card {
         width: 100%;
-        background: #ffffff;
-        border-radius: 12px;
-        box-shadow: 0 3px 15px rgba(0, 0, 0, 0.06);
+        background: var(--bm-white);
+        border: 1px solid var(--bm-border-light);
+        border-radius: var(--bm-radius);
+        box-shadow: var(--bm-shadow);
         overflow: hidden;
     }
 
-
-    /* =========================================================
-       MOBILE ORDER CARD
-       ========================================================= */
+    /* ==========================================================
+       MOBILE ORDER LIST
+       ========================================================== */
 
     .mobile-orders {
         display: flex;
@@ -56,12 +113,18 @@
     }
 
     .order-mobile-card {
-        padding: 18px;
-        border-bottom: 1px solid #edf0f2;
+        padding: 16px;
+        border-bottom: 1px solid var(--bm-border-light);
+        background: var(--bm-white);
+        transition: background .15s ease;
     }
 
     .order-mobile-card:last-child {
         border-bottom: none;
+    }
+
+    .order-mobile-card:hover {
+        background: #fcfdfc;
     }
 
     .order-mobile-top {
@@ -73,32 +136,34 @@
     }
 
     .order-code {
-        font-size: 16px;
+        font-size: .88rem;
+        line-height: 1.25;
         font-weight: 800;
-        color: #166534;
+        color: var(--bm-green-dark);
         word-break: break-word;
     }
 
     .order-date {
         margin-top: 4px;
-        font-size: 12px;
-        color: #6b7280;
+        font-size: .68rem;
+        line-height: 1.3;
+        color: var(--bm-muted);
     }
 
-
-    /* =========================================================
-       STATUS
-       ========================================================= */
+    /* ==========================================================
+       STATUS BADGES
+       ========================================================== */
 
     .status {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-height: 28px;
-        padding: 5px 10px;
+        min-height: 26px;
+        padding: 4px 9px;
         border-radius: 999px;
-        font-size: 11px;
-        font-weight: 700;
+        font-size: .62rem;
+        line-height: 1;
+        font-weight: 800;
         white-space: nowrap;
     }
 
@@ -108,186 +173,259 @@
     }
 
     .status-confirmed {
-        background: #eff6ff;
+        background: var(--bm-blue-soft);
         color: #1d4ed8;
     }
 
     .status-processing {
-        background: #f5f3ff;
+        background: var(--bm-purple-soft);
         color: #6d28d9;
     }
 
     .status-shipped {
-        background: #ecfeff;
+        background: var(--bm-cyan-soft);
         color: #0e7490;
     }
 
     .status-delivered {
-        background: #f0fdf4;
-        color: #15803d;
+        background: var(--bm-green-soft);
+        color: var(--bm-green);
     }
 
     .status-cancelled {
-        background: #fef2f2;
+        background: var(--bm-red-soft);
         color: #b91c1c;
     }
 
-
-    /* =========================================================
-       MOBILE ORDER INFORMATION
-       ========================================================= */
+    /* ==========================================================
+       ORDER INFORMATION
+       ========================================================== */
 
     .order-info-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 14px;
-        margin-bottom: 16px;
+        gap: 9px;
+        margin-bottom: 14px;
     }
 
     .order-info-item {
         min-width: 0;
+        padding: 9px 10px;
+        border: 1px solid var(--bm-border-light);
+        border-radius: 9px;
+        background: var(--bm-background);
     }
 
     .info-label {
         margin-bottom: 4px;
-        font-size: 10px;
-        font-weight: 700;
+        font-size: .59rem;
+        line-height: 1;
+        font-weight: 800;
         text-transform: uppercase;
-        letter-spacing: .04em;
+        letter-spacing: .05em;
         color: #9ca3af;
     }
 
     .info-value {
-        font-size: 14px;
-        font-weight: 600;
-        color: #374151;
+        font-size: .75rem;
+        line-height: 1.3;
+        font-weight: 700;
+        color: var(--bm-text-soft);
         word-break: break-word;
     }
 
     .amount {
         font-weight: 800;
-        color: #111827;
+        color: var(--bm-text);
     }
 
-
-    /* =========================================================
+    /* ==========================================================
        VIEW BUTTON
-       ========================================================= */
+       ========================================================== */
 
     .view-btn {
         display: flex;
         align-items: center;
         justify-content: center;
         width: 100%;
-        min-height: 44px;
+        min-height: 40px;
         box-sizing: border-box;
-
-        background: #166534;
+        background: var(--bm-green);
         color: #ffffff;
         text-decoration: none;
-
-        border-radius: 8px;
-
-        font-size: 14px;
-        font-weight: 700;
-
+        border: 1px solid var(--bm-green);
+        border-radius: 9px;
+        padding: 7px 14px;
+        font-size: .74rem;
+        font-weight: 800;
         transition:
-            background .2s ease,
-            transform .15s ease;
+            background .15s ease,
+            border-color .15s ease,
+            transform .15s ease,
+            box-shadow .15s ease;
     }
 
     .view-btn:hover {
-        background: #14532d;
+        background: var(--bm-green-dark);
+        border-color: var(--bm-green-dark);
+        color: #ffffff;
+        box-shadow: 0 4px 12px rgba(21, 128, 61, .14);
     }
 
     .view-btn:active {
-        transform: scale(.98);
+        transform: translateY(1px);
     }
 
-
-    /* =========================================================
+    /* ==========================================================
        EMPTY STATE
-       ========================================================= */
+       ========================================================== */
 
     .empty-state {
-        padding: 60px 20px;
+        padding: 55px 20px;
         text-align: center;
     }
 
     .empty-icon {
-        width: 58px;
-        height: 58px;
+        width: 62px;
+        height: 62px;
         margin: 0 auto 15px;
-
         display: flex;
         align-items: center;
         justify-content: center;
-
-        background: #f0fdf4;
-        color: #166534;
-
-        border-radius: 50%;
-
+        background: var(--bm-green-soft);
+        color: var(--bm-green-dark);
+        border: 1px solid #dcfce7;
+        border-radius: 16px;
         font-size: 25px;
     }
 
     .empty-state h3 {
         margin: 0 0 7px;
-        color: #374151;
-        font-size: 18px;
+        color: var(--bm-text);
+        font-size: 1rem;
+        font-weight: 800;
     }
 
     .empty-state p {
-        margin: 0;
-        color: #6b7280;
-        font-size: 14px;
+        max-width: 430px;
+        margin: 0 auto;
+        color: var(--bm-muted);
+        font-size: .78rem;
+        line-height: 1.5;
     }
 
-
-    /* =========================================================
+    /* ==========================================================
        DESKTOP TABLE
-       ========================================================= */
+       ========================================================== */
 
     .desktop-orders {
         display: none;
     }
 
+    .orders-table {
+        width: 100%;
+        min-width: 920px;
+        border-collapse: collapse;
+        color: var(--bm-text-soft);
+        font-size: .78rem;
+    }
 
-    /* =========================================================
+    .orders-table th {
+        padding: 13px 14px;
+        background: var(--bm-background);
+        border-bottom: 1px solid var(--bm-border);
+        color: var(--bm-muted);
+        font-size: .63rem;
+        line-height: 1;
+        font-weight: 800;
+        text-align: left;
+        text-transform: uppercase;
+        letter-spacing: .05em;
+        white-space: nowrap;
+    }
+
+    .orders-table td {
+        padding: 13px 14px;
+        border-bottom: 1px solid var(--bm-border-light);
+        color: var(--bm-text-soft);
+        vertical-align: middle;
+    }
+
+    .orders-table tbody tr {
+        transition: background .15s ease;
+    }
+
+    .orders-table tbody tr:hover {
+        background: #fbfdfb;
+    }
+
+    .orders-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .orders-table .order-code {
+        font-size: .76rem;
+    }
+
+    .orders-table .order-date {
+        font-size: .66rem;
+        white-space: nowrap;
+    }
+
+    .orders-table .view-btn {
+        display: inline-flex;
+        width: auto;
+        min-height: 32px;
+        font-size: .66rem;
+        padding: 5px 11px;
+    }
+
+    /* ==========================================================
        TABLET
-       ========================================================= */
+       ========================================================== */
 
     @media (min-width: 600px) {
-
         .orders-page {
             padding: 22px;
         }
 
         .orders-header h1 {
-            font-size: 27px;
+            font-size: 1.75rem;
+        }
+
+        .orders-header p {
+            font-size: .86rem;
         }
 
         .order-mobile-card {
-            padding: 20px;
+            padding: 19px;
         }
 
         .view-btn {
             width: auto;
-            padding: 0 18px;
+            min-width: 105px;
         }
     }
 
-
-    /* =========================================================
+    /* ==========================================================
        DESKTOP
-       ========================================================= */
+       ========================================================== */
 
     @media (min-width: 992px) {
-
         .orders-page {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 30px;
+            padding: 28px;
+        }
+
+        .orders-header {
+            margin-bottom: 20px;
+        }
+
+        .orders-header h1 {
+            font-size: 2rem;
+        }
+
+        .orders-header p {
+            font-size: .88rem;
         }
 
         .mobile-orders {
@@ -298,74 +436,102 @@
             display: block;
             overflow-x: auto;
         }
+    }
 
-        .orders-table {
-            width: 100%;
-            min-width: 900px;
-            border-collapse: collapse;
+    /* ==========================================================
+       LARGE DESKTOP
+       ========================================================== */
+
+    @media (min-width: 1200px) {
+        .orders-page {
+            padding-left: 30px;
+            padding-right: 30px;
         }
 
-        .orders-table th {
-            padding: 16px;
-            background: #f8fafc;
-            border-bottom: 1px solid #e5e7eb;
-
-            color: #475569;
-            font-size: 12px;
-            font-weight: 700;
-
-            text-align: left;
-            text-transform: uppercase;
-            letter-spacing: .04em;
-        }
-
+        .orders-table th,
         .orders-table td {
-            padding: 16px;
-            border-bottom: 1px solid #f1f5f9;
-            color: #374151;
-            vertical-align: middle;
+            padding-left: 16px;
+            padding-right: 16px;
+        }
+    }
+
+    /* ==========================================================
+       SMALL PHONES
+       ========================================================== */
+
+    @media (max-width: 379.98px) {
+        .orders-page {
+            padding: 12px;
         }
 
-        .orders-table tbody tr {
-            transition: background .15s ease;
+        .order-mobile-card {
+            padding: 13px;
         }
 
-        .orders-table tbody tr:hover {
-            background: #fafafa;
+        .order-mobile-top {
+            gap: 8px;
         }
 
-        .orders-table .view-btn {
-            display: inline-flex;
-            width: auto;
+        .order-code {
+            font-size: .82rem;
+        }
+
+        .status {
+            font-size: .57rem;
+            padding-left: 7px;
+            padding-right: 7px;
+        }
+
+        .order-info-grid {
+            gap: 7px;
+        }
+
+        .order-info-item {
+            padding: 8px;
+        }
+
+        .info-value {
+            font-size: .7rem;
         }
     }
 </style>
 
+{% endblock %}
+
+{% block content %}
 
 <div class="orders-page">
+<!-- ======================================================
+     HEADER
+     ====================================================== -->
+<div class="orders-header">
 
-    <!-- HEADER -->
-
-    <div class="orders-header">
-
-        <h1>Orders</h1>
-
-        <p>
-            Manage and monitor customer orders.
-        </p>
-
+    <div class="orders-kicker">
+        <i class="bi bi-receipt"></i>
+        Order Management
     </div>
 
+    <h1>
+        Orders
+    </h1>
 
-    <div class="orders-card">
+    <p>
+        Manage and monitor customer orders.
+    </p>
 
-        {% if orders %}
+</div>
 
 
-        <!-- =====================================================
+<!-- ======================================================
+     ORDERS CONTAINER
+     ====================================================== -->
+<div class="orders-card">
+
+    {% if orders %}
+
+        <!-- ==================================================
              MOBILE / TABLET CARDS
-             ===================================================== -->
-
+             ================================================== -->
         <div class="mobile-orders">
 
             {% for order in orders %}
@@ -376,6 +542,7 @@
 
                 <div class="order-mobile-card">
 
+                    <!-- Order Header -->
                     <div class="order-mobile-top">
 
                         <div>
@@ -410,8 +577,10 @@
                     </div>
 
 
+                    <!-- Order Information -->
                     <div class="order-info-grid">
 
+                        <!-- Customer -->
                         <div class="order-info-item">
 
                             <div class="info-label">
@@ -425,6 +594,7 @@
                         </div>
 
 
+                        <!-- Items -->
                         <div class="order-info-item">
 
                             <div class="info-label">
@@ -438,6 +608,7 @@
                         </div>
 
 
+                        <!-- Payment -->
                         <div class="order-info-item">
 
                             <div class="info-label">
@@ -451,6 +622,7 @@
                         </div>
 
 
+                        <!-- Total -->
                         <div class="order-info-item">
 
                             <div class="info-label">
@@ -468,6 +640,7 @@
                     </div>
 
 
+                    <!-- View Order -->
                     <a
                         href="{{ url_for(
                             'orders.order_detail',
@@ -475,6 +648,7 @@
                         ) }}"
                         class="view-btn"
                     >
+                        <i class="bi bi-eye me-1"></i>
                         View Order
                     </a>
 
@@ -485,10 +659,9 @@
         </div>
 
 
-        <!-- =====================================================
+        <!-- ==================================================
              DESKTOP TABLE
-             ===================================================== -->
-
+             ================================================== -->
         <div class="desktop-orders">
 
             <table class="orders-table">
@@ -496,7 +669,6 @@
                 <thead>
 
                     <tr>
-
                         <th>Order</th>
                         <th>Customer</th>
                         <th>Items</th>
@@ -505,7 +677,6 @@
                         <th>Status</th>
                         <th>Date</th>
                         <th>Action</th>
-
                     </tr>
 
                 </thead>
@@ -521,6 +692,7 @@
 
                         <tr>
 
+                            <!-- Order -->
                             <td>
 
                                 <span class="order-code">
@@ -530,16 +702,19 @@
                             </td>
 
 
+                            <!-- Customer -->
                             <td>
                                 #{{ order.user_id }}
                             </td>
 
 
+                            <!-- Items -->
                             <td>
                                 {{ order.items|length }}
                             </td>
 
 
+                            <!-- Total -->
                             <td>
 
                                 <span class="amount">
@@ -551,11 +726,13 @@
                             </td>
 
 
+                            <!-- Payment -->
                             <td>
                                 {{ order.payment_method or "—" }}
                             </td>
 
 
+                            <!-- Status -->
                             <td>
 
                                 <span class="status status-{{ status_class }}">
@@ -565,6 +742,7 @@
                             </td>
 
 
+                            <!-- Date -->
                             <td>
 
                                 <span class="order-date">
@@ -586,6 +764,7 @@
                             </td>
 
 
+                            <!-- Action -->
                             <td>
 
                                 <a
@@ -595,6 +774,7 @@
                                     ) }}"
                                     class="view-btn"
                                 >
+                                    <i class="bi bi-eye me-1"></i>
                                     View
                                 </a>
 
@@ -611,15 +791,15 @@
         </div>
 
 
-        {% else %}
+    {% else %}
 
-
-        <!-- EMPTY STATE -->
-
+        <!-- ==================================================
+             EMPTY STATE
+             ================================================== -->
         <div class="empty-state">
 
             <div class="empty-icon">
-                🛒
+                <i class="bi bi-cart3"></i>
             </div>
 
             <h3>
@@ -632,10 +812,9 @@
 
         </div>
 
+    {% endif %}
 
-        {% endif %}
-
-    </div>
+</div>
 
 </div>
 

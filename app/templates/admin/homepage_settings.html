@@ -4,44 +4,493 @@
 
 {% block content %}
 
-<div class="container-fluid py-4">
+<style>
+/* ==========================================================
+   BOMET MACHINERIES LTD.
+   HOMEPAGE SETTINGS — PROFESSIONAL ADMIN UI
+   Mobile-first • Bootstrap compatible • Lightweight
+   ========================================================== */
 
-    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+.homepage-settings-page {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
 
-        <div>
-            <h1 class="h3 fw-bold mb-1">
-                Homepage Settings
-            </h1>
+/* ----------------------------------------------------------
+   PAGE HEADER
+   ---------------------------------------------------------- */
 
-            <p class="text-muted mb-0">
-                Control your homepage SEO, announcement bar and global settings.
-            </p>
+.settings-header {
+    margin-bottom: 1.5rem;
+}
+
+.settings-header-main {
+    min-width: 0;
+}
+
+.settings-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+    color: #15803d;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+}
+
+.settings-kicker i {
+    font-size: 14px;
+}
+
+.settings-title {
+    margin: 0;
+    color: #111827;
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1.25;
+}
+
+.settings-subtitle {
+    margin: 6px 0 0;
+    max-width: 720px;
+    color: #6b7280;
+    font-size: 13px;
+    line-height: 1.55;
+}
+
+.settings-back-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    width: 100%;
+    min-height: 42px;
+    padding: 9px 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background: #fff;
+    color: #374151;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    transition:
+        background .15s ease,
+        border-color .15s ease,
+        color .15s ease,
+        transform .15s ease;
+}
+
+.settings-back-btn:hover {
+    background: #f8fafc;
+    border-color: #d1d5db;
+    color: #111827;
+    transform: translateY(-1px);
+}
+
+/* ----------------------------------------------------------
+   FLASH MESSAGES
+   ---------------------------------------------------------- */
+
+.settings-alert {
+    border: 0;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    padding: 12px 14px;
+    font-size: 13px;
+    box-shadow: 0 3px 14px rgba(15, 23, 42, .05);
+}
+
+/* ----------------------------------------------------------
+   SETTINGS CARD
+   ---------------------------------------------------------- */
+
+.settings-card {
+    overflow: hidden;
+    margin-bottom: 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 4px 18px rgba(15, 23, 42, .05);
+}
+
+.settings-card-header {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 14px 15px;
+    border-bottom: 1px solid #f1f5f9;
+    background: #fff;
+}
+
+.settings-card-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: #f0fdf4;
+    color: #15803d;
+    font-size: 16px;
+}
+
+.settings-card-title {
+    margin: 0;
+    color: #111827;
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1.3;
+}
+
+.settings-card-description {
+    margin: 2px 0 0;
+    color: #9ca3af;
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+.settings-card-body {
+    padding: 16px 15px;
+}
+
+/* ----------------------------------------------------------
+   FORM FIELDS
+   ---------------------------------------------------------- */
+
+.settings-field {
+    margin-bottom: 1.1rem;
+}
+
+.settings-field:last-child {
+    margin-bottom: 0;
+}
+
+.settings-field .form-label {
+    margin-bottom: 6px;
+    color: #374151;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.settings-field .form-control {
+    min-height: 43px;
+    border: 1px solid #dfe3e8;
+    border-radius: 9px;
+    color: #111827;
+    background: #fff;
+    font-size: 13px;
+    box-shadow: none;
+    transition:
+        border-color .15s ease,
+        box-shadow .15s ease;
+}
+
+.settings-field textarea.form-control {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.settings-field .form-control::placeholder {
+    color: #9ca3af;
+}
+
+.settings-field .form-control:focus {
+    border-color: #15803d;
+    box-shadow: 0 0 0 .2rem rgba(21, 128, 61, .10);
+}
+
+.settings-field .form-text {
+    margin-top: 5px;
+    color: #9ca3af;
+    font-size: 11px;
+    line-height: 1.45;
+}
+
+.settings-error {
+    margin-top: 5px;
+    color: #dc2626;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* ----------------------------------------------------------
+   SWITCHES
+   ---------------------------------------------------------- */
+
+.settings-switch {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background: #f8fafc;
+}
+
+.settings-switch .form-check-input {
+    flex: 0 0 auto;
+    width: 2.35em;
+    height: 1.3em;
+    margin: 1px 0 0;
+    cursor: pointer;
+    box-shadow: none;
+}
+
+.settings-switch .form-check-input:focus {
+    border-color: #15803d;
+    box-shadow: 0 0 0 .2rem rgba(21, 128, 61, .10);
+}
+
+.settings-switch .form-check-input:checked {
+    border-color: #15803d;
+    background-color: #15803d;
+}
+
+.settings-switch-content {
+    min-width: 0;
+}
+
+.settings-switch .form-check-label {
+    display: block;
+    margin: 0;
+    color: #111827;
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1.4;
+    cursor: pointer;
+}
+
+.settings-switch .form-text {
+    margin-top: 3px;
+    color: #6b7280;
+    font-size: 11px;
+    line-height: 1.45;
+}
+
+/* ----------------------------------------------------------
+   SAVE ACTIONS
+   ---------------------------------------------------------- */
+
+.settings-actions {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 8px;
+    margin-top: 1.25rem;
+}
+
+.settings-cancel-btn,
+.settings-save-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    width: 100%;
+    min-height: 44px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 800;
+    text-decoration: none;
+    transition:
+        background .15s ease,
+        border-color .15s ease,
+        color .15s ease,
+        box-shadow .15s ease,
+        transform .15s ease;
+}
+
+.settings-cancel-btn {
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    color: #374151;
+}
+
+.settings-cancel-btn:hover {
+    background: #f8fafc;
+    border-color: #d1d5db;
+    color: #111827;
+}
+
+.settings-save-btn {
+    border: 1px solid #15803d;
+    background: #15803d;
+    color: #fff;
+}
+
+.settings-save-btn:hover {
+    border-color: #166534;
+    background: #166534;
+    color: #fff;
+    box-shadow: 0 5px 14px rgba(21, 128, 61, .18);
+    transform: translateY(-1px);
+}
+
+/* ----------------------------------------------------------
+   DESKTOP / TABLET
+   ---------------------------------------------------------- */
+
+@media (min-width: 576px) {
+
+    .settings-header {
+        margin-bottom: 1.75rem;
+    }
+
+    .settings-title {
+        font-size: 1.75rem;
+    }
+
+    .settings-subtitle {
+        font-size: 14px;
+    }
+
+    .settings-back-btn {
+        width: auto;
+    }
+
+    .settings-card {
+        margin-bottom: 1.25rem;
+    }
+
+    .settings-card-header {
+        padding: 15px 18px;
+    }
+
+    .settings-card-body {
+        padding: 20px 18px;
+    }
+
+    .settings-actions {
+        flex-direction: row;
+        justify-content: flex-end;
+    }
+
+    .settings-cancel-btn,
+    .settings-save-btn {
+        width: auto;
+        min-width: 110px;
+        padding: 9px 18px;
+    }
+}
+
+@media (min-width: 768px) {
+
+    .settings-title {
+        font-size: 1.9rem;
+    }
+
+    .settings-card-header {
+        padding: 16px 20px;
+    }
+
+    .settings-card-body {
+        padding: 22px 20px;
+    }
+}
+
+@media (min-width: 992px) {
+
+    .homepage-settings-page {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    .settings-card {
+        border-radius: 15px;
+    }
+
+    .settings-card-body {
+        padding: 24px;
+    }
+
+    .settings-field {
+        margin-bottom: 1.25rem;
+    }
+}
+</style>
+
+<div class="container-fluid py-3 py-md-4 py-lg-5">
+
+<div class="homepage-settings-page">
+
+    <!-- ==================================================
+         PAGE HEADER
+         ================================================== -->
+
+    <div class="settings-header">
+
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3">
+
+            <div class="settings-header-main">
+
+                <div class="settings-kicker">
+                    <i class="bi bi-sliders2"></i>
+                    Homepage Management
+                </div>
+
+                <h1 class="settings-title">
+                    Homepage Settings
+                </h1>
+
+                <p class="settings-subtitle">
+                    Control your homepage SEO, announcement bar and global settings.
+                </p>
+
+            </div>
+
+            <a
+                href="{{ url_for('admin_homepage.settings') }}"
+                class="settings-back-btn"
+            >
+                <i class="bi bi-arrow-left"></i>
+                <span>Back to Homepage CMS</span>
+            </a>
+
         </div>
-
-        <a
-            href="{{ url_for('admin_homepage.settings') }}"
-            class="btn btn-outline-secondary"
-        >
-            ← Back to Homepage CMS
-        </a>
 
     </div>
 
 
+    <!-- ==================================================
+         FLASH MESSAGES
+         ================================================== -->
+
     {% with messages = get_flashed_messages(with_categories=true) %}
+
         {% if messages %}
+
             {% for category, message in messages %}
-                <div class="alert alert-{{ category }} alert-dismissible fade show">
-                    {{ message }}
+
+                <div
+                    class="alert alert-{{ category }} alert-dismissible fade show settings-alert"
+                    role="alert"
+                >
+
+                    <div class="d-flex align-items-start gap-2">
+
+                        <i class="bi bi-info-circle mt-1"></i>
+
+                        <div class="flex-grow-1">
+                            {{ message }}
+                        </div>
+
+                    </div>
 
                     <button
                         type="button"
                         class="btn-close"
                         data-bs-dismiss="alert"
+                        aria-label="Close"
                     ></button>
+
                 </div>
+
             {% endfor %}
+
         {% endif %}
+
     {% endwith %}
 
 
@@ -53,21 +502,36 @@
         {{ form.hidden_tag() }}
 
 
-        <!-- GENERAL -->
+        <!-- ==================================================
+             GENERAL SETTINGS
+             ================================================== -->
 
-        <div class="card border-0 shadow-sm mb-4">
+        <div class="settings-card">
 
-            <div class="card-header bg-white py-3">
-                <h2 class="h5 mb-0 fw-bold">
-                    General Settings
-                </h2>
+            <div class="settings-card-header">
+
+                <div class="settings-card-icon">
+                    <i class="bi bi-gear"></i>
+                </div>
+
+                <div>
+                    <h2 class="settings-card-title">
+                        General Settings
+                    </h2>
+
+                    <p class="settings-card-description">
+                        Configure the main identity and availability of your homepage.
+                    </p>
+                </div>
+
             </div>
 
-            <div class="card-body">
 
-                <div class="mb-4">
+            <div class="settings-card-body">
 
-                    {{ form.site_title.label(class="form-label fw-semibold") }}
+                <div class="settings-field">
+
+                    {{ form.site_title.label(class="form-label") }}
 
                     {{ form.site_title(
                         class="form-control",
@@ -75,9 +539,12 @@
                     ) }}
 
                     {% for error in form.site_title.errors %}
-                        <div class="text-danger small mt-1">
+
+                        <div class="settings-error">
+                            <i class="bi bi-exclamation-circle me-1"></i>
                             {{ error }}
                         </div>
+
                     {% endfor %}
 
                     <div class="form-text">
@@ -87,20 +554,24 @@
                 </div>
 
 
-                <div class="form-check form-switch">
+                <div class="settings-switch">
 
                     {{ form.is_active(
                         class="form-check-input",
                         id="is_active"
                     ) }}
 
-                    {{ form.is_active.label(
-                        class="form-check-label fw-semibold",
-                        for="is_active"
-                    ) }}
+                    <div class="settings-switch-content">
 
-                    <div class="form-text">
-                        Disable this if you want to temporarily take the homepage offline.
+                        {{ form.is_active.label(
+                            class="form-check-label",
+                            for="is_active"
+                        ) }}
+
+                        <div class="form-text">
+                            Disable this if you want to temporarily take the homepage offline.
+                        </div>
+
                     </div>
 
                 </div>
@@ -110,22 +581,37 @@
         </div>
 
 
-        <!-- SEO -->
+        <!-- ==================================================
+             SEO SETTINGS
+             ================================================== -->
 
-        <div class="card border-0 shadow-sm mb-4">
+        <div class="settings-card">
 
-            <div class="card-header bg-white py-3">
-                <h2 class="h5 mb-0 fw-bold">
-                    SEO Settings
-                </h2>
+            <div class="settings-card-header">
+
+                <div class="settings-card-icon">
+                    <i class="bi bi-search"></i>
+                </div>
+
+                <div>
+                    <h2 class="settings-card-title">
+                        SEO Settings
+                    </h2>
+
+                    <p class="settings-card-description">
+                        Improve how your homepage appears in search engines and social sharing.
+                    </p>
+                </div>
+
             </div>
 
-            <div class="card-body">
 
-                <div class="mb-4">
+            <div class="settings-card-body">
+
+                <div class="settings-field">
 
                     {{ form.meta_description.label(
-                        class="form-label fw-semibold"
+                        class="form-label"
                     ) }}
 
                     {{ form.meta_description(
@@ -134,22 +620,25 @@
                     ) }}
 
                     {% for error in form.meta_description.errors %}
-                        <div class="text-danger small mt-1">
+
+                        <div class="settings-error">
+                            <i class="bi bi-exclamation-circle me-1"></i>
                             {{ error }}
                         </div>
+
                     {% endfor %}
 
                     <div class="form-text">
-                        Recommended: concise description of Bomet Machineries Ltd.
+                        Recommended: a concise description of Bomet Machineries Ltd.
                     </div>
 
                 </div>
 
 
-                <div class="mb-4">
+                <div class="settings-field">
 
                     {{ form.meta_keywords.label(
-                        class="form-label fw-semibold"
+                        class="form-label"
                     ) }}
 
                     {{ form.meta_keywords(
@@ -158,18 +647,21 @@
                     ) }}
 
                     {% for error in form.meta_keywords.errors %}
-                        <div class="text-danger small mt-1">
+
+                        <div class="settings-error">
+                            <i class="bi bi-exclamation-circle me-1"></i>
                             {{ error }}
                         </div>
+
                     {% endfor %}
 
                 </div>
 
 
-                <div>
+                <div class="settings-field">
 
                     {{ form.og_image_url.label(
-                        class="form-label fw-semibold"
+                        class="form-label"
                     ) }}
 
                     {{ form.og_image_url(
@@ -177,9 +669,12 @@
                     ) }}
 
                     {% for error in form.og_image_url.errors %}
-                        <div class="text-danger small mt-1">
+
+                        <div class="settings-error">
+                            <i class="bi bi-exclamation-circle me-1"></i>
                             {{ error }}
                         </div>
+
                     {% endfor %}
 
                     <div class="form-text">
@@ -193,22 +688,37 @@
         </div>
 
 
-        <!-- ANNOUNCEMENT -->
+        <!-- ==================================================
+             ANNOUNCEMENT BAR
+             ================================================== -->
 
-        <div class="card border-0 shadow-sm mb-4">
+        <div class="settings-card">
 
-            <div class="card-header bg-white py-3">
-                <h2 class="h5 mb-0 fw-bold">
-                    Announcement Bar
-                </h2>
+            <div class="settings-card-header">
+
+                <div class="settings-card-icon">
+                    <i class="bi bi-megaphone"></i>
+                </div>
+
+                <div>
+                    <h2 class="settings-card-title">
+                        Announcement Bar
+                    </h2>
+
+                    <p class="settings-card-description">
+                        Display an important message or promotional notice across the homepage.
+                    </p>
+                </div>
+
             </div>
 
-            <div class="card-body">
 
-                <div class="mb-4">
+            <div class="settings-card-body">
+
+                <div class="settings-field">
 
                     {{ form.announcement_text.label(
-                        class="form-label fw-semibold"
+                        class="form-label"
                     ) }}
 
                     {{ form.announcement_text(
@@ -218,10 +728,10 @@
                 </div>
 
 
-                <div class="mb-4">
+                <div class="settings-field">
 
                     {{ form.announcement_url.label(
-                        class="form-label fw-semibold"
+                        class="form-label"
                     ) }}
 
                     {{ form.announcement_url(
@@ -231,17 +741,25 @@
                 </div>
 
 
-                <div class="form-check form-switch">
+                <div class="settings-switch">
 
                     {{ form.announcement_active(
                         class="form-check-input",
                         id="announcement_active"
                     ) }}
 
-                    {{ form.announcement_active.label(
-                        class="form-check-label fw-semibold",
-                        for="announcement_active"
-                    ) }}
+                    <div class="settings-switch-content">
+
+                        {{ form.announcement_active.label(
+                            class="form-check-label",
+                            for="announcement_active"
+                        ) }}
+
+                        <div class="form-text">
+                            Enable or disable the announcement bar on the homepage.
+                        </div>
+
+                    </div>
 
                 </div>
 
@@ -250,25 +768,29 @@
         </div>
 
 
-        <!-- SAVE -->
+        <!-- ==================================================
+             SAVE ACTIONS
+             ================================================== -->
 
-        <div class="d-flex justify-content-end gap-2">
+        <div class="settings-actions">
 
             <a
                 href="{{ url_for('admin_homepage.homepage') }}"
-                class="btn btn-light border"
+                class="settings-cancel-btn"
             >
+                <i class="bi bi-x-lg"></i>
                 Cancel
             </a>
 
             {{ form.submit(
-                class="btn btn-primary px-4"
+                class="settings-save-btn"
             ) }}
 
         </div>
 
     </form>
 
+</div>
 </div>
 
 {% endblock %}
