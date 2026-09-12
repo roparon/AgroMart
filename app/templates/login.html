@@ -4,149 +4,594 @@
 
 {% block content %}
 
-<div class="container py-5">
+<style>
+/* ==========================================================
+   AGROMART
+   LOGIN PAGE
+   Professional • Mobile First • Lightweight
+   ========================================================== */
 
-    <div class="row justify-content-center">
+:root {
+    --login-green: #15803d;
+    --login-green-dark: #166534;
+    --login-green-soft: #f0fdf4;
+    --login-green-border: #bbf7d0;
 
-        <div class="col-md-6 col-lg-5">
+    --login-red: #dc2626;
+    --login-text: #111827;
+    --login-text-soft: #374151;
+    --login-muted: #6b7280;
+    --login-border: #e5e7eb;
+    --login-border-light: #f1f5f9;
+    --login-background: #f8fafc;
+    --login-white: #ffffff;
 
-            <div class="card shadow-sm border-0">
+    --login-radius: 14px;
+    --login-radius-sm: 10px;
 
-                <div class="card-body p-4">
+    --login-shadow: 0 8px 30px rgba(15, 23, 42, .07);
+}
 
-                    <!-- Header -->
 
-                    <div class="text-center mb-4">
+/* ==========================================================
+   PAGE
+   ========================================================== */
 
-                        <h1 class="fw-bold">
-                            Welcome Back
-                        </h1>
+.login-page {
+    width: 100%;
+    max-width: 460px;
+    margin: 0 auto;
+}
 
-                        <p class="text-muted">
-                            Login to your AgroMart account
-                        </p>
 
+/* ==========================================================
+   LOGIN CARD
+   ========================================================== */
+
+.login-card {
+    position: relative;
+
+    overflow: hidden;
+
+    background: var(--login-white);
+
+    border: 1px solid var(--login-border);
+    border-radius: var(--login-radius);
+
+    box-shadow: var(--login-shadow);
+}
+
+.login-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 3px;
+
+    background: var(--login-green);
+}
+
+.login-card-body {
+    padding: 24px 18px 20px;
+}
+
+
+/* ==========================================================
+   HEADER
+   ========================================================== */
+
+.login-header {
+    margin-bottom: 22px;
+    text-align: center;
+}
+
+.login-icon {
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 13px;
+
+    background: var(--login-green-soft);
+
+    border: 1px solid var(--login-green-border);
+    border-radius: 50%;
+
+    color: var(--login-green);
+
+    font-size: 21px;
+}
+
+.login-header h1 {
+    margin: 0 0 6px;
+
+    color: var(--login-text);
+
+    font-size: 1.55rem;
+    font-weight: 850;
+
+    line-height: 1.2;
+    letter-spacing: -.025em;
+}
+
+.login-header p {
+    margin: 0;
+
+    color: var(--login-muted);
+
+    font-size: .84rem;
+    line-height: 1.5;
+}
+
+
+/* ==========================================================
+   FLASH MESSAGES
+   ========================================================== */
+
+.login-alerts {
+    display: grid;
+    gap: 8px;
+
+    margin-bottom: 17px;
+}
+
+.login-alert {
+    margin: 0;
+
+    padding: 10px 11px;
+
+    border-radius: var(--login-radius-sm);
+
+    font-size: .78rem;
+    line-height: 1.45;
+}
+
+
+/* ==========================================================
+   FORM
+   ========================================================== */
+
+.login-form {
+    margin: 0;
+}
+
+.login-field {
+    margin-bottom: 16px;
+}
+
+.login-field label {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: var(--login-text-soft);
+
+    font-size: .78rem;
+    font-weight: 750;
+}
+
+.login-field .form-control {
+    width: 100%;
+    min-height: 44px;
+
+    padding: 9px 12px;
+
+    background: #fff;
+
+    border: 1px solid var(--login-border);
+    border-radius: var(--login-radius-sm);
+
+    color: var(--login-text);
+
+    font-size: .84rem;
+
+    box-shadow: none;
+
+    transition:
+        border-color .15s ease,
+        box-shadow .15s ease,
+        background-color .15s ease;
+}
+
+.login-field .form-control::placeholder {
+    color: #9ca3af;
+}
+
+.login-field .form-control:hover {
+    border-color: #d1d5db;
+}
+
+.login-field .form-control:focus {
+    background: #fff;
+
+    border-color: var(--login-green);
+
+    box-shadow: 0 0 0 3px rgba(21, 128, 61, .09);
+
+    outline: none;
+}
+
+
+/* ==========================================================
+   VALIDATION ERRORS
+   ========================================================== */
+
+.login-error {
+    display: block;
+
+    margin-top: 5px;
+
+    color: var(--login-red);
+
+    font-size: .72rem;
+    line-height: 1.4;
+}
+
+
+/* ==========================================================
+   REMEMBER ME
+   ========================================================== */
+
+.login-remember {
+    margin: -1px 0 17px;
+}
+
+.login-remember .form-check {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    min-height: 22px;
+
+    padding-left: 0;
+}
+
+.login-remember .form-check-input {
+    position: static;
+
+    width: 16px;
+    height: 16px;
+
+    flex: 0 0 16px;
+
+    margin: 0;
+
+    border: 1px solid #cbd5e1;
+
+    box-shadow: none;
+
+    cursor: pointer;
+}
+
+.login-remember .form-check-input:checked {
+    background-color: var(--login-green);
+    border-color: var(--login-green);
+}
+
+.login-remember .form-check-input:focus {
+    border-color: var(--login-green);
+
+    box-shadow: 0 0 0 3px rgba(21, 128, 61, .09);
+}
+
+.login-remember .form-check-label {
+    color: var(--login-muted);
+
+    font-size: .78rem;
+
+    cursor: pointer;
+}
+
+
+/* ==========================================================
+   SUBMIT
+   ========================================================== */
+
+.login-submit {
+    width: 100%;
+    min-height: 45px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 9px 15px;
+
+    background: var(--login-green);
+
+    border: 1px solid var(--login-green);
+    border-radius: var(--login-radius-sm);
+
+    color: #fff;
+
+    font-size: .82rem;
+    font-weight: 800;
+
+    line-height: 1.2;
+
+    box-shadow: 0 4px 12px rgba(21, 128, 61, .14);
+
+    transition:
+        background-color .15s ease,
+        border-color .15s ease,
+        box-shadow .15s ease,
+        transform .15s ease;
+}
+
+.login-submit:hover,
+.login-submit:focus-visible {
+    background: var(--login-green-dark);
+    border-color: var(--login-green-dark);
+
+    color: #fff;
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 7px 17px rgba(21, 128, 61, .18);
+}
+
+.login-submit:active {
+    transform: translateY(0);
+}
+
+
+/* ==========================================================
+   REGISTER
+   ========================================================== */
+
+.login-register {
+    margin-top: 19px;
+    padding-top: 17px;
+
+    border-top: 1px solid var(--login-border-light);
+
+    text-align: center;
+}
+
+.login-register p {
+    margin: 0;
+
+    color: var(--login-muted);
+
+    font-size: .78rem;
+    line-height: 1.5;
+}
+
+.login-register a {
+    color: var(--login-green);
+
+    font-weight: 750;
+    text-decoration: none;
+}
+
+.login-register a:hover {
+    color: var(--login-green-dark);
+    text-decoration: underline;
+}
+
+
+/* ==========================================================
+   TABLET / DESKTOP
+   ========================================================== */
+
+@media (min-width: 576px) {
+
+    .login-card-body {
+        padding: 30px 28px 25px;
+    }
+
+    .login-header {
+        margin-bottom: 24px;
+    }
+
+    .login-header h1 {
+        font-size: 1.7rem;
+    }
+
+    .login-header p {
+        font-size: .86rem;
+    }
+
+}
+
+
+/* ==========================================================
+   REDUCED MOTION
+   ========================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .login-field .form-control,
+    .login-submit {
+        transition: none;
+    }
+
+    .login-submit:hover {
+        transform: none;
+    }
+
+}
+</style>
+
+
+<div class="container py-4 py-md-5">
+
+    <main class="login-page">
+
+        <div class="login-card">
+
+            <div class="login-card-body">
+
+
+                <!-- ==================================================
+                     HEADER
+                =================================================== -->
+
+                <div class="login-header">
+
+                    <div
+                        class="login-icon"
+                        aria-hidden="true"
+                    >
+                        <i class="bi bi-person-lock"></i>
                     </div>
 
+                    <h1>
+                        Welcome Back
+                    </h1>
 
-                    <!-- Flash Messages -->
+                    <p>
+                        Login to your AgroMart account
+                    </p>
 
-                    {% with messages = get_flashed_messages(
-                        with_categories=true
-                    ) %}
+                </div>
 
-                        {% if messages %}
+
+                <!-- ==================================================
+                     FLASH MESSAGES
+                =================================================== -->
+
+                {% with messages = get_flashed_messages(
+                    with_categories=true
+                ) %}
+
+                    {% if messages %}
+
+                        <div class="login-alerts">
 
                             {% for category, message in messages %}
 
-                                <div class="alert alert-{{ category }}">
+                                <div
+                                    class="alert alert-{{ category }} login-alert"
+                                    role="alert"
+                                >
                                     {{ message }}
                                 </div>
 
                             {% endfor %}
 
-                        {% endif %}
-
-                    {% endwith %}
-
-
-                    <!-- Login Form -->
-
-                    <form method="POST">
-
-                        {{ form.hidden_tag() }}
-
-
-                        <!-- Username -->
-
-                        <div class="mb-3">
-
-                            {{ form.username.label(
-                                class="form-label fw-semibold"
-                            ) }}
-
-                            {{ form.username(
-                                class="form-control",
-                                placeholder="Enter your username",
-                                autocomplete="username"
-                            ) }}
-
-                            {% for error in form.username.errors %}
-
-                                <div class="text-danger small mt-1">
-                                    {{ error }}
-                                </div>
-
-                            {% endfor %}
-
                         </div>
 
+                    {% endif %}
 
-                        <!-- Password -->
+                {% endwith %}
 
-                        <div class="mb-3">
-                            {{ form.password.label(
-                                class="form-label fw-semibold"
-                            ) }}
-                            {{ form.password(
-                                class="form-control",
-                                placeholder="Enter your password",
-                                autocomplete="current-password"
-                            ) }}
-                            {% for error in form.password.errors %}
-                                <div class="text-danger small mt-1">
-                                    {{ error }}
-                                </div>
-                            {% endfor %}
-                        </div>
-                        <!-- Remember Me -->
 
-                        <div class="mb-3">
+                <!-- ==================================================
+                     LOGIN FORM
+                =================================================== -->
 
-                            <div class="form-check">
+                <form
+                    method="POST"
+                    class="login-form"
+                >
 
-                                {{ form.remember(
-                                    class="form-check-input"
-                                ) }}
+                    {{ form.hidden_tag() }}
 
-                                {{ form.remember.label(
-                                    class="form-check-label"
-                                ) }}
 
+                    <!-- USERNAME -->
+
+                    <div class="login-field">
+
+                        {{ form.username.label }}
+
+                        {{ form.username(
+                            class="form-control",
+                            placeholder="Enter your username",
+                            autocomplete="username"
+                        ) }}
+
+                        {% for error in form.username.errors %}
+
+                            <div class="login-error">
+                                {{ error }}
                             </div>
 
-                        </div>
-                        <!-- Submit -->
+                        {% endfor %}
 
-                        <div class="d-grid">
+                    </div>
 
-                            {{ form.submit(
-                                class="btn btn-success btn-lg"
+
+                    <!-- PASSWORD -->
+
+                    <div class="login-field">
+
+                        {{ form.password.label }}
+
+                        {{ form.password(
+                            class="form-control",
+                            placeholder="Enter your password",
+                            autocomplete="current-password"
+                        ) }}
+
+                        {% for error in form.password.errors %}
+
+                            <div class="login-error">
+                                {{ error }}
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    <!-- REMEMBER ME -->
+
+                    <div class="login-remember">
+
+                        <div class="form-check">
+
+                            {{ form.remember(
+                                class="form-check-input"
+                            ) }}
+
+                            {{ form.remember.label(
+                                class="form-check-label"
                             ) }}
 
                         </div>
 
-                    </form>
+                    </div>
 
 
-                    <!-- Register -->
+                    <!-- SUBMIT -->
 
-                    <div class="text-center mt-4">
+                    <div>
 
-                        <p class="mb-0">
-
-                            Don't have an account?
-
-                            <a
-                                href="{{ url_for('auth.register') }}"
-                                class="text-success fw-semibold"
-                            >
-                                Create an account
-                            </a>
-
-                        </p>
+                        {{ form.submit(
+                            class="login-submit"
+                        ) }}
 
                     </div>
+
+                </form>
+
+
+                <!-- ==================================================
+                     REGISTER
+                =================================================== -->
+
+                <div class="login-register">
+
+                    <p>
+
+                        Don't have an account?
+
+                        <a
+                            href="{{ url_for('auth.register') }}"
+                        >
+                            Create an account
+                        </a>
+
+                    </p>
 
                 </div>
 
@@ -154,7 +599,7 @@
 
         </div>
 
-    </div>
+    </main>
 
 </div>
 

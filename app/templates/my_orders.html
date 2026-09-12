@@ -4,44 +4,500 @@
 
 {% block content %}
 
+<style>
+/* ==========================================================
+   AGROMART — MY ORDERS
+   Professional • Mobile First • Lightweight
+   ========================================================== */
+
+:root {
+    --orders-green: #15803d;
+    --orders-green-dark: #166534;
+    --orders-green-soft: #f0fdf4;
+
+    --orders-yellow: #f59e0b;
+    --orders-blue: #2563eb;
+    --orders-red: #dc2626;
+
+    --orders-text: #111827;
+    --orders-muted: #6b7280;
+    --orders-border: #e5e7eb;
+    --orders-bg: #f8fafc;
+    --orders-white: #ffffff;
+
+    --orders-radius: 14px;
+    --orders-radius-sm: 10px;
+
+    --orders-shadow: 0 4px 18px rgba(15, 23, 42, .06);
+    --orders-shadow-hover: 0 10px 28px rgba(15, 23, 42, .09);
+}
+
+
+/* ==========================================================
+   PAGE
+   ========================================================== */
+
+.orders-page {
+    width: 100%;
+    max-width: 1250px;
+    margin: 0 auto;
+    color: var(--orders-text);
+}
+
+
+/* ==========================================================
+   PAGE HEADER
+   ========================================================== */
+
+.orders-header {
+    margin-bottom: 22px;
+}
+
+.orders-header h1 {
+    margin: 0 0 5px;
+    font-size: clamp(1.55rem, 4vw, 2rem);
+    font-weight: 800;
+    letter-spacing: -.025em;
+}
+
+.orders-header p {
+    margin: 0;
+    color: var(--orders-muted);
+    font-size: .92rem;
+}
+
+
+/* ==========================================================
+   ORDERS LIST
+   ========================================================== */
+
+.orders-list {
+    display: grid;
+    gap: 12px;
+}
+
+
+/* ==========================================================
+   ORDER CARD
+   ========================================================== */
+
+.order-card {
+    background: var(--orders-white);
+    border: 1px solid var(--orders-border);
+    border-radius: var(--orders-radius);
+    box-shadow: var(--orders-shadow);
+    overflow: hidden;
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease,
+        border-color .18s ease;
+}
+
+.order-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--orders-shadow-hover);
+    border-color: #d1d5db;
+}
+
+.order-card-body {
+    padding: 15px;
+}
+
+
+/* ==========================================================
+   ORDER INFORMATION
+   ========================================================== */
+
+.order-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 12px;
+}
+
+.order-info {
+    min-width: 0;
+}
+
+.order-label {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--orders-muted);
+    font-size: .68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .045em;
+}
+
+.order-value {
+    display: block;
+    color: var(--orders-text);
+    font-size: .86rem;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.order-code {
+    color: var(--orders-green);
+    overflow-wrap: anywhere;
+}
+
+.order-total {
+    font-size: .92rem;
+}
+
+
+/* ==========================================================
+   STATUS
+   ========================================================== */
+
+.order-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    min-height: 26px;
+    padding: 5px 9px;
+    border-radius: 999px;
+    font-size: .68rem;
+    font-weight: 800;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.order-status::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    flex: 0 0 6px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+
+/* Status colours */
+
+.status-pending {
+    color: #92400e;
+    background: #fef3c7;
+}
+
+.status-processing {
+    color: #075985;
+    background: #e0f2fe;
+}
+
+.status-shipped {
+    color: #1d4ed8;
+    background: #dbeafe;
+}
+
+.status-delivered {
+    color: #166534;
+    background: #dcfce7;
+}
+
+.status-cancelled {
+    color: #991b1b;
+    background: #fee2e2;
+}
+
+.status-default {
+    color: #374151;
+    background: #f3f4f6;
+}
+
+
+/* ==========================================================
+   VIEW ORDER BUTTON
+   ========================================================== */
+
+.order-action {
+    margin-top: 14px;
+    padding-top: 13px;
+    border-top: 1px solid var(--orders-border);
+}
+
+.view-order-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 42px;
+    padding: 9px 14px;
+
+    border: 1px solid var(--orders-green);
+    border-radius: var(--orders-radius-sm);
+
+    background: transparent;
+    color: var(--orders-green);
+
+    font-size: .78rem;
+    font-weight: 800;
+    line-height: 1.2;
+    text-decoration: none;
+
+    transition:
+        background .15s ease,
+        color .15s ease,
+        border-color .15s ease,
+        transform .15s ease,
+        box-shadow .15s ease;
+}
+
+.view-order-btn:hover,
+.view-order-btn:focus-visible {
+    background: var(--orders-green);
+    border-color: var(--orders-green);
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 5px 14px rgba(21, 128, 61, .18);
+}
+
+
+/* ==========================================================
+   EMPTY STATE
+   ========================================================== */
+
+.empty-orders {
+    background: var(--orders-white);
+    border: 1px solid var(--orders-border);
+    border-radius: var(--orders-radius);
+    box-shadow: var(--orders-shadow);
+    padding: 45px 20px;
+    text-align: center;
+}
+
+.empty-orders-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 68px;
+    height: 68px;
+    margin: 0 auto 16px;
+
+    border-radius: 50%;
+    background: var(--orders-green-soft);
+
+    font-size: 2rem;
+}
+
+.empty-orders h2 {
+    margin: 0 0 7px;
+    color: var(--orders-text);
+    font-size: 1.25rem;
+    font-weight: 800;
+}
+
+.empty-orders p {
+    max-width: 360px;
+    margin: 0 auto 20px;
+    color: var(--orders-muted);
+    font-size: .88rem;
+    line-height: 1.6;
+}
+
+.start-shopping-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 43px;
+    padding: 10px 20px;
+
+    border: 0;
+    border-radius: var(--orders-radius-sm);
+
+    background: var(--orders-green);
+    color: #fff;
+
+    font-size: .8rem;
+    font-weight: 800;
+    text-decoration: none;
+
+    transition:
+        background .15s ease,
+        transform .15s ease,
+        box-shadow .15s ease;
+}
+
+.start-shopping-btn:hover,
+.start-shopping-btn:focus-visible {
+    background: var(--orders-green-dark);
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 5px 14px rgba(21, 128, 61, .2);
+}
+
+
+/* ==========================================================
+   TABLET
+   ========================================================== */
+
+@media (min-width: 576px) {
+
+    .order-card-body {
+        padding: 18px;
+    }
+
+    .order-info-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .order-action {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .view-order-btn {
+        width: auto;
+        min-width: 125px;
+    }
+
+}
+
+
+/* ==========================================================
+   DESKTOP
+   ========================================================== */
+
+@media (min-width: 768px) {
+
+    .orders-header {
+        margin-bottom: 25px;
+    }
+
+    .orders-list {
+        gap: 14px;
+    }
+
+    .order-card-body {
+        padding: 20px;
+    }
+
+    .order-info-grid {
+        grid-template-columns:
+            minmax(170px, 1.5fr)
+            minmax(120px, 1fr)
+            minmax(80px, .7fr)
+            minmax(130px, 1fr)
+            minmax(115px, .9fr);
+        align-items: center;
+        gap: 18px;
+    }
+
+    .order-action {
+        margin: 0;
+        padding: 0;
+        border: 0;
+    }
+
+    .view-order-btn {
+        min-width: 118px;
+    }
+
+}
+
+
+/* ==========================================================
+   LARGE DESKTOP
+   ========================================================== */
+
+@media (min-width: 992px) {
+
+    .order-card-body {
+        padding: 19px 22px;
+    }
+
+    .orders-header h1 {
+        font-size: 2rem;
+    }
+
+}
+
+
+/* ==========================================================
+   SMALL MOBILE
+   ========================================================== */
+
+@media (max-width: 359px) {
+
+    .order-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .order-card-body {
+        padding: 14px;
+    }
+
+}
+
+
+/* ==========================================================
+   REDUCED MOTION
+   ========================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .order-card,
+    .view-order-btn,
+    .start-shopping-btn {
+        transition: none;
+    }
+
+    .order-card:hover,
+    .view-order-btn:hover,
+    .start-shopping-btn:hover {
+        transform: none;
+    }
+
+}
+</style>
+
+
 <div class="container py-4 py-lg-5">
 
-    <div class="mb-4">
+    <div class="orders-page">
 
-        <h1 class="fw-bold">
-            My Orders
-        </h1>
+        <!-- ==================================================
+             PAGE HEADER
+             ================================================== -->
 
-        <p class="text-muted mb-0">
-            View and track all your AgroMart orders.
-        </p>
+        <div class="orders-header">
 
-    </div>
+            <h1>
+                My Orders
+            </h1>
+
+            <p>
+                View and track all your AgroMart orders.
+            </p>
+
+        </div>
 
 
-    {% if orders %}
+        <!-- ==================================================
+             ORDERS
+             ================================================== -->
 
-        <div class="row g-4">
+        {% if orders %}
 
-            {% for order in orders %}
+            <div class="orders-list">
 
-                <div class="col-12">
+                {% for order in orders %}
 
-                    <div class="card border-0 shadow-sm rounded-4">
+                    <article class="order-card">
 
-                        <div class="card-body p-4">
+                        <div class="order-card-body">
 
-                            <div class="row align-items-center g-3">
+                            <div class="order-info-grid">
 
                                 <!-- ORDER CODE -->
 
-                                <div class="col-md-3">
+                                <div class="order-info">
 
-                                    <small class="text-muted d-block">
+                                    <span class="order-label">
                                         Order Code
-                                    </small>
+                                    </span>
 
-                                    <strong class="text-success">
+                                    <strong class="order-value order-code">
                                         {{ order.order_code }}
                                     </strong>
 
@@ -50,13 +506,13 @@
 
                                 <!-- DATE -->
 
-                                <div class="col-md-2">
+                                <div class="order-info">
 
-                                    <small class="text-muted d-block">
+                                    <span class="order-label">
                                         Date
-                                    </small>
+                                    </span>
 
-                                    <strong>
+                                    <strong class="order-value">
                                         {{ order.created_at.strftime(
                                             "%d %b %Y"
                                         ) if order.created_at else "—" }}
@@ -67,13 +523,13 @@
 
                                 <!-- ITEMS -->
 
-                                <div class="col-md-2">
+                                <div class="order-info">
 
-                                    <small class="text-muted d-block">
+                                    <span class="order-label">
                                         Items
-                                    </small>
+                                    </span>
 
-                                    <strong>
+                                    <strong class="order-value">
                                         {{ order.items|length }}
                                     </strong>
 
@@ -82,13 +538,13 @@
 
                                 <!-- TOTAL -->
 
-                                <div class="col-md-2">
+                                <div class="order-info">
 
-                                    <small class="text-muted d-block">
+                                    <span class="order-label">
                                         Total
-                                    </small>
+                                    </span>
 
-                                    <strong>
+                                    <strong class="order-value order-total">
                                         KSh
                                         {{ "{:,.2f}".format(
                                             order.total_amount
@@ -100,45 +556,45 @@
 
                                 <!-- STATUS -->
 
-                                <div class="col-md-1">
+                                <div class="order-info">
 
-                                    <small class="text-muted d-block">
+                                    <span class="order-label">
                                         Status
-                                    </small>
+                                    </span>
 
                                     {% if order.status == "Pending" %}
 
-                                        <span class="badge bg-warning text-dark">
+                                        <span class="order-status status-pending">
                                             Pending
                                         </span>
 
                                     {% elif order.status == "Processing" %}
 
-                                        <span class="badge bg-info">
+                                        <span class="order-status status-processing">
                                             Processing
                                         </span>
 
                                     {% elif order.status == "Shipped" %}
 
-                                        <span class="badge bg-primary">
+                                        <span class="order-status status-shipped">
                                             Shipped
                                         </span>
 
                                     {% elif order.status == "Delivered" %}
 
-                                        <span class="badge bg-success">
+                                        <span class="order-status status-delivered">
                                             Delivered
                                         </span>
 
                                     {% elif order.status == "Cancelled" %}
 
-                                        <span class="badge bg-danger">
+                                        <span class="order-status status-cancelled">
                                             Cancelled
                                         </span>
 
                                     {% else %}
 
-                                        <span class="badge bg-secondary">
+                                        <span class="order-status status-default">
                                             {{ order.status }}
                                         </span>
 
@@ -147,16 +603,16 @@
                                 </div>
 
 
-                                <!-- VIEW -->
+                                <!-- VIEW ORDER -->
 
-                                <div class="col-md-2 text-md-end">
+                                <div class="order-action">
 
                                     <a
                                         href="{{ url_for(
                                             'cart.order_details',
                                             order_id=order.id
                                         ) }}"
-                                        class="btn btn-outline-success rounded-pill px-3"
+                                        class="view-order-btn"
                                     >
                                         View Order
                                     </a>
@@ -167,44 +623,46 @@
 
                         </div>
 
-                    </div>
+                    </article>
 
-                </div>
+                {% endfor %}
 
-            {% endfor %}
+            </div>
 
-        </div>
 
-    {% else %}
+        {% else %}
 
-        <div class="card border-0 shadow-sm rounded-4">
+            <!-- ==================================================
+                 EMPTY ORDERS
+                 ================================================== -->
 
-            <div class="card-body text-center py-5">
+            <div class="empty-orders">
 
-                <div class="display-3 mb-3">
+                <div class="empty-orders-icon" aria-hidden="true">
                     📦
                 </div>
 
-                <h3 class="fw-bold">
+                <h2>
                     No Orders Yet
-                </h3>
+                </h2>
 
-                <p class="text-muted">
+                <p>
                     You haven't placed any orders yet.
+                    Your completed and active orders will appear here.
                 </p>
 
                 <a
                     href="{{ url_for('product.products') }}"
-                    class="btn btn-success rounded-pill px-4"
+                    class="start-shopping-btn"
                 >
                     Start Shopping
                 </a>
 
             </div>
 
-        </div>
+        {% endif %}
 
-    {% endif %}
+    </div>
 
 </div>
 

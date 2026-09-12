@@ -2,240 +2,979 @@
 
 {% block title %}Products | AgroMart Admin{% endblock %}
 
+{% block styles %}
+
+<style>
+    /* ==========================================================
+       BOMET MACHINERIES LTD.
+       PRODUCTS ADMIN — MOBILE-FIRST PROFESSIONAL UI
+       ========================================================== */
+
+    :root {
+        --bm-green: #15803d;
+        --bm-green-dark: #166534;
+        --bm-green-soft: #f0fdf4;
+        --bm-yellow: #f59e0b;
+        --bm-yellow-soft: #fffbeb;
+        --bm-red: #dc2626;
+        --bm-red-soft: #fef2f2;
+        --bm-blue: #2563eb;
+        --bm-blue-soft: #eff6ff;
+
+        --bm-text: #111827;
+        --bm-text-soft: #374151;
+        --bm-muted: #6b7280;
+        --bm-border: #e5e7eb;
+        --bm-border-light: #f1f5f9;
+        --bm-background: #f8fafc;
+        --bm-white: #ffffff;
+
+        --bm-radius: 14px;
+        --bm-radius-sm: 10px;
+        --bm-shadow: 0 4px 18px rgba(15, 23, 42, .06);
+        --bm-shadow-hover: 0 8px 24px rgba(15, 23, 42, .09);
+    }
+
+    .products-admin-page {
+        max-width: 1450px;
+        margin: 0 auto;
+    }
+
+    /* ----------------------------------------------------------
+       PAGE HEADER
+       ---------------------------------------------------------- */
+
+    .products-page-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--bm-green);
+        font-size: .72rem;
+        font-weight: 800;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+        margin-bottom: 5px;
+    }
+
+    .products-page-title {
+        color: var(--bm-text);
+        font-size: 1.65rem;
+        line-height: 1.2;
+        letter-spacing: -.02em;
+    }
+
+    .products-page-description {
+        color: var(--bm-muted);
+        font-size: .9rem;
+    }
+
+    .add-product-btn {
+        min-height: 44px;
+        border-radius: var(--bm-radius-sm);
+        padding: 9px 17px;
+        font-size: .86rem;
+        font-weight: 800;
+        box-shadow: 0 3px 10px rgba(21, 128, 61, .14);
+        transition: transform .15s ease,
+                    box-shadow .15s ease,
+                    background .15s ease;
+    }
+
+    .add-product-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(21, 128, 61, .18);
+    }
+
+    /* ----------------------------------------------------------
+       FLASH MESSAGES
+       ---------------------------------------------------------- */
+
+    .products-flash {
+        border-radius: var(--bm-radius-sm);
+        border-width: 1px;
+        font-size: .86rem;
+        font-weight: 600;
+    }
+
+    /* ----------------------------------------------------------
+       COMMON CARD
+       ---------------------------------------------------------- */
+
+    .products-card {
+        background: var(--bm-white);
+        border: 1px solid var(--bm-border-light);
+        border-radius: var(--bm-radius);
+        box-shadow: var(--bm-shadow);
+        overflow: hidden;
+    }
+
+    /* ----------------------------------------------------------
+       MOBILE PRODUCT LIST
+       ---------------------------------------------------------- */
+
+    .mobile-products-list .list-group-item {
+        border-color: var(--bm-border-light);
+        background: var(--bm-white);
+    }
+
+    .mobile-products-list .list-group-item:last-child {
+        border-bottom: 0;
+    }
+
+    .mobile-product-item {
+        padding: 15px !important;
+        transition: background .15s ease;
+    }
+
+    .mobile-product-item:hover {
+        background: #fcfdfd;
+    }
+
+    .product-thumbnail {
+        width: 66px;
+        height: 66px;
+        flex: 0 0 66px;
+        border: 1px solid var(--bm-border);
+        border-radius: 11px;
+        background: #f8fafc;
+        object-fit: cover;
+        display: block;
+    }
+
+    .product-no-image {
+        width: 66px;
+        height: 66px;
+        flex: 0 0 66px;
+        border: 1px dashed #d1d5db;
+        border-radius: 11px;
+        background: #f8fafc;
+        color: var(--bm-muted);
+        font-size: .62rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 5px;
+    }
+
+    .product-mobile-name {
+        color: var(--bm-text);
+        font-size: .92rem;
+        line-height: 1.25;
+        font-weight: 800;
+    }
+
+    .product-mobile-brand {
+        color: var(--bm-muted);
+        font-size: .74rem;
+        line-height: 1.25;
+    }
+
+    .product-mobile-price {
+        color: var(--bm-green);
+        font-size: .92rem;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+
+    .discount-badge {
+        display: inline-flex;
+        align-items: center;
+        min-height: 20px;
+        padding: 2px 6px;
+        border-radius: 6px;
+        background: var(--bm-red-soft);
+        color: var(--bm-red);
+        font-size: .63rem;
+        font-weight: 800;
+        vertical-align: middle;
+    }
+
+    /* ----------------------------------------------------------
+       MOBILE META GRID
+       ---------------------------------------------------------- */
+
+    .mobile-product-meta {
+        background: var(--bm-background);
+        border: 1px solid var(--bm-border-light);
+        border-radius: 10px;
+        padding: 9px 5px;
+    }
+
+    .mobile-meta-column {
+        min-width: 0;
+    }
+
+    .mobile-meta-column.border-end {
+        border-color: var(--bm-border) !important;
+    }
+
+    .mobile-meta-label {
+        display: block;
+        color: var(--bm-muted);
+        font-size: .61rem;
+        line-height: 1;
+        font-weight: 800;
+        letter-spacing: .04em;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+    }
+
+    .mobile-meta-value {
+        display: block;
+        color: var(--bm-text-soft);
+        font-size: .72rem;
+        font-weight: 700;
+        line-height: 1.2;
+    }
+
+    .stock-badge,
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 22px;
+        padding: 3px 8px;
+        border-radius: 7px;
+        font-size: .64rem;
+        font-weight: 800;
+    }
+
+    /* ----------------------------------------------------------
+       MOBILE ACTIONS
+       ---------------------------------------------------------- */
+
+    .product-action-btn {
+        min-height: 38px;
+        border-radius: 8px;
+        font-size: .74rem;
+        font-weight: 800;
+        transition: transform .15s ease,
+                    box-shadow .15s ease,
+                    background .15s ease;
+    }
+
+    .product-action-btn:hover {
+        transform: translateY(-1px);
+    }
+
+    /* ----------------------------------------------------------
+       DESKTOP TABLE
+       ---------------------------------------------------------- */
+
+    .products-table-card {
+        overflow: hidden;
+    }
+
+    .products-table {
+        color: var(--bm-text-soft);
+        font-size: .84rem;
+    }
+
+    .products-table thead th {
+        background: #f8fafc;
+        color: var(--bm-muted);
+        border-bottom: 1px solid var(--bm-border);
+        padding-top: 12px;
+        padding-bottom: 12px;
+        font-size: .68rem;
+        font-weight: 800;
+        letter-spacing: .05em;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .products-table tbody td {
+        border-bottom: 1px solid var(--bm-border-light);
+        padding-top: 12px;
+        padding-bottom: 12px;
+        vertical-align: middle;
+    }
+
+    .products-table tbody tr:last-child td {
+        border-bottom: 0;
+    }
+
+    .products-table tbody tr {
+        transition: background .15s ease;
+    }
+
+    .products-table tbody tr:hover {
+        background: #fbfdfb;
+    }
+
+    .desktop-product-image {
+        width: 54px;
+        height: 54px;
+        border-radius: 10px;
+        border: 1px solid var(--bm-border);
+        object-fit: cover;
+        background: #f8fafc;
+        display: block;
+    }
+
+    .desktop-no-image {
+        width: 54px;
+        height: 54px;
+        border-radius: 10px;
+        border: 1px dashed #d1d5db;
+        background: #f8fafc;
+        color: var(--bm-muted);
+        font-size: .58rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .desktop-product-name {
+        color: var(--bm-text);
+        font-size: .85rem;
+        font-weight: 800;
+        line-height: 1.3;
+    }
+
+    .desktop-product-brand {
+        color: var(--bm-muted);
+        font-size: .7rem;
+    }
+
+    .desktop-price {
+        color: var(--bm-green-dark);
+        font-weight: 800;
+        white-space: nowrap;
+    }
+
+    .desktop-discount {
+        color: var(--bm-red);
+        font-size: .68rem;
+        font-weight: 700;
+    }
+
+    .table-status-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 24px;
+        padding: 3px 8px;
+        border-radius: 7px;
+        font-size: .65rem;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+
+    .featured-badge {
+        display: inline-flex;
+        align-items: center;
+        min-height: 22px;
+        padding: 3px 7px;
+        border-radius: 7px;
+        background: var(--bm-yellow-soft);
+        color: #92400e;
+        border: 1px solid #fde68a;
+        font-size: .62rem;
+        font-weight: 800;
+    }
+
+    .desktop-action-btn {
+        min-height: 34px;
+        padding: 5px 10px;
+        border-radius: 8px;
+        font-size: .7rem;
+        font-weight: 800;
+        transition: transform .15s ease,
+                    box-shadow .15s ease;
+    }
+
+    .desktop-action-btn:hover {
+        transform: translateY(-1px);
+    }
+
+    /* ----------------------------------------------------------
+       EMPTY STATE
+       ---------------------------------------------------------- */
+
+    .empty-products-card {
+        padding: 50px 20px;
+    }
+
+    .empty-products-icon {
+        width: 64px;
+        height: 64px;
+        margin: 0 auto 16px;
+        border-radius: 16px;
+        background: var(--bm-green-soft);
+        color: var(--bm-green);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.65rem;
+    }
+
+    .empty-products-title {
+        color: var(--bm-text);
+        font-size: 1.1rem;
+        font-weight: 800;
+    }
+
+    .empty-products-text {
+        color: var(--bm-muted);
+        font-size: .84rem;
+        max-width: 430px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .empty-add-btn {
+        min-height: 42px;
+        border-radius: 9px;
+        font-size: .8rem;
+        font-weight: 800;
+        padding: 8px 16px;
+    }
+
+    /* ----------------------------------------------------------
+       RESPONSIVE
+       ---------------------------------------------------------- */
+
+    @media (min-width: 768px) {
+        .products-page-title {
+            font-size: 2rem;
+        }
+
+        .products-page-description {
+            font-size: .92rem;
+        }
+    }
+
+    @media (min-width: 992px) {
+        .products-admin-page {
+            padding-left: 4px;
+            padding-right: 4px;
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .products-page-title {
+            font-size: 1.45rem;
+        }
+
+        .products-page-description {
+            font-size: .78rem;
+        }
+
+        .add-product-btn {
+            width: 100%;
+        }
+
+        .empty-products-card {
+            padding: 40px 16px;
+        }
+    }
+
+    @media (max-width: 379.98px) {
+        .mobile-product-item {
+            padding: 12px !important;
+        }
+
+        .product-thumbnail,
+        .product-no-image {
+            width: 58px;
+            height: 58px;
+            flex-basis: 58px;
+        }
+
+        .product-mobile-name {
+            font-size: .84rem;
+        }
+
+        .product-mobile-price {
+            font-size: .83rem;
+        }
+
+        .mobile-meta-label {
+            font-size: .57rem;
+        }
+
+        .mobile-meta-value {
+            font-size: .67rem;
+        }
+    }
+</style>
+
+{% endblock %}
+
 {% block content %}
 
-<div class="container py-3 py-md-4">
-
-    <!-- Header & Action Button -->
-    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-3 mb-md-4">
-        <div>
-            <h1 class="fw-bold fs-3 fs-md-1 mb-1">Products</h1>
-            <p class="text-muted small fs-md-6 mb-0">
-                Manage your shop products.
-            </p>
+<div class="container py-3 py-md-4 products-admin-page">
+<!-- Header & Action Button -->
+<div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-3 mb-md-4">
+    <div>
+        <div class="products-page-kicker">
+            <i class="bi bi-box-seam"></i>
+            Product Management
         </div>
-        <div>
-            <a href="{{ url_for('admin_products.add_product') }}" class="btn btn-success fw-semibold w-100 w-sm-auto shadow-sm">
-                <i class="bi bi-plus-lg me-1"></i> Add Product
-            </a>
+
+        <h1 class="products-page-title fw-bold mb-1">
+            Products
+        </h1>
+
+        <p class="products-page-description mb-0">
+            Manage your shop products, pricing, stock and availability.
+        </p>
+    </div>
+
+    <div>
+        <a href="{{ url_for('admin_products.add_product') }}"
+           class="btn btn-success add-product-btn">
+            <i class="bi bi-plus-lg me-1"></i>
+            Add Product
+        </a>
+    </div>
+</div>
+
+<!-- Flash Messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show products-flash shadow-sm mb-3"
+                 role="alert">
+                {{ message }}
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<!-- Products -->
+{% if products %}
+
+    <!-- ======================================================
+         MOBILE VIEW
+         ====================================================== -->
+    <div class="d-block d-md-none">
+        <div class="products-card mobile-products-list">
+
+            <ul class="list-group list-group-flush">
+
+                {% for product in products %}
+
+                    <li class="list-group-item mobile-product-item">
+
+                        <!-- Product Summary -->
+                        <div class="d-flex align-items-center gap-3 mb-3">
+
+                            <!-- Image -->
+                            <div class="flex-shrink-0">
+
+                                {% if product.images %}
+
+                                    {% set primary_image = product.images
+                                        | selectattr("is_primary", "equalto", true)
+                                        | first %}
+
+                                    {% if primary_image %}
+
+                                        <img src="{{ primary_image.image_url }}"
+                                             alt="{{ product.name }}"
+                                             class="product-thumbnail">
+
+                                    {% else %}
+
+                                        <div class="product-no-image">
+                                            No Image
+                                        </div>
+
+                                    {% endif %}
+
+                                {% else %}
+
+                                    <div class="product-no-image">
+                                        No Image
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+                            <!-- Name / Brand / Price -->
+                            <div class="flex-grow-1 min-w-0">
+
+                                <h6 class="product-mobile-name text-truncate mb-1">
+                                    {{ product.name }}
+                                </h6>
+
+                                {% if product.brand %}
+                                    <small class="product-mobile-brand d-block text-truncate mb-1">
+                                        {{ product.brand }}
+                                    </small>
+                                {% endif %}
+
+                                <div class="product-mobile-price">
+
+                                    KSh {{ "{:,.2f}".format(product.price) }}
+
+                                    {% if product.discount %}
+                                        <span class="discount-badge ms-1">
+                                            -{{ product.discount }}%
+                                        </span>
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Product Meta -->
+                        <div class="mobile-product-meta mb-3">
+
+                            <div class="row g-2 text-center">
+
+                                <!-- Category -->
+                                <div class="col-4 mobile-meta-column border-end">
+
+                                    <span class="mobile-meta-label">
+                                        Category
+                                    </span>
+
+                                    <span class="mobile-meta-value text-truncate">
+                                        {{ product.category.name if product.category else 'None' }}
+                                    </span>
+
+                                </div>
+
+                                <!-- Stock -->
+                                <div class="col-4 mobile-meta-column border-end">
+
+                                    <span class="mobile-meta-label">
+                                        Stock
+                                    </span>
+
+                                    {% if product.stock > 0 %}
+
+                                        <span class="badge bg-success-subtle text-success stock-badge">
+                                            {{ product.stock }}
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge bg-danger-subtle text-danger stock-badge">
+                                            Out
+                                        </span>
+
+                                    {% endif %}
+
+                                </div>
+
+                                <!-- Status -->
+                                <div class="col-4 mobile-meta-column">
+
+                                    <span class="mobile-meta-label">
+                                        Status
+                                    </span>
+
+                                    {% if product.is_active %}
+
+                                        <span class="badge bg-success-subtle text-success status-badge">
+                                            Active
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge bg-secondary-subtle text-secondary status-badge">
+                                            Inactive
+                                        </span>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="row g-2">
+
+                            <div class="col-6">
+
+                                <a href="{{ url_for('admin_products.edit_product', product_id=product.id) }}"
+                                   class="btn btn-outline-primary product-action-btn w-100">
+                                    <i class="bi bi-pencil-square me-1"></i>
+                                    Edit
+                                </a>
+
+                            </div>
+
+                            <div class="col-6">
+
+                                <form action="{{ url_for('admin_products.delete_product', product_id=product.id) }}"
+                                      method="POST"
+                                      class="w-100"
+                                      onsubmit="return confirm('Are you sure you want to delete this product?');">
+
+                                    <input type="hidden"
+                                           name="csrf_token"
+                                           value="{{ csrf_token() }}">
+
+                                    <button type="submit"
+                                            class="btn btn-outline-danger product-action-btn w-100">
+                                        <i class="bi bi-trash3 me-1"></i>
+                                        Delete
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+
+                    </li>
+
+                {% endfor %}
+
+            </ul>
+
         </div>
     </div>
 
-    <!-- Flash Messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+    <!-- ======================================================
+         DESKTOP VIEW
+         ====================================================== -->
+    <div class="products-card products-table-card d-none d-md-block">
 
-    <!-- Products Container -->
-    {% if products %}
+        <div class="table-responsive">
 
-        <!-- 1. MOBILE VIEW (Clean List Layout - Small Screens) -->
-        <div class="d-block d-md-none">
-            <div class="card border-0 shadow-sm overflow-hidden">
-                <ul class="list-group list-group-flush">
+            <table class="table table-hover align-middle products-table mb-0">
+
+                <thead>
+                    <tr>
+                        <th class="ps-3">Image</th>
+                        <th>Product</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                        <th>Status</th>
+                        <th class="text-end pe-3">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
                     {% for product in products %}
-                        <li class="list-group-item p-3">
-                            
-                            <!-- Top Row: Thumbnail + Name/Brand + Price -->
-                            <div class="d-flex align-items-center gap-3 mb-3">
-                                <!-- Image -->
-                                <div class="flex-shrink-0">
-                                    {% if product.images %}
-                                        {% set primary_image = product.images | selectattr("is_primary", "equalto", true) | first %}
-                                        {% if primary_image %}
-                                            <img src="{{ primary_image.image_url }}" alt="{{ product.name }}" width="64" height="64" class="rounded border object-fit-cover">
-                                        {% else %}
-                                            <div class="bg-light border rounded d-flex align-items-center justify-content-center text-muted small text-center" style="width:64px; height:64px;">No Image</div>
-                                        {% endif %}
+
+                        <tr>
+
+                            <!-- Image -->
+                            <td class="ps-3">
+
+                                {% if product.images %}
+
+                                    {% set primary_image = product.images
+                                        | selectattr("is_primary", "equalto", true)
+                                        | first %}
+
+                                    {% if primary_image %}
+
+                                        <img src="{{ primary_image.image_url }}"
+                                             alt="{{ product.name }}"
+                                             class="desktop-product-image">
+
                                     {% else %}
-                                        <div class="bg-light border rounded d-flex align-items-center justify-content-center text-muted small text-center" style="width:64px; height:64px;">No Image</div>
+
+                                        <div class="desktop-no-image">
+                                            No Image
+                                        </div>
+
                                     {% endif %}
-                                </div>
 
-                                <!-- Title, Brand & Price -->
-                                <div class="flex-grow-1 min-w-0">
-                                    <h6 class="fw-bold mb-0 text-truncate text-dark fs-6">{{ product.name }}</h6>
-                                    {% if product.brand %}
-                                        <small class="text-muted d-block text-truncate mb-1">{{ product.brand }}</small>
-                                    {% endif %}
-                                    <div class="fw-bold text-success fs-6">
-                                        KSh {{ "{:,.2f}".format(product.price) }}
-                                        {% if product.discount %}
-                                            <span class="badge bg-danger-subtle text-danger ms-1">-{{ product.discount }}%</span>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div>
+                                {% else %}
 
-                            <!-- Middle Row: Meta Information Grid -->
-                            <div class="bg-light rounded p-2.5 mb-3">
-                                <div class="row g-2 text-center fs-7">
-                                    <div class="col-4 border-end">
-                                        <span class="d-block text-muted text-uppercase fw-semibold mb-1" style="font-size: 0.7rem;">Category</span>
-                                        <span class="fw-medium text-truncate d-block">{{ product.category.name if product.category else 'None' }}</span>
+                                    <div class="desktop-no-image">
+                                        No Image
                                     </div>
-                                    <div class="col-4 border-end">
-                                        <span class="d-block text-muted text-uppercase fw-semibold mb-1" style="font-size: 0.7rem;">Stock</span>
-                                        {% if product.stock > 0 %}
-                                            <span class="badge bg-success-subtle text-success fw-bold px-2 py-1">{{ product.stock }}</span>
-                                        {% else %}
-                                            <span class="badge bg-danger-subtle text-danger fw-bold px-2 py-1">Out</span>
-                                        {% endif %}
-                                    </div>
-                                    <div class="col-4">
-                                        <span class="d-block text-muted text-uppercase fw-semibold mb-1" style="font-size: 0.7rem;">Status</span>
-                                        {% if product.is_active %}
-                                            <span class="badge bg-success-subtle text-success fw-bold px-2 py-1">Active</span>
-                                        {% else %}
-                                            <span class="badge bg-secondary-subtle text-secondary fw-bold px-2 py-1">Inactive</span>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div>
 
-                            <!-- Bottom Row: Clean Action Bar -->
-                            <div class="row g-2">
-                                <div class="col-6">
-                                    <a href="{{ url_for('admin_products.edit_product', product_id=product.id) }}" class="btn btn-sm btn-outline-primary w-100 fw-semibold">
-                                        Edit
-                                    </a>
-                                </div>
-                                <div class="col-6">
-                                    <form action="{{ url_for('admin_products.delete_product', product_id=product.id) }}" method="POST" class="w-100" onsubmit="return confirm('Are you sure you want to delete this product?');">
-                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                                        <button type="submit" class="btn btn-sm btn-outline-danger w-100 fw-semibold">
-                                            Delete
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
+                                {% endif %}
 
-                        </li>
+                            </td>
+
+                            <!-- Product -->
+                            <td>
+
+                                <strong class="desktop-product-name d-block">
+                                    {{ product.name }}
+                                </strong>
+
+                                {% if product.brand %}
+                                    <small class="desktop-product-brand">
+                                        {{ product.brand }}
+                                    </small>
+                                {% endif %}
+
+                            </td>
+
+                            <!-- Category -->
+                            <td>
+
+                                {% if product.category %}
+
+                                    <span class="fw-semibold">
+                                        {{ product.category.name }}
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="text-muted">
+                                        No category
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <!-- Price -->
+                            <td>
+
+                                <span class="desktop-price">
+                                    KSh {{ "{:,.2f}".format(product.price) }}
+                                </span>
+
+                                {% if product.discount %}
+
+                                    <br>
+
+                                    <small class="desktop-discount">
+                                        -{{ product.discount }}%
+                                    </small>
+
+                                {% endif %}
+
+                            </td>
+
+                            <!-- Stock -->
+                            <td>
+
+                                {% if product.stock > 0 %}
+
+                                    <span class="badge bg-success table-status-badge">
+                                        {{ product.stock }}
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge bg-danger table-status-badge">
+                                        Out of stock
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <!-- Status -->
+                            <td>
+
+                                {% if product.is_active %}
+
+                                    <span class="badge bg-success table-status-badge">
+                                        Active
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge bg-secondary table-status-badge">
+                                        Inactive
+                                    </span>
+
+                                {% endif %}
+
+                                {% if product.featured %}
+
+                                    <br>
+
+                                    <span class="featured-badge mt-1">
+                                        <i class="bi bi-star-fill me-1"></i>
+                                        Featured
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <!-- Actions -->
+                            <td class="text-end pe-3">
+
+                                <a href="{{ url_for('admin_products.edit_product', product_id=product.id) }}"
+                                   class="btn btn-outline-primary desktop-action-btn me-1">
+                                    <i class="bi bi-pencil-square me-1"></i>
+                                    Edit
+                                </a>
+
+                                <form action="{{ url_for('admin_products.delete_product', product_id=product.id) }}"
+                                      method="POST"
+                                      class="d-inline"
+                                      onsubmit="return confirm('Are you sure you want to delete this product?');">
+
+                                    <input type="hidden"
+                                           name="csrf_token"
+                                           value="{{ csrf_token() }}">
+
+                                    <button type="submit"
+                                            class="btn btn-outline-danger desktop-action-btn">
+                                        <i class="bi bi-trash3 me-1"></i>
+                                        Delete
+                                    </button>
+
+                                </form>
+
+                            </td>
+
+                        </tr>
+
                     {% endfor %}
-                </ul>
-            </div>
+
+                </tbody>
+
+            </table>
+
         </div>
 
-        <!-- 2. DESKTOP VIEW (Table - Medium and Large Screens) -->
-        <div class="card shadow-sm border-0 d-none d-md-block">
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead class="table-light">
-                            <tr>
-                                <th class="ps-3">Image</th>
-                                <th>Product</th>
-                                <th>Category</th>
-                                <th>Price</th>
-                                <th>Stock</th>
-                                <th>Status</th>
-                                <th class="text-end pe-3">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for product in products %}
-                                <tr>
-                                    <!-- Image -->
-                                    <td class="ps-3">
-                                        {% if product.images %}
-                                            {% set primary_image = product.images | selectattr("is_primary", "equalto", true) | first %}
-                                            {% if primary_image %}
-                                                <img src="{{ primary_image.image_url }}" alt="{{ product.name }}" width="50" height="50" class="rounded border object-fit-cover">
-                                            {% else %}
-                                                <div class="bg-light border rounded d-flex align-items-center justify-content-center text-muted small" style="width:50px;height:50px;">No Image</div>
-                                            {% endif %}
-                                        {% else %}
-                                            <div class="bg-light border rounded d-flex align-items-center justify-content-center text-muted small" style="width:50px;height:50px;">No Image</div>
-                                        {% endif %}
-                                    </td>
+    </div>
 
-                                    <!-- Product -->
-                                    <td>
-                                        <strong class="d-block">{{ product.name }}</strong>
-                                        {% if product.brand %}
-                                            <small class="text-muted">{{ product.brand }}</small>
-                                        {% endif %}
-                                    </td>
+{% else %}
 
-                                    <!-- Category -->
-                                    <td>
-                                        {% if product.category %}
-                                            {{ product.category.name }}
-                                        {% else %}
-                                            <span class="text-muted">No category</span>
-                                        {% endif %}
-                                    </td>
+    <!-- ======================================================
+         EMPTY STATE
+         ====================================================== -->
+    <div class="products-card empty-products-card text-center">
 
-                                    <!-- Price -->
-                                    <td>
-                                        <span class="fw-semibold">KSh {{ "{:,.2f}".format(product.price) }}</span>
-                                        {% if product.discount %}
-                                            <br><small class="text-danger">-{{ product.discount }}%</small>
-                                        {% endif %}
-                                    </td>
-
-                                    <!-- Stock -->
-                                    <td>
-                                        {% if product.stock > 0 %}
-                                            <span class="badge bg-success">{{ product.stock }}</span>
-                                        {% else %}
-                                            <span class="badge bg-danger">Out of stock</span>
-                                        {% endif %}
-                                    </td>
-
-                                    <!-- Status -->
-                                    <td>
-                                        {% if product.is_active %}
-                                            <span class="badge bg-success">Active</span>
-                                        {% else %}
-                                            <span class="badge bg-secondary">Inactive</span>
-                                        {% endif %}
-                                        {% if product.featured %}
-                                            <br><span class="badge bg-warning text-dark mt-1">Featured</span>
-                                        {% endif %}
-                                    </td>
-
-                                    <!-- Actions -->
-                                    <td class="text-end pe-3">
-                                        <a href="{{ url_for('admin_products.edit_product', product_id=product.id) }}" class="btn btn-sm btn-outline-primary me-1">
-                                            Edit
-                                        </a>
-                                        <form action="{{ url_for('admin_products.delete_product', product_id=product.id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this product?');">
-                                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                                            <button type="submit" class="btn btn-sm btn-outline-danger">
-                                                Delete
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+        <div class="empty-products-icon">
+            <i class="bi bi-box-seam"></i>
         </div>
 
-    {% else %}
+        <h4 class="empty-products-title mb-2">
+            No products yet
+        </h4>
 
-        <!-- Empty State -->
-        <div class="card border-0 shadow-sm">
-            <div class="card-body text-center py-5">
-                <h4 class="fw-bold mb-2">No products yet</h4>
-                <p class="text-muted mb-4">Start building your AgroMart product catalog.</p>
-                <a href="{{ url_for('admin_products.add_product') }}" class="btn btn-success px-4 fw-semibold">
-                    + Add Your First Product
-                </a>
-            </div>
-        </div>
+        <p class="empty-products-text mb-4">
+            Start building your Bomet Machineries product catalog
+            by adding your first product.
+        </p>
 
-    {% endif %}
+        <a href="{{ url_for('admin_products.add_product') }}"
+           class="btn btn-success empty-add-btn">
+            <i class="bi bi-plus-lg me-1"></i>
+            Add Your First Product
+        </a>
+
+    </div>
+
+{% endif %}
 
 </div>
 

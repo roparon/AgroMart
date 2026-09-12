@@ -3,181 +3,1027 @@
 {% block title %}Checkout | AgroMart{% endblock %}
 
 {% block content %}
+
+<style>
+/* ==========================================================
+   AGROMART CHECKOUT
+   Professional • Mobile-first • Lightweight
+   ========================================================== */
+
+:root {
+    --checkout-green: #15803d;
+    --checkout-green-dark: #166534;
+    --checkout-green-soft: #f0fdf4;
+    --checkout-yellow: #f59e0b;
+    --checkout-text: #111827;
+    --checkout-text-soft: #374151;
+    --checkout-muted: #6b7280;
+    --checkout-border: #e5e7eb;
+    --checkout-border-light: #f1f5f9;
+    --checkout-background: #f8fafc;
+    --checkout-white: #ffffff;
+    --checkout-red: #dc2626;
+    --checkout-radius: 14px;
+    --checkout-radius-sm: 10px;
+    --checkout-shadow: 0 4px 18px rgba(15, 23, 42, .06);
+    --checkout-shadow-hover: 0 8px 26px rgba(15, 23, 42, .09);
+}
+
+.checkout-page {
+    width: 100%;
+    max-width: 1240px;
+    margin: 0 auto;
+    color: var(--checkout-text);
+}
+
+/* ----------------------------------------------------------
+   HEADER
+   ---------------------------------------------------------- */
+
+.checkout-header {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 22px;
+}
+
+.checkout-header-content {
+    min-width: 0;
+}
+
+.checkout-title {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin: 0 0 4px;
+    font-size: 1.55rem;
+    line-height: 1.2;
+    font-weight: 800;
+    letter-spacing: -.025em;
+}
+
+.checkout-title-icon {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: var(--checkout-green-soft);
+    color: var(--checkout-green);
+    font-size: 17px;
+}
+
+.checkout-subtitle {
+    margin: 0;
+    color: var(--checkout-muted);
+    font-size: .88rem;
+    line-height: 1.5;
+}
+
+.checkout-return {
+    width: 100%;
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 9px 15px;
+    border: 1px solid var(--checkout-border);
+    border-radius: var(--checkout-radius-sm);
+    background: var(--checkout-white);
+    color: var(--checkout-text-soft);
+    font-size: .84rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition:
+        background .15s ease,
+        border-color .15s ease,
+        color .15s ease,
+        transform .15s ease;
+}
+
+.checkout-return:hover {
+    background: var(--checkout-background);
+    border-color: #d1d5db;
+    color: var(--checkout-text);
+    transform: translateY(-1px);
+}
+
+/* ----------------------------------------------------------
+   CARDS
+   ---------------------------------------------------------- */
+
+.checkout-card {
+    overflow: hidden;
+    border: 1px solid var(--checkout-border-light);
+    border-radius: var(--checkout-radius);
+    background: var(--checkout-white);
+    box-shadow: var(--checkout-shadow);
+}
+
+.checkout-card + .checkout-card {
+    margin-top: 16px;
+}
+
+.checkout-card-body {
+    padding: 17px;
+}
+
+.checkout-card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    margin-bottom: 17px;
+}
+
+.checkout-step {
+    width: 29px;
+    height: 29px;
+    flex: 0 0 29px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--checkout-green);
+    color: #fff;
+    font-size: .78rem;
+    font-weight: 800;
+}
+
+.checkout-section-title {
+    margin: 0;
+    color: var(--checkout-text);
+    font-size: 1rem;
+    line-height: 1.35;
+    font-weight: 800;
+}
+
+.checkout-section-description {
+    margin: 2px 0 0;
+    color: var(--checkout-muted);
+    font-size: .76rem;
+    line-height: 1.4;
+}
+
+/* ----------------------------------------------------------
+   FORM
+   ---------------------------------------------------------- */
+
+.checkout-form-row {
+    --bs-gutter-x: 12px;
+    --bs-gutter-y: 13px;
+}
+
+.checkout-form-label {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--checkout-text-soft);
+    font-size: .79rem;
+    font-weight: 700;
+}
+
+.checkout-form-control {
+    width: 100%;
+    min-height: 44px;
+    border: 1px solid var(--checkout-border);
+    border-radius: var(--checkout-radius-sm);
+    background: var(--checkout-white);
+    color: var(--checkout-text);
+    padding: 10px 12px;
+    font-size: .88rem;
+    line-height: 1.35;
+    box-shadow: none;
+    transition:
+        border-color .15s ease,
+        box-shadow .15s ease,
+        background .15s ease;
+}
+
+.checkout-form-control::placeholder {
+    color: #9ca3af;
+}
+
+.checkout-form-control:hover {
+    border-color: #d1d5db;
+}
+
+.checkout-form-control:focus {
+    border-color: var(--checkout-green);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(21, 128, 61, .10);
+    outline: none;
+}
+
+textarea.checkout-form-control {
+    min-height: 88px;
+    resize: vertical;
+}
+
+/* ----------------------------------------------------------
+   PAYMENT OPTIONS
+   ---------------------------------------------------------- */
+
+.checkout-payment-option {
+    position: relative;
+    display: block;
+    margin: 0 0 9px;
+    padding: 12px 12px 12px 42px;
+    border: 1px solid var(--checkout-border);
+    border-radius: var(--checkout-radius-sm);
+    background: var(--checkout-white);
+    cursor: pointer;
+    transition:
+        border-color .15s ease,
+        background .15s ease,
+        box-shadow .15s ease;
+}
+
+.checkout-payment-option:last-child {
+    margin-bottom: 0;
+}
+
+.checkout-payment-option:hover {
+    border-color: #bbf7d0;
+    background: var(--checkout-green-soft);
+}
+
+.checkout-payment-option:has(input:checked) {
+    border-color: #86efac;
+    background: var(--checkout-green-soft);
+    box-shadow: 0 0 0 1px rgba(21, 128, 61, .04);
+}
+
+.checkout-payment-option .form-check-input {
+    position: absolute;
+    top: 15px;
+    left: 14px;
+    width: 17px;
+    height: 17px;
+    margin: 0;
+    accent-color: var(--checkout-green);
+}
+
+.checkout-payment-title {
+    display: block;
+    margin: 0;
+    color: var(--checkout-text);
+    font-size: .86rem;
+    font-weight: 750;
+    line-height: 1.35;
+}
+
+.checkout-payment-description {
+    display: block;
+    margin-top: 3px;
+    color: var(--checkout-muted);
+    font-size: .74rem;
+    line-height: 1.45;
+}
+
+/* ----------------------------------------------------------
+   ORDER SUMMARY
+   ---------------------------------------------------------- */
+
+.checkout-summary-card {
+    border-color: #dfeee3;
+}
+
+.checkout-summary-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.checkout-summary-title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+.checkout-secure-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 8px;
+    border-radius: 999px;
+    background: var(--checkout-green-soft);
+    color: var(--checkout-green-dark);
+    font-size: .66rem;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+/* ----------------------------------------------------------
+   ITEMS
+   ---------------------------------------------------------- */
+
+.checkout-items {
+    max-height: 290px;
+    overflow-y: auto;
+    padding-right: 2px;
+    scrollbar-width: thin;
+}
+
+.checkout-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--checkout-border-light);
+}
+
+.checkout-item:first-child {
+    padding-top: 0;
+}
+
+.checkout-item:last-child {
+    border-bottom: 0;
+    padding-bottom: 2px;
+}
+
+.checkout-item-main {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.checkout-item-image {
+    width: 52px;
+    height: 52px;
+    flex: 0 0 52px;
+    object-fit: cover;
+    border-radius: 9px;
+    border: 1px solid var(--checkout-border-light);
+    background: #f8fafc;
+}
+
+.checkout-item-details {
+    min-width: 0;
+}
+
+.checkout-item-name {
+    display: -webkit-box;
+    overflow: hidden;
+    margin: 0 0 2px;
+    color: var(--checkout-text);
+    font-size: .8rem;
+    font-weight: 700;
+    line-height: 1.35;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.checkout-item-meta {
+    display: block;
+    color: var(--checkout-muted);
+    font-size: .7rem;
+    line-height: 1.35;
+}
+
+.checkout-item-price {
+    flex: 0 0 auto;
+    color: var(--checkout-text);
+    font-size: .78rem;
+    font-weight: 800;
+    text-align: right;
+    white-space: nowrap;
+}
+
+/* ----------------------------------------------------------
+   TOTAL
+   ---------------------------------------------------------- */
+
+.checkout-total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 12px;
+    padding-top: 14px;
+    border-top: 1px solid var(--checkout-border);
+}
+
+.checkout-total-label {
+    color: var(--checkout-text-soft);
+    font-size: .88rem;
+    font-weight: 800;
+}
+
+.checkout-total-value {
+    color: var(--checkout-green);
+    font-size: 1.3rem;
+    font-weight: 850;
+    letter-spacing: -.02em;
+    text-align: right;
+    white-space: nowrap;
+}
+
+/* ----------------------------------------------------------
+   PLACE ORDER
+   ---------------------------------------------------------- */
+
+.checkout-submit {
+    width: 100%;
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    margin-top: 17px;
+    border: 0;
+    border-radius: var(--checkout-radius-sm);
+    background: var(--checkout-green);
+    color: #fff;
+    padding: 11px 16px;
+    font-size: .9rem;
+    font-weight: 800;
+    line-height: 1.2;
+    box-shadow: 0 5px 14px rgba(21, 128, 61, .18);
+    transition:
+        background .15s ease,
+        transform .15s ease,
+        box-shadow .15s ease;
+}
+
+.checkout-submit:hover {
+    background: var(--checkout-green-dark);
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 7px 18px rgba(21, 128, 61, .22);
+}
+
+.checkout-submit:active {
+    transform: translateY(0);
+}
+
+.checkout-security {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    margin: 11px 0 0;
+    color: var(--checkout-muted);
+    font-size: .69rem;
+    line-height: 1.4;
+}
+
+/* ----------------------------------------------------------
+   EMPTY STATE
+   ---------------------------------------------------------- */
+
+.checkout-empty {
+    padding: 48px 18px;
+    border: 1px solid var(--checkout-border-light);
+    border-radius: var(--checkout-radius);
+    background: var(--checkout-white);
+    box-shadow: var(--checkout-shadow);
+    text-align: center;
+}
+
+.checkout-empty-icon {
+    width: 68px;
+    height: 68px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    border-radius: 50%;
+    background: var(--checkout-green-soft);
+    font-size: 30px;
+}
+
+.checkout-empty-title {
+    margin: 0 0 7px;
+    font-size: 1.25rem;
+    font-weight: 800;
+}
+
+.checkout-empty-text {
+    max-width: 420px;
+    margin: 0 auto 19px;
+    color: var(--checkout-muted);
+    font-size: .84rem;
+    line-height: 1.55;
+}
+
+.checkout-shop-btn {
+    min-height: 43px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--checkout-radius-sm);
+    padding: 9px 18px;
+    background: var(--checkout-green);
+    color: #fff;
+    font-size: .82rem;
+    font-weight: 800;
+    text-decoration: none;
+    transition:
+        background .15s ease,
+        transform .15s ease;
+}
+
+.checkout-shop-btn:hover {
+    background: var(--checkout-green-dark);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+/* ----------------------------------------------------------
+   TABLET
+   ---------------------------------------------------------- */
+
+@media (min-width: 576px) {
+    .checkout-title {
+        font-size: 1.7rem;
+    }
+
+    .checkout-card-body {
+        padding: 20px;
+    }
+
+    .checkout-item-image {
+        width: 58px;
+        height: 58px;
+        flex-basis: 58px;
+    }
+
+    .checkout-return {
+        width: auto;
+    }
+
+    .checkout-header {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+/* ----------------------------------------------------------
+   DESKTOP
+   ---------------------------------------------------------- */
+
+@media (min-width: 992px) {
+    .checkout-page {
+        padding-left: 4px;
+        padding-right: 4px;
+    }
+
+    .checkout-header {
+        margin-bottom: 26px;
+    }
+
+    .checkout-title {
+        font-size: 1.8rem;
+    }
+
+    .checkout-card-body {
+        padding: 22px;
+    }
+
+    .checkout-summary-card {
+        position: sticky;
+        top: 80px;
+    }
+
+    .checkout-item-image {
+        width: 60px;
+        height: 60px;
+        flex-basis: 60px;
+    }
+}
+
+/* ----------------------------------------------------------
+   LARGE DESKTOP
+   ---------------------------------------------------------- */
+
+@media (min-width: 1200px) {
+    .checkout-card-body {
+        padding: 24px;
+    }
+
+    .checkout-summary-card .checkout-card-body {
+        padding: 22px;
+    }
+}
+
+/* ----------------------------------------------------------
+   REDUCED MOTION
+   ---------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+    .checkout-return,
+    .checkout-payment-option,
+    .checkout-form-control,
+    .checkout-submit,
+    .checkout-shop-btn {
+        transition: none;
+    }
+}
+</style>
+
+
 <div class="container py-4 py-lg-5">
+    <div class="checkout-page">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h1 class="fw-bold h2 mb-1">Checkout</h1>
-            <p class="text-muted mb-0">Complete your order details below.</p>
-        </div>
-        <a href="{{ url_for('cart.cart') }}" class="btn btn-outline-secondary rounded-pill px-3">
-            &larr; Return to Cart
-        </a>
-    </div>
+        <!-- PAGE HEADER -->
+        <div class="checkout-header">
+            <div class="checkout-header-content">
+                <h1 class="checkout-title">
+                    <span class="checkout-title-icon" aria-hidden="true">
+                        <i class="bi bi-bag-check"></i>
+                    </span>
+                    Checkout
+                </h1>
 
-    {% if checkout_items %}
-    <form method="POST" action="{{ url_for('cart.checkout') }}">
-        
-        <!-- CSRF TOKEN -->
-        {% if csrf_token is defined and csrf_token is callable %}
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        {% elif csrf_token is defined %}
-            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-        {% endif %}
-
-        <div class="row g-4">
-            
-            <!-- LEFT COLUMN: SHIPPING & PAYMENT DETAILS -->
-            <div class="col-lg-7">
-                
-                <!-- Shipping Details Card -->
-                <div class="card border-0 shadow-sm rounded-3 mb-4">
-                    <div class="card-body p-4">
-                        <h4 class="fw-bold mb-3 h5">1. Shipping Information</h4>
-                        
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label for="full_name" class="form-label fw-semibold">Full Name</label>
-                                <input type="text" class="form-control" id="full_name" name="full_name" required>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="phone" class="form-label fw-semibold">Phone Number (M-Pesa)</label>
-                                <input type="tel" class="form-control" id="phone" name="phone" placeholder="07XXXXXXXX" required>
-                            </div>
-
-                            <div class="col-12">
-                                <label for="email" class="form-label fw-semibold">Email Address</label>
-                                <input type="email" class="form-control" id="email" name="email" required>
-                            </div>
-
-                            <div class="col-12">
-                                <label for="shipping_address" class="form-label fw-semibold">Delivery Address / Location</label>
-                                <textarea class="form-control" id="shipping_address" name="shipping_address" rows="3" placeholder="Town, Street, Building, Door No." required></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Payment Method Card -->
-                <div class="card border-0 shadow-sm rounded-3">
-                    <div class="card-body p-4">
-                        <h4 class="fw-bold mb-3 h5">2. Payment Method</h4>
-                        
-                        <div class="form-check mb-3 p-3 border rounded-3">
-                            <input class="form-check-input ms-0 me-2" type="radio" name="payment_method" id="mpesa" value="mpesa" checked>
-                            <label class="form-check-label fw-semibold" for="mpesa">
-                                📱 M-Pesa Express (STK Push)
-                            </label>
-                            <small class="text-muted d-block mt-1">Pay directly via an M-Pesa prompt sent to your phone.</small>
-                        </div>
-
-                        <div class="form-check p-3 border rounded-3">
-                            <input class="form-check-input ms-0 me-2" type="radio" name="payment_method" id="cod" value="cod">
-                            <label class="form-check-label fw-semibold" for="cod">
-                                💵 Cash on Delivery
-                            </label>
-                            <small class="text-muted d-block mt-1">Pay when your farm supplies arrive at your doorstep.</small>
-                        </div>
-                    </div>
-                </div>
-
+                <p class="checkout-subtitle">
+                    Complete your order details below.
+                </p>
             </div>
 
-            <!-- RIGHT COLUMN: ORDER SUMMARY -->
-            <div class="col-lg-5">
-                <div class="card border-0 shadow-sm rounded-3 sticky-lg-top" style="top: 80px;">
-                    <div class="card-body p-4">
-                        <h4 class="fw-bold mb-4 h5">Order Summary</h4>
-
-                        <!-- Item mini-list -->
-                        <div class="checkout-items mb-3" style="max-height: 280px; overflow-y: auto;">
-                            {% if buy_now_mode %}
-                                {% for item in checkout_items %}
-                                    <div class="d-flex justify-content-between align-items-center mb-3">
-                                        <div class="d-flex align-items-center gap-3">
-                                            {% if item.product.images %}
-                                                {% set primary_image = item.product.images | selectattr("is_primary", "equalto", true) | first %}
-                                                <img src="{{ primary_image.image_url if primary_image else item.product.images[0].image_url }}" 
-                                                     alt="{{ item.product.name }}" 
-                                                     width="70" 
-                                                     height="70" 
-                                                     class="rounded-3 object-fit-cover">
-                                            {% endif %}
-                                            <div>
-                                                <div class="fw-semibold">
-                                                    {{ item.product.name }}
-                                                </div>
-                                                <small class="text-muted">
-                                                    Quantity: {{ item.quantity }}
-                                                </small>
-                                            </div>
-                                        </div>
-                                        <div class="fw-bold">
-                                            KSh {{ "{:,.2f}".format(item.subtotal) }}
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                            {% else %}
-                                {% for item in checkout_items %}
-                                    <div class="d-flex justify-content-between align-items-center mb-3">
-                                        <div>
-                                            <div class="fw-semibold">
-                                                {{ item.product.name }}
-                                            </div>
-                                            <small class="text-muted">
-                                                {{ item.quantity }} × KSh {{ "{:,.2f}".format(item.unit_price) }}
-                                            </small>
-                                        </div>
-                                        <div class="fw-bold">
-                                            KSh {{ "{:,.2f}".format(item.subtotal) }}
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                            {% endif %}
-                        </div>
-
-                        <!-- Total Breakdown -->
-                        <div class="d-flex justify-content-between border-top pt-3 mb-4">
-                            <span class="fw-bold">
-                                Total
-                            </span>
-                            <span class="fw-bold fs-4 text-success">
-                                KSh {{ "{:,.2f}".format(total) }}
-                            </span>
-                        </div>
-
-                        <button type="submit" class="btn btn-success w-100 btn-lg rounded-3 fw-bold py-3 shadow-sm">
-                            Place Order
-                        </button>
-
-                        <div class="text-center mt-3">
-                            <small class="text-muted">
-                                🔒 Encrypted & Secure Checkout
-                            </small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </form>
-
-    {% else %}
-
-    <!-- EMPTY CART FALLBACK -->
-    <div class="card border-0 shadow-sm rounded-3">
-        <div class="card-body text-center py-5">
-            <div class="display-1 mb-3">🛒</div>
-            <h2 class="fw-bold">Your cart is empty</h2>
-            <p class="text-muted">You cannot proceed to checkout without items in your cart.</p>
-            <a href="{{ url_for('product.products') }}" class="btn btn-success rounded-pill px-4">
-                Start Shopping
+            <a href="{{ url_for('cart.cart') }}" class="checkout-return">
+                <span aria-hidden="true">&larr;</span>
+                Return to Cart
             </a>
         </div>
+
+
+        {% if checkout_items %}
+
+        <form method="POST" action="{{ url_for('cart.checkout') }}">
+
+            <!-- CSRF TOKEN -->
+            {% if csrf_token is defined and csrf_token is callable %}
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            {% elif csrf_token is defined %}
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            {% endif %}
+
+
+            <div class="row g-3 g-lg-4">
+
+                <!-- ==================================================
+                     LEFT COLUMN
+                     SHIPPING & PAYMENT DETAILS
+                     ================================================== -->
+                <div class="col-lg-7">
+
+                    <!-- SHIPPING INFORMATION -->
+                    <section class="checkout-card mb-3 mb-lg-4">
+                        <div class="checkout-card-body">
+
+                            <div class="checkout-card-header">
+                                <span class="checkout-step">1</span>
+
+                                <div>
+                                    <h2 class="checkout-section-title">
+                                        Shipping Information
+                                    </h2>
+
+                                    <p class="checkout-section-description">
+                                        Tell us where and how to contact you.
+                                    </p>
+                                </div>
+                            </div>
+
+
+                            <div class="row checkout-form-row">
+
+                                <!-- FULL NAME -->
+                                <div class="col-md-6">
+                                    <label for="full_name" class="checkout-form-label">
+                                        Full Name
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        class="checkout-form-control"
+                                        id="full_name"
+                                        name="full_name"
+                                        autocomplete="name"
+                                        required
+                                    >
+                                </div>
+
+
+                                <!-- PHONE -->
+                                <div class="col-md-6">
+                                    <label for="phone" class="checkout-form-label">
+                                        Phone Number (M-Pesa)
+                                    </label>
+
+                                    <input
+                                        type="tel"
+                                        class="checkout-form-control"
+                                        id="phone"
+                                        name="phone"
+                                        placeholder="07XXXXXXXX"
+                                        autocomplete="tel"
+                                        inputmode="tel"
+                                        required
+                                    >
+                                </div>
+
+
+                                <!-- EMAIL -->
+                                <div class="col-12">
+                                    <label for="email" class="checkout-form-label">
+                                        Email Address
+                                    </label>
+
+                                    <input
+                                        type="email"
+                                        class="checkout-form-control"
+                                        id="email"
+                                        name="email"
+                                        autocomplete="email"
+                                        required
+                                    >
+                                </div>
+
+
+                                <!-- SHIPPING ADDRESS -->
+                                <div class="col-12">
+                                    <label for="shipping_address" class="checkout-form-label">
+                                        Delivery Address / Location
+                                    </label>
+
+                                    <textarea
+                                        class="checkout-form-control"
+                                        id="shipping_address"
+                                        name="shipping_address"
+                                        rows="3"
+                                        placeholder="Town, Street, Building, Door No."
+                                        autocomplete="street-address"
+                                        required
+                                    ></textarea>
+                                </div>
+
+                            </div>
+                        </div>
+                    </section>
+
+
+                    <!-- PAYMENT METHOD -->
+                    <section class="checkout-card">
+                        <div class="checkout-card-body">
+
+                            <div class="checkout-card-header">
+                                <span class="checkout-step">2</span>
+
+                                <div>
+                                    <h2 class="checkout-section-title">
+                                        Payment Method
+                                    </h2>
+
+                                    <p class="checkout-section-description">
+                                        Select your preferred payment option.
+                                    </p>
+                                </div>
+                            </div>
+
+
+                            <!-- M-PESA -->
+                            <label class="checkout-payment-option" for="mpesa">
+
+                                <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="payment_method"
+                                    id="mpesa"
+                                    value="mpesa"
+                                    checked
+                                >
+
+                                <span class="checkout-payment-title">
+                                    📱 M-Pesa Express (STK Push)
+                                </span>
+
+                                <span class="checkout-payment-description">
+                                    Pay directly via an M-Pesa prompt sent to your phone.
+                                </span>
+
+                            </label>
+
+
+                            <!-- CASH ON DELIVERY -->
+                            <label class="checkout-payment-option" for="cod">
+
+                                <input
+                                    class="form-check-input"
+                                    type="radio"
+                                    name="payment_method"
+                                    id="cod"
+                                    value="cod"
+                                >
+
+                                <span class="checkout-payment-title">
+                                    💵 Cash on Delivery
+                                </span>
+
+                                <span class="checkout-payment-description">
+                                    Pay when your farm supplies arrive at your doorstep.
+                                </span>
+
+                            </label>
+
+                        </div>
+                    </section>
+
+                </div>
+
+
+                <!-- ==================================================
+                     RIGHT COLUMN
+                     ORDER SUMMARY
+                     ================================================== -->
+                <div class="col-lg-5">
+
+                    <section class="checkout-card checkout-summary-card">
+                        <div class="checkout-card-body">
+
+                            <!-- SUMMARY HEADER -->
+                            <div class="checkout-summary-header">
+
+                                <h2 class="checkout-summary-title">
+                                    Order Summary
+                                </h2>
+
+                                <span class="checkout-secure-badge">
+                                    🔒 Secure
+                                </span>
+
+                            </div>
+
+
+                            <!-- ITEMS -->
+                            <div class="checkout-items">
+
+                                {% if buy_now_mode %}
+
+                                    {% for item in checkout_items %}
+
+                                        <div class="checkout-item">
+
+                                            <div class="checkout-item-main">
+
+                                                {% if item.product.images %}
+
+                                                    {% set primary_image =
+                                                        item.product.images
+                                                        | selectattr("is_primary", "equalto", true)
+                                                        | first
+                                                    %}
+
+                                                    <img
+                                                        src="{{ primary_image.image_url if primary_image else item.product.images[0].image_url }}"
+                                                        alt="{{ item.product.name }}"
+                                                        width="60"
+                                                        height="60"
+                                                        class="checkout-item-image"
+                                                        loading="lazy"
+                                                        decoding="async"
+                                                    >
+
+                                                {% endif %}
+
+
+                                                <div class="checkout-item-details">
+
+                                                    <p class="checkout-item-name">
+                                                        {{ item.product.name }}
+                                                    </p>
+
+                                                    <span class="checkout-item-meta">
+                                                        Quantity: {{ item.quantity }}
+                                                    </span>
+
+                                                </div>
+
+                                            </div>
+
+
+                                            <div class="checkout-item-price">
+                                                KSh {{ "{:,.2f}".format(item.subtotal) }}
+                                            </div>
+
+                                        </div>
+
+                                    {% endfor %}
+
+                                {% else %}
+
+                                    {% for item in checkout_items %}
+
+                                        <div class="checkout-item">
+
+                                            <div class="checkout-item-main">
+
+                                                <div class="checkout-item-details">
+
+                                                    <p class="checkout-item-name">
+                                                        {{ item.product.name }}
+                                                    </p>
+
+                                                    <span class="checkout-item-meta">
+                                                        {{ item.quantity }} ×
+                                                        KSh {{ "{:,.2f}".format(item.unit_price) }}
+                                                    </span>
+
+                                                </div>
+
+                                            </div>
+
+
+                                            <div class="checkout-item-price">
+                                                KSh {{ "{:,.2f}".format(item.subtotal) }}
+                                            </div>
+
+                                        </div>
+
+                                    {% endfor %}
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <!-- TOTAL -->
+                            <div class="checkout-total">
+
+                                <span class="checkout-total-label">
+                                    Total
+                                </span>
+
+                                <span class="checkout-total-value">
+                                    KSh {{ "{:,.2f}".format(total) }}
+                                </span>
+
+                            </div>
+
+
+                            <!-- PLACE ORDER -->
+                            <button
+                                type="submit"
+                                class="checkout-submit"
+                            >
+                                <i class="bi bi-check2-circle" aria-hidden="true"></i>
+                                Place Order
+                            </button>
+
+
+                            <!-- SECURITY -->
+                            <div class="checkout-security">
+                                <span aria-hidden="true">🔒</span>
+                                Encrypted &amp; Secure Checkout
+                            </div>
+
+                        </div>
+                    </section>
+
+                </div>
+
+            </div>
+
+        </form>
+
+        {% else %}
+
+        <!-- ==================================================
+             EMPTY CART
+             ================================================== -->
+        <div class="checkout-empty">
+
+            <div class="checkout-empty-icon" aria-hidden="true">
+                🛒
+            </div>
+
+            <h2 class="checkout-empty-title">
+                Your cart is empty
+            </h2>
+
+            <p class="checkout-empty-text">
+                You cannot proceed to checkout without items in your cart.
+            </p>
+
+            <a
+                href="{{ url_for('product.products') }}"
+                class="checkout-shop-btn"
+            >
+                Start Shopping
+            </a>
+
+        </div>
+
+        {% endif %}
+
     </div>
-
-    {% endif %}
-
 </div>
+
 {% endblock %}

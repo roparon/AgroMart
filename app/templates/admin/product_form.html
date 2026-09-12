@@ -1,201 +1,981 @@
 {% extends "base.html" %}
 
+{% block title %}Products | AgroMart Admin{% endblock %}
+
+{% block styles %}
+
+<style>
+    /* ==========================================================
+       BOMET MACHINERIES LTD.
+       PRODUCTS ADMIN — MOBILE-FIRST PROFESSIONAL UI
+       ========================================================== */
+
+    :root {
+        --bm-green: #15803d;
+        --bm-green-dark: #166534;
+        --bm-green-soft: #f0fdf4;
+        --bm-yellow: #f59e0b;
+        --bm-yellow-soft: #fffbeb;
+        --bm-red: #dc2626;
+        --bm-red-soft: #fef2f2;
+        --bm-blue: #2563eb;
+        --bm-blue-soft: #eff6ff;
+
+        --bm-text: #111827;
+        --bm-text-soft: #374151;
+        --bm-muted: #6b7280;
+        --bm-border: #e5e7eb;
+        --bm-border-light: #f1f5f9;
+        --bm-background: #f8fafc;
+        --bm-white: #ffffff;
+
+        --bm-radius: 14px;
+        --bm-radius-sm: 10px;
+        --bm-shadow: 0 4px 18px rgba(15, 23, 42, .06);
+        --bm-shadow-hover: 0 8px 24px rgba(15, 23, 42, .09);
+    }
+
+    .products-admin-page {
+        max-width: 1450px;
+        margin: 0 auto;
+    }
+
+    /* ----------------------------------------------------------
+       PAGE HEADER
+       ---------------------------------------------------------- */
+
+    .products-page-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--bm-green);
+        font-size: .72rem;
+        font-weight: 800;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+        margin-bottom: 5px;
+    }
+
+    .products-page-title {
+        color: var(--bm-text);
+        font-size: 1.65rem;
+        line-height: 1.2;
+        letter-spacing: -.02em;
+    }
+
+    .products-page-description {
+        color: var(--bm-muted);
+        font-size: .9rem;
+    }
+
+    .add-product-btn {
+        min-height: 44px;
+        border-radius: var(--bm-radius-sm);
+        padding: 9px 17px;
+        font-size: .86rem;
+        font-weight: 800;
+        box-shadow: 0 3px 10px rgba(21, 128, 61, .14);
+        transition: transform .15s ease,
+                    box-shadow .15s ease,
+                    background .15s ease;
+    }
+
+    .add-product-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(21, 128, 61, .18);
+    }
+
+    /* ----------------------------------------------------------
+       FLASH MESSAGES
+       ---------------------------------------------------------- */
+
+    .products-flash {
+        border-radius: var(--bm-radius-sm);
+        border-width: 1px;
+        font-size: .86rem;
+        font-weight: 600;
+    }
+
+    /* ----------------------------------------------------------
+       COMMON CARD
+       ---------------------------------------------------------- */
+
+    .products-card {
+        background: var(--bm-white);
+        border: 1px solid var(--bm-border-light);
+        border-radius: var(--bm-radius);
+        box-shadow: var(--bm-shadow);
+        overflow: hidden;
+    }
+
+    /* ----------------------------------------------------------
+       MOBILE PRODUCT LIST
+       ---------------------------------------------------------- */
+
+    .mobile-products-list .list-group-item {
+        border-color: var(--bm-border-light);
+        background: var(--bm-white);
+    }
+
+    .mobile-products-list .list-group-item:last-child {
+        border-bottom: 0;
+    }
+
+    .mobile-product-item {
+        padding: 15px !important;
+        transition: background .15s ease;
+    }
+
+    .mobile-product-item:hover {
+        background: #fcfdfd;
+    }
+
+    .product-thumbnail {
+        width: 66px;
+        height: 66px;
+        flex: 0 0 66px;
+        border: 1px solid var(--bm-border);
+        border-radius: 11px;
+        background: #f8fafc;
+        object-fit: cover;
+        display: block;
+    }
+
+    .product-no-image {
+        width: 66px;
+        height: 66px;
+        flex: 0 0 66px;
+        border: 1px dashed #d1d5db;
+        border-radius: 11px;
+        background: #f8fafc;
+        color: var(--bm-muted);
+        font-size: .62rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 5px;
+    }
+
+    .product-mobile-name {
+        color: var(--bm-text);
+        font-size: .92rem;
+        line-height: 1.25;
+        font-weight: 800;
+    }
+
+    .product-mobile-brand {
+        color: var(--bm-muted);
+        font-size: .74rem;
+        line-height: 1.25;
+    }
+
+    .product-mobile-price {
+        color: var(--bm-green);
+        font-size: .92rem;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+
+    .discount-badge {
+        display: inline-flex;
+        align-items: center;
+        min-height: 20px;
+        padding: 2px 6px;
+        border-radius: 6px;
+        background: var(--bm-red-soft);
+        color: var(--bm-red);
+        font-size: .63rem;
+        font-weight: 800;
+        vertical-align: middle;
+    }
+
+    /* ----------------------------------------------------------
+       MOBILE META GRID
+       ---------------------------------------------------------- */
+
+    .mobile-product-meta {
+        background: var(--bm-background);
+        border: 1px solid var(--bm-border-light);
+        border-radius: 10px;
+        padding: 9px 5px;
+    }
+
+    .mobile-meta-column {
+        min-width: 0;
+    }
+
+    .mobile-meta-column.border-end {
+        border-color: var(--bm-border) !important;
+    }
+
+    .mobile-meta-label {
+        display: block;
+        color: var(--bm-muted);
+        font-size: .61rem;
+        line-height: 1;
+        font-weight: 800;
+        letter-spacing: .04em;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+    }
+
+    .mobile-meta-value {
+        display: block;
+        color: var(--bm-text-soft);
+        font-size: .72rem;
+        font-weight: 700;
+        line-height: 1.2;
+    }
+
+    .stock-badge,
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 22px;
+        padding: 3px 8px;
+        border-radius: 7px;
+        font-size: .64rem;
+        font-weight: 800;
+    }
+
+    /* ----------------------------------------------------------
+       MOBILE ACTIONS
+       ---------------------------------------------------------- */
+
+    .product-action-btn {
+        min-height: 38px;
+        border-radius: 8px;
+        font-size: .74rem;
+        font-weight: 800;
+        transition: transform .15s ease,
+                    box-shadow .15s ease,
+                    background .15s ease;
+    }
+
+    .product-action-btn:hover {
+        transform: translateY(-1px);
+    }
+
+    /* ----------------------------------------------------------
+       DESKTOP TABLE
+       ---------------------------------------------------------- */
+
+    .products-table-card {
+        overflow: hidden;
+    }
+
+    .products-table {
+        color: var(--bm-text-soft);
+        font-size: .84rem;
+    }
+
+    .products-table thead th {
+        background: #f8fafc;
+        color: var(--bm-muted);
+        border-bottom: 1px solid var(--bm-border);
+        padding-top: 12px;
+        padding-bottom: 12px;
+        font-size: .68rem;
+        font-weight: 800;
+        letter-spacing: .05em;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .products-table tbody td {
+        border-bottom: 1px solid var(--bm-border-light);
+        padding-top: 12px;
+        padding-bottom: 12px;
+        vertical-align: middle;
+    }
+
+    .products-table tbody tr:last-child td {
+        border-bottom: 0;
+    }
+
+    .products-table tbody tr {
+        transition: background .15s ease;
+    }
+
+    .products-table tbody tr:hover {
+        background: #fbfdfb;
+    }
+
+    .desktop-product-image {
+        width: 54px;
+        height: 54px;
+        border-radius: 10px;
+        border: 1px solid var(--bm-border);
+        object-fit: cover;
+        background: #f8fafc;
+        display: block;
+    }
+
+    .desktop-no-image {
+        width: 54px;
+        height: 54px;
+        border-radius: 10px;
+        border: 1px dashed #d1d5db;
+        background: #f8fafc;
+        color: var(--bm-muted);
+        font-size: .58rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .desktop-product-name {
+        color: var(--bm-text);
+        font-size: .85rem;
+        font-weight: 800;
+        line-height: 1.3;
+    }
+
+    .desktop-product-brand {
+        color: var(--bm-muted);
+        font-size: .7rem;
+    }
+
+    .desktop-price {
+        color: var(--bm-green-dark);
+        font-weight: 800;
+        white-space: nowrap;
+    }
+
+    .desktop-discount {
+        color: var(--bm-red);
+        font-size: .68rem;
+        font-weight: 700;
+    }
+
+    .table-status-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 24px;
+        padding: 3px 8px;
+        border-radius: 7px;
+        font-size: .65rem;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+
+    .featured-badge {
+        display: inline-flex;
+        align-items: center;
+        min-height: 22px;
+        padding: 3px 7px;
+        border-radius: 7px;
+        background: var(--bm-yellow-soft);
+        color: #92400e;
+        border: 1px solid #fde68a;
+        font-size: .62rem;
+        font-weight: 800;
+    }
+
+    .desktop-action-btn {
+        min-height: 34px;
+        padding: 5px 10px;
+        border-radius: 8px;
+        font-size: .7rem;
+        font-weight: 800;
+        transition: transform .15s ease,
+                    box-shadow .15s ease;
+    }
+
+    .desktop-action-btn:hover {
+        transform: translateY(-1px);
+    }
+
+    /* ----------------------------------------------------------
+       EMPTY STATE
+       ---------------------------------------------------------- */
+
+    .empty-products-card {
+        padding: 50px 20px;
+    }
+
+    .empty-products-icon {
+        width: 64px;
+        height: 64px;
+        margin: 0 auto 16px;
+        border-radius: 16px;
+        background: var(--bm-green-soft);
+        color: var(--bm-green);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.65rem;
+    }
+
+    .empty-products-title {
+        color: var(--bm-text);
+        font-size: 1.1rem;
+        font-weight: 800;
+    }
+
+    .empty-products-text {
+        color: var(--bm-muted);
+        font-size: .84rem;
+        max-width: 430px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .empty-add-btn {
+        min-height: 42px;
+        border-radius: 9px;
+        font-size: .8rem;
+        font-weight: 800;
+        padding: 8px 16px;
+    }
+
+    /* ----------------------------------------------------------
+       RESPONSIVE
+       ---------------------------------------------------------- */
+
+    @media (min-width: 768px) {
+        .products-page-title {
+            font-size: 2rem;
+        }
+
+        .products-page-description {
+            font-size: .92rem;
+        }
+    }
+
+    @media (min-width: 992px) {
+        .products-admin-page {
+            padding-left: 4px;
+            padding-right: 4px;
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .products-page-title {
+            font-size: 1.45rem;
+        }
+
+        .products-page-description {
+            font-size: .78rem;
+        }
+
+        .add-product-btn {
+            width: 100%;
+        }
+
+        .empty-products-card {
+            padding: 40px 16px;
+        }
+    }
+
+    @media (max-width: 379.98px) {
+        .mobile-product-item {
+            padding: 12px !important;
+        }
+
+        .product-thumbnail,
+        .product-no-image {
+            width: 58px;
+            height: 58px;
+            flex-basis: 58px;
+        }
+
+        .product-mobile-name {
+            font-size: .84rem;
+        }
+
+        .product-mobile-price {
+            font-size: .83rem;
+        }
+
+        .mobile-meta-label {
+            font-size: .57rem;
+        }
+
+        .mobile-meta-value {
+            font-size: .67rem;
+        }
+    }
+</style>
+
+{% endblock %}
+
 {% block content %}
 
-<div class="container mt-4 mb-5">
+<div class="container py-3 py-md-4 products-admin-page">
 
-    <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h1>{{ title }}</h1>
-            <p class="text-muted mb-0">
-                Manage your AgroMart product information.
-            </p>
+<!-- Header & Action Button -->
+<div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-3 mb-md-4">
+    <div>
+        <div class="products-page-kicker">
+            <i class="bi bi-box-seam"></i>
+            Product Management
         </div>
 
-        <a href="{{ url_for('admin_products.products') }}" class="btn btn-outline-secondary">
-            ← Back to Products
+        <h1 class="products-page-title fw-bold mb-1">
+            Products
+        </h1>
+
+        <p class="products-page-description mb-0">
+            Manage your shop products, pricing, stock and availability.
+        </p>
+    </div>
+
+    <div>
+        <a href="{{ url_for('admin_products.add_product') }}"
+           class="btn btn-success add-product-btn">
+            <i class="bi bi-plus-lg me-1"></i>
+            Add Product
         </a>
     </div>
+</div>
 
-    <!-- Global Form Validation Errors -->
-    {% if form.errors %}
-        <div class="alert alert-danger rounded-3 mb-4 shadow-sm">
-            <h6 class="fw-bold mb-2">
-                <i class="bi bi-exclamation-triangle-fill me-2"></i>Please fix the following form errors:
-            </h6>
-            <ul class="mb-0 ps-3">
-                {% for field, errors in form.errors.items() %}
-                    <li><strong>{{ field }}:</strong> {{ errors|join(', ') }}</li>
-                {% endfor %}
-            </ul>
-        </div>
+<!-- Flash Messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show products-flash shadow-sm mb-3"
+                 role="alert">
+                {{ message }}
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Close"></button>
+            </div>
+        {% endfor %}
     {% endif %}
+{% endwith %}
 
-    <!-- Main Product Form -->
-    <div class="card shadow-sm">
-        <div class="card-body p-4">
+<!-- Products -->
+{% if products %}
 
-            <form method="POST" action="" enctype="multipart/form-data">
-                {{ form.hidden_tag() }}
+    <!-- ======================================================
+         MOBILE VIEW
+         ====================================================== -->
+    <div class="d-block d-md-none">
+        <div class="products-card mobile-products-list">
 
-                <div class="row g-3">
+            <ul class="list-group list-group-flush">
 
-                    <!-- Product Name -->
-                    <div class="col-md-6">
-                        {{ form.name.label(class="form-label fw-bold") }}
-                        {{ form.name(class="form-control", placeholder="Example: Diesel Posho Mill") }}
-                        {% for error in form.name.errors %}
-                            <div class="text-danger small mt-1">{{ error }}</div>
-                        {% endfor %}
-                    </div>
+                {% for product in products %}
 
-                    <!-- Brand -->
-                    <div class="col-md-6">
-                        {{ form.brand.label(class="form-label fw-bold") }}
-                        {{ form.brand(class="form-control", placeholder="Example: Lister") }}
-                        {% for error in form.brand.errors %}
-                            <div class="text-danger small mt-1">{{ error }}</div>
-                        {% endfor %}
-                    </div>
+                    <li class="list-group-item mobile-product-item">
 
-                    <!-- Description -->
-                    <div class="col-12">
-                        {{ form.description.label(class="form-label fw-bold") }}
-                        {{ form.description(class="form-control", rows="4", placeholder="Describe the product...") }}
-                        {% for error in form.description.errors %}
-                            <div class="text-danger small mt-1">{{ error }}</div>
-                        {% endfor %}
-                    </div>
+                        <!-- Product Summary -->
+                        <div class="d-flex align-items-center gap-3 mb-3">
 
-                    <!-- Price -->
-                    <div class="col-md-4">
-                        {{ form.price.label(class="form-label fw-bold") }}
-                        {{ form.price(class="form-control", placeholder="0.00") }}
-                        {% for error in form.price.errors %}
-                            <div class="text-danger small mt-1">{{ error }}</div>
-                        {% endfor %}
-                    </div>
+                            <!-- Image -->
+                            <div class="flex-shrink-0">
 
-                    <!-- Discount -->
-                    <div class="col-md-4">
-                        {{ form.discount.label(class="form-label fw-bold") }}
-                        {{ form.discount(class="form-control", placeholder="0") }}
-                        {% for error in form.discount.errors %}
-                            <div class="text-danger small mt-1">{{ error }}</div>
-                        {% endfor %}
-                    </div>
+                                {% if product.images %}
 
-                    <!-- Stock -->
-                    <div class="col-md-4">
-                        {{ form.stock.label(class="form-label fw-bold") }}
-                        {{ form.stock(class="form-control", placeholder="0") }}
-                        {% for error in form.stock.errors %}
-                            <div class="text-danger small mt-1">{{ error }}</div>
-                        {% endfor %}
-                    </div>
+                                    {% set primary_image = product.images
+                                        | selectattr("is_primary", "equalto", true)
+                                        | first %}
 
-                    <!-- SKU -->
-                    <div class="col-md-6">
-                        {{ form.sku.label(class="form-label fw-bold") }}
-                        {{ form.sku(class="form-control", placeholder="Example: AGM-PM-001") }}
-                        {% for error in form.sku.errors %}
-                            <div class="text-danger small mt-1">{{ error }}</div>
-                        {% endfor %}
-                    </div>
+                                    {% if primary_image %}
 
-                    <!-- Slug -->
-                    <div class="col-md-6">
-                        {{ form.slug.label(class="form-label fw-bold") }}
-                        {{ form.slug(class="form-control", placeholder="example-product-name") }}
-                        {% for error in form.slug.errors %}
-                            <div class="text-danger small mt-1">{{ error }}</div>
-                        {% endfor %}
-                    </div>
+                                        <img src="{{ primary_image.image_url }}"
+                                             alt="{{ product.name }}"
+                                             class="product-thumbnail">
 
-                    <!-- Category -->
-                    <div class="col-md-6">
-                        {{ form.category.label(class="form-label fw-bold") }}
-                        {{ form.category(class="form-select") }}
-                        {% for error in form.category.errors %}
-                            <div class="text-danger small mt-1">{{ error }}</div>
-                        {% endfor %}
-                    </div>
+                                    {% else %}
 
-                    <!-- Status -->
-                    <div class="col-md-6">
-                        <label class="form-label fw-bold">Product Status</label>
-                        <div class="form-check">
-                            {{ form.is_active(class="form-check-input") }}
-                            {{ form.is_active.label(class="form-check-label") }}
+                                        <div class="product-no-image">
+                                            No Image
+                                        </div>
+
+                                    {% endif %}
+
+                                {% else %}
+
+                                    <div class="product-no-image">
+                                        No Image
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+                            <!-- Name / Brand / Price -->
+                            <div class="flex-grow-1 min-w-0">
+
+                                <h6 class="product-mobile-name text-truncate mb-1">
+                                    {{ product.name }}
+                                </h6>
+
+                                {% if product.brand %}
+                                    <small class="product-mobile-brand d-block text-truncate mb-1">
+                                        {{ product.brand }}
+                                    </small>
+                                {% endif %}
+
+                                <div class="product-mobile-price">
+
+                                    KSh {{ "{:,.2f}".format(product.price) }}
+
+                                    {% if product.discount %}
+                                        <span class="discount-badge ms-1">
+                                            -{{ product.discount }}%
+                                        </span>
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
                         </div>
-                        <div class="form-check mt-2">
-                            {{ form.featured(class="form-check-input") }}
-                            {{ form.featured.label(class="form-check-label") }}
+
+                        <!-- Product Meta -->
+                        <div class="mobile-product-meta mb-3">
+
+                            <div class="row g-2 text-center">
+
+                                <!-- Category -->
+                                <div class="col-4 mobile-meta-column border-end">
+
+                                    <span class="mobile-meta-label">
+                                        Category
+                                    </span>
+
+                                    <span class="mobile-meta-value text-truncate">
+                                        {{ product.category.name if product.category else 'None' }}
+                                    </span>
+
+                                </div>
+
+                                <!-- Stock -->
+                                <div class="col-4 mobile-meta-column border-end">
+
+                                    <span class="mobile-meta-label">
+                                        Stock
+                                    </span>
+
+                                    {% if product.stock > 0 %}
+
+                                        <span class="badge bg-success-subtle text-success stock-badge">
+                                            {{ product.stock }}
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge bg-danger-subtle text-danger stock-badge">
+                                            Out
+                                        </span>
+
+                                    {% endif %}
+
+                                </div>
+
+                                <!-- Status -->
+                                <div class="col-4 mobile-meta-column">
+
+                                    <span class="mobile-meta-label">
+                                        Status
+                                    </span>
+
+                                    {% if product.is_active %}
+
+                                        <span class="badge bg-success-subtle text-success status-badge">
+                                            Active
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge bg-secondary-subtle text-secondary status-badge">
+                                            Inactive
+                                        </span>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
                         </div>
-                    </div>
 
-                    <!-- Upload New Product Image -->
-                    <div class="col-12 mt-3">
-                        <label for="image" class="form-label fw-bold">Upload New Image</label>
-                        <input type="file" name="images" id="image" class="form-control" accept=".jpg,.jpeg,.png,.webp">
-                        <div class="form-text">Allowed formats: JPG, JPEG, PNG, WEBP. Maximum size: 5MB.</div>
-                    </div>
+                        <!-- Actions -->
+                        <div class="row g-2">
 
-                </div>
+                            <div class="col-6">
 
-                <!-- Submit & Cancel Buttons -->
-                <hr class="my-4">
-                <div class="d-flex gap-2">
-                    {{ form.submit(class="btn btn-success px-4") }}
-                    <a href="{{ url_for('admin_products.products') }}" class="btn btn-secondary">
-                        Cancel
-                    </a>
-                </div>
+                                <a href="{{ url_for('admin_products.edit_product', product_id=product.id) }}"
+                                   class="btn btn-outline-primary product-action-btn w-100">
+                                    <i class="bi bi-pencil-square me-1"></i>
+                                    Edit
+                                </a>
 
-            </form>
+                            </div>
+
+                            <div class="col-6">
+
+                                <form action="{{ url_for('admin_products.delete_product', product_id=product.id) }}"
+                                      method="POST"
+                                      class="w-100"
+                                      onsubmit="return confirm('Are you sure you want to delete this product?');">
+
+                                    <input type="hidden"
+                                           name="csrf_token"
+                                           value="{{ csrf_token() }}">
+
+                                    <button type="submit"
+                                            class="btn btn-outline-danger product-action-btn w-100">
+                                        <i class="bi bi-trash3 me-1"></i>
+                                        Delete
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+
+                    </li>
+
+                {% endfor %}
+
+            </ul>
 
         </div>
     </div>
 
-    <!-- Existing Product Images (Placed OUTSIDE main form to avoid form nesting) -->
-    {% if product and product.images %}
-        <div class="card shadow-sm mt-4 p-4">
-            <h5 class="fw-bold mb-3">Existing Product Images</h5>
-            <div class="row g-3">
-                {% for image in product.images %}
-                    <div class="col-md-4 col-lg-3">
-                        <div class="card h-100 shadow-sm">
-                            <img src="{{ image.image_url }}" class="card-img-top" alt="{{ product.name }}" style="height: 180px; object-fit: cover;">
-                            
-                            <div class="card-body text-center p-2">
-                                {% if image.is_primary %}
-                                    <span class="badge bg-success w-100 mb-2 py-2">Primary Image</span>
+    <!-- ======================================================
+         DESKTOP VIEW
+         ====================================================== -->
+    <div class="products-card products-table-card d-none d-md-block">
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle products-table mb-0">
+
+                <thead>
+                    <tr>
+                        <th class="ps-3">Image</th>
+                        <th>Product</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                        <th>Status</th>
+                        <th class="text-end pe-3">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for product in products %}
+
+                        <tr>
+
+                            <!-- Image -->
+                            <td class="ps-3">
+
+                                {% if product.images %}
+
+                                    {% set primary_image = product.images
+                                        | selectattr("is_primary", "equalto", true)
+                                        | first %}
+
+                                    {% if primary_image %}
+
+                                        <img src="{{ primary_image.image_url }}"
+                                             alt="{{ product.name }}"
+                                             class="desktop-product-image">
+
+                                    {% else %}
+
+                                        <div class="desktop-no-image">
+                                            No Image
+                                        </div>
+
+                                    {% endif %}
+
                                 {% else %}
-                                    <!-- Standalone form for Set Primary -->
-                                    <form method="POST" action="{{ url_for('admin_products.set_primary_image', image_id=image.id) }}" class="mb-2">
-                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() if csrf_token else '' }}">
-                                        <button type="submit" class="btn btn-sm btn-outline-success w-100">
-                                            Set as Primary
-                                        </button>
-                                    </form>
+
+                                    <div class="desktop-no-image">
+                                        No Image
+                                    </div>
+
                                 {% endif %}
 
-                                <!-- Standalone form for Delete -->
-                                <form method="POST" action="{{ url_for('admin_products.delete_product_image', image_id=image.id) }}" onsubmit="return confirm('Are you sure you want to delete this image?');">
-                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() if csrf_token else '' }}">
-                                    <button type="submit" class="btn btn-sm btn-outline-danger w-100">
-                                        Delete Image
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-    {% endif %}
+                            </td>
 
+                            <!-- Product -->
+                            <td>
+
+                                <strong class="desktop-product-name d-block">
+                                    {{ product.name }}
+                                </strong>
+
+                                {% if product.brand %}
+                                    <small class="desktop-product-brand">
+                                        {{ product.brand }}
+                                    </small>
+                                {% endif %}
+
+                            </td>
+
+                            <!-- Category -->
+                            <td>
+
+                                {% if product.category %}
+
+                                    <span class="fw-semibold">
+                                        {{ product.category.name }}
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="text-muted">
+                                        No category
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <!-- Price -->
+                            <td>
+
+                                <span class="desktop-price">
+                                    KSh {{ "{:,.2f}".format(product.price) }}
+                                </span>
+
+                                {% if product.discount %}
+
+                                    <br>
+
+                                    <small class="desktop-discount">
+                                        -{{ product.discount }}%
+                                    </small>
+
+                                {% endif %}
+
+                            </td>
+
+                            <!-- Stock -->
+                            <td>
+
+                                {% if product.stock > 0 %}
+
+                                    <span class="badge bg-success table-status-badge">
+                                        {{ product.stock }}
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge bg-danger table-status-badge">
+                                        Out of stock
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <!-- Status -->
+                            <td>
+
+                                {% if product.is_active %}
+
+                                    <span class="badge bg-success table-status-badge">
+                                        Active
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge bg-secondary table-status-badge">
+                                        Inactive
+                                    </span>
+
+                                {% endif %}
+
+                                {% if product.featured %}
+
+                                    <br>
+
+                                    <span class="featured-badge mt-1">
+                                        <i class="bi bi-star-fill me-1"></i>
+                                        Featured
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <!-- Actions -->
+                            <td class="text-end pe-3">
+
+                                <a href="{{ url_for('admin_products.edit_product', product_id=product.id) }}"
+                                   class="btn btn-outline-primary desktop-action-btn me-1">
+                                    <i class="bi bi-pencil-square me-1"></i>
+                                    Edit
+                                </a>
+
+                                <form action="{{ url_for('admin_products.delete_product', product_id=product.id) }}"
+                                      method="POST"
+                                      class="d-inline"
+                                      onsubmit="return confirm('Are you sure you want to delete this product?');">
+
+                                    <input type="hidden"
+                                           name="csrf_token"
+                                           value="{{ csrf_token() }}">
+
+                                    <button type="submit"
+                                            class="btn btn-outline-danger desktop-action-btn">
+                                        <i class="bi bi-trash3 me-1"></i>
+                                        Delete
+                                    </button>
+
+                                </form>
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+{% else %}
+
+    <!-- ======================================================
+         EMPTY STATE
+         ====================================================== -->
+    <div class="products-card empty-products-card text-center">
+
+        <div class="empty-products-icon">
+            <i class="bi bi-box-seam"></i>
+        </div>
+
+        <h4 class="empty-products-title mb-2">
+            No products yet
+        </h4>
+
+        <p class="empty-products-text mb-4">
+            Start building your Bomet Machineries product catalog
+            by adding your first product.
+        </p>
+
+        <a href="{{ url_for('admin_products.add_product') }}"
+           class="btn btn-success empty-add-btn">
+            <i class="bi bi-plus-lg me-1"></i>
+            Add Your First Product
+        </a>
+
+    </div>
+
+{% endif %}
 </div>
 
 {% endblock %}
