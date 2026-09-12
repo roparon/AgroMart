@@ -80,8 +80,14 @@ def create_app():
     def inject_cart_count():
 
         cart_count = 0
+        wishlist_count = 0
 
         if current_user.is_authenticated:
+
+            # ====================================================
+            # CART COUNT
+            # ====================================================
+
             from app.models.cart import Cart
 
             cart = Cart.query.filter_by(
@@ -94,8 +100,21 @@ def create_app():
                     for item in cart.items
                 )
 
+
+            # ====================================================
+            # WISHLIST COUNT
+            # ====================================================
+
+            from app.models.wishlist import Wishlist
+
+            wishlist_count = Wishlist.query.filter_by(
+                user_id=current_user.id
+            ).count()
+
+
         return {
-            "cart_count": cart_count
+            "cart_count": cart_count,
+            "wishlist_count": wishlist_count
         }
 
 
