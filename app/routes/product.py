@@ -1,18 +1,8 @@
 from decimal import Decimal, InvalidOperation
-
-from flask import (
-    Blueprint,
-    render_template,
-    request,
-    session,
-    abort,
-)
-
+from flask import (Blueprint, render_template, request, session, abort,)
 from flask_login import current_user
-
 from sqlalchemy import or_, and_, func
 from sqlalchemy.orm import joinedload, selectinload
-
 from app.models.product import Product
 from app.models.category import Category
 from app.models.wishlist import Wishlist

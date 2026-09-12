@@ -1573,7 +1573,7 @@
                 {% if current_user.is_authenticated %}
 
                     <a
-                        href="{{ url_for('orders.orders') }}"
+                        href="{{ url_for('cart.order_details', order_id=order.id) }}"
                         class="confirmation-action confirmation-action-secondary"
                     >
 

@@ -97,29 +97,6 @@ def add_product():
     if form.validate_on_submit():
 
         # ----------------------------------------------------
-        # CHECK SKU
-        # ----------------------------------------------------
-
-        if form.sku.data:
-
-            existing_sku = Product.query.filter_by(
-                sku=form.sku.data
-            ).first()
-
-            if existing_sku:
-
-                flash(
-                    "A product with this SKU already exists.",
-                    "danger",
-                )
-
-                return render_template(
-                    "admin/product_form.html",
-                    form=form,
-                    title="Add Product",
-                )
-
-        # ----------------------------------------------------
         # CHECK SLUG
         # ----------------------------------------------------
 
@@ -153,7 +130,6 @@ def add_product():
             price=form.price.data,
             discount=form.discount.data or 0,
             stock=form.stock.data,
-            sku=form.sku.data,
             slug=form.slug.data,
             category_id=form.category.data,
             featured=form.featured.data,
@@ -162,8 +138,22 @@ def add_product():
 
         db.session.add(product)
 
-        # Flush so product.id is available before images
+        # ----------------------------------------------------
+        # FLUSH
+        # This gives the product its database ID.
+        # ----------------------------------------------------
+
         db.session.flush()
+
+        # ----------------------------------------------------
+        # AUTO-GENERATE SKU
+        # Example:
+        # BM-000001
+        # BM-000002
+        # BM-000003
+        # ----------------------------------------------------
+
+        product.sku = f"BM-{product.id:06d}"
 
         # ----------------------------------------------------
         # SAVE PRODUCT IMAGES
@@ -258,7 +248,7 @@ def add_product():
         db.session.commit()
 
         flash(
-            "Product created successfully.",
+            f"Product created successfully. SKU: {product.sku}",
             "success",
         )
 
@@ -373,7 +363,6 @@ def edit_product(product_id):
         product.price = form.price.data
         product.discount = form.discount.data or 0
         product.stock = form.stock.data
-        product.sku = form.sku.data
         product.slug = form.slug.data
         product.category_id = form.category.data
         product.featured = form.featured.data
