@@ -2,49 +2,778 @@
 
 {% block content %}
 
-<div class="container-fluid px-3 px-md-4 py-4">
+<style>
+/* ============================================================
+   BOMET MACHINERIES LTD.
+   ADMIN CATEGORY FORM
+   Production-ready mobile-first design
+   ============================================================ */
+
+:root {
+    --bm-green: #15803d;
+    --bm-green-dark: #166534;
+    --bm-green-soft: #f0fdf4;
+
+    --bm-blue: #2563eb;
+    --bm-blue-dark: #1d4ed8;
+    --bm-blue-soft: #eff6ff;
+
+    --bm-text: #111827;
+    --bm-text-soft: #374151;
+    --bm-muted: #6b7280;
+    --bm-muted-light: #9ca3af;
+
+    --bm-border: #e5e7eb;
+    --bm-border-light: #f1f5f9;
+
+    --bm-background: #f8fafc;
+    --bm-white: #ffffff;
+
+    --bm-danger: #dc2626;
+    --bm-danger-soft: #fef2f2;
+
+    --bm-radius: 14px;
+    --bm-radius-sm: 10px;
+
+    --bm-shadow: 0 4px 18px rgba(15, 23, 42, .06);
+    --bm-shadow-hover: 0 10px 30px rgba(15, 23, 42, .10);
+}
+
+
+/* ============================================================
+   PAGE FOUNDATION
+   ============================================================ */
+
+.bm-category-page {
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
+    color: var(--bm-text);
+}
+
+.bm-category-page *,
+.bm-category-page *::before,
+.bm-category-page *::after {
+    box-sizing: border-box;
+}
+
+
+/* ============================================================
+   PAGE HEADER
+   ============================================================ */
+
+.bm-page-header {
+    margin-bottom: 1.25rem;
+}
+
+.bm-page-title-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+}
+
+.bm-page-title-icon {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: var(--bm-blue-soft);
+    color: var(--bm-blue);
+    font-size: 19px;
+}
+
+.bm-page-title {
+    color: var(--bm-text);
+    font-size: 1.35rem;
+    font-weight: 800;
+    line-height: 1.25;
+    letter-spacing: -.025em;
+    margin: 0;
+}
+
+.bm-page-subtitle {
+    color: var(--bm-muted);
+    font-size: .875rem;
+    line-height: 1.55;
+    margin: 5px 0 0;
+}
+
+.bm-back-btn {
+    width: 100%;
+    min-height: 46px;
+    border-radius: var(--bm-radius-sm);
+    font-weight: 700;
+    font-size: .875rem;
+}
+
+
+/* ============================================================
+   MAIN CARD
+   ============================================================ */
+
+.bm-form-card,
+.bm-tips-card {
+    border: 1px solid var(--bm-border-light);
+    border-radius: var(--bm-radius);
+    background: var(--bm-white);
+    box-shadow: var(--bm-shadow);
+    overflow: hidden;
+}
+
+.bm-form-card-header {
+    padding: 15px 16px;
+    background: linear-gradient(
+        180deg,
+        #ffffff 0%,
+        #fafafa 100%
+    );
+    border-bottom: 1px solid var(--bm-border);
+}
+
+.bm-form-card-header-inner {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.bm-section-icon {
+    width: 36px;
+    height: 36px;
+    flex: 0 0 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: var(--bm-blue-soft);
+    color: var(--bm-blue);
+    font-size: 16px;
+}
+
+.bm-section-title {
+    color: var(--bm-text);
+    font-size: .95rem;
+    font-weight: 800;
+    line-height: 1.3;
+    margin: 0;
+}
+
+.bm-section-subtitle {
+    color: var(--bm-muted);
+    font-size: .78rem;
+    line-height: 1.45;
+    margin: 3px 0 0;
+}
+
+.bm-form-body {
+    padding: 18px 15px;
+}
+
+
+/* ============================================================
+   FORM GROUPS
+   ============================================================ */
+
+.bm-field {
+    margin-bottom: 21px;
+}
+
+.bm-field:last-child {
+    margin-bottom: 0;
+}
+
+.bm-field-label {
+    display: block;
+    color: var(--bm-text-soft);
+    font-size: .84rem;
+    font-weight: 750;
+    line-height: 1.4;
+    margin-bottom: 7px;
+}
+
+.bm-field-label::after {
+    color: var(--bm-danger);
+}
+
+.bm-category-page .form-control,
+.bm-category-page .form-select,
+.bm-category-page .input-group-text {
+    border-color: #d7dce3;
+}
+
+.bm-category-page .form-control {
+    min-height: 45px;
+    color: var(--bm-text);
+    border-radius: var(--bm-radius-sm);
+    font-size: .9rem;
+    box-shadow: none;
+    transition:
+        border-color .15s ease,
+        box-shadow .15s ease,
+        background-color .15s ease;
+}
+
+.bm-category-page textarea.form-control {
+    min-height: 125px;
+    resize: vertical;
+    line-height: 1.55;
+}
+
+.bm-category-page .form-control::placeholder {
+    color: #a3a9b3;
+}
+
+.bm-category-page .form-control:hover {
+    border-color: #b9c0ca;
+}
+
+.bm-category-page .form-control:focus {
+    border-color: var(--bm-blue);
+    background: #fff;
+    box-shadow: 0 0 0 .2rem rgba(37, 99, 235, .10);
+}
+
+.bm-category-page .input-group {
+    flex-wrap: nowrap;
+}
+
+.bm-category-page .input-group-text {
+    min-height: 45px;
+    padding: 8px 10px;
+    background: #f8fafc;
+    color: var(--bm-muted);
+    font-size: .72rem;
+    white-space: nowrap;
+    border-radius: var(--bm-radius-sm) 0 0 var(--bm-radius-sm);
+}
+
+.bm-category-page .input-group .form-control {
+    border-radius: 0 var(--bm-radius-sm) var(--bm-radius-sm) 0;
+}
+
+.bm-form-help {
+    display: block;
+    color: var(--bm-muted);
+    font-size: .75rem;
+    line-height: 1.5;
+    margin-top: 6px;
+}
+
+.bm-form-help code {
+    padding: 2px 5px;
+    border-radius: 5px;
+    background: #f3f4f6;
+    color: var(--bm-text-soft);
+    font-size: .72rem;
+}
+
+
+/* ============================================================
+   VALIDATION ERRORS
+   ============================================================ */
+
+.bm-field-error {
+    display: flex;
+    align-items: flex-start;
+    gap: 5px;
+    color: var(--bm-danger);
+    font-size: .76rem;
+    line-height: 1.45;
+    margin-top: 6px;
+}
+
+.bm-field-error i {
+    margin-top: 2px;
+    flex: 0 0 auto;
+}
+
+
+/* ============================================================
+   IMAGE SECTION
+   ============================================================ */
+
+.bm-image-current {
+    margin-bottom: 12px;
+}
+
+.bm-image-label {
+    display: block;
+    color: var(--bm-muted);
+    font-size: .75rem;
+    font-weight: 700;
+    margin-bottom: 7px;
+}
+
+.bm-image-frame {
+    width: 100%;
+    max-width: 440px;
+    overflow: hidden;
+    border: 1px solid var(--bm-border);
+    border-radius: 12px;
+    background: #f8fafc;
+}
+
+.bm-image-frame img {
+    display: block;
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+.bm-upload-box {
+    padding: 13px;
+    border: 1px dashed #cbd5e1;
+    border-radius: 12px;
+    background: #f8fafc;
+    transition:
+        border-color .15s ease,
+        background-color .15s ease;
+}
+
+.bm-upload-box:hover {
+    border-color: #94a3b8;
+    background: #f8fafc;
+}
+
+.bm-upload-box .form-control {
+    min-height: 45px;
+    background: #fff;
+}
+
+.bm-upload-icon {
+    display: none;
+}
+
+.bm-image-preview {
+    margin-top: 13px;
+}
+
+.bm-image-preview-label {
+    color: var(--bm-muted);
+    font-size: .75rem;
+    font-weight: 700;
+    margin-bottom: 7px;
+}
+
+.bm-image-preview .bm-image-frame {
+    position: relative;
+}
+
+.bm-preview-badge {
+    position: absolute;
+    top: 9px;
+    left: 9px;
+    z-index: 2;
+    padding: 5px 8px;
+    border-radius: 7px;
+    background: rgba(17, 24, 39, .78);
+    color: #fff;
+    font-size: .68rem;
+    font-weight: 700;
+    backdrop-filter: blur(5px);
+}
+
+
+/* ============================================================
+   STATUS SECTION
+   ============================================================ */
+
+.bm-status-box {
+    padding: 13px;
+    border: 1px solid var(--bm-border);
+    border-radius: 12px;
+    background: #fff;
+    transition:
+        border-color .15s ease,
+        background-color .15s ease;
+}
+
+.bm-status-box:hover {
+    border-color: #cbd5e1;
+}
+
+.bm-status-row {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.bm-status-switch {
+    flex: 0 0 auto;
+}
+
+.bm-category-page .form-switch .form-check-input {
+    width: 2.55em;
+    height: 1.4em;
+    margin: 0;
+    cursor: pointer;
+}
+
+.bm-category-page .form-switch .form-check-input:checked {
+    background-color: var(--bm-green);
+    border-color: var(--bm-green);
+}
+
+.bm-status-label {
+    color: var(--bm-text);
+    font-size: .86rem;
+    font-weight: 750;
+    cursor: pointer;
+}
+
+.bm-status-description {
+    color: var(--bm-muted);
+    font-size: .75rem;
+    line-height: 1.5;
+    margin: 7px 0 0 0;
+}
+
+
+/* ============================================================
+   ACTIONS
+   ============================================================ */
+
+.bm-form-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    padding-top: 5px;
+}
+
+.bm-form-actions .btn {
+    width: 100%;
+    min-height: 47px;
+    border-radius: var(--bm-radius-sm);
+    font-size: .875rem;
+    font-weight: 750;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    transition:
+        transform .15s ease,
+        box-shadow .15s ease,
+        background-color .15s ease,
+        border-color .15s ease;
+}
+
+.bm-form-actions .btn:hover {
+    transform: translateY(-1px);
+}
+
+.bm-form-actions .btn:active {
+    transform: translateY(0);
+}
+
+
+/* ============================================================
+   TIPS CARD
+   ============================================================ */
+
+.bm-tips-card {
+    margin-top: 16px;
+}
+
+.bm-tips-body {
+    padding: 16px;
+}
+
+.bm-tips-layout {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+}
+
+.bm-tips-icon {
+    width: 36px;
+    height: 36px;
+    flex: 0 0 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: #fffbeb;
+    color: #d97706;
+    font-size: 17px;
+}
+
+.bm-tips-title {
+    color: var(--bm-text);
+    font-size: .86rem;
+    font-weight: 800;
+    margin: 1px 0 7px;
+}
+
+.bm-tips-list {
+    padding-left: 17px;
+    margin: 0;
+}
+
+.bm-tips-list li {
+    color: var(--bm-muted);
+    font-size: .76rem;
+    line-height: 1.55;
+}
+
+.bm-tips-list li + li {
+    margin-top: 4px;
+}
+
+
+/* ============================================================
+   FOCUS ACCESSIBILITY
+   ============================================================ */
+
+.bm-category-page a:focus-visible,
+.bm-category-page button:focus-visible,
+.bm-category-page input:focus-visible,
+.bm-category-page textarea:focus-visible,
+.bm-category-page select:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, .22);
+    outline-offset: 2px;
+}
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (min-width: 576px) {
+
+    .bm-page-header {
+        margin-bottom: 1.5rem;
+    }
+
+    .bm-page-title {
+        font-size: 1.5rem;
+    }
+
+    .bm-back-btn {
+        width: auto;
+        padding-left: 17px;
+        padding-right: 17px;
+    }
+
+    .bm-form-body {
+        padding: 23px 22px;
+    }
+
+    .bm-form-actions {
+        flex-direction: row;
+    }
+
+    .bm-form-actions .btn {
+        width: auto;
+        min-width: 125px;
+    }
+
+    .bm-image-frame img {
+        height: 240px;
+    }
+}
+
+
+/* ============================================================
+   DESKTOP
+   ============================================================ */
+
+@media (min-width: 768px) {
+
+    .bm-page-title-icon {
+        width: 46px;
+        height: 46px;
+        flex-basis: 46px;
+        font-size: 20px;
+    }
+
+    .bm-page-title {
+        font-size: 1.65rem;
+    }
+
+    .bm-page-subtitle {
+        font-size: .9rem;
+    }
+
+    .bm-form-card-header {
+        padding: 18px 22px;
+    }
+
+    .bm-form-body {
+        padding: 28px;
+    }
+
+    .bm-field {
+        margin-bottom: 24px;
+    }
+
+    .bm-image-frame img {
+        height: 250px;
+    }
+
+    .bm-tips-body {
+        padding: 19px 22px;
+    }
+}
+
+
+/* ============================================================
+   LARGE DESKTOP
+   ============================================================ */
+
+@media (min-width: 992px) {
+
+    .bm-page-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+    }
+
+    .bm-back-btn {
+        flex: 0 0 auto;
+    }
+
+    .bm-form-card {
+        box-shadow: var(--bm-shadow);
+    }
+
+    .bm-form-card:hover,
+    .bm-tips-card:hover {
+        box-shadow: var(--bm-shadow-hover);
+    }
+}
+
+
+/* ============================================================
+   EXTRA LARGE DESKTOP
+   ============================================================ */
+
+@media (min-width: 1200px) {
+
+    .bm-form-body {
+        padding: 30px 34px;
+    }
+
+    .bm-form-card-header {
+        padding: 19px 34px;
+    }
+
+    .bm-image-frame img {
+        height: 260px;
+    }
+}
+
+
+/* ============================================================
+   VERY SMALL DEVICES
+   ============================================================ */
+
+@media (max-width: 380px) {
+
+    .bm-page-title {
+        font-size: 1.2rem;
+    }
+
+    .bm-page-title-icon {
+        width: 38px;
+        height: 38px;
+        flex-basis: 38px;
+        font-size: 17px;
+    }
+
+    .bm-page-subtitle {
+        font-size: .8rem;
+    }
+
+    .bm-form-body {
+        padding: 15px 12px;
+    }
+
+    .bm-form-card-header {
+        padding: 13px 12px;
+    }
+
+    .bm-category-page .input-group-text {
+        padding-left: 7px;
+        padding-right: 7px;
+        font-size: .65rem;
+    }
+
+    .bm-category-page .form-control {
+        font-size: .85rem;
+    }
+}
+
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .bm-category-page *,
+    .bm-category-page *::before,
+    .bm-category-page *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+        animation: none !important;
+    }
+}
+</style>
+
+<div class="container-fluid px-2 px-sm-3 px-md-4 py-3 py-md-4
+<div class="bm-category-page">
 
     <!-- ===================================================== -->
     <!-- PAGE HEADER -->
     <!-- ===================================================== -->
 
-    <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
+    <header class="bm-page-header">
 
         <div>
 
-            <div class="d-flex align-items-center gap-2 mb-1">
+            <div class="bm-page-title-row">
 
-                <i class="bi bi-grid-3x3-gap-fill text-primary fs-4"></i>
+                <div class="bm-page-title-icon" aria-hidden="true">
+                    <i class="bi bi-grid-3x3-gap-fill"></i>
+                </div>
 
-                <h1 class="h3 fw-bold mb-0">
-                    {{ title }}
-                </h1>
+                <div>
+
+                    <h1 class="bm-page-title">
+                        {{ title }}
+                    </h1>
+
+                    <p class="bm-page-subtitle">
+                        Create and manage product categories for Bomet Machineries Ltd.
+                    </p>
+
+                </div>
 
             </div>
-
-            <p class="text-muted mb-0">
-                Create and manage product categories for Bomet Machineries Ltd.
-            </p>
 
         </div>
 
 
         <a
             href="{{ url_for('admin_categories.categories') }}"
-            class="btn btn-outline-secondary d-inline-flex align-items-center justify-content-center gap-2"
+            class="btn btn-outline-secondary bm-back-btn d-inline-flex align-items-center justify-content-center gap-2"
         >
-            <i class="bi bi-arrow-left"></i>
+            <i class="bi bi-arrow-left" aria-hidden="true"></i>
             <span>Back to Categories</span>
         </a>
 
-    </div>
+    </header>
 
 
     <!-- ===================================================== -->
     <!-- FLASH MESSAGES -->
     <!-- ===================================================== -->
 
-    <!-- {% with messages = get_flashed_messages(with_categories=true) %}
+    <!--
+    {% with messages = get_flashed_messages(with_categories=true) %}
 
         {% if messages %}
 
@@ -76,7 +805,8 @@
 
         {% endif %}
 
-    {% endwith %} -->
+    {% endwith %}
+    -->
 
 
     <!-- ===================================================== -->
@@ -87,23 +817,30 @@
 
         <div class="col-12 col-xl-9">
 
-            <div class="card border-0 shadow-sm">
 
-                <div class="card-header bg-white border-bottom py-3">
+            <!-- ================================================= -->
+            <!-- CATEGORY FORM CARD -->
+            <!-- ================================================= -->
 
-                    <div class="d-flex align-items-center gap-2">
+            <section class="bm-form-card">
 
-                        <i class="bi bi-pencil-square text-primary"></i>
+                <div class="bm-form-card-header">
+
+                    <div class="bm-form-card-header-inner">
+
+                        <div class="bm-section-icon" aria-hidden="true">
+                            <i class="bi bi-pencil-square"></i>
+                        </div>
 
                         <div>
 
-                            <h2 class="h6 fw-bold mb-1">
+                            <h2 class="bm-section-title">
                                 Category Information
                             </h2>
 
-                            <small class="text-muted">
+                            <p class="bm-section-subtitle">
                                 Add the details that will appear across the store.
-                            </small>
+                            </p>
 
                         </div>
 
@@ -112,7 +849,7 @@
                 </div>
 
 
-                <div class="card-body p-3 p-md-4">
+                <div class="bm-form-body">
 
                     <form
                         method="POST"
@@ -123,31 +860,35 @@
                         {{ form.hidden_tag() }}
 
 
-                        <!-- ================================================= -->
+                        <!-- ============================================= -->
                         <!-- CATEGORY NAME -->
-                        <!-- ================================================= -->
+                        <!-- ============================================= -->
 
-                        <div class="mb-4">
+                        <div class="bm-field">
 
                             {{ form.name.label(
-                                class="form-label fw-semibold"
+                                class="bm-field-label"
                             ) }}
 
                             {{ form.name(
-                                class="form-control form-control-lg",
+                                class="form-control",
                                 placeholder="e.g. Posho Mills",
-                                autocomplete="off"
+                                autocomplete="off",
+                                autocapitalize="words"
                             ) }}
 
-                            <div class="form-text">
-                                Choose a clear name customers will understand.
-                            </div>
+                            <span class="bm-form-help">
+                                Choose a clear name customers will easily understand.
+                            </span>
 
                             {% for error in form.name.errors %}
 
-                                <div class="text-danger small mt-1">
-                                    <i class="bi bi-exclamation-circle me-1"></i>
-                                    {{ error }}
+                                <div class="bm-field-error">
+                                    <i
+                                        class="bi bi-exclamation-circle"
+                                        aria-hidden="true"
+                                    ></i>
+                                    <span>{{ error }}</span>
                                 </div>
 
                             {% endfor %}
@@ -155,14 +896,14 @@
                         </div>
 
 
-                        <!-- ================================================= -->
+                        <!-- ============================================= -->
                         <!-- SLUG -->
-                        <!-- ================================================= -->
+                        <!-- ============================================= -->
 
-                        <div class="mb-4">
+                        <div class="bm-field">
 
                             {{ form.slug.label(
-                                class="form-label fw-semibold"
+                                class="bm-field-label"
                             ) }}
 
                             <div class="input-group">
@@ -174,21 +915,26 @@
                                 {{ form.slug(
                                     class="form-control",
                                     placeholder="posho-mills",
-                                    autocomplete="off"
+                                    autocomplete="off",
+                                    autocapitalize="none",
+                                    spellcheck="false"
                                 ) }}
 
                             </div>
 
-                            <div class="form-text">
+                            <span class="bm-form-help">
                                 Use lowercase letters, numbers and hyphens.
                                 Example: <code>posho-mills</code>
-                            </div>
+                            </span>
 
                             {% for error in form.slug.errors %}
 
-                                <div class="text-danger small mt-1">
-                                    <i class="bi bi-exclamation-circle me-1"></i>
-                                    {{ error }}
+                                <div class="bm-field-error">
+                                    <i
+                                        class="bi bi-exclamation-circle"
+                                        aria-hidden="true"
+                                    ></i>
+                                    <span>{{ error }}</span>
                                 </div>
 
                             {% endfor %}
@@ -196,14 +942,14 @@
                         </div>
 
 
-                        <!-- ================================================= -->
+                        <!-- ============================================= -->
                         <!-- DESCRIPTION -->
-                        <!-- ================================================= -->
+                        <!-- ============================================= -->
 
-                        <div class="mb-4">
+                        <div class="bm-field">
 
                             {{ form.description.label(
-                                class="form-label fw-semibold"
+                                class="bm-field-label"
                             ) }}
 
                             {{ form.description(
@@ -212,15 +958,18 @@
                                 placeholder="Describe this category and the products customers will find here..."
                             ) }}
 
-                            <div class="form-text">
-                                A short description helps customers understand the category.
-                            </div>
+                            <span class="bm-form-help">
+                                A short, useful description helps customers understand the category.
+                            </span>
 
                             {% for error in form.description.errors %}
 
-                                <div class="text-danger small mt-1">
-                                    <i class="bi bi-exclamation-circle me-1"></i>
-                                    {{ error }}
+                                <div class="bm-field-error">
+                                    <i
+                                        class="bi bi-exclamation-circle"
+                                        aria-hidden="true"
+                                    ></i>
+                                    <span>{{ error }}</span>
                                 </div>
 
                             {% endfor %}
@@ -228,28 +977,26 @@
                         </div>
 
 
-                        <!-- ================================================= -->
+                        <!-- ============================================= -->
                         <!-- CATEGORY IMAGE -->
-                        <!-- ================================================= -->
+                        <!-- ============================================= -->
 
-                        <div class="mb-4">
+                        <div class="bm-field">
 
                             {{ form.image.label(
-                                class="form-label fw-semibold"
+                                class="bm-field-label"
                             ) }}
+
 
                             {% if category and category.image_url %}
 
-                                <div class="mb-3">
+                                <div class="bm-image-current">
 
-                                    <div class="small text-muted mb-2">
+                                    <span class="bm-image-label">
                                         Current category image
-                                    </div>
+                                    </span>
 
-                                    <div
-                                        class="rounded-3 overflow-hidden border bg-light"
-                                        style="max-width:420px;"
-                                    >
+                                    <div class="bm-image-frame">
 
                                         <img
                                             src="{{ url_for(
@@ -257,8 +1004,7 @@
                                                 filename=category.image_url
                                             ) }}"
                                             alt="{{ category.name }}"
-                                            class="img-fluid"
-                                            style="width:100%;max-height:260px;object-fit:cover;"
+                                            loading="lazy"
                                         >
 
                                     </div>
@@ -268,42 +1014,45 @@
                             {% endif %}
 
 
-                            <div
-                                class="border rounded-3 p-3 bg-light"
-                            >
+                            <div class="bm-upload-box">
 
                                 {{ form.image(
                                     class="form-control",
-                                    accept=".jpg,.jpeg,.png,.webp"
+                                    accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp",
+                                    aria_describedby="imageHelp"
                                 ) }}
 
-                                <div class="form-text">
+                                <span
+                                    id="imageHelp"
+                                    class="bm-form-help"
+                                >
                                     JPG, JPEG, PNG or WEBP. Maximum size: 5 MB.
-                                </div>
+                                </span>
 
                             </div>
 
 
+                            <!-- NEW IMAGE PREVIEW -->
+
                             <div
                                 id="imagePreview"
-                                class="mt-3 d-none"
+                                class="bm-image-preview d-none"
                             >
 
-                                <div class="small text-muted mb-2">
+                                <div class="bm-image-preview-label">
                                     New image preview
                                 </div>
 
-                                <div
-                                    class="rounded-3 overflow-hidden border"
-                                    style="max-width:420px;"
-                                >
+                                <div class="bm-image-frame">
+
+                                    <span class="bm-preview-badge">
+                                        New image
+                                    </span>
 
                                     <img
                                         id="previewImage"
                                         src=""
-                                        alt="Category image preview"
-                                        class="img-fluid"
-                                        style="width:100%;max-height:260px;object-fit:cover;"
+                                        alt="Selected category image preview"
                                     >
 
                                 </div>
@@ -313,9 +1062,12 @@
 
                             {% for error in form.image.errors %}
 
-                                <div class="text-danger small mt-1">
-                                    <i class="bi bi-exclamation-circle me-1"></i>
-                                    {{ error }}
+                                <div class="bm-field-error">
+                                    <i
+                                        class="bi bi-exclamation-circle"
+                                        aria-hidden="true"
+                                    ></i>
+                                    <span>{{ error }}</span>
                                 </div>
 
                             {% endfor %}
@@ -323,97 +1075,105 @@
                         </div>
 
 
-                        <!-- ================================================= -->
+                        <!-- ============================================= -->
                         <!-- STATUS -->
-                        <!-- ================================================= -->
+                        <!-- ============================================= -->
 
-                        <div class="mb-4">
+                        <div class="bm-field">
 
-                            <div class="border rounded-3 p-3">
+                            <div class="bm-status-box">
 
-                                <div class="form-check form-switch">
+                                <div class="bm-status-row">
 
-                                    {{ form.is_active(
-                                        class="form-check-input",
-                                        role="switch",
-                                        id="is_active"
-                                    ) }}
+                                    <div class="form-check form-switch bm-status-switch">
+
+                                        {{ form.is_active(
+                                            class="form-check-input",
+                                            role="switch",
+                                            id="is_active"
+                                        ) }}
+
+                                    </div>
 
                                     {{ form.is_active.label(
-                                        class="form-check-label fw-semibold",
+                                        class="bm-status-label",
                                         for="is_active"
                                     ) }}
 
                                 </div>
 
-                                <div class="form-text ms-4">
-                                    Active categories are visible and available
-                                    throughout the store.
-                                </div>
+                                <p class="bm-status-description">
+                                    Active categories are visible and available throughout the store.
+                                </p>
 
                             </div>
 
                         </div>
 
 
-                        <!-- ================================================= -->
+                        <!-- ============================================= -->
                         <!-- ACTIONS -->
-                        <!-- ================================================= -->
+                        <!-- ============================================= -->
 
-                        <div class="d-flex flex-column flex-sm-row gap-2 pt-2">
+                        <div class="bm-form-actions">
 
                             {{ form.submit(
-                                class="btn btn-primary btn-lg px-4"
+                                class="btn btn-primary"
                             ) }}
 
                             <a
                                 href="{{ url_for('admin_categories.categories') }}"
-                                class="btn btn-outline-secondary btn-lg px-4"
+                                class="btn btn-outline-secondary"
                             >
-                                Cancel
+                                <i
+                                    class="bi bi-x-lg"
+                                    aria-hidden="true"
+                                ></i>
+                                <span>Cancel</span>
                             </a>
 
                         </div>
+
 
                     </form>
 
                 </div>
 
-            </div>
+            </section>
 
 
             <!-- ================================================= -->
-            <!-- INFORMATION CARD -->
+            <!-- INFORMATION / IMAGE TIPS -->
             <!-- ================================================= -->
 
-            <div class="card border-0 shadow-sm mt-4">
+            <section class="bm-tips-card">
 
-                <div class="card-body">
+                <div class="bm-tips-body">
 
-                    <div class="d-flex gap-3">
+                    <div class="bm-tips-layout">
 
-                        <div class="text-primary fs-4">
+                        <div class="bm-tips-icon" aria-hidden="true">
                             <i class="bi bi-lightbulb"></i>
                         </div>
 
                         <div>
 
-                            <h3 class="h6 fw-bold">
+                            <h3 class="bm-tips-title">
                                 Category image tips
                             </h3>
 
-                            <ul class="small text-muted mb-0 ps-3">
+                            <ul class="bm-tips-list">
 
-                                <li class="mb-1">
-                                    Use a clear, high-quality image representing the category.
-                                </li>
-
-                                <li class="mb-1">
-                                    Landscape images generally work well for category cards.
+                                <li>
+                                    Use a clear, high-quality image that accurately represents the category.
                                 </li>
 
                                 <li>
-                                    Avoid very large images to keep the storefront fast on mobile devices.
+                                    Landscape images generally work well for category cards and storefront layouts.
+                                </li>
+
+                                <li>
+                                    Keep image dimensions reasonable to help maintain fast loading speeds on mobile devices.
                                 </li>
 
                             </ul>
@@ -424,7 +1184,8 @@
 
                 </div>
 
-            </div>
+            </section>
+
 
         </div>
 
@@ -432,9 +1193,12 @@
 
 </div>
 
+</div>
 
 <!-- ========================================================= -->
-<!-- IMAGE PREVIEW SCRIPT -->
+
+<!-- IMAGE PREVIEW + CLIENT-SIDE VALIDATION -->
+
 <!-- ========================================================= -->
 
 <script>
@@ -444,37 +1208,78 @@ document.addEventListener("DOMContentLoaded", function () {
     const previewContainer = document.getElementById("imagePreview");
     const previewImage = document.getElementById("previewImage");
 
-    if (!imageInput) {
+    if (!imageInput || !previewContainer || !previewImage) {
         return;
     }
+
+
+    const allowedTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/webp"
+    ];
+
+    const maxFileSize = 5 * 1024 * 1024;
+
+
+    function clearPreview() {
+
+        previewContainer.classList.add("d-none");
+        previewImage.removeAttribute("src");
+
+    }
+
 
     imageInput.addEventListener("change", function () {
 
         const file = this.files && this.files[0];
 
+        clearPreview();
+
+
         if (!file) {
-
-            previewContainer.classList.add("d-none");
-            previewImage.src = "";
-
             return;
         }
 
-        const allowedTypes = [
-            "image/jpeg",
-            "image/png",
-            "image/webp"
-        ];
+
+        /* ---------------------------------------------------------
+           FILE TYPE VALIDATION
+           --------------------------------------------------------- */
 
         if (!allowedTypes.includes(file.type)) {
 
-            previewContainer.classList.add("d-none");
-            previewImage.src = "";
+            this.value = "";
+
+            alert(
+                "Please select a JPG, JPEG, PNG or WEBP image."
+            );
 
             return;
         }
 
+
+        /* ---------------------------------------------------------
+           FILE SIZE VALIDATION
+           --------------------------------------------------------- */
+
+        if (file.size > maxFileSize) {
+
+            this.value = "";
+
+            alert(
+                "The selected image is larger than 5 MB. Please choose a smaller image."
+            );
+
+            return;
+        }
+
+
+        /* ---------------------------------------------------------
+           IMAGE PREVIEW
+           --------------------------------------------------------- */
+
         const reader = new FileReader();
+
 
         reader.onload = function (event) {
 
@@ -483,6 +1288,14 @@ document.addEventListener("DOMContentLoaded", function () {
             previewContainer.classList.remove("d-none");
 
         };
+
+
+        reader.onerror = function () {
+
+            clearPreview();
+
+        };
+
 
         reader.readAsDataURL(file);
 
