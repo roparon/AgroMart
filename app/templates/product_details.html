@@ -2403,7 +2403,9 @@
                 {% endif %}
 
             </div>
-             <!-- PURCHASE -->
+
+
+            <!-- PURCHASE -->
 
             <div class="purchase-section">
 
@@ -2636,103 +2638,100 @@
                     </div>
 
 
+                    <!-- PRODUCT OVERVIEW -->
 
-            <!-- PRODUCT OVERVIEW -->
+                    <div>
 
-            <div>
+                        <h2 class="section-title">
+                            Product Overview
+                        </h2>
 
-                <h2 class="section-title">
-                    Product Overview
-                </h2>
+                        {% if product.description %}
 
-                {% if product.description %}
+                            <div class="product-description">
+                                {{ product.description }}
+                            </div>
 
-                    <div class="product-description">
-                        {{ product.description }}
-                    </div>
-
-                {% else %}
-
-                    <div class="product-description product-description-empty">
-                        Product details will be updated soon.
-                    </div>
-
-                {% endif %}
-
-            </div>
-
-
-            <!-- PRODUCT INFORMATION -->
-
-            <div class="product-info-grid">
-
-                <div class="info-item">
-
-                    <span class="info-item-label">
-                        Category
-                    </span>
-
-                    <span class="info-item-value">
-
-                        {% if product.category %}
-                            {{ product.category.name }}
                         {% else %}
-                            General
+
+                            <div class="product-description product-description-empty">
+                                Product details will be updated soon.
+                            </div>
+
                         {% endif %}
 
-                    </span>
-
-                </div>
+                    </div>
 
 
-                <div class="info-item">
+                    <!-- PRODUCT INFORMATION -->
 
-                    <span class="info-item-label">
-                        Availability
-                    </span>
+                    <div class="product-info-grid">
 
-                    <span class="info-item-value">
+                        <div class="info-item">
 
-                        {% if product.stock > 0 %}
-                            Available
-                        {% else %}
-                            Currently unavailable
-                        {% endif %}
+                            <span class="info-item-label">
+                                Category
+                            </span>
 
-                    </span>
+                            <span class="info-item-value">
 
-                </div>
+                                {% if product.category %}
+                                    {{ product.category.name }}
+                                {% else %}
+                                    General
+                                {% endif %}
 
+                            </span>
 
-                <div class="info-item">
-
-                    <span class="info-item-label">
-                        Stock
-                    </span>
-
-                    <span class="info-item-value">
-                        {{ product.stock }} unit(s)
-                    </span>
-
-                </div>
+                        </div>
 
 
-                <div class="info-item">
+                        <div class="info-item">
 
-                    <span class="info-item-label">
-                        Delivery
-                    </span>
+                            <span class="info-item-label">
+                                Availability
+                            </span>
 
-                    <span class="info-item-value">
-                        Nationwide
-                    </span>
+                            <span class="info-item-value">
 
-                </div>
+                                {% if product.stock > 0 %}
+                                    Available
+                                {% else %}
+                                    Currently unavailable
+                                {% endif %}
 
-            </div>
+                            </span>
+
+                        </div>
 
 
-           
+                        <div class="info-item">
+
+                            <span class="info-item-label">
+                                Stock
+                            </span>
+
+                            <span class="info-item-value">
+                                {{ product.stock }} unit(s)
+                            </span>
+
+                        </div>
+
+
+                        <div class="info-item">
+
+                            <span class="info-item-label">
+                                Delivery
+                            </span>
+
+                            <span class="info-item-value">
+                                Nationwide
+                            </span>
+
+                        </div>
+
+                    </div>
+
 
                     <!-- SHARE -->
 
@@ -3198,6 +3197,7 @@
 
 </div>
 
+
 <!-- ================================================================
      IMAGE LIGHTBOX
 ================================================================ -->
@@ -3275,6 +3275,7 @@
 
 {% endif %}
 
+
 <!-- ================================================================
      COPY FEEDBACK
 ================================================================ -->
@@ -3288,12 +3289,18 @@
     Copied
 </div>
 
+
 <script>
 
 document.addEventListener("DOMContentLoaded", function () {
 
     /* ============================================================
        IMAGE DATA
+
+       IMPORTANT:
+       Build the JavaScript gallery array using ONLY valid image
+       URLs. This means the JavaScript indexes always correspond
+       to the actual images available to the gallery.
        ============================================================ */
 
     const images = [
@@ -3315,60 +3322,11 @@ document.addEventListener("DOMContentLoaded", function () {
         {% endif %}
 
     ].filter(function (src) {
+
         return typeof src === "string" &&
                src.trim().length > 0;
+
     });
-
-
-    let currentIndex = 0;
-
-
-    /* ============================================================
-       PRIMARY IMAGE INDEX
-       ============================================================ */
-
-    const primaryIndex = [
-
-        {% if product.images %}
-
-            {% set primary_image =
-                product.images
-                | selectattr("is_primary", "equalto", true)
-                | first
-            %}
-
-
-            {% if primary_image %}
-
-                {% for image in product.images %}
-
-                    {% if image.id == primary_image.id %}
-
-                        {{ loop.index0 }}
-
-                    {% endif %}
-
-                {% endfor %}
-
-            {% else %}
-
-                0
-
-            {% endif %}
-
-        {% else %}
-
-            0
-
-        {% endif %}
-
-    ];
-
-
-    currentIndex =
-        Number.isInteger(primaryIndex)
-            ? primaryIndex
-            : 0;
 
 
     /* ============================================================
@@ -3392,86 +3350,176 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     /* ============================================================
+       INITIAL GALLERY INDEX
+
+       The important fix:
+
+       The initial image is determined from the SAME image URL
+       that the server rendered into #mainProductImage.
+
+       This prevents a mismatch between:
+       - database image position
+       - filtered JavaScript image position
+       - primary image position
+
+       Therefore the first image displayed on the details page
+       remains exactly the image selected by the template.
+       ============================================================ */
+
+    let currentIndex = 0;
+
+
+    if (mainImage && images.length) {
+
+        const initialImage =
+            mainImage.getAttribute("src");
+
+
+        if (initialImage) {
+
+            const normalizedInitialImage =
+                initialImage.trim();
+
+
+            const matchingIndex =
+                images.findIndex(function (src) {
+
+                    return src.trim() ===
+                           normalizedInitialImage;
+
+                });
+
+
+            if (matchingIndex !== -1) {
+
+                currentIndex =
+                    matchingIndex;
+
+            }
+
+        }
+
+    }
+
+
+    /* ============================================================
        UPDATE GALLERY
        ============================================================ */
 
-    function updateGallery(index) {
+    function updateGallery(
+        index,
+        options = {}
+    ) {
 
         if (!images.length) {
             return;
         }
 
 
+        const shouldScrollThumbnail =
+            options.scrollThumbnail !== false;
+
+
         currentIndex =
-            (index + images.length) % images.length;
+            (index + images.length) %
+            images.length;
 
 
         if (mainImage) {
-
-            mainImage.style.opacity = "0.45";
-
 
             const nextSrc =
                 images[currentIndex];
 
 
-            const preload =
-                new Image();
+            /*
+             * Do not change the image unnecessarily.
+             * This prevents the initial image from appearing to
+             * jump to another image during page load.
+             */
+
+            if (
+                mainImage.getAttribute("src") !==
+                nextSrc
+            ) {
+
+                mainImage.style.opacity =
+                    "0.45";
 
 
-            preload.onload = function () {
+                const preload =
+                    new Image();
 
-                mainImage.src =
-                    nextSrc;
 
-                requestAnimationFrame(function () {
+                preload.onload = function () {
+
+                    mainImage.src =
+                        nextSrc;
+
+
+                    requestAnimationFrame(
+                        function () {
+
+                            mainImage.style.opacity =
+                                "1";
+
+                        }
+                    );
+
+                };
+
+
+                preload.onerror = function () {
 
                     mainImage.style.opacity =
                         "1";
 
-                });
 
-            };
-
-
-            preload.onerror = function () {
-
-                mainImage.style.opacity = "1";
+                    const failedThumbnail =
+                        thumbnails[currentIndex];
 
 
-                const failedThumbnail =
-                    thumbnails[currentIndex];
+                    if (failedThumbnail) {
+
+                        failedThumbnail.classList.add(
+                            "image-unavailable"
+                        );
 
 
-                if (failedThumbnail) {
+                        failedThumbnail.setAttribute(
+                            "aria-disabled",
+                            "true"
+                        );
 
-                    failedThumbnail.classList.add(
-                        "image-unavailable"
-                    );
+                    }
 
-                    failedThumbnail.setAttribute(
-                        "aria-disabled",
-                        "true"
-                    );
-
-                }
-
-            };
+                };
 
 
-            preload.src =
-                nextSrc;
+                preload.src =
+                    nextSrc;
+
+            } else {
+
+                /*
+                 * The server-rendered image is already correct.
+                 * Keep it visible without fading or replacing it.
+                 */
+
+                mainImage.style.opacity =
+                    "1";
+
+            }
 
         }
 
 
         thumbnails.forEach(function (
             thumbnail,
-            index
+            thumbnailIndex
         ) {
 
             const active =
-                index === currentIndex;
+                thumbnailIndex === currentIndex;
 
 
             thumbnail.classList.toggle(
@@ -3488,7 +3536,18 @@ document.addEventListener("DOMContentLoaded", function () {
             );
 
 
-            if (active) {
+            /*
+             * Only scroll the thumbnail strip after a real
+             * navigation action.
+
+             * On initial page load this is disabled so the gallery
+             * does not appear to move automatically.
+             */
+
+            if (
+                active &&
+                shouldScrollThumbnail
+            ) {
 
                 thumbnail.scrollIntoView({
                     behavior: "smooth",
@@ -3530,7 +3589,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 if (
                     !Number.isNaN(index) &&
-                    !thumbnail.classList.contains("image-unavailable")
+                    !thumbnail.classList.contains(
+                        "image-unavailable"
+                    )
                 ) {
 
                     updateGallery(index);
@@ -3658,11 +3719,27 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /* ============================================================
        INITIAL GALLERY
+
+       IMPORTANT:
+       Do not force a new image on page load.
+
+       The server has already rendered the correct initial image.
+       We only synchronize:
+       - active thumbnail
+       - counter
+       - currentIndex
+
+       This removes the initial image jump.
        ============================================================ */
 
     if (images.length) {
 
-        updateGallery(currentIndex);
+        updateGallery(
+            currentIndex,
+            {
+                scrollThumbnail: false
+            }
+        );
 
     }
 
