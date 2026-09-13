@@ -1,49 +1,703 @@
 {% extends "base.html" %}
 
+{% block title %}Categories | Bomet Machineries Ltd.{% endblock %}
+
 {% block content %}
 
-<div class="container-fluid px-3 px-md-4 py-4">
+<style>
+/* ==========================================================
+   BOMET MACHINERIES LTD.
+   CATEGORY MANAGEMENT
+   Mobile-first • Professional • Lightweight
+   ========================================================== */
 
-    <!-- ===================================================== -->
+.categories-page {
+    --cat-green: #15803d;
+    --cat-green-dark: #166534;
+    --cat-green-soft: #f0fdf4;
+
+    --cat-blue: #2563eb;
+    --cat-blue-soft: #eff6ff;
+
+    --cat-yellow: #d97706;
+    --cat-yellow-soft: #fffbeb;
+
+    --cat-red: #dc2626;
+    --cat-red-soft: #fef2f2;
+
+    --cat-text: #111827;
+    --cat-text-soft: #374151;
+    --cat-muted: #6b7280;
+
+    --cat-border: #e5e7eb;
+    --cat-border-light: #f1f5f9;
+    --cat-background: #f8fafc;
+    --cat-white: #ffffff;
+
+    --cat-radius: 14px;
+    --cat-radius-sm: 10px;
+
+    --cat-shadow: 0 4px 18px rgba(15, 23, 42, .055);
+    --cat-shadow-hover: 0 8px 24px rgba(15, 23, 42, .09);
+
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
+    color: var(--cat-text);
+}
+
+/* ==========================================================
+   PAGE HEADER
+   ========================================================== */
+
+.categories-page .page-header {
+    margin-bottom: 18px;
+}
+
+.categories-page .page-title-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.categories-page .page-title-icon {
+    width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 11px;
+    background: var(--cat-green-soft);
+    color: var(--cat-green);
+    font-size: 18px;
+}
+
+.categories-page .page-title {
+    margin: 0;
+    font-size: 1.35rem;
+    line-height: 1.25;
+    font-weight: 800;
+    letter-spacing: -.02em;
+}
+
+.categories-page .page-subtitle {
+    margin: 4px 0 0;
+    color: var(--cat-muted);
+    font-size: .82rem;
+    line-height: 1.45;
+}
+
+.categories-page .add-category-btn {
+    width: 100%;
+    min-height: 43px;
+    border: 0;
+    border-radius: var(--cat-radius-sm);
+    background: var(--cat-green);
+    font-size: .82rem;
+    font-weight: 700;
+    box-shadow: 0 3px 10px rgba(21, 128, 61, .12);
+    transition: background .15s ease, transform .15s ease, box-shadow .15s ease;
+}
+
+.categories-page .add-category-btn:hover {
+    background: var(--cat-green-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(21, 128, 61, .16);
+}
+
+/* ==========================================================
+   FLASH MESSAGES
+   ========================================================== */
+
+.categories-page .flash-area {
+    margin-bottom: 18px;
+}
+
+.categories-page .alert {
+    margin-bottom: 8px;
+    padding: 11px 13px;
+    border-radius: var(--cat-radius-sm);
+    border-width: 1px;
+    font-size: .82rem;
+}
+
+.categories-page .alert:last-child {
+    margin-bottom: 0;
+}
+
+/* ==========================================================
+   STATISTICS
+   ========================================================== */
+
+.categories-page .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.categories-page .stat-card {
+    min-width: 0;
+    background: var(--cat-white);
+    border: 1px solid var(--cat-border-light);
+    border-radius: var(--cat-radius);
+    box-shadow: var(--cat-shadow);
+    transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.categories-page .stat-card:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--cat-shadow-hover);
+}
+
+.categories-page .stat-card.total {
+    border-top: 3px solid var(--cat-blue);
+}
+
+.categories-page .stat-card.active {
+    border-top: 3px solid var(--cat-green);
+}
+
+.categories-page .stat-card.inactive {
+    border-top: 3px solid #94a3b8;
+}
+
+.categories-page .stat-body {
+    min-height: 82px;
+    padding: 13px;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.categories-page .stat-icon {
+    width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    font-size: 17px;
+}
+
+.categories-page .stat-icon.total {
+    background: var(--cat-blue-soft);
+    color: var(--cat-blue);
+}
+
+.categories-page .stat-icon.active {
+    background: var(--cat-green-soft);
+    color: var(--cat-green);
+}
+
+.categories-page .stat-icon.inactive {
+    background: #f8fafc;
+    color: #64748b;
+}
+
+.categories-page .stat-label {
+    color: var(--cat-muted);
+    font-size: .72rem;
+    line-height: 1.2;
+}
+
+.categories-page .stat-value {
+    margin-top: 3px;
+    font-size: 1.25rem;
+    line-height: 1;
+    font-weight: 800;
+}
+
+/* ==========================================================
+   MAIN CONTENT CARD
+   ========================================================== */
+
+.categories-page .categories-card {
+    overflow: hidden;
+    background: var(--cat-white);
+    border: 1px solid var(--cat-border-light);
+    border-radius: var(--cat-radius);
+    box-shadow: var(--cat-shadow);
+}
+
+.categories-page .categories-card-header {
+    padding: 13px 14px;
+    border-bottom: 1px solid var(--cat-border);
+    background: var(--cat-white);
+}
+
+.categories-page .content-title {
+    margin: 0 0 3px;
+    font-size: .92rem;
+    line-height: 1.3;
+    font-weight: 800;
+}
+
+.categories-page .content-description {
+    margin: 0;
+    color: var(--cat-muted);
+    font-size: .74rem;
+    line-height: 1.4;
+}
+
+/* ==========================================================
+   DESKTOP TABLE
+   ========================================================== */
+
+.categories-page .categories-table {
+    margin: 0;
+    color: var(--cat-text);
+    font-size: .82rem;
+}
+
+.categories-page .categories-table thead th {
+    padding-top: 11px;
+    padding-bottom: 11px;
+    border-bottom: 1px solid var(--cat-border);
+    background: #f8fafc;
+    color: var(--cat-muted);
+    font-size: .7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .035em;
+    white-space: nowrap;
+}
+
+.categories-page .categories-table tbody td {
+    padding-top: 11px;
+    padding-bottom: 11px;
+    border-color: var(--cat-border-light);
+}
+
+.categories-page .categories-table tbody tr {
+    transition: background .12s ease;
+}
+
+.categories-page .categories-table tbody tr:hover {
+    background: #fbfefc;
+}
+
+.categories-page .category-image {
+    width: 52px;
+    height: 52px;
+    flex: 0 0 52px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--cat-border);
+    border-radius: 10px;
+    background: #f8fafc;
+    color: #9ca3af;
+}
+
+.categories-page .category-image img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+.categories-page .category-name {
+    max-width: 260px;
+    overflow: hidden;
+    color: var(--cat-text);
+    font-size: .82rem;
+    font-weight: 700;
+    line-height: 1.3;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.categories-page .category-description {
+    max-width: 260px;
+    margin-top: 2px;
+    overflow: hidden;
+    color: var(--cat-muted);
+    font-size: .72rem;
+    line-height: 1.3;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.categories-page .category-slug {
+    display: inline-block;
+    max-width: 260px;
+    padding: 4px 7px;
+    overflow: hidden;
+    border: 1px solid var(--cat-border);
+    border-radius: 6px;
+    background: #f8fafc;
+    color: #475569;
+    font-size: .7rem;
+    line-height: 1.3;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+.categories-page .product-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 58px;
+    padding: 5px 8px;
+    border: 1px solid var(--cat-border);
+    border-radius: 999px;
+    background: #f8fafc;
+    color: var(--cat-text-soft);
+    font-size: .7rem;
+    font-weight: 700;
+}
+
+.categories-page .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 8px;
+    border-radius: 999px;
+    font-size: .68rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.categories-page .status-badge.active {
+    background: var(--cat-green-soft);
+    color: var(--cat-green-dark);
+}
+
+.categories-page .status-badge.inactive {
+    background: #f1f5f9;
+    color: #64748b;
+}
+
+.categories-page .created-date {
+    color: var(--cat-muted);
+    font-size: .74rem;
+    white-space: nowrap;
+}
+
+.categories-page .action-buttons {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.categories-page .action-buttons .btn {
+    min-height: 32px;
+    padding: 5px 8px;
+    border-radius: 7px;
+    font-size: .7rem;
+    font-weight: 700;
+}
+
+/* ==========================================================
+   MOBILE CATEGORY CARDS
+   ========================================================== */
+
+.categories-page .mobile-category-list {
+    padding: 11px;
+}
+
+.categories-page .mobile-category {
+    margin-bottom: 9px;
+    padding: 11px;
+    border: 1px solid var(--cat-border);
+    border-radius: 11px;
+    background: var(--cat-white);
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.categories-page .mobile-category:last-child {
+    margin-bottom: 0;
+}
+
+.categories-page .mobile-category:hover {
+    border-color: #d1d5db;
+    box-shadow: 0 3px 12px rgba(15, 23, 42, .045);
+}
+
+.categories-page .mobile-category-top {
+    display: flex;
+    gap: 10px;
+    min-width: 0;
+}
+
+.categories-page .mobile-category-image {
+    width: 58px;
+    height: 58px;
+    flex: 0 0 58px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--cat-border);
+    border-radius: 9px;
+    background: #f8fafc;
+    color: #9ca3af;
+}
+
+.categories-page .mobile-category-image img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+.categories-page .mobile-category-info {
+    min-width: 0;
+    flex: 1;
+}
+
+.categories-page .mobile-category-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 7px;
+}
+
+.categories-page .mobile-category-name {
+    min-width: 0;
+    margin: 0;
+    overflow: hidden;
+    color: var(--cat-text);
+    font-size: .82rem;
+    font-weight: 800;
+    line-height: 1.3;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.categories-page .mobile-slug {
+    display: block;
+    margin-top: 3px;
+    overflow: hidden;
+    color: var(--cat-muted);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: .66rem;
+    line-height: 1.35;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.categories-page .mobile-product-count {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 6px;
+    color: var(--cat-muted);
+    font-size: .7rem;
+}
+
+.categories-page .mobile-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 7px;
+    margin-top: 10px;
+}
+
+.categories-page .mobile-actions .edit-action {
+    grid-column: 1 / -1;
+}
+
+.categories-page .mobile-actions .btn {
+    min-height: 36px;
+    border-radius: 8px;
+    font-size: .72rem;
+    font-weight: 700;
+}
+
+/* ==========================================================
+   EMPTY STATE
+   ========================================================== */
+
+.categories-page .empty-state {
+    padding: 45px 18px;
+    text-align: center;
+}
+
+.categories-page .empty-icon {
+    width: 68px;
+    height: 68px;
+    margin: 0 auto 13px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--cat-green-soft);
+    color: var(--cat-green);
+    font-size: 27px;
+}
+
+.categories-page .empty-title {
+    margin-bottom: 5px;
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+.categories-page .empty-description {
+    max-width: 450px;
+    margin: 0 auto 18px;
+    color: var(--cat-muted);
+    font-size: .8rem;
+    line-height: 1.5;
+}
+
+.categories-page .empty-action {
+    min-height: 40px;
+    padding: 8px 14px;
+    border-radius: 9px;
+    font-size: .78rem;
+    font-weight: 700;
+}
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+
+@media (min-width: 576px) {
+    .categories-page .stats-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .categories-page .add-category-btn {
+        width: auto;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+}
+
+@media (min-width: 768px) {
+    .categories-page .page-title {
+        font-size: 1.5rem;
+    }
+
+    .categories-page .categories-card-header {
+        padding: 14px 17px;
+    }
+
+    .categories-page .mobile-category-list {
+        display: none;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .categories-page .desktop-category-table {
+        display: none;
+    }
+}
+
+@media (min-width: 992px) {
+    .categories-page .page-header {
+        margin-bottom: 20px;
+    }
+
+    .categories-page .page-header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .categories-page .page-title-row {
+        align-items: center;
+    }
+
+    .categories-page .page-title-icon {
+        width: 42px;
+        height: 42px;
+        flex-basis: 42px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .categories-page .stats-grid {
+        gap: 13px;
+        margin-bottom: 20px;
+    }
+
+    .categories-page .stat-body {
+        min-height: 88px;
+        padding: 14px 15px;
+    }
+
+    .categories-page .categories-table tbody td {
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+}
+
+/* ==========================================================
+   ACCESSIBILITY
+   ========================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .categories-page *,
+    .categories-page *::before,
+    .categories-page *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+    }
+}
+</style>
+
+<div class="container-fluid px-3 px-md-4 py-3 py-md-4">
+
+<div class="categories-page">
+
+    <!-- ================================================= -->
     <!-- PAGE HEADER -->
-    <!-- ===================================================== -->
+    <!-- ================================================= -->
 
-    <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
+    <div class="page-header">
 
-        <div>
-            <div class="d-flex align-items-center gap-2 mb-1">
-                <i class="bi bi-grid-3x3-gap-fill text-primary fs-4"></i>
+        <div class="page-header-inner">
 
-                <h1 class="h3 fw-bold mb-0">
-                    Categories
-                </h1>
+            <div class="page-title-row">
+
+                <div class="page-title-icon">
+                    <i class="bi bi-grid-3x3-gap-fill"></i>
+                </div>
+
+                <div>
+                    <h1 class="page-title">
+                        Categories
+                    </h1>
+
+                    <p class="page-subtitle">
+                        Manage product categories, images, visibility and organization.
+                    </p>
+                </div>
+
             </div>
 
-            <p class="text-muted mb-0">
-                Manage product categories, images, visibility and organization.
-            </p>
-        </div>
 
-        <a
-            href="{{ url_for('admin_categories.add_category') }}"
-            class="btn btn-primary d-inline-flex align-items-center justify-content-center gap-2"
-        >
-            <i class="bi bi-plus-lg"></i>
-            <span>Add Category</span>
-        </a>
+            <a
+                href="{{ url_for('admin_categories.add_category') }}"
+                class="btn btn-success add-category-btn d-inline-flex align-items-center justify-content-center gap-2"
+            >
+                <i class="bi bi-plus-lg"></i>
+                <span>Add Category</span>
+            </a>
+
+        </div>
 
     </div>
 
 
-    <!-- ===================================================== -->
+    <!-- ================================================= -->
     <!-- FLASH MESSAGES -->
-    <!-- ===================================================== -->
+    <!-- ================================================= -->
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
+    <!-- {% with messages = get_flashed_messages(with_categories=true) %}
 
         {% if messages %}
 
-            <div class="mb-4">
+            <div class="flash-area">
 
                 {% for category, message in messages %}
 
@@ -79,40 +733,35 @@
 
         {% endif %}
 
-    {% endwith %}
+    {% endwith %} -->
 
 
-    <!-- ===================================================== -->
+    <!-- ================================================= -->
     <!-- STATISTICS -->
-    <!-- ===================================================== -->
+    <!-- ================================================= -->
 
     {% set active_count = categories | selectattr("is_active") | list | length %}
     {% set inactive_count = categories | length - active_count %}
 
-    <div class="row g-3 mb-4">
+    <div class="stats-grid">
 
         <!-- Total -->
-        <div class="col-12 col-sm-6 col-xl-4">
+        <div class="stat-card total">
 
-            <div class="card border-0 shadow-sm h-100">
+            <div class="stat-body">
 
-                <div class="card-body d-flex align-items-center gap-3">
+                <div class="stat-icon total">
+                    <i class="bi bi-grid"></i>
+                </div>
 
-                    <div
-                        class="rounded-3 bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center"
-                        style="width:48px;height:48px;"
-                    >
-                        <i class="bi bi-grid fs-5"></i>
+                <div class="min-w-0">
+
+                    <div class="stat-label">
+                        Total Categories
                     </div>
 
-                    <div>
-                        <div class="text-muted small">
-                            Total Categories
-                        </div>
-
-                        <div class="fs-4 fw-bold">
-                            {{ categories | length }}
-                        </div>
+                    <div class="stat-value">
+                        {{ categories | length }}
                     </div>
 
                 </div>
@@ -123,27 +772,22 @@
 
 
         <!-- Active -->
-        <div class="col-12 col-sm-6 col-xl-4">
+        <div class="stat-card active">
 
-            <div class="card border-0 shadow-sm h-100">
+            <div class="stat-body">
 
-                <div class="card-body d-flex align-items-center gap-3">
+                <div class="stat-icon active">
+                    <i class="bi bi-check-circle"></i>
+                </div>
 
-                    <div
-                        class="rounded-3 bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center"
-                        style="width:48px;height:48px;"
-                    >
-                        <i class="bi bi-check-circle fs-5"></i>
+                <div class="min-w-0">
+
+                    <div class="stat-label">
+                        Active
                     </div>
 
-                    <div>
-                        <div class="text-muted small">
-                            Active
-                        </div>
-
-                        <div class="fs-4 fw-bold">
-                            {{ active_count }}
-                        </div>
+                    <div class="stat-value">
+                        {{ active_count }}
                     </div>
 
                 </div>
@@ -154,27 +798,22 @@
 
 
         <!-- Inactive -->
-        <div class="col-12 col-sm-6 col-xl-4">
+        <div class="stat-card inactive">
 
-            <div class="card border-0 shadow-sm h-100">
+            <div class="stat-body">
 
-                <div class="card-body d-flex align-items-center gap-3">
+                <div class="stat-icon inactive">
+                    <i class="bi bi-eye-slash"></i>
+                </div>
 
-                    <div
-                        class="rounded-3 bg-secondary bg-opacity-10 text-secondary d-flex align-items-center justify-content-center"
-                        style="width:48px;height:48px;"
-                    >
-                        <i class="bi bi-eye-slash fs-5"></i>
+                <div class="min-w-0">
+
+                    <div class="stat-label">
+                        Inactive
                     </div>
 
-                    <div>
-                        <div class="text-muted small">
-                            Inactive
-                        </div>
-
-                        <div class="fs-4 fw-bold">
-                            {{ inactive_count }}
-                        </div>
+                    <div class="stat-value">
+                        {{ inactive_count }}
                     </div>
 
                 </div>
@@ -186,44 +825,38 @@
     </div>
 
 
-    <!-- ===================================================== -->
+    <!-- ================================================= -->
     <!-- CATEGORY CONTENT -->
-    <!-- ===================================================== -->
+    <!-- ================================================= -->
 
-    <div class="card border-0 shadow-sm">
+    <div class="categories-card">
 
-        <div class="card-header bg-white border-bottom py-3">
+        <div class="categories-card-header">
 
-            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
+            <h2 class="content-title">
+                Product Categories
+            </h2>
 
-                <div>
-                    <h2 class="h6 fw-bold mb-1">
-                        Product Categories
-                    </h2>
-
-                    <small class="text-muted">
-                        Manage the categories displayed throughout Bomet Machineries Ltd.
-                    </small>
-                </div>
-
-            </div>
+            <p class="content-description">
+                Manage the categories displayed throughout Bomet Machineries Ltd.
+            </p>
 
         </div>
 
 
-        <div class="card-body p-0">
+        <div>
 
             {% if categories %}
 
-                <!-- ================================================= -->
+                <!-- ============================================= -->
                 <!-- DESKTOP TABLE -->
-                <!-- ================================================= -->
+                <!-- ============================================= -->
 
-                <div class="table-responsive">
+                <div class="table-responsive desktop-category-table">
 
-                    <table class="table table-hover align-middle mb-0">
+                    <table class="table table-hover align-middle categories-table mb-0">
 
-                        <thead class="table-light">
+                        <thead>
 
                             <tr>
 
@@ -263,50 +896,39 @@
                                 <tr>
 
                                     <!-- CATEGORY -->
+
                                     <td class="ps-3 ps-md-4">
 
                                         <div class="d-flex align-items-center gap-3">
 
-                                            <!-- Image -->
-                                            <div
-                                                class="flex-shrink-0 rounded-3 overflow-hidden bg-light border"
-                                                style="width:58px;height:58px;"
-                                            >
+                                            <div class="category-image">
 
                                                 {% if category.image_url %}
 
                                                     <img
                                                         src="{{ url_for('static', filename=category.image_url) }}"
                                                         alt="{{ category.name }}"
-                                                        class="w-100 h-100"
-                                                        style="object-fit:cover;"
                                                         loading="lazy"
                                                     >
 
                                                 {% else %}
 
-                                                    <div class="w-100 h-100 d-flex align-items-center justify-content-center text-muted">
-                                                        <i class="bi bi-image fs-4"></i>
-                                                    </div>
+                                                    <i class="bi bi-image fs-5"></i>
 
                                                 {% endif %}
 
                                             </div>
 
 
-                                            <!-- Name -->
                                             <div class="min-w-0">
 
-                                                <div class="fw-semibold text-truncate">
+                                                <div class="category-name">
                                                     {{ category.name }}
                                                 </div>
 
                                                 {% if category.description %}
 
-                                                    <div
-                                                        class="small text-muted text-truncate"
-                                                        style="max-width:280px;"
-                                                    >
+                                                    <div class="category-description">
                                                         {{ category.description }}
                                                     </div>
 
@@ -320,9 +942,10 @@
 
 
                                     <!-- SLUG -->
+
                                     <td>
 
-                                        <code>
+                                        <code class="category-slug">
                                             /products/category/{{ category.slug }}
                                         </code>
 
@@ -330,9 +953,10 @@
 
 
                                     <!-- PRODUCTS -->
+
                                     <td class="text-center">
 
-                                        <span class="badge rounded-pill text-bg-light border">
+                                        <span class="product-count">
 
                                             {{ category.products | length }}
 
@@ -348,19 +972,20 @@
 
 
                                     <!-- STATUS -->
+
                                     <td class="text-center">
 
                                         {% if category.is_active %}
 
-                                            <span class="badge rounded-pill text-bg-success">
-                                                <i class="bi bi-check-circle me-1"></i>
+                                            <span class="status-badge active">
+                                                <i class="bi bi-check-circle"></i>
                                                 Active
                                             </span>
 
                                         {% else %}
 
-                                            <span class="badge rounded-pill text-bg-secondary">
-                                                <i class="bi bi-eye-slash me-1"></i>
+                                            <span class="status-badge inactive">
+                                                <i class="bi bi-eye-slash"></i>
                                                 Inactive
                                             </span>
 
@@ -370,11 +995,12 @@
 
 
                                     <!-- CREATED -->
+
                                     <td>
 
                                         {% if category.created_at %}
 
-                                            <span class="small text-muted">
+                                            <span class="created-date">
                                                 {{ category.created_at.strftime("%d %b %Y") }}
                                             </span>
 
@@ -390,12 +1016,13 @@
 
 
                                     <!-- ACTIONS -->
+
                                     <td class="text-end pe-3 pe-md-4">
 
-                                        <div class="d-inline-flex flex-wrap justify-content-end gap-1">
-
+                                        <div class="action-buttons">
 
                                             <!-- EDIT -->
+
                                             <a
                                                 href="{{ url_for(
                                                     'admin_categories.edit_category',
@@ -405,6 +1032,7 @@
                                                 title="Edit category"
                                             >
                                                 <i class="bi bi-pencil"></i>
+
                                                 <span class="d-none d-xl-inline ms-1">
                                                     Edit
                                                 </span>
@@ -412,6 +1040,7 @@
 
 
                                             <!-- TOGGLE -->
+
                                             <form
                                                 action="{{ url_for(
                                                     'admin_categories.toggle_category_status',
@@ -461,6 +1090,7 @@
 
 
                                             <!-- DELETE -->
+
                                             <form
                                                 action="{{ url_for(
                                                     'admin_categories.delete_category',
@@ -508,61 +1138,54 @@
                 </div>
 
 
-                <!-- ================================================= -->
+                <!-- ============================================= -->
                 <!-- MOBILE CATEGORY CARDS -->
-                <!-- ================================================= -->
+                <!-- ============================================= -->
 
-                <div class="d-md-none p-3">
+                <div class="mobile-category-list">
 
                     {% for category in categories %}
 
-                        <div class="border rounded-3 p-3 mb-3">
+                        <div class="mobile-category">
 
-                            <div class="d-flex gap-3">
+                            <div class="mobile-category-top">
 
-                                <div
-                                    class="flex-shrink-0 rounded-3 overflow-hidden bg-light border"
-                                    style="width:64px;height:64px;"
-                                >
+                                <div class="mobile-category-image">
 
                                     {% if category.image_url %}
 
                                         <img
                                             src="{{ url_for('static', filename=category.image_url) }}"
                                             alt="{{ category.name }}"
-                                            class="w-100 h-100"
-                                            style="object-fit:cover;"
                                             loading="lazy"
                                         >
 
                                     {% else %}
 
-                                        <div class="w-100 h-100 d-flex align-items-center justify-content-center text-muted">
-                                            <i class="bi bi-image"></i>
-                                        </div>
+                                        <i class="bi bi-image"></i>
 
                                     {% endif %}
 
                                 </div>
 
 
-                                <div class="flex-grow-1 min-w-0">
+                                <div class="mobile-category-info">
 
-                                    <div class="d-flex justify-content-between gap-2">
+                                    <div class="mobile-category-heading">
 
-                                        <h3 class="h6 fw-bold mb-1 text-truncate">
+                                        <h3 class="mobile-category-name">
                                             {{ category.name }}
                                         </h3>
 
                                         {% if category.is_active %}
 
-                                            <span class="badge text-bg-success">
+                                            <span class="status-badge active">
                                                 Active
                                             </span>
 
                                         {% else %}
 
-                                            <span class="badge text-bg-secondary">
+                                            <span class="status-badge inactive">
                                                 Inactive
                                             </span>
 
@@ -571,18 +1194,23 @@
                                     </div>
 
 
-                                    <div class="small text-muted mb-1">
+                                    <span class="mobile-slug">
                                         /products/category/{{ category.slug }}
-                                    </div>
+                                    </span>
 
 
-                                    <div class="small text-muted">
-                                        {{ category.products | length }}
-                                        {% if category.products | length == 1 %}
-                                            product
-                                        {% else %}
-                                            products
-                                        {% endif %}
+                                    <div class="mobile-product-count">
+                                        <i class="bi bi-box-seam"></i>
+
+                                        <span>
+                                            {{ category.products | length }}
+
+                                            {% if category.products | length == 1 %}
+                                                product
+                                            {% else %}
+                                                products
+                                            {% endif %}
+                                        </span>
                                     </div>
 
                                 </div>
@@ -592,95 +1220,91 @@
 
                             <!-- MOBILE ACTIONS -->
 
-                            <div class="d-grid gap-2 mt-3">
+                            <div class="mobile-actions">
 
                                 <a
                                     href="{{ url_for(
                                         'admin_categories.edit_category',
                                         category_id=category.id
                                     ) }}"
-                                    class="btn btn-sm btn-outline-primary"
+                                    class="btn btn-outline-primary edit-action d-flex align-items-center justify-content-center"
                                 >
                                     <i class="bi bi-pencil me-1"></i>
                                     Edit Category
                                 </a>
 
 
-                                <div class="row g-2">
+                                <div>
 
-                                    <div class="col-6">
+                                    <form
+                                        action="{{ url_for(
+                                            'admin_categories.toggle_category_status',
+                                            category_id=category.id
+                                        ) }}"
+                                        method="POST"
+                                    >
 
-                                        <form
-                                            action="{{ url_for(
-                                                'admin_categories.toggle_category_status',
-                                                category_id=category.id
-                                            ) }}"
-                                            method="POST"
+                                        <input
+                                            type="hidden"
+                                            name="csrf_token"
+                                            value="{{ csrf_token() }}"
                                         >
 
-                                            <input
-                                                type="hidden"
-                                                name="csrf_token"
-                                                value="{{ csrf_token() }}"
-                                            >
-
-                                            {% if category.is_active %}
-
-                                                <button
-                                                    type="submit"
-                                                    class="btn btn-sm btn-outline-warning w-100"
-                                                >
-                                                    <i class="bi bi-eye-slash me-1"></i>
-                                                    Disable
-                                                </button>
-
-                                            {% else %}
-
-                                                <button
-                                                    type="submit"
-                                                    class="btn btn-sm btn-outline-success w-100"
-                                                >
-                                                    <i class="bi bi-eye me-1"></i>
-                                                    Activate
-                                                </button>
-
-                                            {% endif %}
-
-                                        </form>
-
-                                    </div>
-
-
-                                    <div class="col-6">
-
-                                        <form
-                                            action="{{ url_for(
-                                                'admin_categories.delete_category',
-                                                category_id=category.id
-                                            ) }}"
-                                            method="POST"
-                                            onsubmit="return confirm(
-                                                'Are you sure you want to delete {{ category.name | e }}?'
-                                            );"
-                                        >
-
-                                            <input
-                                                type="hidden"
-                                                name="csrf_token"
-                                                value="{{ csrf_token() }}"
-                                            >
+                                        {% if category.is_active %}
 
                                             <button
                                                 type="submit"
-                                                class="btn btn-sm btn-outline-danger w-100"
+                                                class="btn btn-outline-warning w-100 d-flex align-items-center justify-content-center"
                                             >
-                                                <i class="bi bi-trash me-1"></i>
-                                                Delete
+                                                <i class="bi bi-eye-slash me-1"></i>
+                                                Disable
                                             </button>
 
-                                        </form>
+                                        {% else %}
 
-                                    </div>
+                                            <button
+                                                type="submit"
+                                                class="btn btn-outline-success w-100 d-flex align-items-center justify-content-center"
+                                            >
+                                                <i class="bi bi-eye me-1"></i>
+                                                Activate
+                                            </button>
+
+                                        {% endif %}
+
+                                    </form>
+
+                                </div>
+
+
+                                <div>
+
+                                    <form
+                                        action="{{ url_for(
+                                            'admin_categories.delete_category',
+                                            category_id=category.id
+                                        ) }}"
+                                        method="POST"
+                                        onsubmit="return confirm(
+                                            'Are you sure you want to delete {{ category.name | e }}?'
+                                        );"
+                                    >
+
+                                        <input
+                                            type="hidden"
+                                            name="csrf_token"
+                                            value="{{ csrf_token() }}"
+                                        >
+
+                                        <button
+                                            type="submit"
+                                            class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center"
+                                        >
+                                            <i class="bi bi-trash me-1"></i>
+                                            Delete
+                                        </button>
+
+                                    </form>
 
                                 </div>
 
@@ -695,31 +1319,28 @@
 
             {% else %}
 
-                <!-- ================================================= -->
+                <!-- ============================================= -->
                 <!-- EMPTY STATE -->
-                <!-- ================================================= -->
+                <!-- ============================================= -->
 
-                <div class="text-center py-5 px-3">
+                <div class="empty-state">
 
-                    <div
-                        class="rounded-circle bg-primary bg-opacity-10 text-primary d-inline-flex align-items-center justify-content-center mb-3"
-                        style="width:76px;height:76px;"
-                    >
-                        <i class="bi bi-grid-3x3-gap fs-2"></i>
+                    <div class="empty-icon">
+                        <i class="bi bi-grid-3x3-gap"></i>
                     </div>
 
-                    <h2 class="h5 fw-bold">
+                    <h2 class="empty-title">
                         No categories yet
                     </h2>
 
-                    <p class="text-muted mx-auto mb-4" style="max-width:480px;">
+                    <p class="empty-description">
                         Start organizing your Bomet Machineries products by
                         creating your first category.
                     </p>
 
                     <a
                         href="{{ url_for('admin_categories.add_category') }}"
-                        class="btn btn-primary"
+                        class="btn btn-success empty-action"
                     >
                         <i class="bi bi-plus-lg me-1"></i>
                         Create First Category
@@ -732,6 +1353,8 @@
         </div>
 
     </div>
+
+</div>
 
 </div>
 

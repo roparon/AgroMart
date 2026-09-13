@@ -4,130 +4,566 @@
 
 {% block content %}
 
-<div class="container-fluid py-3 py-md-4">
-<!-- Header -->
-<div class="d-flex justify-content-between align-items-center mb-3 mb-md-4">
-    <div>
-        <h1 class="fw-bold fs-3 fs-md-1 mb-1">Admin Dashboard</h1>
-        <p class="text-muted small fs-md-6 mb-0">
-            Welcome to the <i>Bomet Machineries Ltd.</i> administration panel.
-        </p>
-    </div>
+<style>
+/* ==========================================================
+   BOMET MACHINERIES LTD.
+   ADMIN DASHBOARD
+   Lightweight mobile-first styling
+   ========================================================== */
+
+.admin-dashboard {
+    --admin-green: #15803d;
+    --admin-green-dark: #166534;
+    --admin-green-soft: #f0fdf4;
+
+    --admin-blue: #2563eb;
+    --admin-blue-soft: #eff6ff;
+
+    --admin-yellow: #d97706;
+    --admin-yellow-soft: #fffbeb;
+
+    --admin-cyan: #0891b2;
+    --admin-cyan-soft: #ecfeff;
+
+    --admin-text: #111827;
+    --admin-text-soft: #374151;
+    --admin-muted: #6b7280;
+    --admin-border: #e5e7eb;
+    --admin-background: #f8fafc;
+    --admin-white: #ffffff;
+
+    --admin-radius: 14px;
+    --admin-radius-sm: 10px;
+
+    --admin-shadow: 0 3px 14px rgba(15, 23, 42, .055);
+    --admin-shadow-hover: 0 8px 24px rgba(15, 23, 42, .09);
+
+    color: var(--admin-text);
+}
+
+/* ---------- Page ---------- */
+
+.admin-dashboard {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+/* ---------- Header ---------- */
+
+.admin-dashboard-header {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 18px;
+}
+
+.admin-dashboard-title {
+    margin: 0;
+    color: var(--admin-text);
+    font-size: 1.35rem;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -.02em;
+}
+
+.admin-dashboard-subtitle {
+    margin: 0;
+    color: var(--admin-muted);
+    font-size: .78rem;
+    line-height: 1.45;
+}
+
+/* ---------- Statistics ---------- */
+
+.admin-stat-card {
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    background: var(--admin-white);
+    border: 1px solid var(--admin-border) !important;
+    border-radius: var(--admin-radius) !important;
+    box-shadow: var(--admin-shadow) !important;
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease,
+        border-color .18s ease;
+}
+
+.admin-stat-card::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--stat-accent, var(--admin-green));
+}
+
+.admin-stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--admin-shadow-hover) !important;
+}
+
+.admin-stat-body {
+    min-height: 92px;
+    padding: 13px 14px !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.admin-stat-label {
+    max-width: 75%;
+    color: var(--admin-muted);
+    font-size: .72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .035em;
+}
+
+.admin-stat-icon {
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 34px;
+    border-radius: 9px;
+    font-size: 1rem;
+}
+
+.admin-stat-number {
+    margin: 7px 0 0;
+    color: var(--admin-text);
+    font-size: 1.35rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+/* Statistic colour variants */
+
+.admin-stat-products {
+    --stat-accent: var(--admin-green);
+}
+
+.admin-stat-products .admin-stat-icon {
+    color: var(--admin-green);
+    background: var(--admin-green-soft);
+}
+
+.admin-stat-categories {
+    --stat-accent: var(--admin-blue);
+}
+
+.admin-stat-categories .admin-stat-icon {
+    color: var(--admin-blue);
+    background: var(--admin-blue-soft);
+}
+
+.admin-stat-orders {
+    --stat-accent: var(--admin-yellow);
+}
+
+.admin-stat-orders .admin-stat-icon {
+    color: var(--admin-yellow);
+    background: var(--admin-yellow-soft);
+}
+
+.admin-stat-customers {
+    --stat-accent: var(--admin-cyan);
+}
+
+.admin-stat-customers .admin-stat-icon {
+    color: var(--admin-cyan);
+    background: var(--admin-cyan-soft);
+}
+
+/* ---------- Quick Actions ---------- */
+
+.admin-actions-card {
+    overflow: hidden;
+    background: var(--admin-white);
+    border: 1px solid var(--admin-border) !important;
+    border-radius: var(--admin-radius) !important;
+    box-shadow: var(--admin-shadow) !important;
+}
+
+.admin-actions-header {
+    padding: 13px 14px !important;
+    background: var(--admin-white) !important;
+    border-bottom: 1px solid var(--admin-border) !important;
+}
+
+.admin-actions-title {
+    margin: 0;
+    color: var(--admin-text);
+    font-size: .92rem;
+    font-weight: 800;
+}
+
+.admin-actions-body {
+    padding: 13px !important;
+}
+
+/* ---------- Action Buttons ---------- */
+
+.admin-action-btn {
+    min-height: 74px;
+    width: 100%;
+    padding: 10px 8px !important;
+
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 6px;
+    border-radius: var(--admin-radius-sm) !important;
+
+    font-size: .72rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-decoration: none !important;
+
+    transition:
+        transform .16s ease,
+        box-shadow .16s ease,
+        background-color .16s ease,
+        border-color .16s ease;
+}
+
+.admin-action-btn i {
+    margin: 0 !important;
+    font-size: 1.25rem;
+    line-height: 1;
+}
+
+.admin-action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 14px rgba(15, 23, 42, .07);
+}
+
+.admin-action-btn:active {
+    transform: translateY(0);
+}
+
+.admin-action-btn:focus-visible {
+    outline: 3px solid rgba(21, 128, 61, .18);
+    outline-offset: 2px;
+}
+
+/* ---------- Tablet ---------- */
+
+@media (min-width: 576px) {
+
+    .admin-dashboard-header {
+        margin-bottom: 22px;
+    }
+
+    .admin-dashboard-title {
+        font-size: 1.6rem;
+    }
+
+    .admin-dashboard-subtitle {
+        font-size: .84rem;
+    }
+
+    .admin-stat-body {
+        min-height: 105px;
+        padding: 15px 16px !important;
+    }
+
+    .admin-stat-number {
+        font-size: 1.55rem;
+    }
+
+    .admin-action-btn {
+        min-height: 90px;
+        font-size: .78rem;
+    }
+
+    .admin-action-btn i {
+        font-size: 1.4rem;
+    }
+}
+
+/* ---------- Desktop ---------- */
+
+@media (min-width: 768px) {
+
+    .admin-dashboard-title {
+        font-size: 1.8rem;
+    }
+
+    .admin-stat-body {
+        min-height: 112px;
+    }
+
+    .admin-stat-number {
+        font-size: 1.7rem;
+    }
+
+    .admin-action-btn {
+        min-height: 100px;
+    }
+}
+
+/* ---------- Large screens ---------- */
+
+@media (min-width: 1200px) {
+
+    .admin-dashboard {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    .admin-dashboard-header {
+        margin-bottom: 24px;
+    }
+
+    .admin-dashboard-title {
+        font-size: 2rem;
+    }
+
+    .admin-stat-body {
+        padding: 17px 18px !important;
+    }
+
+    .admin-stat-number {
+        font-size: 1.85rem;
+    }
+}
+
+/* ---------- Reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .admin-stat-card,
+    .admin-action-btn {
+        transition: none;
+    }
+
+    .admin-stat-card:hover,
+    .admin-action-btn:hover {
+        transform: none;
+    }
+}
+</style>
+
+<div class="container-fluid py-3 py-md-4 admin-dashboard">
+
+<!-- =====================================================
+     HEADER
+     ===================================================== -->
+
+<div class="admin-dashboard-header">
+    <h1 class="admin-dashboard-title">
+        Admin Dashboard
+    </h1>
+
+    <p class="admin-dashboard-subtitle">
+        Welcome to the <i>Bomet Machineries Ltd.</i> administration panel.
+    </p>
 </div>
-<!-- Stat Cards -->
+
+
+<!-- =====================================================
+     STAT CARDS
+     ===================================================== -->
+
 <div class="row g-2 g-md-3 mb-3 mb-md-4">
 
     <!-- Products -->
-    <div class="col-6 col-md-6 col-xl-3">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body p-2.5 p-md-3 d-flex flex-column justify-content-between">
-                <div class="d-flex align-items-center justify-content-between mb-1">
-                    <span class="text-muted small fw-medium text-truncate">Products</span>
-                    <i class="bi bi-box-seam text-success fs-5 fs-md-3"></i>
+    <div class="col-6 col-xl-3">
+        <div class="card admin-stat-card admin-stat-products">
+            <div class="card-body admin-stat-body">
+
+                <div class="d-flex align-items-center justify-content-between">
+                    <span class="admin-stat-label text-truncate">
+                        Products
+                    </span>
+
+                    <span class="admin-stat-icon">
+                        <i class="bi bi-box-seam"></i>
+                    </span>
                 </div>
-                <h3 class="fw-bold mb-0 fs-4 fs-md-2">{{ total_products }}</h3>
+
+                <h3 class="admin-stat-number">
+                    {{ total_products }}
+                </h3>
+
             </div>
         </div>
     </div>
+
 
     <!-- Categories -->
-    <div class="col-6 col-md-6 col-xl-3">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body p-2.5 p-md-3 d-flex flex-column justify-content-between">
-                <div class="d-flex align-items-center justify-content-between mb-1">
-                    <span class="text-muted small fw-medium text-truncate">Categories</span>
-                    <i class="bi bi-grid text-primary fs-5 fs-md-3"></i>
+    <div class="col-6 col-xl-3">
+        <div class="card admin-stat-card admin-stat-categories">
+            <div class="card-body admin-stat-body">
+
+                <div class="d-flex align-items-center justify-content-between">
+                    <span class="admin-stat-label text-truncate">
+                        Categories
+                    </span>
+
+                    <span class="admin-stat-icon">
+                        <i class="bi bi-grid"></i>
+                    </span>
                 </div>
-                <h3 class="fw-bold mb-0 fs-4 fs-md-2">{{ total_categories }}</h3>
+
+                <h3 class="admin-stat-number">
+                    {{ total_categories }}
+                </h3>
+
             </div>
         </div>
     </div>
+
 
     <!-- Orders -->
-    <div class="col-6 col-md-6 col-xl-3">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body p-2.5 p-md-3 d-flex flex-column justify-content-between">
-                <div class="d-flex align-items-center justify-content-between mb-1">
-                    <span class="text-muted small fw-medium text-truncate">Orders</span>
-                    <i class="bi bi-cart-check text-warning fs-5 fs-md-3"></i>
+    <div class="col-6 col-xl-3">
+        <div class="card admin-stat-card admin-stat-orders">
+            <div class="card-body admin-stat-body">
+
+                <div class="d-flex align-items-center justify-content-between">
+                    <span class="admin-stat-label text-truncate">
+                        Orders
+                    </span>
+
+                    <span class="admin-stat-icon">
+                        <i class="bi bi-cart-check"></i>
+                    </span>
                 </div>
-                <h3 class="fw-bold mb-0 fs-4 fs-md-2">{{ total_orders }}</h3>
+
+                <h3 class="admin-stat-number">
+                    {{ total_orders }}
+                </h3>
+
             </div>
         </div>
     </div>
 
+
     <!-- Customers -->
-    <div class="col-6 col-md-6 col-xl-3">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body p-2.5 p-md-3 d-flex flex-column justify-content-between">
-                <div class="d-flex align-items-center justify-content-between mb-1">
-                    <span class="text-muted small fw-medium text-truncate">Customers</span>
-                    <i class="bi bi-people text-info fs-5 fs-md-3"></i>
+    <div class="col-6 col-xl-3">
+        <div class="card admin-stat-card admin-stat-customers">
+            <div class="card-body admin-stat-body">
+
+                <div class="d-flex align-items-center justify-content-between">
+                    <span class="admin-stat-label text-truncate">
+                        Customers
+                    </span>
+
+                    <span class="admin-stat-icon">
+                        <i class="bi bi-people"></i>
+                    </span>
                 </div>
-                <h3 class="fw-bold mb-0 fs-4 fs-md-2">{{ total_users }}</h3>
+
+                <h3 class="admin-stat-number">
+                    {{ total_users }}
+                </h3>
+
             </div>
         </div>
     </div>
 
 </div>
 
-<!-- Quick Actions -->
-<div class="card border-0 shadow-sm">
-    <div class="card-header bg-white py-2.5 py-md-3">
-        <h5 class="mb-0 fw-bold fs-6 fs-md-5">
+
+<!-- =====================================================
+     QUICK ACTIONS
+     ===================================================== -->
+
+<div class="card admin-actions-card">
+
+    <div class="card-header admin-actions-header">
+        <h5 class="admin-actions-title">
             Quick Actions
         </h5>
     </div>
 
-    <div class="card-body p-2.5 p-md-3">
+    <div class="card-body admin-actions-body">
+
         <div class="row g-2 g-md-3">
 
             <!-- Manage Products -->
             <div class="col-6 col-md-3">
                 <a href="{{ url_for('admin_products.products') }}"
-                   class="btn btn-outline-success w-100 py-2.5 py-md-3 d-flex flex-column align-items-center justify-content-center text-decoration-none">
-                    <i class="bi bi-box-seam fs-5 fs-md-3 me-1 me-md-0 mb-md-2"></i>
-                    <span class="small fw-semibold text-truncate">Products</span>
+                   class="btn btn-outline-success admin-action-btn">
+
+                    <i class="bi bi-box-seam"></i>
+
+                    <span class="text-truncate">
+                        Products
+                    </span>
+
                 </a>
             </div>
+
 
             <!-- Manage Categories -->
             <div class="col-6 col-md-3">
                 <a href="{{ url_for('admin_categories.categories') }}"
-                   class="btn btn-outline-primary w-100 py-2.5 py-md-3 d-flex flex-column align-items-center justify-content-center text-decoration-none">
-                    <i class="bi bi-grid fs-5 fs-md-3 me-1 me-md-0 mb-md-2"></i>
-                    <span class="small fw-semibold text-truncate">Categories</span>
+                   class="btn btn-outline-primary admin-action-btn">
+
+                    <i class="bi bi-grid"></i>
+
+                    <span class="text-truncate">
+                        Categories
+                    </span>
+
                 </a>
             </div>
+
 
             <!-- Manage Orders -->
             <div class="col-6 col-md-3">
                 <a href="{{ url_for('orders.orders') }}"
-                   class="btn btn-outline-warning w-100 py-2.5 py-md-3 d-flex flex-column align-items-center justify-content-center text-decoration-none">
-                    <i class="bi bi-cart-check fs-5 fs-md-3 me-1 me-md-0 mb-md-2"></i>
-                    <span class="small fw-semibold text-truncate">Orders</span>
+                   class="btn btn-outline-warning admin-action-btn">
+
+                    <i class="bi bi-cart-check"></i>
+
+                    <span class="text-truncate">
+                        Orders
+                    </span>
+
                 </a>
             </div>
+
 
             <!-- Manage Customers -->
             <div class="col-6 col-md-3">
                 <a href="{{ url_for('customers.customers') }}"
-                   class="btn btn-outline-dark w-100 py-2.5 py-md-3 d-flex flex-column align-items-center justify-content-center text-decoration-none">
-                    <i class="bi bi-people fs-5 fs-md-3 me-1 me-md-0 mb-md-2"></i>
-                    <span class="small fw-semibold text-truncate">Customers</span>
+                   class="btn btn-outline-dark admin-action-btn">
+
+                    <i class="bi bi-people"></i>
+
+                    <span class="text-truncate">
+                        Customers
+                    </span>
+
                 </a>
             </div>
+
 
             <!-- Homepage CMS -->
             <div class="col-6 col-md-3">
                 <a href="{{ url_for('admin_homepage.homepage') }}"
-                   class="btn btn-outline-success w-100 py-2.5 py-md-3 d-flex flex-column align-items-center justify-content-center text-decoration-none">
-                    <i class="bi bi-layout-text-window-reverse fs-5 fs-md-3 me-1 me-md-0 mb-md-2"></i>
-                    <span class="small fw-semibold text-truncate">Homepage CMS</span>
+                   class="btn btn-outline-success admin-action-btn">
+
+                    <i class="bi bi-layout-text-window-reverse"></i>
+
+                    <span class="text-truncate">
+                        Homepage CMS
+                    </span>
+
                 </a>
             </div>
 
         </div>
+
     </div>
 </div>
 </div>
