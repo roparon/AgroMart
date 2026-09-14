@@ -1,1243 +1,1595 @@
 {% extends "base.html" %}
 
 {% block title %}
-{{ settings.site_title if settings and settings.site_title else "Bomet Machineries Ltd. | Agricultural Machinery & Spare Parts" }}
+{{ settings.site_title if settings and settings.site_title else "Bomet Machineries Ltd. | Agricultural Machinery & Genuine Spare Parts in Kenya" }}
 {% endblock %}
 
 {% block content %}
 
 <style>
-/* ==========================================================
+/* ============================================================
    BOMET MACHINERIES LTD.
-   PROFESSIONAL MOBILE-FIRST HOMEPAGE
-   ========================================================== */
+   PREMIUM ECOMMERCE HOMEPAGE
+   Mobile-first / CMS-compatible / Lightweight
+   ============================================================ */
 
 :root {
-    --bm-green: #198754;
-    --bm-green-dark: #146c43;
-    --bm-green-light: rgba(25, 135, 84, .10);
-    --bm-dark: #17211b;
-    --bm-text: #26332b;
-    --bm-muted: #6c757d;
-    --bm-light: #f6f8f7;
-    --bm-border: #e8ece9;
-    --bm-radius: 1rem;
-    --bm-radius-lg: 1.35rem;
-    --bm-shadow: 0 .5rem 1.5rem rgba(0, 0, 0, .07);
-    --bm-shadow-lg: 0 1rem 3rem rgba(0, 0, 0, .11);
+    --bm-home-green: #198754;
+    --bm-home-green-dark: #146c43;
+    --bm-home-green-deep: #0f5132;
+    --bm-home-green-soft: #edf8f1;
+
+    --bm-home-gold: #d69e2e;
+    --bm-home-gold-soft: #fff8e6;
+
+    --bm-home-dark: #17211b;
+    --bm-home-dark-2: #26332b;
+    --bm-home-muted: #68756e;
+
+    --bm-home-bg: #f6f8f7;
+    --bm-home-white: #ffffff;
+    --bm-home-border: #e3e9e5;
+
+    --bm-home-danger: #dc3545;
+    --bm-home-danger-soft: #fff1f2;
+
+    --bm-home-shadow: 0 8px 28px rgba(16, 35, 25, .07);
+    --bm-home-shadow-lg: 0 18px 48px rgba(16, 35, 25, .12);
+
+    --bm-home-radius: 18px;
+    --bm-home-radius-sm: 12px;
+
+    --bm-home-container: 1380px;
 }
 
+/* ============================================================
+   GLOBAL HOMEPAGE
+   ============================================================ */
 
-/* ==========================================================
-   GENERAL
-   ========================================================== */
+.bm-home {
+    width: 100%;
+    min-width: 0;
+    overflow-x: clip;
+    background: var(--bm-home-white);
+    color: var(--bm-home-dark);
+}
 
-.homepage-section {
+.bm-home *,
+.bm-home *::before,
+.bm-home *::after {
+    box-sizing: border-box;
+}
+
+.bm-home img {
+    max-width: 100%;
+}
+
+.bm-home a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.bm-home-container {
+    width: 100%;
+    max-width: var(--bm-home-container);
+    margin-inline: auto;
+    padding-inline: 1rem;
+}
+
+.bm-home-section {
     position: relative;
 }
 
-.content-section {
+.bm-home-content-section {
     content-visibility: auto;
     contain-intrinsic-size: 600px;
 }
 
-.homepage-section-content {
-    line-height: 1.8;
-    overflow-wrap: anywhere;
+.bm-home-section-spacing {
+    padding-block: 3.25rem;
 }
 
-.homepage-mobile-padding {
-    padding-left: 1rem;
-    padding-right: 1rem;
+.bm-home-section-heading {
+    max-width: 760px;
+    margin-inline: auto;
+    margin-bottom: 2rem;
+    text-align: center;
 }
 
-.homepage-section-title {
-    font-weight: 900;
-    letter-spacing: .01em;
-    line-height: 1.15;
-    color: var(--bm-dark);
-}
-
-.homepage-section-subtitle {
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-    line-height: 1.65;
-}
-
-.homepage-eyebrow {
+.bm-home-eyebrow {
     display: inline-flex;
     align-items: center;
-    gap: .45rem;
-    color: var(--bm-green);
-    font-size: .75rem;
+    gap: .4rem;
+    margin-bottom: .65rem;
+    color: var(--bm-home-green);
+    font-size: .68rem;
     font-weight: 800;
-    letter-spacing: .12em;
+    letter-spacing: .13em;
+    line-height: 1.3;
     text-transform: uppercase;
-    margin-bottom: .75rem;
 }
 
-.homepage-eyebrow::before {
+.bm-home-eyebrow::before {
     content: "";
-    width: 28px;
+    width: 22px;
     height: 2px;
-    background: currentColor;
+    border-radius: 99px;
+    background: var(--bm-home-gold);
 }
 
+.bm-home-section-title {
+    margin: 0;
+    color: var(--bm-home-dark);
+    font-size: clamp(1.45rem, 5vw, 2.35rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -.035em;
+}
 
-/* ==========================================================
+.bm-home-section-subtitle {
+    max-width: 680px;
+    margin: .75rem auto 0;
+    color: var(--bm-home-muted);
+    font-size: .82rem;
+    line-height: 1.7;
+}
+
+/* ============================================================
    ANNOUNCEMENT
-   ========================================================== */
+   ============================================================ */
 
-.homepage-announcement {
-    background: var(--bm-green);
+.bm-home-announcement {
+    background: var(--bm-home-green-deep);
     color: #fff;
-    font-size: .85rem;
-    line-height: 1.45;
+    font-size: .72rem;
+    line-height: 1.5;
 }
 
-.homepage-announcement a {
+.bm-home-announcement-inner {
+    min-height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-block: .45rem;
+    text-align: center;
+}
+
+.bm-home-announcement a {
+    color: #fff;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.bm-home-announcement a:hover {
     color: #fff;
     text-decoration: underline;
-    font-weight: 700;
 }
 
+/* ============================================================
+   PREVIEW NOTICE
+   ============================================================ */
 
-/* ==========================================================
-   PREVIEW
-   ========================================================== */
-
-.homepage-preview {
-    background: #ffc107;
-    color: #212529;
-    font-size: .82rem;
-    font-weight: 700;
+.bm-home-preview {
+    background: var(--bm-home-gold);
+    color: #211b0b;
+    font-size: .72rem;
+    font-weight: 800;
 }
 
+.bm-home-preview-inner {
+    min-height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .4rem;
+    padding-block: .45rem;
+    text-align: center;
+}
 
-/* ==========================================================
+/* ============================================================
    HERO
-   ========================================================== */
+   ============================================================ */
 
-.hero-carousel-item {
+.bm-home-hero {
     position: relative;
-    height: 380px;
-    min-height: 320px;
+    overflow: hidden;
+    background: var(--bm-home-dark);
+}
+
+.bm-home-hero .carousel-inner,
+.bm-home-hero .carousel-item {
+    height: 430px;
+}
+
+.bm-home-hero-slide {
+    position: relative;
+    height: 100%;
     overflow: hidden;
 }
 
-.hero-slide-image {
+.bm-home-hero-image,
+.bm-home-hero-placeholder {
     width: 100%;
     height: 100%;
+}
+
+.bm-home-hero-image {
+    display: block;
     object-fit: cover;
     object-position: center;
 }
 
-.hero-slide-overlay {
+.bm-home-hero-placeholder {
+    background:
+        radial-gradient(
+            circle at 80% 25%,
+            rgba(25, 135, 84, .38),
+            transparent 38%
+        ),
+        linear-gradient(
+            135deg,
+            #102019,
+            #26382e
+        );
+}
+
+.bm-home-hero-overlay {
     position: absolute;
     inset: 0;
     display: flex;
     align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 1.25rem;
     background:
         linear-gradient(
-            180deg,
-            rgba(0, 0, 0, .18) 0%,
-            rgba(0, 0, 0, .78) 100%
+            90deg,
+            rgba(7, 18, 12, .86) 0%,
+            rgba(7, 18, 12, .67) 42%,
+            rgba(7, 18, 12, .18) 100%
         );
 }
 
-.hero-slide-content {
+.bm-home-hero-content {
     width: 100%;
-    max-width: 900px;
+    max-width: 760px;
+    padding-block: 2rem;
 }
 
-.hero-slide-title {
-    font-size: 1.85rem;
-    line-height: 1.08;
-    font-weight: 900;
-    letter-spacing: .015em;
-    text-shadow: 0 2px 12px rgba(0, 0, 0, .4);
-}
-
-.hero-slide-subtitle {
-    font-size: .95rem;
-    line-height: 1.6;
-    color: rgba(255, 255, 255, .9);
-}
-
-.hero-slide-button {
-    min-height: 46px;
-    padding: .72rem 1.35rem;
+.bm-home-hero-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    margin-bottom: .85rem;
+    padding: .42rem .7rem;
+    border: 1px solid rgba(255,255,255,.22);
+    border-radius: 999px;
+    background: rgba(255,255,255,.08);
+    color: #fff;
+    font-size: .61rem;
     font-weight: 800;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    backdrop-filter: blur(8px);
 }
 
-.hero-placeholder {
-    width: 100%;
-    height: 100%;
-    background:
-        linear-gradient(
-            135deg,
-            #18221c,
-            #343a40
-        );
+.bm-home-hero-title {
+    max-width: 760px;
+    margin: 0 0 1rem;
+    color: #fff;
+    font-size: clamp(1.85rem, 7vw, 4rem);
+    font-weight: 800;
+    line-height: 1.04;
+    letter-spacing: -.045em;
+}
+
+.bm-home-hero-description {
+    max-width: 680px;
+    margin: 0 0 1.35rem;
+    color: rgba(255,255,255,.84);
+    font-size: .84rem;
+    line-height: 1.7;
+}
+
+.bm-home-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .55rem;
+}
+
+.bm-home-primary-btn,
+.bm-home-secondary-btn {
+    min-height: 45px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .4rem;
+    padding: .7rem 1rem;
+    border-radius: 10px;
+    font-size: .68rem;
+    font-weight: 800;
+    text-decoration: none;
+    transition:
+        transform .18s ease,
+        background-color .18s ease,
+        border-color .18s ease,
+        color .18s ease,
+        box-shadow .18s ease;
+}
+
+.bm-home-primary-btn {
+    border: 1px solid var(--bm-home-green);
+    background: var(--bm-home-green);
+    color: #fff;
+    box-shadow: 0 8px 22px rgba(25,135,84,.22);
+}
+
+.bm-home-primary-btn:hover {
+    background: var(--bm-home-green-dark);
+    border-color: var(--bm-home-green-dark);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.bm-home-secondary-btn {
+    border: 1px solid rgba(255,255,255,.38);
+    background: rgba(255,255,255,.08);
+    color: #fff;
+    backdrop-filter: blur(8px);
+}
+
+.bm-home-secondary-btn:hover {
+    border-color: rgba(255,255,255,.65);
+    background: rgba(255,255,255,.16);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.bm-home-hero-trust {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: .45rem;
+    max-width: 600px;
+    margin-top: 1.4rem;
+}
+
+.bm-home-hero-trust-item {
+    display: flex;
+    align-items: center;
+    gap: .45rem;
+    color: rgba(255,255,255,.78);
+    font-size: .58rem;
+    font-weight: 700;
+}
+
+.bm-home-hero-trust-item i {
+    color: #f3c969;
+    font-size: .8rem;
+}
+
+.bm-home-hero .carousel-indicators {
+    margin-bottom: .8rem;
+}
+
+.bm-home-hero .carousel-indicators button {
+    width: 24px;
+    height: 3px;
+    border: 0;
+    border-radius: 99px;
+}
+
+.bm-home-hero .carousel-control-prev,
+.bm-home-hero .carousel-control-next {
+    width: 44px;
+}
+
+.bm-home-hero .carousel-control-prev-icon,
+.bm-home-hero .carousel-control-next-icon {
+    width: 1.35rem;
+    height: 1.35rem;
 }
 
 @media (min-width: 576px) {
-    .hero-carousel-item {
-        height: 440px;
+    .bm-home-hero .carousel-inner,
+    .bm-home-hero .carousel-item {
+        height: 500px;
     }
 
-    .hero-slide-title {
-        font-size: 2.4rem;
+    .bm-home-hero-description {
+        font-size: .92rem;
     }
 
-    .hero-slide-subtitle {
-        font-size: 1.05rem;
+    .bm-home-hero-trust {
+        grid-template-columns: repeat(4, minmax(0,1fr));
     }
 }
 
 @media (min-width: 768px) {
-    .hero-carousel-item {
-        height: 500px;
+    .bm-home-hero .carousel-inner,
+    .bm-home-hero .carousel-item {
+        height: 570px;
     }
 
-    .hero-slide-title {
-        font-size: 3.1rem;
+    .bm-home-hero-description {
+        font-size: 1rem;
     }
 
-    .hero-slide-subtitle {
-        font-size: 1.15rem;
+    .bm-home-primary-btn,
+    .bm-home-secondary-btn {
+        min-height: 48px;
+        padding-inline: 1.25rem;
+    }
+}
+
+/* ============================================================
+   QUICK VALUE STRIP
+   ============================================================ */
+
+.bm-home-value-strip {
+    position: relative;
+    z-index: 3;
+    margin-top: -1.1rem;
+    padding-bottom: .5rem;
+}
+
+.bm-home-value-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    overflow: hidden;
+    border: 1px solid var(--bm-home-border);
+    border-radius: var(--bm-home-radius);
+    background: #fff;
+    box-shadow: var(--bm-home-shadow);
+}
+
+.bm-home-value-item {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    padding: .85rem .75rem;
+    border-bottom: 1px solid var(--bm-home-border);
+}
+
+.bm-home-value-item:nth-child(odd) {
+    border-right: 1px solid var(--bm-home-border);
+}
+
+.bm-home-value-item:nth-child(n+3) {
+    border-bottom: 0;
+}
+
+.bm-home-value-icon {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: var(--bm-home-green-soft);
+    color: var(--bm-home-green);
+    font-size: .82rem;
+}
+
+.bm-home-value-title {
+    display: block;
+    color: var(--bm-home-dark);
+    font-size: .61rem;
+    font-weight: 800;
+}
+
+.bm-home-value-text {
+    display: block;
+    margin-top: .12rem;
+    color: var(--bm-home-muted);
+    font-size: .53rem;
+}
+
+@media (min-width: 768px) {
+    .bm-home-value-grid {
+        grid-template-columns: repeat(4, minmax(0,1fr));
+    }
+
+    .bm-home-value-item,
+    .bm-home-value-item:nth-child(n+3) {
+        border-right: 1px solid var(--bm-home-border);
+        border-bottom: 0;
+        padding: 1rem;
+    }
+
+    .bm-home-value-item:last-child {
+        border-right: 0;
+    }
+}
+
+/* ============================================================
+   CATEGORY DISCOVERY
+   ============================================================ */
+
+.bm-home-category-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: .75rem;
+}
+
+.bm-home-category-card {
+    position: relative;
+    min-width: 0;
+    overflow: hidden;
+    min-height: 145px;
+    display: flex;
+    align-items: flex-end;
+    border: 1px solid var(--bm-home-border);
+    border-radius: var(--bm-home-radius-sm);
+    background: #edf1ee;
+    box-shadow: 0 4px 16px rgba(0,0,0,.045);
+    text-decoration: none;
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+.bm-home-category-card:hover {
+    color: inherit;
+    transform: translateY(-3px);
+    box-shadow: var(--bm-home-shadow);
+}
+
+.bm-home-category-image,
+.bm-home-category-fallback {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.bm-home-category-image {
+    object-fit: cover;
+    transition: transform .3s ease;
+}
+
+.bm-home-category-card:hover .bm-home-category-image {
+    transform: scale(1.04);
+}
+
+.bm-home-category-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bm-home-green-soft);
+    color: var(--bm-home-green);
+    font-size: 2rem;
+}
+
+.bm-home-category-overlay {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    padding: 2.25rem .8rem .75rem;
+    background:
+        linear-gradient(
+            transparent,
+            rgba(10,20,14,.88)
+        );
+}
+
+.bm-home-category-name {
+    display: block;
+    color: #fff;
+    font-size: .72rem;
+    font-weight: 800;
+    line-height: 1.25;
+}
+
+.bm-home-category-arrow {
+    display: inline-flex;
+    align-items: center;
+    gap: .25rem;
+    margin-top: .25rem;
+    color: rgba(255,255,255,.76);
+    font-size: .54rem;
+    font-weight: 700;
+}
+
+@media (min-width: 576px) {
+    .bm-home-category-grid {
+        grid-template-columns: repeat(3, minmax(0,1fr));
+    }
+
+    .bm-home-category-card {
+        min-height: 175px;
     }
 }
 
 @media (min-width: 992px) {
-    .hero-slide-title {
-        font-size: 3.65rem;
+    .bm-home-category-grid {
+        grid-template-columns: repeat(4, minmax(0,1fr));
+    }
+
+    .bm-home-category-card {
+        min-height: 190px;
     }
 }
 
-
-/* ==========================================================
-   CATEGORY CIRCLES
-   ========================================================== */
-
-.circle-card {
-    display: block;
-    text-decoration: none;
-    color: inherit;
-}
-
-.circle-card-img {
-    display: block;
-    width: 125px;
-    height: 125px;
-    margin-left: auto;
-    margin-right: auto;
-    border-radius: 50%;
-    object-fit: cover;
-    box-shadow: 0 .45rem 1rem rgba(0, 0, 0, .12);
-    transition:
-        transform .25s ease,
-        box-shadow .25s ease;
-}
-
-.circle-card:hover .circle-card-img {
-    transform: translateY(-5px) scale(1.03);
-    box-shadow: 0 .85rem 1.7rem rgba(0, 0, 0, .16);
-}
-
-.circle-card-placeholder {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--bm-light);
-    color: var(--bm-muted);
-}
-
-@media (min-width: 576px) {
-    .circle-card-img {
-        width: 155px;
-        height: 155px;
-    }
-}
-
-@media (min-width: 768px) {
-    .circle-card-img {
-        width: 180px;
-        height: 180px;
-    }
-}
-
-
-/* ==========================================================
-   CATEGORY CARDS
-   ========================================================== */
-
-.category-badge-card {
-    height: 100%;
-    border: 1px solid var(--bm-border);
-    border-radius: var(--bm-radius);
-    overflow: hidden;
-    background: #fff;
-    transition:
-        transform .2s ease,
-        border-color .2s ease,
-        box-shadow .2s ease;
-}
-
-.category-badge-card:hover {
-    border-color: var(--bm-green);
-    transform: translateY(-4px);
-    box-shadow: var(--bm-shadow) !important;
-}
-
-.category-badge-image {
-    width: 100%;
-    height: 135px;
-    object-fit: cover;
-}
-
-.category-badge-placeholder {
-    width: 100%;
-    height: 135px;
-    background: var(--bm-light);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--bm-muted);
-}
-
-
-/* ==========================================================
+/* ============================================================
    PRODUCT GRID
-   ========================================================== */
+   ============================================================ */
 
-.homepage-product-card {
-    height: 100%;
-    border: 0;
-    overflow: hidden;
-    border-radius: var(--bm-radius);
-    background: #fff;
-    transition:
-        transform .2s ease,
-        box-shadow .2s ease;
+.bm-home-product-section {
+    background: var(--bm-home-bg);
 }
 
-.homepage-product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--bm-shadow-lg) !important;
+.bm-home-category-product-block {
+    margin-bottom: 2.5rem;
 }
 
-.homepage-product-image {
-    display: block;
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-    background: var(--bm-light);
+.bm-home-category-product-block:last-child {
+    margin-bottom: 0;
 }
 
-.homepage-product-placeholder {
+.bm-home-product-heading {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--bm-muted);
+    flex-direction: column;
+    gap: .7rem;
+    margin-bottom: 1rem;
 }
 
-.homepage-product-name {
-    min-height: 38px;
-    line-height: 1.3;
+.bm-home-product-heading-title {
+    margin: 0;
+    color: var(--bm-home-dark);
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: -.02em;
 }
 
-.homepage-product-price {
-    font-size: .95rem;
-}
-
-
-/* ==========================================================
-   PRODUCT GRID CMS IMAGE
-   ========================================================== */
-
-.product-grid-media {
-    position: relative;
-    overflow: hidden;
-    border-radius: var(--bm-radius-lg);
-    box-shadow: var(--bm-shadow);
-    margin-bottom: 2rem;
-}
-
-.product-grid-media img {
-    display: block;
-    width: 100%;
-    height: 260px;
-    object-fit: cover;
-}
-
-.product-grid-media-overlay {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 1.25rem;
-    background:
-        linear-gradient(
-            180deg,
-            rgba(0, 0, 0, .10),
-            rgba(0, 0, 0, .78)
-        );
-}
-
-.product-grid-media-title {
-    color: #fff;
-    font-size: 1.8rem;
-    line-height: 1.1;
-    font-weight: 900;
-    text-transform: uppercase;
-}
-
-.product-grid-media-subtitle {
-    color: rgba(255, 255, 255, .88);
+.bm-home-product-heading-description {
+    margin: .25rem 0 0;
+    color: var(--bm-home-muted);
+    font-size: .68rem;
     line-height: 1.55;
 }
 
-@media (min-width: 576px) {
-    .product-grid-media img {
-        height: 320px;
-    }
-
-    .product-grid-media-title {
-        font-size: 2.4rem;
-    }
+.bm-home-view-all {
+    align-self: flex-start;
+    min-height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .3rem;
+    padding: .55rem .8rem;
+    border: 1px solid var(--bm-home-green);
+    border-radius: 9px;
+    color: var(--bm-home-green);
+    font-size: .6rem;
+    font-weight: 800;
+    text-decoration: none;
 }
 
-@media (min-width: 768px) {
-    .product-grid-media img {
-        height: 380px;
-    }
-
-    .product-grid-media-title {
-        font-size: 3rem;
-    }
+.bm-home-view-all:hover {
+    background: var(--bm-home-green);
+    color: #fff;
 }
 
+.bm-home-product-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: .7rem;
+}
 
-/* ==========================================================
-   CATEGORY PRODUCT HEADER
-   ========================================================== */
-
-.product-category-heading {
+.bm-home-product-card {
     position: relative;
-    padding-left: 1rem;
-}
-
-.product-category-heading::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: .15rem;
-    bottom: .15rem;
-    width: 4px;
-    border-radius: 10px;
-    background: var(--bm-green);
-}
-
-
-/* ==========================================================
-   IMAGE + TEXT
-   ========================================================== */
-
-.homepage-section-image {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-}
-
-.homepage-image-text-image {
-    display: block;
-    width: 100%;
-    min-height: 300px;
-    object-fit: cover;
-    border-radius: var(--bm-radius-lg);
-}
-
-@media (min-width: 768px) {
-    .homepage-section-image,
-    .homepage-image-text-image {
-        height: 420px;
-        min-height: 420px;
-    }
-}
-
-
-/* ==========================================================
-   FEATURE / TRUST / SERVICE CARDS
-   ========================================================== */
-
-.homepage-feature-card {
+    min-width: 0;
     height: 100%;
-    border: 1px solid var(--bm-border);
-    border-radius: var(--bm-radius);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--bm-home-border);
+    border-radius: var(--bm-home-radius-sm);
     background: #fff;
+    box-shadow: 0 3px 14px rgba(0,0,0,.035);
     transition:
         transform .2s ease,
         box-shadow .2s ease,
         border-color .2s ease;
 }
 
-.homepage-feature-card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(25, 135, 84, .35);
-    box-shadow: var(--bm-shadow) !important;
+.bm-home-product-card:hover {
+    border-color: #c9dbd0;
+    transform: translateY(-3px);
+    box-shadow: var(--bm-home-shadow);
 }
 
-.homepage-feature-icon {
-    width: 58px;
-    height: 58px;
-    border-radius: 50%;
+.bm-home-product-media {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    background: #f4f6f5;
+    text-decoration: none;
+}
+
+.bm-home-product-image,
+.bm-home-product-placeholder {
+    width: 100%;
+    height: 160px;
+}
+
+.bm-home-product-image {
+    display: block;
+    object-fit: cover;
+    transition: transform .3s ease;
+}
+
+.bm-home-product-card:hover .bm-home-product-image {
+    transform: scale(1.025);
+}
+
+.bm-home-product-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9aa59e;
+    font-size: 1.8rem;
+}
+
+.bm-home-product-badge {
+    position: absolute;
+    top: .5rem;
+    left: .5rem;
+    z-index: 2;
+    padding: .28rem .45rem;
+    border-radius: 7px;
+    background: var(--bm-home-danger);
+    color: #fff;
+    font-size: .49rem;
+    font-weight: 800;
+}
+
+.bm-home-product-body {
+    min-width: 0;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: .72rem;
+}
+
+.bm-home-product-name {
+    display: -webkit-box;
+    min-height: 2.25rem;
+    margin: 0 0 .35rem;
+    overflow: hidden;
+    color: var(--bm-home-dark);
+    font-size: .66rem;
+    font-weight: 750;
+    line-height: 1.35;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+.bm-home-product-brand {
+    margin-bottom: .45rem;
+    color: var(--bm-home-muted);
+    font-size: .54rem;
+    font-weight: 600;
+}
+
+.bm-home-product-price {
+    margin-top: auto;
+}
+
+.bm-home-old-price {
+    color: #98a19c;
+    font-size: .55rem;
+    text-decoration: line-through;
+}
+
+.bm-home-current-price {
+    color: var(--bm-home-green);
+    font-size: .72rem;
+    font-weight: 850;
+}
+
+.bm-home-product-stock {
+    margin-top: .3rem;
+    color: var(--bm-home-muted);
+    font-size: .5rem;
+}
+
+.bm-home-product-stock.available {
+    color: var(--bm-home-green);
+}
+
+.bm-home-product-stock.unavailable {
+    color: var(--bm-home-danger);
+}
+
+.bm-home-product-btn {
+    width: 100%;
+    min-height: 38px;
+    margin-top: .65rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: var(--bm-green-light);
-    color: var(--bm-green);
-    font-size: 1.45rem;
+    gap: .3rem;
+    border: 1px solid var(--bm-home-green);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--bm-home-green);
+    font-size: .57rem;
+    font-weight: 800;
+    text-decoration: none;
 }
 
-
-/* ==========================================================
-   SPARE PARTS
-   ========================================================== */
-
-.homepage-spare-parts {
-    background:
-        linear-gradient(
-            135deg,
-            #f5f8f6 0%,
-            #ffffff 100%
-        );
+.bm-home-product-btn:hover {
+    background: var(--bm-home-green);
+    color: #fff;
 }
 
-.spare-parts-media {
-    position: relative;
-    overflow: hidden;
-    border-radius: var(--bm-radius-lg);
-    min-height: 300px;
-    box-shadow: var(--bm-shadow-lg);
+@media (min-width: 576px) {
+    .bm-home-product-grid {
+        grid-template-columns: repeat(3, minmax(0,1fr));
+        gap: .9rem;
+    }
+
+    .bm-home-product-image,
+    .bm-home-product-placeholder {
+        height: 190px;
+    }
 }
 
-.spare-parts-media img {
+@media (min-width: 768px) {
+    .bm-home-product-heading {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .bm-home-view-all {
+        align-self: center;
+    }
+
+    .bm-home-product-grid {
+        grid-template-columns: repeat(4, minmax(0,1fr));
+    }
+
+    .bm-home-product-image,
+    .bm-home-product-placeholder {
+        height: 205px;
+    }
+}
+
+@media (min-width: 992px) {
+    .bm-home-product-grid {
+        grid-template-columns: repeat(5, minmax(0,1fr));
+    }
+}
+
+@media (min-width: 1200px) {
+    .bm-home-product-grid {
+        grid-template-columns: repeat(6, minmax(0,1fr));
+    }
+}
+
+/* ============================================================
+   IMAGE + TEXT
+   ============================================================ */
+
+.bm-home-image-text {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.bm-home-section-image,
+.bm-home-image-text-image {
     width: 100%;
-    height: 100%;
-    min-height: 300px;
+    height: 280px;
     object-fit: cover;
-    display: block;
+    border-radius: var(--bm-home-radius);
+    background: #eef2ef;
+    box-shadow: var(--bm-home-shadow);
 }
 
-.spare-parts-placeholder {
+.bm-home-image-placeholder {
     width: 100%;
-    min-height: 300px;
-    background: #e9efeb;
+    height: 280px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--bm-muted);
+    border-radius: var(--bm-home-radius);
+    background: var(--bm-home-green-soft);
+    color: var(--bm-home-green);
+    font-size: 3rem;
 }
 
-.spare-parts-content {
-    padding: .5rem 0;
+.bm-home-section-content {
+    color: var(--bm-home-muted);
+    font-size: .78rem;
+    line-height: 1.8;
+    overflow-wrap: anywhere;
 }
 
-.spare-parts-list {
-    list-style: none;
-    padding: 0;
+.bm-home-section-content p:last-child {
+    margin-bottom: 0;
+}
+
+.bm-home-text-link {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .35rem;
+    margin-top: 1rem;
+    padding: .7rem 1rem;
+    border-radius: 9px;
+    background: var(--bm-home-green);
+    color: #fff;
+    font-size: .63rem;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.bm-home-text-link:hover {
+    background: var(--bm-home-green-dark);
+    color: #fff;
+}
+
+@media (min-width: 992px) {
+    .bm-home-image-text {
+        grid-template-columns: repeat(2, minmax(0,1fr));
+        align-items: center;
+        gap: 3rem;
+    }
+
+    .bm-home-section-image,
+    .bm-home-image-text-image,
+    .bm-home-image-placeholder {
+        height: 390px;
+    }
+}
+
+/* ============================================================
+   TRUST / SERVICES
+   ============================================================ */
+
+.bm-home-feature-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: .75rem;
+}
+
+.bm-home-feature-card {
+    height: 100%;
+    padding: 1rem;
+    border: 1px solid var(--bm-home-border);
+    border-radius: var(--bm-home-radius-sm);
+    background: #fff;
+    box-shadow: 0 4px 18px rgba(0,0,0,.035);
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+.bm-home-feature-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--bm-home-shadow);
+}
+
+.bm-home-feature-icon {
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: .75rem;
+    border-radius: 12px;
+    background: var(--bm-home-green-soft);
+    color: var(--bm-home-green);
+    font-size: 1rem;
+}
+
+.bm-home-feature-title {
+    margin: 0 0 .35rem;
+    color: var(--bm-home-dark);
+    font-size: .76rem;
+    font-weight: 800;
+}
+
+.bm-home-feature-text {
     margin: 0;
+    color: var(--bm-home-muted);
+    font-size: .63rem;
+    line-height: 1.65;
 }
 
-.spare-parts-list li {
-    display: flex;
-    align-items: flex-start;
-    gap: .7rem;
-    margin-bottom: .8rem;
-    color: var(--bm-text);
+@media (min-width: 576px) {
+    .bm-home-feature-grid {
+        grid-template-columns: repeat(2, minmax(0,1fr));
+    }
 }
 
-.spare-parts-list i {
-    color: var(--bm-green);
-    margin-top: .15rem;
+@media (min-width: 992px) {
+    .bm-home-feature-grid {
+        grid-template-columns: repeat(4, minmax(0,1fr));
+    }
 }
 
-
-/* ==========================================================
+/* ============================================================
    BANNER
-   ========================================================== */
+   ============================================================ */
 
-.homepage-banner {
+.bm-home-banner {
     position: relative;
     overflow: hidden;
-    border-radius: var(--bm-radius-lg);
-    box-shadow: var(--bm-shadow);
+    border-radius: var(--bm-home-radius);
+    background: var(--bm-home-dark);
+    box-shadow: var(--bm-home-shadow);
 }
 
-.homepage-banner img {
-    display: block;
+.bm-home-banner-image,
+.bm-home-banner-placeholder {
     width: 100%;
+    min-height: 300px;
+}
+
+.bm-home-banner-image {
+    display: block;
     object-fit: cover;
 }
 
-.homepage-banner-overlay {
+.bm-home-banner-placeholder {
+    background:
+        linear-gradient(
+            135deg,
+            var(--bm-home-green-deep),
+            var(--bm-home-dark)
+        );
+}
+
+.bm-home-banner-overlay {
     position: absolute;
     inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 1.25rem;
+    background: rgba(5,15,9,.58);
     text-align: center;
-    padding: 1rem;
-    background: rgba(0, 0, 0, .56);
 }
 
+.bm-home-banner-title {
+    margin: 0 0 .65rem;
+    color: #fff;
+    font-size: clamp(1.35rem, 5vw, 2.5rem);
+    font-weight: 800;
+    line-height: 1.15;
+}
 
-/* ==========================================================
+.bm-home-banner-text {
+    max-width: 680px;
+    margin: 0 auto 1.1rem;
+    color: rgba(255,255,255,.82);
+    font-size: .75rem;
+    line-height: 1.65;
+}
+
+/* ============================================================
    CTA
-   ========================================================== */
+   ============================================================ */
 
-.homepage-cta {
+.bm-home-cta {
+    position: relative;
+    overflow: hidden;
     background:
-        linear-gradient(
-            135deg,
-            #17211b 0%,
-            #343a40 100%
-        );
+        radial-gradient(
+            circle at 85% 10%,
+            rgba(25,135,84,.35),
+            transparent 35%
+        ),
+        var(--bm-home-dark);
+    color: #fff;
 }
 
-.homepage-cta .btn {
-    min-height: 46px;
+.bm-home-cta-inner {
+    padding-block: 3rem;
+    text-align: center;
 }
 
-
-/* ==========================================================
-   BUTTONS
-   ========================================================== */
-
-.homepage-section .btn-success {
-    background-color: var(--bm-green);
-    border-color: var(--bm-green);
+.bm-home-cta-title {
+    margin: 0 0 .7rem;
+    color: #fff;
+    font-size: clamp(1.45rem, 5vw, 2.35rem);
+    font-weight: 800;
+    letter-spacing: -.035em;
 }
 
-.homepage-section .btn-success:hover {
-    background-color: var(--bm-green-dark);
-    border-color: var(--bm-green-dark);
+.bm-home-cta-text {
+    max-width: 650px;
+    margin: 0 auto 1.3rem;
+    color: rgba(255,255,255,.68);
+    font-size: .78rem;
+    line-height: 1.7;
 }
 
-.homepage-section .btn-outline-success:hover {
-    background-color: var(--bm-green);
-    border-color: var(--bm-green);
+.bm-home-cta-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: .55rem;
 }
 
+/* ============================================================
+   LEGACY CATEGORY CARDS
+   ============================================================ */
 
-/* ==========================================================
+.bm-home-category-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: .75rem;
+}
+
+.bm-home-category-list-card {
+    overflow: hidden;
+    border: 1px solid var(--bm-home-border);
+    border-radius: var(--bm-home-radius-sm);
+    background: #fff;
+    box-shadow: 0 4px 16px rgba(0,0,0,.035);
+    text-decoration: none;
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+.bm-home-category-list-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--bm-home-shadow);
+}
+
+.bm-home-category-list-image,
+.bm-home-category-list-placeholder {
+    width: 100%;
+    height: 125px;
+}
+
+.bm-home-category-list-image {
+    display: block;
+    object-fit: cover;
+}
+
+.bm-home-category-list-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bm-home-green-soft);
+    color: var(--bm-home-green);
+    font-size: 1.8rem;
+}
+
+.bm-home-category-list-body {
+    padding: .7rem;
+}
+
+.bm-home-category-list-name {
+    margin: 0;
+    color: var(--bm-home-dark);
+    font-size: .66rem;
+    font-weight: 800;
+}
+
+@media (min-width: 576px) {
+    .bm-home-category-list {
+        grid-template-columns: repeat(3, minmax(0,1fr));
+    }
+}
+
+@media (min-width: 768px) {
+    .bm-home-category-list {
+        grid-template-columns: repeat(4, minmax(0,1fr));
+    }
+}
+
+/* ============================================================
    ACCESSIBILITY
-   ========================================================== */
+   ============================================================ */
 
-.homepage-section a:focus-visible,
-.homepage-section button:focus-visible {
-    outline: 3px solid rgba(25, 135, 84, .45);
+.bm-home a:focus-visible,
+.bm-home button:focus-visible {
+    outline: 3px solid rgba(25,135,84,.45);
     outline-offset: 3px;
 }
 
-
-/* ==========================================================
-   REDUCE MOTION
-   ========================================================== */
-
 @media (prefers-reduced-motion: reduce) {
-
-    *,
-    *::before,
-    *::after {
+    .bm-home *,
+    .bm-home *::before,
+    .bm-home *::after {
         scroll-behavior: auto !important;
         transition-duration: .01ms !important;
         animation-duration: .01ms !important;
         animation-iteration-count: 1 !important;
     }
 }
-
-
-/* ==========================================================
-   DESKTOP
-   ========================================================== */
-
-@media (min-width: 768px) {
-
-    .homepage-mobile-padding {
-        padding-left: 0;
-        padding-right: 0;
-    }
-
-}
 </style>
 
 
-{# ==========================================================
-   ANNOUNCEMENT BAR
-   ========================================================== #}
+<div class="bm-home">
 
-{% if settings and settings.announcement_active and settings.announcement_text %}
+    <!-- ========================================================
+         ANNOUNCEMENT BAR
+         ======================================================== -->
 
-<section class="homepage-announcement py-2">
+    {% if settings and settings.announcement_active and settings.announcement_text %}
 
-    <div class="container text-center px-3">
+        <section class="bm-home-announcement" aria-label="Announcement">
 
-        {% if settings.announcement_url %}
+            <div class="bm-home-container bm-home-announcement-inner">
 
-        <a href="{{ settings.announcement_url }}">
-            {{ settings.announcement_text }}
-        </a>
-
-        {% else %}
-
-        <span>
-            {{ settings.announcement_text }}
-        </span>
-
-        {% endif %}
-
-    </div>
-
-</section>
-
-{% endif %}
-
-
-{# ==========================================================
-   PREVIEW NOTICE
-   ========================================================== #}
-
-{% if preview %}
-
-<section class="homepage-preview py-2">
-
-    <div class="container text-center px-3">
-
-        <i class="bi bi-eye me-1"></i>
-
-        Homepage Preview Mode —
-        unpublished content is visible only to administrators.
-
-    </div>
-
-</section>
-
-{% endif %}
-
-
-{# ==========================================================
-   CMS HOMEPAGE
-   ========================================================== #}
-
-{% if sections %}
-
-    {% for section in sections %}
-
-        {% set section_type = section.section_type %}
-        {% set config = section.config or {} %}
-        {% set custom_class = section.css_class or '' %}
-
-
-        {# ======================================================
-           HERO
-           ====================================================== #}
-
-        {% if section_type == "hero" %}
-
-        <section
-            id="homepageHero{{ section.id }}"
-            class="homepage-section {{ custom_class }} mb-4 mb-md-5"
-        >
-
-            <div
-                id="bometHeroCarousel{{ section.id }}"
-                class="carousel slide carousel-fade"
-                data-bs-ride="carousel"
-                data-bs-interval="{{ config.get('interval', 5000) | int }}"
-                aria-label="{{ section.title or 'Bomet Machineries Ltd. featured products' }}"
-            >
-
-                <div class="carousel-inner">
-
-                    <div class="carousel-item active hero-carousel-item">
-
-                        {% if section.image_url %}
-
-                        <img
-                            src="{{ section.image_url }}"
-                            fetchpriority="high"
-                            decoding="async"
-                            class="hero-slide-image"
-                            alt="{{ section.image_alt or section.title or 'Bomet Machineries Ltd.' }}"
-                        >
-
-                        {% else %}
-
-                        <div class="hero-placeholder"></div>
-
-                        {% endif %}
-
-
-                        <div class="hero-slide-overlay">
-
-                            <div class="container hero-slide-content">
-
-                                {% if section.title %}
-
-                                <div class="homepage-eyebrow text-white">
-                                    Bomet Machineries Ltd.
-                                </div>
-
-                                <h1 class="hero-slide-title text-uppercase text-white mb-3">
-                                    {{ section.title }}
-                                </h1>
-
-                                {% endif %}
-
-
-                                {% if section.subtitle %}
-
-                                <p class="hero-slide-subtitle mb-4 mx-auto">
-                                    {{ section.subtitle }}
-                                </p>
-
-                                {% endif %}
-
-
-                                {% if section.button_text and section.button_url %}
-
-                                <a
-                                    href="{{ section.button_url }}"
-                                    class="btn btn-success rounded-pill hero-slide-button px-4"
-                                >
-                                    {{ section.button_text }}
-                                    <i class="bi bi-arrow-right ms-1"></i>
-                                </a>
-
-                                {% endif %}
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        {# ======================================================
-           INTRO
-           ====================================================== #}
-
-        {% elif section_type == "intro" %}
-
-        <section
-            class="container py-4 py-md-5 content-section homepage-section {{ custom_class }}"
-        >
-
-            {% if section.title or section.subtitle %}
-
-            <div class="text-center mb-4 mb-md-5">
-
-                <div class="homepage-eyebrow justify-content-center">
-                    About Our Company
-                </div>
-
-                {% if section.title %}
-
-                <h2 class="homepage-section-title display-6 text-uppercase mb-3">
-                    {{ section.title }}
-                </h2>
-
-                {% endif %}
-
-
-                {% if section.subtitle %}
-
-                <p class="text-muted homepage-section-subtitle mb-0 px-2">
-                    {{ section.subtitle }}
-                </p>
-
-                {% endif %}
-
-            </div>
-
-            {% endif %}
-
-
-            {% if section.content %}
-
-            <div class="row justify-content-center">
-
-                <div class="col-12 col-lg-9">
-
-                    <div class="text-secondary homepage-section-content">
-
-                        {{ section.content | safe }}
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            {% endif %}
-
-        </section>
-
-
-        {# ======================================================
-           FEATURED CATEGORIES
-           ====================================================== #}
-
-        {% elif section_type == "featured_categories" %}
-
-        <section
-            class="container py-4 py-md-5 content-section homepage-section {{ custom_class }}"
-        >
-
-            {% if section.title or section.subtitle %}
-
-            <div class="text-center mb-4 mb-md-5">
-
-                <div class="homepage-eyebrow justify-content-center">
-                    Explore Our Range
-                </div>
-
-                {% if section.title %}
-
-                <h2 class="homepage-section-title display-6 text-uppercase mb-3">
-                    {{ section.title }}
-                </h2>
-
-                {% endif %}
-
-
-                {% if section.subtitle %}
-
-                <p class="text-muted homepage-section-subtitle mb-0 px-2">
-                    {{ section.subtitle }}
-                </p>
-
-                {% endif %}
-
-            </div>
-
-            {% endif %}
-
-
-            {% set category_limit = config.get('limit', 3) | int %}
-
-
-            <div class="row g-4 justify-content-center text-center">
-
-                {% for category in categories[:category_limit] %}
-
-                <div class="col-6 col-md-4">
+                {% if settings.announcement_url %}
 
                     <a
-                        href="{{ url_for('product.category_products', slug=category.slug) }}"
-                        class="circle-card"
+                        href="{{ settings.announcement_url }}"
                     >
-
-                        {% if category.image_url %}
-
-                        <img
-                            src="{{ category.image_url }}"
-                            loading="lazy"
-                            decoding="async"
-                            class="circle-card-img mb-3"
-                            alt="{{ category.name }}"
-                        >
-
-                        {% else %}
-
-                        <div class="circle-card-img circle-card-placeholder mb-3">
-
-                            <i class="bi bi-image fs-1"></i>
-
-                        </div>
-
-                        {% endif %}
-
-
-                        <h5 class="fw-bold fs-6 mb-0">
-                            {{ category.name }}
-                        </h5>
-
+                        {{ settings.announcement_text }}
                     </a>
-
-                </div>
-
-                {% endfor %}
-
-            </div>
-
-        </section>
-
-
-        {# ======================================================
-           PRODUCT GRID
-           ====================================================== #}
-
-        {% elif section_type == "product_grid" %}
-
-        <section
-            class="bg-light py-4 py-md-5 content-section homepage-section {{ custom_class }}"
-        >
-
-            <div class="container">
-
-
-                {# ==================================================
-                   PRODUCT GRID CMS IMAGE
-                   ================================================== #}
-
-                {% if section.image_url %}
-
-                <div class="product-grid-media">
-
-                    <img
-                        src="{{ section.image_url }}"
-                        loading="lazy"
-                        decoding="async"
-                        alt="{{ section.image_alt or section.title or 'Bomet Machineries Ltd. agricultural machinery' }}"
-                    >
-
-
-                    <div class="product-grid-media-overlay">
-
-                        <div class="w-100">
-
-                            {% if section.title %}
-
-                            <h2 class="product-grid-media-title mb-2">
-                                {{ section.title }}
-                            </h2>
-
-                            {% endif %}
-
-
-                            {% if section.subtitle %}
-
-                            <p class="product-grid-media-subtitle mb-0 mx-auto" style="max-width:760px;">
-                                {{ section.subtitle }}
-                            </p>
-
-                            {% endif %}
-
-                        </div>
-
-                    </div>
-
-                </div>
-
 
                 {% else %}
 
-
-                {# ==================================================
-                   STANDARD PRODUCT GRID HEADER
-                   ================================================== #}
-
-                {% if section.title or section.subtitle %}
-
-                <div class="text-center mb-4 mb-md-5">
-
-                    <div class="homepage-eyebrow justify-content-center">
-                        Featured Machinery
-                    </div>
-
-                    {% if section.title %}
-
-                    <h2 class="homepage-section-title display-6 text-uppercase mb-3">
-                        {{ section.title }}
-                    </h2>
-
-                    {% endif %}
-
-
-                    {% if section.subtitle %}
-
-                    <p class="text-muted homepage-section-subtitle mb-0 px-2">
-                        {{ section.subtitle }}
-                    </p>
-
-                    {% endif %}
-
-                </div>
+                    <span>
+                        {{ settings.announcement_text }}
+                    </span>
 
                 {% endif %}
 
-                {% endif %}
+            </div>
+
+        </section>
+
+    {% endif %}
 
 
-                {% set product_limit = config.get('limit', 6) | int %}
+    <!-- ========================================================
+         ADMIN PREVIEW NOTICE
+         ======================================================== -->
+
+    {% if preview %}
+
+        <section class="bm-home-preview">
+
+            <div class="bm-home-container bm-home-preview-inner">
+
+                <i class="bi bi-eye"></i>
+
+                <span>
+                    Homepage Preview Mode — unpublished content is visible
+                    only to administrators.
+                </span>
+
+            </div>
+
+        </section>
+
+    {% endif %}
 
 
-                {% for category in categories %}
+    <!-- ========================================================
+         CMS HOMEPAGE
+         ======================================================== -->
 
-                    {% set products = featured_by_category.get(category.id, []) %}
+    {% if sections %}
 
+        {% for section in sections %}
 
-                    {% if products %}
-
-                    <div class="mb-5">
-
-
-                        {# ==============================================
-                           CATEGORY HEADER
-                           ============================================== #}
-
-                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
-
-                            <div class="product-category-heading">
-
-                                <h3 class="fw-bold text-uppercase h4 mb-1">
-                                    {{ category.name }}
-                                </h3>
+            {% set section_type = section.section_type %}
+            {% set config = section.config or {} %}
+            {% set custom_class = section.css_class or '' %}
 
 
-                                {% if category.description %}
+            <!-- ==================================================
+                 HERO
+                 ================================================== -->
 
-                                <p class="text-muted small mb-0">
-                                    {{ category.description }}
-                                </p>
+            {% if section_type == "hero" %}
 
-                                {% endif %}
+                <section
+                    id="homepageHero{{ section.id }}"
+                    class="bm-home-hero bm-home-section {{ custom_class }}"
+                >
 
-                            </div>
+                    <div
+                        id="bometHeroCarousel{{ section.id }}"
+                        class="carousel slide carousel-fade"
+                        data-bs-ride="carousel"
+                        data-bs-interval="{{ config.get('interval', 5000) | int }}"
+                        aria-label="{{ section.title or 'Bomet Machineries Ltd. featured products' }}"
+                    >
 
+                        <div class="carousel-inner">
 
-                            <a
-                                href="{{ url_for('product.category_products', slug=category.slug) }}"
-                                class="btn btn-outline-success rounded-pill px-4 fw-semibold align-self-start align-self-md-center"
-                            >
+                            <div class="carousel-item active">
 
-                                View All
+                                <div class="bm-home-hero-slide">
 
-                                <i class="bi bi-arrow-right ms-1"></i>
+                                    {% if section.image_url %}
 
-                            </a>
-
-                        </div>
-
-
-                        {# ==============================================
-                           PRODUCTS
-                           ============================================== #}
-
-                        <div class="row g-3 g-md-4">
-
-                            {% for product in products[:product_limit] %}
-
-                            <div class="col-6 col-md-4 col-lg-2">
-
-                                <div class="card homepage-product-card shadow-sm">
-
-
-                                    <a
-                                        href="{{ url_for('product.products', slug=product.slug) }}"
-                                        class="text-decoration-none"
-                                    >
-
-                                        {% if product.images %}
-
-                                            {% set primary_image =
-                                                product.images
-                                                | selectattr('is_primary', 'equalto', true)
-                                                | first
-                                            %}
-
-
-                                            <img
-                                                src="{{ primary_image.image_url if primary_image else product.images[0].image_url }}"
-                                                loading="lazy"
-                                                decoding="async"
-                                                class="homepage-product-image"
-                                                alt="{{ product.name }}"
-                                            >
-
-                                        {% else %}
-
-                                            <div class="homepage-product-image homepage-product-placeholder">
-
-                                                <i class="bi bi-image fs-1"></i>
-
-                                            </div>
-
-                                        {% endif %}
-
-                                    </a>
-
-
-                                    <div class="card-body p-3">
-
-                                        <h5
-                                            class="homepage-product-name fw-semibold small mb-2 text-truncate"
-                                            title="{{ product.name }}"
+                                        <img
+                                            src="{{ section.image_url }}"
+                                            fetchpriority="high"
+                                            decoding="async"
+                                            class="bm-home-hero-image"
+                                            alt="{{ section.image_alt or section.title or 'Bomet Machineries Ltd. agricultural machinery' }}"
                                         >
-                                            {{ product.name }}
-                                        </h5>
+
+                                    {% else %}
+
+                                        <div
+                                            class="bm-home-hero-placeholder"
+                                            aria-hidden="true"
+                                        ></div>
+
+                                    {% endif %}
 
 
-                                        {% if product.discount and product.discount > 0 %}
+                                    <div class="bm-home-hero-overlay">
 
-                                        <div class="homepage-product-price">
+                                        <div class="bm-home-container">
 
-                                            <div class="small text-muted text-decoration-line-through">
+                                            <div class="bm-home-hero-content">
 
-                                                KSh
-                                                {{ "{:,.2f}".format(product.price) }}
+                                                <span class="bm-home-hero-kicker">
+                                                    <i class="bi bi-shield-check"></i>
+                                                    Bomet Machineries Ltd.
+                                                </span>
 
-                                            </div>
+
+                                                {% if section.title %}
+
+                                                    <h1 class="bm-home-hero-title">
+                                                        {{ section.title }}
+                                                    </h1>
+
+                                                {% else %}
+
+                                                    <h1 class="bm-home-hero-title">
+                                                        Agricultural Machinery Built for Productivity
+                                                    </h1>
+
+                                                {% endif %}
 
 
-                                            <div class="fw-bold text-success">
+                                                {% if section.subtitle %}
 
-                                                KSh
-                                                {{ "{:,.2f}".format(product.discounted_price) }}
+                                                    <p class="bm-home-hero-description">
+                                                        {{ section.subtitle }}
+                                                    </p>
+
+                                                {% endif %}
+
+
+                                                {% if section.button_text and section.button_url %}
+
+                                                    <div class="bm-home-hero-actions">
+
+                                                        <a
+                                                            href="{{ section.button_url }}"
+                                                            class="bm-home-primary-btn"
+                                                        >
+                                                            {{ section.button_text }}
+                                                            <i class="bi bi-arrow-right"></i>
+                                                        </a>
+
+                                                        <a
+                                                            href="{{ url_for('product.products') }}"
+                                                            class="bm-home-secondary-btn"
+                                                        >
+                                                            <i class="bi bi-grid"></i>
+                                                            Shop Products
+                                                        </a>
+
+                                                    </div>
+
+                                                {% else %}
+
+                                                    <div class="bm-home-hero-actions">
+
+                                                        <a
+                                                            href="{{ url_for('product.products') }}"
+                                                            class="bm-home-primary-btn"
+                                                        >
+                                                            Shop Products
+                                                            <i class="bi bi-arrow-right"></i>
+                                                        </a>
+
+                                                    </div>
+
+                                                {% endif %}
+
+
+                                                <div class="bm-home-hero-trust">
+
+                                                    <span class="bm-home-hero-trust-item">
+                                                        <i class="bi bi-check-circle-fill"></i>
+                                                        Quality Machinery
+                                                    </span>
+
+                                                    <span class="bm-home-hero-trust-item">
+                                                        <i class="bi bi-check-circle-fill"></i>
+                                                        Genuine Parts
+                                                    </span>
+
+                                                    <span class="bm-home-hero-trust-item">
+                                                        <i class="bi bi-check-circle-fill"></i>
+                                                        Reliable Service
+                                                    </span>
+
+                                                    <span class="bm-home-hero-trust-item">
+                                                        <i class="bi bi-check-circle-fill"></i>
+                                                        Kenya Focused
+                                                    </span>
+
+                                                </div>
 
                                             </div>
 
                                         </div>
-
-                                        {% else %}
-
-                                        <div class="homepage-product-price fw-bold text-success">
-
-                                            KSh
-                                            {{ "{:,.2f}".format(product.price) }}
-
-                                        </div>
-
-                                        {% endif %}
-
-
-                                        <a
-                                            href="{{ url_for('product.product_details', id=product.id) }}"
-                                            class="btn btn-sm btn-outline-success rounded-pill w-100 mt-3"
-                                        >
-                                            View Product
-                                        </a>
 
                                     </div>
 
                                 </div>
 
                             </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+            <!-- ==================================================
+                 INTRO
+                 ================================================== -->
+
+            {% elif section_type == "intro" %}
+
+                <section
+                    class="bm-home-section bm-home-section-spacing bm-home-content-section {{ custom_class }}"
+                >
+
+                    <div class="bm-home-container">
+
+                        {% if section.title or section.subtitle %}
+
+                            <div class="bm-home-section-heading">
+
+                                <span class="bm-home-eyebrow">
+                                    About Our Solutions
+                                </span>
+
+                                {% if section.title %}
+
+                                    <h2 class="bm-home-section-title">
+                                        {{ section.title }}
+                                    </h2>
+
+                                {% endif %}
+
+                                {% if section.subtitle %}
+
+                                    <p class="bm-home-section-subtitle">
+                                        {{ section.subtitle }}
+                                    </p>
+
+                                {% endif %}
+
+                            </div>
+
+                        {% endif %}
+
+
+                        {% if section.content %}
+
+                            <div class="row justify-content-center">
+
+                                <div class="col-12 col-lg-9">
+
+                                    <div class="bm-home-section-content">
+                                        {{ section.content | safe }}
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </section>
+
+
+            <!-- ==================================================
+                 FEATURED CATEGORIES
+                 ================================================== -->
+
+            {% elif section_type == "featured_categories" %}
+
+                <section
+                    class="bm-home-section bm-home-section-spacing bm-home-content-section {{ custom_class }}"
+                >
+
+                    <div class="bm-home-container">
+
+                        {% if section.title or section.subtitle %}
+
+                            <div class="bm-home-section-heading">
+
+                                <span class="bm-home-eyebrow">
+                                    Explore
+                                </span>
+
+                                {% if section.title %}
+
+                                    <h2 class="bm-home-section-title">
+                                        {{ section.title }}
+                                    </h2>
+
+                                {% endif %}
+
+                                {% if section.subtitle %}
+
+                                    <p class="bm-home-section-subtitle">
+                                        {{ section.subtitle }}
+                                    </p>
+
+                                {% endif %}
+
+                            </div>
+
+                        {% endif %}
+
+
+                        {% set category_limit = config.get('limit', 3) | int %}
+
+                        <div class="bm-home-category-grid">
+
+                            {% for category in categories[:category_limit] %}
+
+                                <a
+                                    href="{{ url_for('product.category_products', slug=category.slug) }}"
+                                    class="bm-home-category-card"
+                                    aria-label="Shop {{ category.name }}"
+                                >
+
+                                    {% if category.image_url %}
+
+                                        <img
+                                            src="{{ category.image_url }}"
+                                            loading="lazy"
+                                            decoding="async"
+                                            class="bm-home-category-image"
+                                            alt="{{ category.name }}"
+                                        >
+
+                                    {% else %}
+
+                                        <div
+                                            class="bm-home-category-fallback"
+                                            aria-hidden="true"
+                                        >
+                                            <i class="bi bi-grid-3x3-gap"></i>
+                                        </div>
+
+                                    {% endif %}
+
+
+                                    <div class="bm-home-category-overlay">
+
+                                        <span class="bm-home-category-name">
+                                            {{ category.name }}
+                                        </span>
+
+                                        <span class="bm-home-category-arrow">
+                                            Explore
+                                            <i class="bi bi-arrow-right"></i>
+                                        </span>
+
+                                    </div>
+
+                                </a>
 
                             {% endfor %}
 
@@ -1245,161 +1597,1268 @@
 
                     </div>
 
+                </section>
+
+
+            <!-- ==================================================
+                 PRODUCT GRID
+                 ================================================== -->
+
+            {% elif section_type == "product_grid" %}
+
+                <section
+                    class="bm-home-section bm-home-product-section bm-home-section-spacing bm-home-content-section {{ custom_class }}"
+                >
+
+                    <div class="bm-home-container">
+
+                        {% if section.title or section.subtitle %}
+
+                            <div class="bm-home-section-heading">
+
+                                <span class="bm-home-eyebrow">
+                                    Shop
+                                </span>
+
+                                {% if section.title %}
+
+                                    <h2 class="bm-home-section-title">
+                                        {{ section.title }}
+                                    </h2>
+
+                                {% endif %}
+
+                                {% if section.subtitle %}
+
+                                    <p class="bm-home-section-subtitle">
+                                        {{ section.subtitle }}
+                                    </p>
+
+                                {% endif %}
+
+                            </div>
+
+                        {% endif %}
+
+
+                        {% set product_limit = config.get('limit', 6) | int %}
+
+
+                        {% for category in categories %}
+
+                            {% set products = featured_by_category.get(category.id, []) %}
+
+                            {% if products %}
+
+                                <div class="bm-home-category-product-block">
+
+                                    <div class="bm-home-product-heading">
+
+                                        <div>
+
+                                            <h3 class="bm-home-product-heading-title">
+                                                {{ category.name }}
+                                            </h3>
+
+                                            {% if category.description %}
+
+                                                <p class="bm-home-product-heading-description">
+                                                    {{ category.description }}
+                                                </p>
+
+                                            {% endif %}
+
+                                        </div>
+
+
+                                        <a
+                                            href="{{ url_for('product.category_products', slug=category.slug) }}"
+                                            class="bm-home-view-all"
+                                        >
+                                            View All
+                                            <i class="bi bi-arrow-right"></i>
+                                        </a>
+
+                                    </div>
+
+
+                                    <div class="bm-home-product-grid">
+
+                                        {% for product in products[:product_limit] %}
+
+                                            <article class="bm-home-product-card">
+
+                                                <a
+                                                    href="{{ url_for('product.products', slug=product.slug) }}"
+                                                    class="bm-home-product-media"
+                                                >
+
+                                                    {% if product.discount and product.discount > 0 %}
+
+                                                        <span class="bm-home-product-badge">
+                                                            SALE
+                                                        </span>
+
+                                                    {% endif %}
+
+
+                                                    {% if product.images %}
+
+                                                        {% set primary_image = product.images | selectattr('is_primary', 'equalto', true) | first %}
+
+                                                        <img
+                                                            src="{{ primary_image.image_url if primary_image else product.images[0].image_url }}"
+                                                            loading="lazy"
+                                                            decoding="async"
+                                                            class="bm-home-product-image"
+                                                            alt="{{ product.name }}"
+                                                        >
+
+                                                    {% else %}
+
+                                                        <div
+                                                            class="bm-home-product-placeholder"
+                                                            aria-label="{{ product.name }} image unavailable"
+                                                        >
+                                                            <i class="bi bi-image"></i>
+                                                        </div>
+
+                                                    {% endif %}
+
+                                                </a>
+
+
+                                                <div class="bm-home-product-body">
+
+                                                    <h3
+                                                        class="bm-home-product-name"
+                                                        title="{{ product.name }}"
+                                                    >
+                                                        {{ product.name }}
+                                                    </h3>
+
+
+                                                    {% if product.brand %}
+
+                                                        <div class="bm-home-product-brand">
+                                                            {{ product.brand }}
+                                                        </div>
+
+                                                    {% endif %}
+
+
+                                                    <div class="bm-home-product-price">
+
+                                                        {% if product.discount and product.discount > 0 %}
+
+                                                            <div class="bm-home-old-price">
+                                                                KSh {{ "{:,.2f}".format(product.price) }}
+                                                            </div>
+
+                                                            <div class="bm-home-current-price">
+                                                                KSh {{ "{:,.2f}".format(product.discounted_price) }}
+                                                            </div>
+
+                                                        {% else %}
+
+                                                            <div class="bm-home-current-price">
+                                                                KSh {{ "{:,.2f}".format(product.price) }}
+                                                            </div>
+
+                                                        {% endif %}
+
+                                                    </div>
+
+
+                                                    {% if product.stock is defined %}
+
+                                                        {% if product.stock > 0 %}
+
+                                                            <div class="bm-home-product-stock available">
+                                                                <i class="bi bi-check-circle"></i>
+                                                                In stock
+                                                            </div>
+
+                                                        {% else %}
+
+                                                            <div class="bm-home-product-stock unavailable">
+                                                                <i class="bi bi-x-circle"></i>
+                                                                Out of stock
+                                                            </div>
+
+                                                        {% endif %}
+
+                                                    {% endif %}
+
+
+                                                    <a
+                                                        href="{{ url_for('product.product_details', id=product.id) }}"
+                                                        class="bm-home-product-btn"
+                                                    >
+                                                        View Product
+                                                        <i class="bi bi-arrow-right"></i>
+                                                    </a>
+
+                                                </div>
+
+                                            </article>
+
+                                        {% endfor %}
+
+                                    </div>
+
+                                </div>
+
+                            {% endif %}
+
+                        {% endfor %}
+
+                    </div>
+
+                </section>
+
+
+            <!-- ==================================================
+                 PRODUCT CATEGORY
+                 ================================================== -->
+
+            {% elif section_type == "product_category" %}
+
+                {% set selected_category_slug = config.get('category_slug') %}
+                {% set ns = namespace(category=none) %}
+
+                {% for category in categories %}
+
+                    {% if category.slug == selected_category_slug %}
+
+                        {% set ns.category = category %}
+
                     {% endif %}
 
                 {% endfor %}
 
-            </div>
-
-        </section>
+                {% set selected_category = ns.category %}
 
 
-        {# ======================================================
-           PRODUCT CATEGORY
-           ====================================================== #}
+                {% if selected_category %}
 
-        {% elif section_type == "product_category" %}
-
-            {% set selected_category_slug = config.get('category_slug') %}
-
-            {% set ns = namespace(category=none) %}
+                    {% set products = featured_by_category.get(selected_category.id, []) %}
+                    {% set category_product_limit = config.get('limit', 6) | int %}
 
 
-            {% for category in categories %}
+                    <section
+                        class="bm-home-section bm-home-section-spacing bm-home-content-section {{ custom_class }}"
+                    >
 
-                {% if category.slug == selected_category_slug %}
+                        <div class="bm-home-container">
 
-                    {% set ns.category = category %}
+                            <div class="bm-home-product-heading">
+
+                                <div>
+
+                                    <span class="bm-home-eyebrow">
+                                        {{ selected_category.name }}
+                                    </span>
+
+                                    <h2 class="bm-home-product-heading-title">
+                                        {{ section.title or selected_category.name }}
+                                    </h2>
+
+                                    {% if section.subtitle %}
+
+                                        <p class="bm-home-product-heading-description">
+                                            {{ section.subtitle }}
+                                        </p>
+
+                                    {% endif %}
+
+                                </div>
+
+
+                                <a
+                                    href="{{ url_for('product.category_products', slug=selected_category.slug) }}"
+                                    class="bm-home-view-all"
+                                >
+                                    View Category
+                                    <i class="bi bi-arrow-right"></i>
+                                </a>
+
+                            </div>
+
+
+                            <div class="bm-home-product-grid">
+
+                                {% for product in products[:category_product_limit] %}
+
+                                    <article class="bm-home-product-card">
+
+                                        <a
+                                            href="{{ url_for('product.products', slug=product.slug) }}"
+                                            class="bm-home-product-media"
+                                        >
+
+                                            {% if product.discount and product.discount > 0 %}
+
+                                                <span class="bm-home-product-badge">
+                                                    SALE
+                                                </span>
+
+                                            {% endif %}
+
+
+                                            {% if product.images %}
+
+                                                {% set primary_image = product.images | selectattr('is_primary', 'equalto', true) | first %}
+
+                                                <img
+                                                    src="{{ primary_image.image_url if primary_image else product.images[0].image_url }}"
+                                                    loading="lazy"
+                                                    decoding="async"
+                                                    class="bm-home-product-image"
+                                                    alt="{{ product.name }}"
+                                                >
+
+                                            {% else %}
+
+                                                <div
+                                                    class="bm-home-product-placeholder"
+                                                    aria-hidden="true"
+                                                >
+                                                    <i class="bi bi-image"></i>
+                                                </div>
+
+                                            {% endif %}
+
+                                        </a>
+
+
+                                        <div class="bm-home-product-body">
+
+                                            <h3 class="bm-home-product-name">
+                                                {{ product.name }}
+                                            </h3>
+
+
+                                            {% if product.brand %}
+
+                                                <div class="bm-home-product-brand">
+                                                    {{ product.brand }}
+                                                </div>
+
+                                            {% endif %}
+
+
+                                            <div class="bm-home-product-price">
+
+                                                {% if product.discount and product.discount > 0 %}
+
+                                                    <div class="bm-home-old-price">
+                                                        KSh {{ "{:,.2f}".format(product.price) }}
+                                                    </div>
+
+                                                    <div class="bm-home-current-price">
+                                                        KSh {{ "{:,.2f}".format(product.discounted_price) }}
+                                                    </div>
+
+                                                {% else %}
+
+                                                    <div class="bm-home-current-price">
+                                                        KSh {{ "{:,.2f}".format(product.price) }}
+                                                    </div>
+
+                                                {% endif %}
+
+                                            </div>
+
+
+                                            {% if product.stock is defined %}
+
+                                                {% if product.stock > 0 %}
+
+                                                    <div class="bm-home-product-stock available">
+                                                        <i class="bi bi-check-circle"></i>
+                                                        In stock
+                                                    </div>
+
+                                                {% else %}
+
+                                                    <div class="bm-home-product-stock unavailable">
+                                                        <i class="bi bi-x-circle"></i>
+                                                        Out of stock
+                                                    </div>
+
+                                                {% endif %}
+
+                                            {% endif %}
+
+
+                                            <a
+                                                href="{{ url_for('product.product_details', id=product.id) }}"
+                                                class="bm-home-product-btn"
+                                            >
+                                                View Product
+                                                <i class="bi bi-arrow-right"></i>
+                                            </a>
+
+                                        </div>
+
+                                    </article>
+
+                                {% else %}
+
+                                    <div class="col-12 text-center py-5">
+
+                                        <i class="bi bi-box-seam fs-1 text-secondary"></i>
+
+                                        <p class="text-muted mt-3 mb-0">
+                                            Products coming soon.
+                                        </p>
+
+                                    </div>
+
+                                {% endfor %}
+
+                            </div>
+
+                        </div>
+
+                    </section>
 
                 {% endif %}
 
-            {% endfor %}
 
+            <!-- ==================================================
+                 IMAGE + TEXT
+                 ================================================== -->
 
-            {% set selected_category = ns.category %}
+            {% elif section_type == "image_text" %}
 
-
-            {% if selected_category %}
-
-                {% set products = featured_by_category.get(selected_category.id, []) %}
-
-                {% set category_product_limit = config.get('limit', 6) | int %}
-
+                {% set image_left = config.get('image_position', 'left') == 'left' %}
 
                 <section
-                    class="container py-4 py-md-5 content-section homepage-section {{ custom_class }}"
+                    class="bm-home-section bm-home-section-spacing bm-home-content-section {{ custom_class }}"
                 >
 
-                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+                    <div class="bm-home-container">
 
-                        <div>
+                        <div
+                            class="bm-home-image-text"
+                            {% if not image_left %}
+                                style="direction: rtl;"
+                            {% endif %}
+                        >
 
-                            <div class="homepage-eyebrow">
-                                Product Category
+                            <div
+                                style="{% if not image_left %}direction:ltr;{% endif %}"
+                            >
+
+                                {% if section.image_url %}
+
+                                    <img
+                                        src="{{ section.image_url }}"
+                                        loading="lazy"
+                                        decoding="async"
+                                        class="bm-home-image-text-image"
+                                        alt="{{ section.image_alt or section.title or 'Bomet Machineries Ltd.' }}"
+                                    >
+
+                                {% else %}
+
+                                    <div class="bm-home-image-placeholder">
+                                        <i class="bi bi-image"></i>
+                                    </div>
+
+                                {% endif %}
+
                             </div>
 
-                            <h2 class="homepage-section-title text-uppercase h3 mb-2">
 
-                                {{ section.title or selected_category.name }}
+                            <div
+                                style="{% if not image_left %}direction:ltr;{% endif %}"
+                            >
 
-                            </h2>
+                                <span class="bm-home-eyebrow">
+                                    Bomet Machineries Ltd.
+                                </span>
+
+                                {% if section.title %}
+
+                                    <h2 class="bm-home-section-title">
+                                        {{ section.title }}
+                                    </h2>
+
+                                {% endif %}
+
+
+                                {% if section.subtitle %}
+
+                                    <p class="bm-home-section-subtitle"
+                                       style="margin-left:0;margin-right:0;">
+                                        {{ section.subtitle }}
+                                    </p>
+
+                                {% endif %}
+
+
+                                {% if section.content %}
+
+                                    <div class="bm-home-section-content mt-3">
+                                        {{ section.content | safe }}
+                                    </div>
+
+                                {% endif %}
+
+
+                                {% if section.button_text and section.button_url %}
+
+                                    <a
+                                        href="{{ section.button_url }}"
+                                        class="bm-home-text-link"
+                                    >
+                                        {{ section.button_text }}
+                                        <i class="bi bi-arrow-right"></i>
+                                    </a>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+            <!-- ==================================================
+                 TRUST
+                 ================================================== -->
+
+            {% elif section_type == "trust" %}
+
+                <section
+                    class="bm-home-section bm-home-section-spacing bm-home-content-section"
+                    style="background:var(--bm-home-bg);"
+                >
+
+                    <div class="bm-home-container">
+
+                        <div class="bm-home-section-heading">
+
+                            <span class="bm-home-eyebrow">
+                                Why Choose Us
+                            </span>
+
+                            {% if section.title %}
+
+                                <h2 class="bm-home-section-title">
+                                    {{ section.title }}
+                                </h2>
+
+                            {% endif %}
 
 
                             {% if section.subtitle %}
 
-                            <p class="text-muted mb-0">
-                                {{ section.subtitle }}
-                            </p>
+                                <p class="bm-home-section-subtitle">
+                                    {{ section.subtitle }}
+                                </p>
 
                             {% endif %}
 
                         </div>
 
 
-                        <a
-                            href="{{ url_for('product.category_products', slug=selected_category.slug) }}"
-                            class="btn btn-success rounded-pill px-4 align-self-start align-self-md-center"
-                        >
-
-                            View Category
-
-                            <i class="bi bi-arrow-right ms-1"></i>
-
-                        </a>
-
-                    </div>
+                        {% set trust_items = config.get('items', []) %}
 
 
-                    <div class="row g-3 g-md-4">
+                        <div class="bm-home-feature-grid">
 
-                        {% for product in products[:category_product_limit] %}
+                            {% if trust_items %}
 
-                        <div class="col-6 col-md-4 col-lg-2">
+                                {% for item in trust_items %}
 
-                            <div class="card homepage-product-card shadow-sm">
+                                    <div class="bm-home-feature-card">
 
-                                <a
-                                    href="{{ url_for('product.products', slug=product.slug) }}"
-                                    class="text-decoration-none"
-                                >
+                                        <div class="bm-home-feature-icon">
 
-                                    {% if product.images %}
-
-                                        {% set primary_image =
-                                            product.images
-                                            | selectattr('is_primary', 'equalto', true)
-                                            | first
-                                        %}
-
-
-                                        <img
-                                            src="{{ primary_image.image_url if primary_image else product.images[0].image_url }}"
-                                            loading="lazy"
-                                            decoding="async"
-                                            class="homepage-product-image"
-                                            alt="{{ product.name }}"
-                                        >
-
-                                    {% else %}
-
-                                        <div class="homepage-product-image homepage-product-placeholder">
-
-                                            <i class="bi bi-image fs-1"></i>
+                                            <i class="bi bi-{{ item.get('icon', 'check-circle') }}"></i>
 
                                         </div>
 
-                                    {% endif %}
 
-                                </a>
-
-
-                                <div class="card-body p-3">
-
-                                    <h5
-                                        class="homepage-product-name fw-semibold small mb-2 text-truncate"
-                                        title="{{ product.name }}"
-                                    >
-                                        {{ product.name }}
-                                    </h5>
+                                        <h3 class="bm-home-feature-title">
+                                            {{ item.get('title', 'Quality Service') }}
+                                        </h3>
 
 
-                                    <div class="fw-bold text-success">
+                                        {% if item.get('text') %}
 
-                                        KSh
-                                        {{ "{:,.2f}".format(
-                                            product.discounted_price
-                                            if product.discount and product.discount > 0
-                                            else product.price
-                                        ) }}
+                                            <p class="bm-home-feature-text">
+                                                {{ item.get('text') }}
+                                            </p>
+
+                                        {% endif %}
+
+                                    </div>
+
+                                {% endfor %}
+
+                            {% else %}
+
+                                <div class="bm-home-feature-card">
+
+                                    <div class="bm-home-feature-icon">
+                                        <i class="bi bi-award"></i>
+                                    </div>
+
+                                    <h3 class="bm-home-feature-title">
+                                        Quality Agricultural Equipment
+                                    </h3>
+
+                                    <p class="bm-home-feature-text">
+                                        Reliable machinery and equipment selected
+                                        to support agricultural productivity.
+                                    </p>
+
+                                </div>
+
+
+                                <div class="bm-home-feature-card">
+
+                                    <div class="bm-home-feature-icon">
+                                        <i class="bi bi-tools"></i>
+                                    </div>
+
+                                    <h3 class="bm-home-feature-title">
+                                        Genuine Spare Parts
+                                    </h3>
+
+                                    <p class="bm-home-feature-text">
+                                        Quality replacement parts designed to
+                                        help keep machinery operating reliably.
+                                    </p>
+
+                                </div>
+
+
+                                <div class="bm-home-feature-card">
+
+                                    <div class="bm-home-feature-icon">
+                                        <i class="bi bi-headset"></i>
+                                    </div>
+
+                                    <h3 class="bm-home-feature-title">
+                                        Practical Support
+                                    </h3>
+
+                                    <p class="bm-home-feature-text">
+                                        Professional assistance for farmers,
+                                        businesses and agricultural processors.
+                                    </p>
+
+                                </div>
+
+
+                                <div class="bm-home-feature-card">
+
+                                    <div class="bm-home-feature-icon">
+                                        <i class="bi bi-truck"></i>
+                                    </div>
+
+                                    <h3 class="bm-home-feature-title">
+                                        Reliable Service
+                                    </h3>
+
+                                    <p class="bm-home-feature-text">
+                                        A customer-focused approach built around
+                                        dependable agricultural solutions.
+                                    </p>
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+            <!-- ==================================================
+                 SERVICES
+                 ================================================== -->
+
+            {% elif section_type == "services" %}
+
+                <section
+                    class="bm-home-section bm-home-section-spacing bm-home-content-section {{ custom_class }}"
+                >
+
+                    <div class="bm-home-container">
+
+                        <div class="bm-home-section-heading">
+
+                            <span class="bm-home-eyebrow">
+                                Our Solutions
+                            </span>
+
+                            {% if section.title %}
+
+                                <h2 class="bm-home-section-title">
+                                    {{ section.title }}
+                                </h2>
+
+                            {% endif %}
+
+
+                            {% if section.subtitle %}
+
+                                <p class="bm-home-section-subtitle">
+                                    {{ section.subtitle }}
+                                </p>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        {% set service_items = config.get('items', []) %}
+
+
+                        <div class="bm-home-feature-grid">
+
+                            {% for item in service_items %}
+
+                                <div class="bm-home-feature-card">
+
+                                    <div class="bm-home-feature-icon">
+
+                                        <i class="bi bi-{{ item.get('icon', 'gear') }}"></i>
 
                                     </div>
 
 
-                                    <a
-                                        href="{{ url_for('product.product_details', id=product.id) }}"
-                                        class="btn btn-sm btn-outline-success rounded-pill w-100 mt-3"
+                                    <h3 class="bm-home-feature-title">
+                                        {{ item.get('title', 'Agricultural Solutions') }}
+                                    </h3>
+
+
+                                    {% if item.get('text') %}
+
+                                        <p class="bm-home-feature-text">
+                                            {{ item.get('text') }}
+                                        </p>
+
+                                    {% endif %}
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+            <!-- ==================================================
+                 BANNER
+                 ================================================== -->
+
+            {% elif section_type == "banner" %}
+
+                {% set banner_height = config.get('height', 320) | int %}
+
+                <section
+                    class="bm-home-section bm-home-section-spacing bm-home-content-section {{ custom_class }}"
+                >
+
+                    <div class="bm-home-container">
+
+                        <div class="bm-home-banner">
+
+                            {% if section.image_url %}
+
+                                <img
+                                    src="{{ section.image_url }}"
+                                    loading="lazy"
+                                    decoding="async"
+                                    class="bm-home-banner-image"
+                                    style="height:{{ banner_height }}px;"
+                                    alt="{{ section.image_alt or section.title or 'Bomet Machineries Ltd.' }}"
+                                >
+
+                            {% else %}
+
+                                <div
+                                    class="bm-home-banner-placeholder"
+                                    style="height:{{ banner_height }}px;"
+                                ></div>
+
+                            {% endif %}
+
+
+                            <div class="bm-home-banner-overlay">
+
+                                <div>
+
+                                    {% if section.title %}
+
+                                        <h2 class="bm-home-banner-title">
+                                            {{ section.title }}
+                                        </h2>
+
+                                    {% endif %}
+
+
+                                    {% if section.subtitle %}
+
+                                        <p class="bm-home-banner-text">
+                                            {{ section.subtitle }}
+                                        </p>
+
+                                    {% endif %}
+
+
+                                    {% if section.button_text and section.button_url %}
+
+                                        <a
+                                            href="{{ section.button_url }}"
+                                            class="bm-home-primary-btn"
+                                        >
+                                            {{ section.button_text }}
+                                            <i class="bi bi-arrow-right"></i>
+                                        </a>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+            <!-- ==================================================
+                 CTA
+                 ================================================== -->
+
+            {% elif section_type == "cta" %}
+
+                <section
+                    class="bm-home-cta bm-home-section bm-home-content-section {{ custom_class }}"
+                >
+
+                    <div class="bm-home-container bm-home-cta-inner">
+
+                        <span class="bm-home-eyebrow" style="color:#b9e3c9;">
+                            Get Started
+                        </span>
+
+
+                        {% if section.title %}
+
+                            <h2 class="bm-home-cta-title">
+                                {{ section.title }}
+                            </h2>
+
+                        {% endif %}
+
+
+                        {% if section.subtitle %}
+
+                            <p class="bm-home-cta-text">
+                                {{ section.subtitle }}
+                            </p>
+
+                        {% endif %}
+
+
+                        {% if section.button_text and section.button_url %}
+
+                            <div class="bm-home-cta-actions">
+
+                                <a
+                                    href="{{ section.button_url }}"
+                                    class="bm-home-primary-btn"
+                                >
+                                    {{ section.button_text }}
+                                    <i class="bi bi-arrow-right"></i>
+                                </a>
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </section>
+
+
+            <!-- ==================================================
+                 SPARE PARTS
+                 ================================================== -->
+
+            {% elif section_type == "spare_parts" %}
+
+                <section
+                    class="bm-home-section bm-home-section-spacing bm-home-content-section {{ custom_class }}"
+                >
+
+                    <div class="bm-home-container">
+
+                        <div class="bm-home-image-text">
+
+                            <div>
+
+                                {% if section.image_url %}
+
+                                    <img
+                                        src="{{ section.image_url }}"
+                                        loading="lazy"
+                                        decoding="async"
+                                        class="bm-home-section-image"
+                                        alt="{{ section.image_alt or section.title or 'Genuine spare parts' }}"
                                     >
-                                        View Product
+
+                                {% else %}
+
+                                    <div class="bm-home-image-placeholder">
+                                        <i class="bi bi-tools"></i>
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <div>
+
+                                <span class="bm-home-eyebrow">
+                                    Genuine Spare Parts
+                                </span>
+
+
+                                <h2 class="bm-home-section-title">
+
+                                    {{ section.title or "Genuine Spare Parts for Your Machinery" }}
+
+                                </h2>
+
+
+                                {% if section.subtitle %}
+
+                                    <p class="bm-home-section-subtitle"
+                                       style="margin-left:0;margin-right:0;">
+                                        {{ section.subtitle }}
+                                    </p>
+
+                                {% endif %}
+
+
+                                {% if section.content %}
+
+                                    <div class="bm-home-section-content mt-3">
+                                        {{ section.content | safe }}
+                                    </div>
+
+                                {% endif %}
+
+
+                                {% if section.button_text and section.button_url %}
+
+                                    <a
+                                        href="{{ section.button_url }}"
+                                        class="bm-home-text-link"
+                                    >
+                                        {{ section.button_text }}
+                                        <i class="bi bi-arrow-right"></i>
+                                    </a>
+
+                                {% else %}
+
+                                    <a
+                                        href="{{ url_for('product.products') }}"
+                                        class="bm-home-text-link"
+                                    >
+                                        Browse Products
+                                        <i class="bi bi-arrow-right"></i>
+                                    </a>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+            <!-- ==================================================
+                 CUSTOM HTML
+                 ================================================== -->
+
+            {% elif section_type == "custom_html" %}
+
+                <section
+                    class="bm-home-section bm-home-content-section {{ custom_class }}"
+                >
+                    {{ section.content | safe }}
+                </section>
+
+            {% endif %}
+
+        {% endfor %}
+
+
+    <!-- ========================================================
+         LEGACY FALLBACK
+         ======================================================== -->
+
+    {% else %}
+
+
+        <!-- ====================================================
+             LEGACY HERO
+             ==================================================== -->
+
+        <section
+            id="bometLegacyHero"
+            class="bm-home-hero bm-home-section"
+            aria-label="Bomet Machineries Ltd. featured products"
+        >
+
+            {% set hero_keys = [
+                'hero_1',
+                'hero_2',
+                'hero_3',
+                'hero_4',
+                'hero_5',
+                'hero_6',
+                'hero_7',
+                'hero_8'
+            ] %}
+
+
+            {% set active_heroes = [] %}
+            {% for key in hero_keys %}
+                {% set hero = cms.get(key) if cms else none %}
+                {% if hero and hero.is_active %}
+                    {% set ignored = active_heroes.append(hero) %}
+                {% endif %}
+            {% endfor %}
+            {% if active_heroes %}
+                {% if active_heroes|length > 1 %}
+                    <div class="carousel-indicators mb-3">
+                        {% for hero in active_heroes %}
+                            <button
+                                type="button"
+                                data-bs-target="#bometLegacyHero"
+                                data-bs-slide-to="{{ loop.index0 }}"
+                                class="{% if loop.first %}active{% endif %}"
+                                {% if loop.first %}
+                                    aria-current="true"
+                                {% endif %}
+                                aria-label="Slide {{ loop.index }}"
+                            ></button>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <div class="carousel slide carousel-fade"
+                     data-bs-ride="carousel"
+                     data-bs-interval="5000">
+
+                    <div class="carousel-inner">
+
+                        {% for hero in active_heroes %}
+
+                            <div
+                                class="carousel-item {% if loop.first %}active{% endif %}"
+                            >
+
+                                <div class="bm-home-hero-slide">
+
+                                    {% if hero.image_url %}
+
+                                        <img
+                                            src="{{ hero.image_url }}"
+                                            {% if loop.first %}
+                                                fetchpriority="high"
+                                            {% else %}
+                                                loading="lazy"
+                                            {% endif %}
+                                            decoding="async"
+                                            class="bm-home-hero-image"
+                                            alt="{{ hero.image_alt or hero.headline or 'Bomet Machineries Ltd.' }}"
+                                        >
+
+                                    {% else %}
+
+                                        <div
+                                            class="bm-home-hero-placeholder"
+                                            aria-hidden="true"
+                                        ></div>
+
+                                    {% endif %}
+
+
+                                    <div class="bm-home-hero-overlay">
+
+                                        <div class="bm-home-container">
+
+                                            <div class="bm-home-hero-content">
+
+                                                <span class="bm-home-hero-kicker">
+                                                    <i class="bi bi-shield-check"></i>
+                                                    Bomet Machineries Ltd.
+                                                </span>
+
+
+                                                {% if hero.headline %}
+
+                                                    <h1 class="bm-home-hero-title">
+                                                        {{ hero.headline }}
+                                                    </h1>
+
+                                                {% endif %}
+
+
+                                                {% if hero.subheadline %}
+
+                                                    <p class="bm-home-hero-description">
+                                                        {{ hero.subheadline }}
+                                                    </p>
+
+                                                {% endif %}
+
+
+                                                {% if hero.button_text and hero.button_url %}
+
+                                                    <div class="bm-home-hero-actions">
+
+                                                        <a
+                                                            href="{{ hero.button_url }}"
+                                                            class="bm-home-primary-btn"
+                                                        >
+                                                            {{ hero.button_text }}
+                                                            <i class="bi bi-arrow-right"></i>
+                                                        </a>
+
+                                                        <a
+                                                            href="{{ url_for('product.products') }}"
+                                                            class="bm-home-secondary-btn"
+                                                        >
+                                                            Shop Products
+                                                            <i class="bi bi-grid"></i>
+                                                        </a>
+
+                                                    </div>
+
+                                                {% else %}
+
+                                                    <div class="bm-home-hero-actions">
+
+                                                        <a
+                                                            href="{{ url_for('product.products') }}"
+                                                            class="bm-home-primary-btn"
+                                                        >
+                                                            Shop Products
+                                                            <i class="bi bi-arrow-right"></i>
+                                                        </a>
+
+                                                    </div>
+
+                                                {% endif %}
+
+
+                                                <div class="bm-home-hero-trust">
+
+                                                    <span class="bm-home-hero-trust-item">
+                                                        <i class="bi bi-check-circle-fill"></i>
+                                                        Quality Machinery
+                                                    </span>
+
+                                                    <span class="bm-home-hero-trust-item">
+                                                        <i class="bi bi-check-circle-fill"></i>
+                                                        Genuine Parts
+                                                    </span>
+
+                                                    <span class="bm-home-hero-trust-item">
+                                                        <i class="bi bi-check-circle-fill"></i>
+                                                        Reliable Service
+                                                    </span>
+
+                                                    <span class="bm-home-hero-trust-item">
+                                                        <i class="bi bi-check-circle-fill"></i>
+                                                        Kenya Focused
+                                                    </span>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+
+            {% else %}
+
+                <div class="bm-home-hero-slide">
+
+                    <div
+                        class="bm-home-hero-placeholder"
+                        aria-hidden="true"
+                    ></div>
+
+                    <div class="bm-home-hero-overlay">
+
+                        <div class="bm-home-container">
+
+                            <div class="bm-home-hero-content">
+
+                                <span class="bm-home-hero-kicker">
+                                    <i class="bi bi-shield-check"></i>
+                                    Bomet Machineries Ltd.
+                                </span>
+
+                                <h1 class="bm-home-hero-title">
+                                    Agricultural Machinery Built for Productivity
+                                </h1>
+
+                                <p class="bm-home-hero-description">
+                                    Quality agricultural machinery, equipment
+                                    and genuine spare parts for farmers and
+                                    businesses in Kenya.
+                                </p>
+
+                                <div class="bm-home-hero-actions">
+
+                                    <a
+                                        href="{{ url_for('product.products') }}"
+                                        class="bm-home-primary-btn"
+                                    >
+                                        Shop Products
+                                        <i class="bi bi-arrow-right"></i>
                                     </a>
 
                                 </div>
@@ -1408,645 +2867,246 @@
 
                         </div>
 
-                        {% else %}
-
-                        <div class="col-12 text-center py-5">
-
-                            <i class="bi bi-box-seam fs-1 text-secondary"></i>
-
-                            <p class="text-muted mt-3 mb-0">
-                                Products coming soon.
-                            </p>
-
-                        </div>
-
-                        {% endfor %}
-
                     </div>
 
-                </section>
+                </div>
 
             {% endif %}
 
-
-        {# ======================================================
-           IMAGE + TEXT
-           ====================================================== #}
-
-        {% elif section_type == "image_text" %}
-
-            {% set image_left = config.get('image_position', 'left') == 'left' %}
+        </section>
 
 
-            <section
-                class="container py-4 py-md-5 content-section homepage-section {{ custom_class }}"
-            >
+        <!-- ====================================================
+             VALUE STRIP
+             ==================================================== -->
 
-                <div class="row align-items-center g-4 g-lg-5">
+        <section class="bm-home-value-strip">
 
+            <div class="bm-home-container">
 
-                    <div class="col-12 col-lg-6 {% if not image_left %}order-lg-2{% endif %}">
+                <div class="bm-home-value-grid">
 
-                        {% if section.image_url %}
+                    <div class="bm-home-value-item">
 
-                        <img
-                            src="{{ section.image_url }}"
-                            loading="lazy"
-                            decoding="async"
-                            class="homepage-image-text-image shadow-sm"
-                            alt="{{ section.image_alt or section.title or 'Bomet Machineries Ltd.' }}"
-                        >
+                        <span class="bm-home-value-icon">
+                            <i class="bi bi-award"></i>
+                        </span>
 
-                        {% else %}
+                        <span>
+                            <strong class="bm-home-value-title">
+                                Quality Machinery
+                            </strong>
 
-                        <div class="homepage-image-text-image bg-light d-flex align-items-center justify-content-center">
-
-                            <i class="bi bi-image fs-1 text-secondary"></i>
-
-                        </div>
-
-                        {% endif %}
+                            <small class="bm-home-value-text">
+                                Built for productive work
+                            </small>
+                        </span>
 
                     </div>
 
 
-                    <div class="col-12 col-lg-6">
+                    <div class="bm-home-value-item">
 
-                        <div class="homepage-eyebrow">
-                            Bomet Machineries Ltd.
-                        </div>
+                        <span class="bm-home-value-icon">
+                            <i class="bi bi-tools"></i>
+                        </span>
 
+                        <span>
+                            <strong class="bm-home-value-title">
+                                Genuine Spare Parts
+                            </strong>
 
-                        {% if section.title %}
+                            <small class="bm-home-value-text">
+                                Keep equipment running
+                            </small>
+                        </span>
 
-                        <h2 class="homepage-section-title text-uppercase h2 mb-3">
-                            {{ section.title }}
-                        </h2>
-
-                        {% endif %}
-
-
-                        {% if section.subtitle %}
-
-                        <p class="lead text-secondary mb-4">
-                            {{ section.subtitle }}
-                        </p>
-
-                        {% endif %}
+                    </div>
 
 
-                        {% if section.content %}
+                    <div class="bm-home-value-item">
 
-                        <div class="text-muted homepage-section-content mb-4">
+                        <span class="bm-home-value-icon">
+                            <i class="bi bi-headset"></i>
+                        </span>
 
-                            {{ section.content | safe }}
+                        <span>
+                            <strong class="bm-home-value-title">
+                                Practical Support
+                            </strong>
 
-                        </div>
+                            <small class="bm-home-value-text">
+                                Customer-focused service
+                            </small>
+                        </span>
 
-                        {% endif %}
+                    </div>
 
 
-                        {% if section.button_text and section.button_url %}
+                    <div class="bm-home-value-item">
 
-                        <a
-                            href="{{ section.button_url }}"
-                            class="btn btn-success rounded-pill px-4 py-2 fw-bold"
-                        >
+                        <span class="bm-home-value-icon">
+                            <i class="bi bi-truck"></i>
+                        </span>
 
-                            {{ section.button_text }}
+                        <span>
+                            <strong class="bm-home-value-title">
+                                Kenya Focused
+                            </strong>
 
-                            <i class="bi bi-arrow-right ms-1"></i>
-
-                        </a>
-
-                        {% endif %}
+                            <small class="bm-home-value-text">
+                                Agricultural solutions
+                            </small>
+                        </span>
 
                     </div>
 
                 </div>
 
-            </section>
+            </div>
+
+        </section>
 
 
-        {# ======================================================
-           TRUST
-           ====================================================== #}
+        <!-- ====================================================
+             CATEGORY SHOWCASE
+             ==================================================== -->
 
-        {% elif section_type == "trust" %}
+        <section class="bm-home-section bm-home-section-spacing">
 
-        <section
-            class="bg-light py-4 py-md-5 content-section homepage-section {{ custom_class }}"
-        >
+            <div class="bm-home-container">
 
-            <div class="container">
+                <div class="bm-home-section-heading">
 
+                    <span class="bm-home-eyebrow">
+                        Explore Our Range
+                    </span>
 
-                <div class="text-center mb-4 mb-md-5">
-
-                    <div class="homepage-eyebrow justify-content-center">
-                        Why Choose Us
-                    </div>
-
-
-                    {% if section.title %}
-
-                    <h2 class="homepage-section-title display-6 text-uppercase mb-3">
-                        {{ section.title }}
+                    <h2 class="bm-home-section-title">
+                        Shop by Category
                     </h2>
 
-                    {% endif %}
-
-
-                    {% if section.subtitle %}
-
-                    <p class="text-muted homepage-section-subtitle mb-0 px-2">
-                        {{ section.subtitle }}
+                    <p class="bm-home-section-subtitle">
+                        Find machinery, equipment and agricultural products
+                        by category.
                     </p>
 
-                    {% endif %}
-
                 </div>
 
 
-                {% set trust_items = config.get('items', []) %}
+                <div class="bm-home-category-grid">
 
+                    {% for category in categories[:6] %}
 
-                <div class="row g-3 g-md-4">
-
-
-                    {% if trust_items %}
-
-                        {% for item in trust_items %}
-
-                        <div class="col-12 col-md-6 col-lg-3">
-
-                            <div class="card homepage-feature-card shadow-sm p-4 text-center">
-
-                                <div class="homepage-feature-icon mb-3">
-
-                                    <i class="bi bi-{{ item.get('icon', 'check-circle') }}"></i>
-
-                                </div>
-
-
-                                <h5 class="fw-bold">
-                                    {{ item.get('title', 'Quality Service') }}
-                                </h5>
-
-
-                                {% if item.get('text') %}
-
-                                <p class="text-muted small mb-0">
-                                    {{ item.get('text') }}
-                                </p>
-
-                                {% endif %}
-
-                            </div>
-
-                        </div>
-
-                        {% endfor %}
-
-
-                    {% else %}
-
-
-                        <div class="col-12 col-md-4">
-
-                            <div class="card homepage-feature-card shadow-sm p-4 text-center">
-
-                                <div class="homepage-feature-icon mb-3">
-                                    <i class="bi bi-award"></i>
-                                </div>
-
-                                <h5 class="fw-bold">
-                                    Quality Equipment
-                                </h5>
-
-                                <p class="text-muted small mb-0">
-                                    Reliable agricultural machinery built for productivity.
-                                </p>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="col-12 col-md-4">
-
-                            <div class="card homepage-feature-card shadow-sm p-4 text-center">
-
-                                <div class="homepage-feature-icon mb-3">
-                                    <i class="bi bi-tools"></i>
-                                </div>
-
-                                <h5 class="fw-bold">
-                                    Genuine Spare Parts
-                                </h5>
-
-                                <p class="text-muted small mb-0">
-                                    Keep your machinery running with quality replacement parts.
-                                </p>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="col-12 col-md-4">
-
-                            <div class="card homepage-feature-card shadow-sm p-4 text-center">
-
-                                <div class="homepage-feature-icon mb-3">
-                                    <i class="bi bi-headset"></i>
-                                </div>
-
-                                <h5 class="fw-bold">
-                                    Reliable Support
-                                </h5>
-
-                                <p class="text-muted small mb-0">
-                                    Practical solutions for farmers and agricultural businesses.
-                                </p>
-
-                            </div>
-
-                        </div>
-
-
-                    {% endif %}
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        {# ======================================================
-           SERVICES
-           ====================================================== #}
-
-        {% elif section_type == "services" %}
-
-        <section
-            class="container py-4 py-md-5 content-section homepage-section {{ custom_class }}"
-        >
-
-            <div class="text-center mb-4 mb-md-5">
-
-                <div class="homepage-eyebrow justify-content-center">
-                    Our Services
-                </div>
-
-
-                {% if section.title %}
-
-                <h2 class="homepage-section-title display-6 text-uppercase mb-3">
-                    {{ section.title }}
-                </h2>
-
-                {% endif %}
-
-
-                {% if section.subtitle %}
-
-                <p class="text-muted homepage-section-subtitle mb-0 px-2">
-                    {{ section.subtitle }}
-                </p>
-
-                {% endif %}
-
-            </div>
-
-
-            {% set service_items = config.get('items', []) %}
-
-
-            <div class="row g-3 g-md-4">
-
-                {% for item in service_items %}
-
-                <div class="col-12 col-md-6 col-lg-4">
-
-                    <div class="card homepage-feature-card shadow-sm p-4">
-
-                        <div class="homepage-feature-icon mb-3">
-
-                            <i class="bi bi-{{ item.get('icon', 'gear') }}"></i>
-
-                        </div>
-
-
-                        <h5 class="fw-bold">
-                            {{ item.get('title', 'Agricultural Solutions') }}
-                        </h5>
-
-
-                        {% if item.get('text') %}
-
-                        <p class="text-muted mb-0">
-                            {{ item.get('text') }}
-                        </p>
-
-                        {% endif %}
-
-                    </div>
-
-                </div>
-
-                {% endfor %}
-
-            </div>
-
-        </section>
-
-
-        {# ======================================================
-           BANNER
-           ====================================================== #}
-
-        {% elif section_type == "banner" %}
-
-            {% set banner_height = config.get('height', 320) | int %}
-
-
-            <section
-                class="homepage-section py-4 py-md-5 content-section {{ custom_class }}"
-            >
-
-                <div class="container">
-
-                    <div
-                        class="homepage-banner"
-                        style="min-height: {{ banner_height }}px;"
-                    >
-
-
-                        {% if section.image_url %}
-
-                        <img
-                            src="{{ section.image_url }}"
-                            loading="lazy"
-                            decoding="async"
-                            style="height: {{ banner_height }}px;"
-                            alt="{{ section.image_alt or section.title or 'Bomet Machineries Ltd.' }}"
+                        <a
+                            href="{{ url_for('product.category_products', slug=category.slug) }}"
+                            class="bm-home-category-card"
                         >
 
-                        {% else %}
+                            {% if category.image_url %}
 
-                        <div
-                            class="bg-dark"
-                            style="height: {{ banner_height }}px;"
-                        ></div>
-
-                        {% endif %}
-
-
-                        <div class="homepage-banner-overlay">
-
-                            <div class="text-white">
-
-                                {% if section.title %}
-
-                                <h2 class="display-6 fw-bold text-uppercase mb-3">
-                                    {{ section.title }}
-                                </h2>
-
-                                {% endif %}
-
-
-                                {% if section.subtitle %}
-
-                                <p class="lead mb-4">
-                                    {{ section.subtitle }}
-                                </p>
-
-                                {% endif %}
-
-
-                                {% if section.button_text and section.button_url %}
-
-                                <a
-                                    href="{{ section.button_url }}"
-                                    class="btn btn-success rounded-pill px-4 py-2 fw-bold"
+                                <img
+                                    src="{{ category.image_url }}"
+                                    loading="lazy"
+                                    decoding="async"
+                                    class="bm-home-category-image"
+                                    alt="{{ category.name }}"
                                 >
-
-                                    {{ section.button_text }}
-
-                                    <i class="bi bi-arrow-right ms-1"></i>
-
-                                </a>
-
-                                {% endif %}
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-        {# ======================================================
-           CTA
-           ====================================================== #}
-
-        {% elif section_type == "cta" %}
-
-        <section
-            class="homepage-cta text-white py-5 content-section homepage-section {{ custom_class }}"
-        >
-
-            <div class="container text-center py-3 py-md-4 px-3">
-
-                <div class="homepage-eyebrow text-white justify-content-center">
-                    Get Started
-                </div>
-
-
-                {% if section.title %}
-
-                <h2 class="fw-bold text-uppercase mb-3">
-                    {{ section.title }}
-                </h2>
-
-                {% endif %}
-
-
-                {% if section.subtitle %}
-
-                <p
-                    class="text-white-50 mb-4 mx-auto"
-                    style="max-width:760px;"
-                >
-                    {{ section.subtitle }}
-                </p>
-
-                {% endif %}
-
-
-                {% if section.button_text and section.button_url %}
-
-                <a
-                    href="{{ section.button_url }}"
-                    class="btn btn-success rounded-pill px-4 py-2 fw-bold"
-                >
-
-                    {{ section.button_text }}
-
-                    <i class="bi bi-arrow-right ms-1"></i>
-
-                </a>
-
-                {% endif %}
-
-            </div>
-
-        </section>
-
-
-        {# ======================================================
-           SPARE PARTS
-           ====================================================== #}
-
-        {% elif section_type == "spare_parts" %}
-
-        <section
-            class="homepage-spare-parts py-4 py-md-5 content-section homepage-section {{ custom_class }}"
-        >
-
-            <div class="container">
-
-                <div class="row align-items-center g-4 g-lg-5">
-
-
-                    {# ==================================================
-                       IMAGE
-                       ================================================== #}
-
-                    <div class="col-12 col-lg-6">
-
-                        <div class="spare-parts-media">
-
-                            {% if section.image_url %}
-
-                            <img
-                                src="{{ section.image_url }}"
-                                loading="lazy"
-                                decoding="async"
-                                alt="{{ section.image_alt or section.title or 'Bomet Machineries Ltd. genuine spare parts' }}"
-                            >
 
                             {% else %}
 
-                            <div class="spare-parts-placeholder">
-
-                                <i class="bi bi-gear-wide-connected fs-1"></i>
-
-                            </div>
+                                <div
+                                    class="bm-home-category-fallback"
+                                    aria-hidden="true"
+                                >
+                                    <i class="bi bi-grid-3x3-gap"></i>
+                                </div>
 
                             {% endif %}
 
+
+                            <div class="bm-home-category-overlay">
+
+                                <span class="bm-home-category-name">
+                                    {{ category.name }}
+                                </span>
+
+                                <span class="bm-home-category-arrow">
+                                    Shop category
+                                    <i class="bi bi-arrow-right"></i>
+                                </span>
+
+                            </div>
+
+                        </a>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ====================================================
+             COMPANY INTRODUCTION
+             ==================================================== -->
+
+        <section
+            class="bm-home-section bm-home-section-spacing"
+            style="background:var(--bm-home-bg);"
+        >
+
+            <div class="bm-home-container">
+
+                <div class="bm-home-image-text">
+
+                    <div>
+
+                        <div class="bm-home-image-placeholder">
+                            <i class="bi bi-gear-wide-connected"></i>
                         </div>
 
                     </div>
 
 
-                    {# ==================================================
-                       CONTENT
-                       ================================================== #}
+                    <div>
 
-                    <div class="col-12 col-lg-6">
+                        <span class="bm-home-eyebrow">
+                            Bomet Machineries Ltd.
+                        </span>
 
-                        <div class="spare-parts-content">
+                        <h2 class="bm-home-section-title">
+                            Agricultural Machinery You Can Rely On
+                        </h2>
 
-                            <div class="homepage-eyebrow">
-                                Genuine Spare Parts
-                            </div>
+                        <p class="bm-home-section-subtitle"
+                           style="margin-left:0;margin-right:0;">
+                            Professional agricultural machinery, equipment
+                            and genuine spare parts for farmers, businesses
+                            and agricultural processors in Kenya.
+                        </p>
 
+                        <div class="bm-home-section-content mt-3">
 
-                            {% if section.title %}
-
-                            <h2 class="homepage-section-title text-uppercase h2 mb-3">
-                                {{ section.title }}
-                            </h2>
-
-                            {% endif %}
-
-
-                            {% if section.subtitle %}
-
-                            <p class="lead text-secondary mb-4">
-                                {{ section.subtitle }}
+                            <p>
+                                We focus on practical agricultural solutions
+                                designed to improve productivity, reduce
+                                equipment downtime and support dependable
+                                day-to-day operations.
                             </p>
 
-                            {% endif %}
-
-
-                            {% if section.content %}
-
-                            <div class="text-muted homepage-section-content mb-4">
-
-                                {{ section.content | safe }}
-
-                            </div>
-
-                            {% endif %}
-
-
-                            {# ==================================================
-                               OPTIONAL LIST ITEMS
-                               ================================================== #}
-
-                            {% set spare_items = config.get('items', []) %}
-
-
-                            {% if spare_items %}
-
-                            <ul class="spare-parts-list mb-4">
-
-                                {% for item in spare_items %}
-
-                                <li>
-
-                                    <i class="bi bi-check-circle-fill"></i>
-
-                                    <span>
-
-                                        {{ item.get('text', item.get('title', 'Quality spare parts available.')) }}
-
-                                    </span>
-
-                                </li>
-
-                                {% endfor %}
-
-                            </ul>
-
-                            {% endif %}
-
-
-                            {% if section.button_text and section.button_url %}
-
-                            <a
-                                href="{{ section.button_url }}"
-                                class="btn btn-success rounded-pill px-4 py-2 fw-bold"
-                            >
-
-                                {{ section.button_text }}
-
-                                <i class="bi bi-arrow-right ms-1"></i>
-
-                            </a>
-
-                            {% endif %}
-
                         </div>
+
+
+                        <a
+                            href="{{ url_for('product.products') }}"
+                            class="bm-home-text-link"
+                        >
+                            Explore Products
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
 
                     </div>
 
@@ -2056,12 +3116,465 @@
 
         </section>
 
-        {% endif %}
 
-    {% endfor %}
+        <!-- ====================================================
+             MACHINERY PRODUCTS
+             ==================================================== -->
 
-{% endif %}
+        <section class="bm-home-section bm-home-product-section bm-home-section-spacing">
 
+            <div class="bm-home-container">
+
+                <div class="bm-home-section-heading">
+
+                    <span class="bm-home-eyebrow">
+                        Our Products
+                    </span>
+
+                    <h2 class="bm-home-section-title">
+                        Machinery & Equipment
+                    </h2>
+
+                    <p class="bm-home-section-subtitle">
+                        Explore agricultural machinery and equipment available
+                        from Bomet Machineries Ltd.
+                    </p>
+
+                </div>
+
+
+                {% if categories %}
+
+                    {% for category in categories %}
+
+                        {% set products = featured_by_category.get(category.id, []) %}
+
+                        {% if products %}
+
+                            <div class="bm-home-category-product-block">
+
+                                <div class="bm-home-product-heading">
+
+                                    <div>
+
+                                        <h3 class="bm-home-product-heading-title">
+                                            {{ category.name }}
+                                        </h3>
+
+                                        {% if category.description %}
+
+                                            <p class="bm-home-product-heading-description">
+                                                {{ category.description }}
+                                            </p>
+
+                                        {% endif %}
+
+                                    </div>
+
+
+                                    <a
+                                        href="{{ url_for('product.category_products', slug=category.slug) }}"
+                                        class="bm-home-view-all"
+                                    >
+                                        View All
+                                        <i class="bi bi-arrow-right"></i>
+                                    </a>
+
+                                </div>
+
+
+                                <div class="bm-home-product-grid">
+
+                                    {% for product in products[:6] %}
+
+                                        <article class="bm-home-product-card">
+
+                                            <a
+                                                href="{{ url_for('product.products', slug=product.slug) }}"
+                                                class="bm-home-product-media"
+                                            >
+
+                                                {% if product.discount and product.discount > 0 %}
+
+                                                    <span class="bm-home-product-badge">
+                                                        SALE
+                                                    </span>
+
+                                                {% endif %}
+
+
+                                                {% if product.images %}
+
+                                                    {% set primary_image = product.images | selectattr('is_primary', 'equalto', true) | first %}
+
+                                                    <img
+                                                        src="{{ primary_image.image_url if primary_image else product.images[0].image_url }}"
+                                                        loading="lazy"
+                                                        decoding="async"
+                                                        class="bm-home-product-image"
+                                                        alt="{{ product.name }}"
+                                                    >
+
+                                                {% else %}
+
+                                                    <div class="bm-home-product-placeholder">
+                                                        <i class="bi bi-image"></i>
+                                                    </div>
+
+                                                {% endif %}
+
+                                            </a>
+
+
+                                            <div class="bm-home-product-body">
+
+                                                <h3 class="bm-home-product-name">
+                                                    {{ product.name }}
+                                                </h3>
+
+
+                                                {% if product.brand %}
+
+                                                    <div class="bm-home-product-brand">
+                                                        {{ product.brand }}
+                                                    </div>
+
+                                                {% endif %}
+
+
+                                                <div class="bm-home-product-price">
+
+                                                    {% if product.discount and product.discount > 0 %}
+
+                                                        <div class="bm-home-old-price">
+                                                            KSh {{ "{:,.2f}".format(product.price) }}
+                                                        </div>
+
+                                                        <div class="bm-home-current-price">
+                                                            KSh {{ "{:,.2f}".format(product.discounted_price) }}
+                                                        </div>
+
+                                                    {% else %}
+
+                                                        <div class="bm-home-current-price">
+                                                            KSh {{ "{:,.2f}".format(product.price) }}
+                                                        </div>
+
+                                                    {% endif %}
+
+                                                </div>
+
+
+                                                {% if product.stock is defined %}
+
+                                                    {% if product.stock > 0 %}
+
+                                                        <div class="bm-home-product-stock available">
+                                                            <i class="bi bi-check-circle"></i>
+                                                            In stock
+                                                        </div>
+
+                                                    {% else %}
+
+                                                        <div class="bm-home-product-stock unavailable">
+                                                            <i class="bi bi-x-circle"></i>
+                                                            Out of stock
+                                                        </div>
+
+                                                    {% endif %}
+
+                                                {% endif %}
+
+
+                                                <a
+                                                    href="{{ url_for('product.product_details', id=product.id) }}"
+                                                    class="bm-home-product-btn"
+                                                >
+                                                    View Product
+                                                    <i class="bi bi-arrow-right"></i>
+                                                </a>
+
+                                            </div>
+
+                                        </article>
+
+                                    {% endfor %}
+
+                                </div>
+
+                            </div>
+
+                        {% endif %}
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <div class="text-center py-5">
+
+                        <i class="bi bi-box-seam fs-1 text-secondary"></i>
+
+                        <h3 class="mt-3 h5">
+                            Products Coming Soon
+                        </h3>
+
+                        <p class="text-muted mb-0">
+                            Our latest machinery and equipment will appear here.
+                        </p>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+
+        <!-- ====================================================
+             SHOP BY CATEGORY
+             ==================================================== -->
+
+        <section class="bm-home-section bm-home-section-spacing">
+
+            <div class="bm-home-container">
+
+                <div class="bm-home-section-heading">
+
+                    <span class="bm-home-eyebrow">
+                        Browse
+                    </span>
+
+                    <h2 class="bm-home-section-title">
+                        Find What You Need
+                    </h2>
+
+                    <p class="bm-home-section-subtitle">
+                        Browse our agricultural machinery, equipment and
+                        related product categories.
+                    </p>
+
+                </div>
+
+
+                <div class="bm-home-category-list">
+
+                    {% for category in categories %}
+
+                        <a
+                            href="{{ url_for('product.category_products', slug=category.slug) }}"
+                            class="bm-home-category-list-card"
+                        >
+
+                            {% if category.image_url %}
+
+                                <img
+                                    src="{{ category.image_url }}"
+                                    loading="lazy"
+                                    decoding="async"
+                                    class="bm-home-category-list-image"
+                                    alt="{{ category.name }}"
+                                >
+
+                            {% else %}
+
+                                <div
+                                    class="bm-home-category-list-placeholder"
+                                    aria-hidden="true"
+                                >
+                                    <i class="bi bi-grid"></i>
+                                </div>
+
+                            {% endif %}
+
+
+                            <div class="bm-home-category-list-body">
+
+                                <h3 class="bm-home-category-list-name">
+                                    {{ category.name }}
+                                </h3>
+
+                            </div>
+
+                        </a>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ====================================================
+             TRUST
+             ==================================================== -->
+
+        <section
+            class="bm-home-section bm-home-section-spacing"
+            style="background:var(--bm-home-bg);"
+        >
+
+            <div class="bm-home-container">
+
+                <div class="bm-home-section-heading">
+
+                    <span class="bm-home-eyebrow">
+                        Why Bomet Machineries
+                    </span>
+
+                    <h2 class="bm-home-section-title">
+                        Built Around Your Agricultural Needs
+                    </h2>
+
+                    <p class="bm-home-section-subtitle">
+                        Professional products and practical support for
+                        agricultural work in Kenya.
+                    </p>
+
+                </div>
+
+
+                <div class="bm-home-feature-grid">
+
+                    <div class="bm-home-feature-card">
+
+                        <div class="bm-home-feature-icon">
+                            <i class="bi bi-award"></i>
+                        </div>
+
+                        <h3 class="bm-home-feature-title">
+                            Quality Equipment
+                        </h3>
+
+                        <p class="bm-home-feature-text">
+                            Agricultural machinery and equipment selected
+                            with productivity and reliability in mind.
+                        </p>
+
+                    </div>
+
+
+                    <div class="bm-home-feature-card">
+
+                        <div class="bm-home-feature-icon">
+                            <i class="bi bi-tools"></i>
+                        </div>
+
+                        <h3 class="bm-home-feature-title">
+                            Genuine Spare Parts
+                        </h3>
+
+                        <p class="bm-home-feature-text">
+                            Replacement parts to help keep your machinery
+                            operating efficiently.
+                        </p>
+
+                    </div>
+
+
+                    <div class="bm-home-feature-card">
+
+                        <div class="bm-home-feature-icon">
+                            <i class="bi bi-headset"></i>
+                        </div>
+
+                        <h3 class="bm-home-feature-title">
+                            Expert Support
+                        </h3>
+
+                        <p class="bm-home-feature-text">
+                            Practical assistance for farmers, businesses
+                            and agricultural processors.
+                        </p>
+
+                    </div>
+
+
+                    <div class="bm-home-feature-card">
+
+                        <div class="bm-home-feature-icon">
+                            <i class="bi bi-truck"></i>
+                        </div>
+
+                        <h3 class="bm-home-feature-title">
+                            Reliable Service
+                        </h3>
+
+                        <p class="bm-home-feature-text">
+                            A customer-focused approach to agricultural
+                            machinery and equipment solutions.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ====================================================
+             FINAL CTA
+             ==================================================== -->
+
+        <section class="bm-home-cta">
+
+            <div class="bm-home-container bm-home-cta-inner">
+
+                <span
+                    class="bm-home-eyebrow"
+                    style="color:#b9e3c9;"
+                >
+                    Ready to Get Started?
+                </span>
+
+
+                <h2 class="bm-home-cta-title">
+                    Equip Your Farm for Better Productivity
+                </h2>
+
+
+                <p class="bm-home-cta-text">
+                    Browse agricultural machinery, equipment and genuine
+                    spare parts from Bomet Machineries Ltd.
+                </p>
+
+
+                <div class="bm-home-cta-actions">
+
+                    <a
+                        href="{{ url_for('product.products') }}"
+                        class="bm-home-primary-btn"
+                    >
+                        Shop Products
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+
+                    {% if categories %}
+
+                        <a
+                            href="{{ url_for('product.category_products', slug=categories[0].slug) }}"
+                            class="bm-home-secondary-btn"
+                        >
+                            Browse Categories
+                            <i class="bi bi-grid"></i>
+                        </a>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    {% endif %}
+
+</div>
 
 {% endblock %}
-```
