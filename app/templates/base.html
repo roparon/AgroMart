@@ -947,14 +947,89 @@
 
 
         /* =====================================================
-           FOOTER STYLES
+           FOOTER STYLES — PROFESSIONAL, MOBILE-FIRST
         ====================================================== */
 
         .bomet-footer {
 
-            background: var(--bomet-green-deep);
+            position: relative;
+
+            background:
+                linear-gradient(180deg, var(--bomet-green-deep) 0%, #062f1d 100%);
 
             color: white;
+
+            overflow: hidden;
+
+            border-top: 1px solid rgba(255,255,255,.08);
+
+        }
+
+        .bomet-footer::before {
+
+            content: '';
+
+            position: absolute;
+
+            inset: 0;
+
+            pointer-events: none;
+
+            background:
+                radial-gradient(circle at 8% 8%, rgba(255,255,255,.055), transparent 30%),
+                radial-gradient(circle at 92% 90%, rgba(25,135,84,.16), transparent 32%);
+
+        }
+
+        .bomet-footer .container {
+
+            position: relative;
+
+            z-index: 1;
+
+        }
+
+        .footer-top {
+
+            padding: 8px 0 28px;
+
+        }
+
+        .footer-brand-wrap {
+
+            display: flex;
+
+            align-items: flex-start;
+
+            gap: 12px;
+
+            margin-bottom: 12px;
+
+        }
+
+        .footer-brand-mark {
+
+            width: 42px;
+
+            height: 42px;
+
+            flex: 0 0 42px;
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 12px;
+
+            background: rgba(255,255,255,.10);
+
+            border: 1px solid rgba(255,255,255,.12);
+
+            color: white;
+
+            box-shadow: 0 8px 24px rgba(0,0,0,.12);
 
         }
 
@@ -962,17 +1037,99 @@
 
             color: white;
 
+            font-size: 1rem;
+
+            line-height: 1.25;
+
             font-weight: 800;
+
+            letter-spacing: -.2px;
+
+        }
+
+        .footer-brand-subtitle {
+
+            display: block;
+
+            margin-top: 3px;
+
+            color: rgba(255,255,255,.55);
+
+            font-size: .62rem;
+
+            font-weight: 700;
+
+            letter-spacing: .04em;
+
+            text-transform: uppercase;
 
         }
 
         .footer-text {
 
-            color: rgba(255,255,255,.65);
+            color: rgba(255,255,255,.68);
 
-            font-size: .78rem;
+            font-size: .76rem;
 
-            line-height: 1.7;
+            line-height: 1.72;
+
+        }
+
+        .footer-description {
+
+            max-width: 440px;
+
+            margin-bottom: 14px;
+
+        }
+
+        .footer-trust-row {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 7px;
+
+            margin-top: 14px;
+
+        }
+
+        .footer-trust-item {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            min-width: 0;
+
+            padding: 8px 9px;
+
+            border: 1px solid rgba(255,255,255,.09);
+
+            border-radius: 10px;
+
+            background: rgba(255,255,255,.045);
+
+            color: rgba(255,255,255,.76);
+
+            font-size: .66rem;
+
+            font-weight: 700;
+
+            line-height: 1.35;
+
+        }
+
+        .footer-trust-item i {
+
+            flex: 0 0 auto;
+
+            color: #b8dfc7;
+
+            font-size: .9rem;
 
         }
 
@@ -980,35 +1137,415 @@
 
             color: white;
 
-            font-size: .78rem;
+            font-size: .72rem;
 
             font-weight: 800;
 
-            margin-bottom: 14px;
+            letter-spacing: .07em;
+
+            text-transform: uppercase;
+
+            margin-bottom: 11px;
 
         }
 
         .footer-link {
 
-            display: block;
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            width: fit-content;
+
+            max-width: 100%;
 
             color: rgba(255,255,255,.68);
 
-            font-size: .76rem;
+            font-size: .74rem;
 
-            padding: 4px 0;
+            line-height: 1.45;
+
+            padding: 5px 0;
+
+            border-radius: 5px;
+
+            transition:
+                color .15s ease,
+                transform .15s ease;
 
         }
 
-        .footer-link:hover {
+        .footer-link i {
+
+            color: rgba(184,223,199,.78);
+
+            font-size: .72rem;
+
+        }
+
+        .footer-link:hover,
+        .footer-link:focus-visible {
 
             color: white;
+
+            transform: translateX(2px);
+
+        }
+
+        .footer-link:focus-visible,
+        .footer-contact-link:focus-visible,
+        .footer-social-link:focus-visible {
+
+            outline: 2px solid rgba(255,255,255,.8);
+
+            outline-offset: 3px;
+
+        }
+
+        .footer-contact-list {
+
+            display: grid;
+
+            gap: 9px;
+
+        }
+
+        .footer-contact-link {
+
+            display: flex;
+
+            align-items: flex-start;
+
+            gap: 9px;
+
+            color: rgba(255,255,255,.7);
+
+            font-size: .74rem;
+
+            line-height: 1.5;
+
+            transition: color .15s ease;
+
+        }
+
+        .footer-contact-link i {
+
+            flex: 0 0 17px;
+
+            width: 17px;
+
+            margin-top: 2px;
+
+            color: #b8dfc7;
+
+            text-align: center;
+
+        }
+
+        .footer-contact-link:hover {
+
+            color: white;
+
+        }
+
+        .footer-contact-static {
+
+            display: flex;
+
+            align-items: flex-start;
+
+            gap: 9px;
+
+            color: rgba(255,255,255,.7);
+
+            font-size: .74rem;
+
+            line-height: 1.5;
+
+        }
+
+        .footer-contact-static i {
+
+            flex: 0 0 17px;
+
+            width: 17px;
+
+            margin-top: 2px;
+
+            color: #b8dfc7;
+
+            text-align: center;
+
+        }
+
+        .footer-social-row {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 7px;
+
+            margin-top: 15px;
+
+        }
+
+        .footer-social-link {
+
+            width: 34px;
+
+            height: 34px;
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 9px;
+
+            border: 1px solid rgba(255,255,255,.11);
+
+            background: rgba(255,255,255,.05);
+
+            color: rgba(255,255,255,.78);
+
+            transition:
+                background-color .15s ease,
+                color .15s ease,
+                transform .15s ease;
+
+        }
+
+        .footer-social-link:hover {
+
+            background: rgba(255,255,255,.12);
+
+            color: white;
+
+            transform: translateY(-1px);
+
+        }
+
+        .footer-cta {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 11px;
+
+            padding: 14px;
+
+            margin-top: 20px;
+
+            border: 1px solid rgba(255,255,255,.10);
+
+            border-radius: 14px;
+
+            background: rgba(255,255,255,.045);
+
+        }
+
+        .footer-cta-title {
+
+            color: white;
+
+            font-size: .8rem;
+
+            font-weight: 800;
+
+            margin-bottom: 3px;
+
+        }
+
+        .footer-cta-text {
+
+            color: rgba(255,255,255,.62);
+
+            font-size: .68rem;
+
+            line-height: 1.55;
+
+            margin: 0;
+
+        }
+
+        .footer-call-btn {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 7px;
+
+            min-height: 40px;
+
+            padding: 8px 12px;
+
+            border-radius: 9px;
+
+            background: white;
+
+            color: var(--bomet-green-dark);
+
+            font-size: .7rem;
+
+            font-weight: 800;
+
+            transition:
+                transform .15s ease,
+                box-shadow .15s ease;
+
+        }
+
+        .footer-call-btn:hover {
+
+            color: var(--bomet-green-deep);
+
+            transform: translateY(-1px);
+
+            box-shadow: 0 7px 18px rgba(0,0,0,.14);
 
         }
 
         .desktop-footer {
 
             display: none;
+
+        }
+
+        .mobile-footer {
+
+            display: block;
+
+        }
+
+        .mobile-footer .accordion {
+
+            border-top: 1px solid rgba(255,255,255,.10);
+
+        }
+
+        .mobile-footer .accordion-item {
+
+            background: transparent;
+
+            border-color: rgba(255,255,255,.10);
+
+        }
+
+        .mobile-footer .accordion-button {
+
+            min-height: 50px;
+
+            background: transparent;
+
+            color: white;
+
+            box-shadow: none;
+
+            padding: 12px 0;
+
+            font-size: .76rem;
+
+            font-weight: 800;
+
+        }
+
+        .mobile-footer .accordion-button:not(.collapsed) {
+
+            background: transparent;
+
+            color: #d9f0e1;
+
+        }
+
+        .mobile-footer .accordion-button::after {
+
+            filter: brightness(0) invert(1);
+
+            opacity: .75;
+
+        }
+
+        .mobile-footer .accordion-body {
+
+            padding: 0 0 13px;
+
+        }
+
+        .mobile-footer .footer-link {
+
+            width: 100%;
+
+            min-height: 38px;
+
+            padding: 7px 0;
+
+        }
+
+        .footer-bottom {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 6px;
+
+            padding: 15px 0 4px;
+
+            border-top: 1px solid rgba(255,255,255,.10);
+
+        }
+
+        .footer-bottom-copy {
+
+            color: rgba(255,255,255,.52);
+
+            font-size: .64rem;
+
+            line-height: 1.5;
+
+        }
+
+        .footer-bottom-note {
+
+            color: rgba(255,255,255,.42);
+
+            font-size: .61rem;
+
+            line-height: 1.5;
+
+        }
+
+        @media (min-width: 576px) {
+
+            .footer-trust-row {
+
+                grid-template-columns: repeat(3, 1fr);
+
+            }
+
+            .footer-cta {
+
+                flex-direction: row;
+
+                align-items: center;
+
+                justify-content: space-between;
+
+            }
+
+            .footer-call-btn {
+
+                flex: 0 0 auto;
+
+            }
 
         }
 
@@ -1026,47 +1563,81 @@
 
             }
 
-        }
+            .footer-top {
 
-        .mobile-footer {
+                padding: 4px 0 30px;
 
-            display: block;
+            }
 
-        }
+            .footer-cta {
 
-        .mobile-footer .accordion-item {
+                margin-top: 24px;
 
-            background: transparent;
+            }
 
-            border-color: rgba(255,255,255,.12);
+            .footer-bottom {
 
-        }
+                flex-direction: row;
 
-        .mobile-footer .accordion-button {
+                align-items: center;
 
-            background: transparent;
+                justify-content: space-between;
 
-            color: white;
+            }
 
-            box-shadow: none;
+            .footer-bottom-note {
 
-            padding: 15px 0;
+                text-align: right;
 
-            font-size: .8rem;
-
-            font-weight: 700;
+            }
 
         }
 
-        .mobile-footer .accordion-button::after {
+        @media (min-width: 992px) {
 
-            filter: brightness(0) invert(1);
+            .footer-top {
+
+                padding-top: 6px;
+
+                padding-bottom: 34px;
+
+            }
+
+            .footer-description {
+
+                max-width: 390px;
+
+            }
+
+            .footer-trust-row {
+
+                max-width: 430px;
+
+            }
 
         }
 
-        .mobile-footer .accordion-body {
+        @media (max-width: 359.98px) {
 
-            padding: 0 0 14px;
+            .bomet-footer .container {
+
+                padding-left: 13px;
+
+                padding-right: 13px;
+
+            }
+
+            .footer-trust-row {
+
+                grid-template-columns: 1fr;
+
+            }
+
+            .footer-cta {
+
+                padding: 12px;
+
+            }
 
         }
 
@@ -2088,7 +2659,7 @@
          FOOTER
     ========================================================== -->
 
-    <footer class="bomet-footer pt-5 pb-4">
+    <footer class="bomet-footer pt-4 pt-md-5 pb-3" aria-label="Bomet Machineries Ltd. website footer">
 
         <div class="container">
 
@@ -2097,152 +2668,405 @@
 
             <div class="desktop-footer">
 
-                <div class="row g-4 mb-4">
+                <div class="footer-top">
+
+                    <div class="row g-4 g-lg-5">
 
 
-                    <div class="col-md-4">
+                        <!-- Company -->
 
-                        <div class="footer-brand mb-2 fs-5">
+                        <div class="col-md-5 col-lg-4">
 
-                            Bomet Machineries Ltd.
+                            <div class="footer-brand-wrap">
+
+                                <span class="footer-brand-mark" aria-hidden="true">
+
+                                    <i class="bi bi-gear-wide-connected"></i>
+
+                                </span>
+
+                                <div>
+
+                                    <div class="footer-brand">
+
+                                        Bomet Machineries Ltd.
+
+                                    </div>
+
+                                    <span class="footer-brand-subtitle">
+
+                                        Quality Machinery • Genuine Parts
+
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            <p class="footer-text footer-description">
+
+                                Your trusted partner for quality agricultural machinery,
+                                farm equipment, heavy machinery and genuine spare parts,
+                                serving farmers and businesses across Kenya with reliable
+                                machinery solutions.
+
+                            </p>
+
+                            <div class="footer-trust-row" aria-label="Why shop with Bomet Machineries">
+
+                                <div class="footer-trust-item">
+
+                                    <i class="bi bi-check-circle" aria-hidden="true"></i>
+
+                                    <span>Quality Products</span>
+
+                                </div>
+
+                                <div class="footer-trust-item">
+
+                                    <i class="bi bi-gear" aria-hidden="true"></i>
+
+                                    <span>Genuine Spare Parts</span>
+
+                                </div>
+
+                                <div class="footer-trust-item">
+
+                                    <i class="bi bi-headset" aria-hidden="true"></i>
+
+                                    <span>Reliable Support</span>
+
+                                </div>
+
+                            </div>
 
                         </div>
 
-                        <p class="footer-text">
 
-                            Providing reliable agricultural equipment,
-                            heavy machinery, spare parts, and customer
-                            service across Kenya.
+                        <!-- Quick Links -->
 
-                        </p>
+                        <div class="col-6 col-md-3 col-lg-2">
 
-                    </div>
+                            <div class="footer-heading">
 
+                                Quick Links
 
-                    <div class="col-md-2">
+                            </div>
 
-                        <div class="footer-heading">
+                            <a
+                                href="{{ url_for('home.home') }}"
+                                class="footer-link"
+                            >
 
-                            Quick Links
+                                <i class="bi bi-house" aria-hidden="true"></i>
+                                Home
 
-                        </div>
+                            </a>
 
+                            <a
+                                href="{{ url_for('product.products') }}"
+                                class="footer-link"
+                            >
 
-                        <a
-                            href="{{ url_for('home.home') }}"
-                            class="footer-link"
-                        >
+                                <i class="bi bi-grid" aria-hidden="true"></i>
+                                Products
 
-                            Home
+                            </a>
 
-                        </a>
-
-
-                        <a
-                            href="{{ url_for('product.products') }}"
-                            class="footer-link"
-                        >
-
-                            Products
-
-                        </a>
-
-
-                        <a
-                            href="#"
-                            class="footer-link"
-                        >
-
-                            About Us
-
-                        </a>
-
-                    </div>
-
-
-                    <div class="col-md-3">
-
-                        <div class="footer-heading">
-
-                            Categories
-
-                        </div>
-
-
-                        {% if categories %}
-
-                            {% for cat in categories %}
+                            {% if current_user.is_authenticated %}
 
                                 <a
-                                    href="{{ url_for('product.products', category=cat.id) }}"
+                                    href="{{ url_for('auth.account') }}"
                                     class="footer-link"
                                 >
 
-                                    {{ cat.name }}
+                                    <i class="bi bi-person-circle" aria-hidden="true"></i>
+                                    My Account
 
                                 </a>
 
-                            {% endfor %}
+                            {% else %}
 
-                        {% endif %}
+                                <a
+                                    href="{{ url_for('auth.login') }}"
+                                    class="footer-link"
+                                >
+
+                                    <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>
+                                    Login / Register
+
+                                </a>
+
+                            {% endif %}
+
+                            {% if current_user.is_authenticated and not current_user.is_admin %}
+
+                                <a
+                                    href="{{ url_for('wishlist.wishlist') }}"
+                                    class="footer-link"
+                                >
+
+                                    <i class="bi bi-heart" aria-hidden="true"></i>
+                                    Wishlist
+
+                                </a>
+
+                                <a
+                                    href="{{ url_for('cart.cart') }}"
+                                    class="footer-link"
+                                >
+
+                                    <i class="bi bi-bag" aria-hidden="true"></i>
+                                    Cart
+
+                                </a>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- Categories -->
+
+                        <div class="col-6 col-md-4 col-lg-3">
+
+                            <div class="footer-heading">
+
+                                Shop by Category
+
+                            </div>
+
+                            {% if categories %}
+
+                                {% for cat in categories %}
+
+                                    <a
+                                        href="{{ url_for('product.products', category=cat.id) }}"
+                                        class="footer-link"
+                                    >
+
+                                        <i class="bi bi-tag" aria-hidden="true"></i>
+                                        {{ cat.name }}
+
+                                    </a>
+
+                                {% endfor %}
+
+                            {% else %}
+
+                                <div class="footer-text">
+
+                                    Browse our agricultural machinery, farm equipment and spare parts collection.
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- Customer Support -->
+
+                        <div class="col-md-5 col-lg-3">
+
+                            <div class="footer-heading">
+
+                                Customer Support
+
+                            </div>
+
+                            <div class="footer-contact-list">
+
+                                <div class="footer-contact-static">
+
+                                    <i class="bi bi-geo-alt" aria-hidden="true"></i>
+
+                                    <span>Kipchamba Street, Bomet</span>
+
+                                </div>
+
+                                <a
+                                    href="tel:+254722434519"
+                                    class="footer-contact-link"
+                                    aria-label="Call Bomet Machineries Ltd. at plus 254 722 434 519"
+                                >
+
+                                    <i class="bi bi-telephone" aria-hidden="true"></i>
+
+                                    <span>+254 722 434 519</span>
+
+                                </a>
+
+                                <div class="footer-contact-static">
+
+                                    <i class="bi bi-truck" aria-hidden="true"></i>
+
+                                    <span>Serving customers across Kenya</span>
+
+                                </div>
+
+                            </div>
+
+                            <div class="footer-cta">
+
+                                <div>
+
+                                    <div class="footer-cta-title">
+
+                                        Need machinery or spare parts?
+
+                                    </div>
+
+                                    <p class="footer-cta-text">
+
+                                        Call us for product enquiries and assistance.
+
+                                    </p>
+
+                                </div>
+
+                                <a
+                                    href="tel:+254722434519"
+                                    class="footer-call-btn"
+                                    aria-label="Call Bomet Machineries Ltd."
+                                >
+
+                                    <i class="bi bi-telephone-outbound" aria-hidden="true"></i>
+                                    Call Us
+
+                                </a>
+
+                            </div>
+
+                        </div>
 
                     </div>
-
-
-                    <div class="col-md-3">
-
-                        <div class="footer-heading">
-
-                            Contact
-
-                        </div>
-
-
-                        <div class="footer-text mb-1">
-
-                            <i class="bi bi-geo-alt me-1"></i>
-
-                            Kipchamba Street, Bomet
-
-                        </div>
-
-
-                        <div class="footer-text">
-
-                            <i class="bi bi-telephone me-1"></i>
-
-                            +254 722 434 519
-
-                        </div>
-
-                    </div>
-
 
                 </div>
 
             </div>
 
 
-            <!-- Mobile Footer Accordion -->
+            <!-- Mobile Footer -->
 
-            <div class="mobile-footer mb-4">
+            <div class="mobile-footer mb-3">
+
+                <div class="footer-top">
+
+                    <div class="footer-brand-wrap">
+
+                        <span class="footer-brand-mark" aria-hidden="true">
+
+                            <i class="bi bi-gear-wide-connected"></i>
+
+                        </span>
+
+                        <div>
+
+                            <div class="footer-brand">
+
+                                Bomet Machineries Ltd.
+
+                            </div>
+
+                            <span class="footer-brand-subtitle">
+
+                                Quality Machinery • Genuine Parts
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <p class="footer-text footer-description">
+
+                        Your trusted partner for agricultural machinery, farm equipment,
+                        machinery spare parts and reliable machinery solutions for farmers
+                        and businesses across Kenya.
+
+                    </p>
+
+                    <div class="footer-trust-row" aria-label="Bomet Machineries service values">
+
+                        <div class="footer-trust-item">
+
+                            <i class="bi bi-check-circle" aria-hidden="true"></i>
+
+                            <span>Quality Products</span>
+
+                        </div>
+
+                        <div class="footer-trust-item">
+
+                            <i class="bi bi-gear" aria-hidden="true"></i>
+
+                            <span>Genuine Parts</span>
+
+                        </div>
+
+                        <div class="footer-trust-item">
+
+                            <i class="bi bi-headset" aria-hidden="true"></i>
+
+                            <span>Reliable Support</span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="footer-cta">
+
+                        <div>
+
+                            <div class="footer-cta-title">
+
+                                Machinery &amp; spare parts enquiries
+
+                            </div>
+
+                            <p class="footer-cta-text">
+
+                                Speak with Bomet Machineries Ltd. for help finding the right equipment or parts.
+
+                            </p>
+
+                        </div>
+
+                        <a
+                            href="tel:+254722434519"
+                            class="footer-call-btn"
+                            aria-label="Call Bomet Machineries Ltd. at plus 254 722 434 519"
+                        >
+
+                            <i class="bi bi-telephone-outbound" aria-hidden="true"></i>
+                            Call Us
+
+                        </a>
+
+                    </div>
+
+                </div>
+
 
                 <div
                     class="accordion accordion-flush"
                     id="footerAccordion"
                 >
 
+                    <!-- Quick Navigation -->
 
                     <div class="accordion-item">
 
-
-                        <h2 class="accordion-header">
+                        <h2 class="accordion-header" id="footAccOneHeading">
 
                             <button
                                 class="accordion-button collapsed"
                                 type="button"
                                 data-bs-toggle="collapse"
                                 data-bs-target="#footAccOne"
+                                aria-expanded="false"
+                                aria-controls="footAccOne"
                             >
 
                                 Quick Navigation
@@ -2251,35 +3075,121 @@
 
                         </h2>
 
-
                         <div
                             id="footAccOne"
                             class="accordion-collapse collapse"
+                            aria-labelledby="footAccOneHeading"
                             data-bs-parent="#footerAccordion"
                         >
 
                             <div class="accordion-body">
-
 
                                 <a
                                     href="{{ url_for('home.home') }}"
                                     class="footer-link"
                                 >
 
+                                    <i class="bi bi-house" aria-hidden="true"></i>
                                     Home
 
                                 </a>
-
 
                                 <a
                                     href="{{ url_for('product.products') }}"
                                     class="footer-link"
                                 >
 
-                                    All Products
+                                    <i class="bi bi-grid" aria-hidden="true"></i>
+                                    Products
 
                                 </a>
 
+                                {% if current_user.is_authenticated %}
+
+                                    <a
+                                        href="{{ url_for('auth.account') }}"
+                                        class="footer-link"
+                                    >
+
+                                        <i class="bi bi-person-circle" aria-hidden="true"></i>
+                                        My Account
+
+                                    </a>
+
+                                {% else %}
+
+                                    <a
+                                        href="{{ url_for('auth.login') }}"
+                                        class="footer-link"
+                                    >
+
+                                        <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>
+                                        Login / Register
+
+                                    </a>
+
+                                {% endif %}
+
+                                {% if current_user.is_authenticated and not current_user.is_admin %}
+
+                                    <a
+                                        href="{{ url_for('wishlist.wishlist') }}"
+                                        class="footer-link"
+                                    >
+
+                                        <i class="bi bi-heart" aria-hidden="true"></i>
+                                        Wishlist{% if wishlist_count and wishlist_count > 0 %} ({{ wishlist_count }}){% endif %}
+
+                                    </a>
+
+                                    <a
+                                        href="{{ url_for('cart.cart') }}"
+                                        class="footer-link"
+                                    >
+
+                                        <i class="bi bi-bag" aria-hidden="true"></i>
+                                        Cart{% if cart_count and cart_count > 0 %} ({{ cart_count }}){% endif %}
+
+                                    </a>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Categories -->
+
+                    <div class="accordion-item">
+
+                        <h2 class="accordion-header" id="footAccTwoHeading">
+
+                            <button
+                                class="accordion-button collapsed"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#footAccTwo"
+                                aria-expanded="false"
+                                aria-controls="footAccTwo"
+                            >
+
+                                Shop by Category
+
+                            </button>
+
+                        </h2>
+
+                        <div
+                            id="footAccTwo"
+                            class="accordion-collapse collapse"
+                            aria-labelledby="footAccTwoHeading"
+                            data-bs-parent="#footerAccordion"
+                        >
+
+                            <div class="accordion-body">
 
                                 {% if categories %}
 
@@ -2290,14 +3200,22 @@
                                             class="footer-link"
                                         >
 
+                                            <i class="bi bi-tag" aria-hidden="true"></i>
                                             {{ cat.name }}
 
                                         </a>
 
                                     {% endfor %}
 
-                                {% endif %}
+                                {% else %}
 
+                                    <div class="footer-text py-2">
+
+                                        Browse our agricultural machinery, farm equipment and spare parts collection.
+
+                                    </div>
+
+                                {% endif %}
 
                             </div>
 
@@ -2306,20 +3224,96 @@
                     </div>
 
 
+                    <!-- Customer Support -->
+
+                    <div class="accordion-item">
+
+                        <h2 class="accordion-header" id="footAccThreeHeading">
+
+                            <button
+                                class="accordion-button collapsed"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#footAccThree"
+                                aria-expanded="false"
+                                aria-controls="footAccThree"
+                            >
+
+                                Customer Support
+
+                            </button>
+
+                        </h2>
+
+                        <div
+                            id="footAccThree"
+                            class="accordion-collapse collapse"
+                            aria-labelledby="footAccThreeHeading"
+                            data-bs-parent="#footerAccordion"
+                        >
+
+                            <div class="accordion-body">
+
+                                <div class="footer-contact-list py-2">
+
+                                    <div class="footer-contact-static">
+
+                                        <i class="bi bi-geo-alt" aria-hidden="true"></i>
+
+                                        <span>Kipchamba Street, Bomet</span>
+
+                                    </div>
+
+                                    <a
+                                        href="tel:+254722434519"
+                                        class="footer-contact-link"
+                                        aria-label="Call Bomet Machineries Ltd. at plus 254 722 434 519"
+                                    >
+
+                                        <i class="bi bi-telephone" aria-hidden="true"></i>
+
+                                        <span>+254 722 434 519</span>
+
+                                    </a>
+
+                                    <div class="footer-contact-static">
+
+                                        <i class="bi bi-truck" aria-hidden="true"></i>
+
+                                        <span>Serving customers across Kenya</span>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
                 </div>
 
             </div>
 
 
-            <hr class="my-3 border-secondary">
+            <!-- Footer Bottom -->
 
+            <div class="footer-bottom">
 
-            <div class="text-center footer-text small">
+                <div class="footer-bottom-copy">
 
-                © {{ 2026 }} Bomet Machineries Ltd. All rights reserved.
+                    © {{ 2026 }} Bomet Machineries Ltd. All rights reserved.
+
+                </div>
+
+                <div class="footer-bottom-note">
+
+                    Agricultural Machinery • Farm Equipment • Genuine Machinery Spare Parts • Kenya
+
+                </div>
 
             </div>
-
 
         </div>
 
@@ -2380,7 +3374,9 @@
 
                     // Remove completely after fade animation
                     setTimeout(function () {
+
                         flash.remove();
+
                     }, 300);
 
                 }, 4000);
