@@ -489,6 +489,45 @@
         padding: 20px !important;
     }
 }
+
+/* ----------------------------------------------------------
+   HERO SLIDER FORM GUIDANCE
+   ---------------------------------------------------------- */
+
+.hero-type-help {
+    margin-top: 8px;
+    padding: 10px 11px;
+    border: 1px solid #d1fae5;
+    border-radius: 9px;
+    background: #f0fdf4;
+}
+
+.hero-type-help-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 3px;
+    color: #166534;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.hero-type-help-text {
+    color: #4b5563;
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+.hero-image-requirement {
+    margin-top: 7px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: #f8fafc;
+    color: #6b7280;
+    font-size: 10px;
+    line-height: 1.5;
+}
+
 </style>
 
 <div class="container-fluid py-3 py-md-4 py-lg-5">
@@ -750,6 +789,18 @@
                                 <div class="form-text">
                                     Choose how this section should behave
                                     on the homepage.
+                                </div>
+
+                                <div
+                                    id="heroTypeHelp"
+                                    class="hero-type-help d-none"
+                                >
+                                    <div class="hero-type-help-title">
+                                        <i class="bi bi-images"></i> Hero Slider Slide
+                                    </div>
+                                    <div class="hero-type-help-text">
+                                        Hero slides are displayed together in the public homepage slider. You can create up to 10 hero slides. Use the image, title, subtitle, CTA and order fields below.
+                                    </div>
                                 </div>
 
                             {% endif %}
@@ -1472,29 +1523,63 @@
 document.addEventListener("DOMContentLoaded", function () {
 
     const input = document.getElementById("image");
+    const wrapper = document.getElementById("imagePreviewWrapper");
+    const preview = document.getElementById("imagePreview");
+    const sectionType = document.getElementById("section_type");
+    const heroHelp = document.getElementById("heroTypeHelp");
 
-    const previewWrapper =
-        document.getElementById("imagePreviewWrapper");
+    function updateHeroGuidance() {
+        if (!sectionType || !heroHelp) {
+            return;
+        }
 
-    const preview =
-        document.getElementById("imagePreview");
+        if (sectionType.value === "hero") {
+            heroHelp.classList.remove("d-none");
+        } else {
+            heroHelp.classList.add("d-none");
+        }
+    }
 
-    if (!input || !previewWrapper || !preview) {
+    updateHeroGuidance();
+
+    if (sectionType) {
+        sectionType.addEventListener("change", updateHeroGuidance);
+    }
+
+    if (!input || !wrapper || !preview) {
         return;
     }
 
     input.addEventListener("change", function () {
 
-        const file = this.files && this.files[0];
+        const file = input.files && input.files[0];
 
         if (!file) {
-            previewWrapper.classList.add("d-none");
+            wrapper.classList.add("d-none");
             preview.removeAttribute("src");
             return;
         }
 
-        if (!file.type.startsWith("image/")) {
-            previewWrapper.classList.add("d-none");
+        const allowedTypes = [
+            "image/jpeg",
+            "image/png",
+            "image/webp"
+        ];
+
+        const maxSize = 5 * 1024 * 1024;
+
+        if (!allowedTypes.includes(file.type)) {
+            alert("Only JPG, JPEG, PNG and WEBP images are allowed.");
+            input.value = "";
+            wrapper.classList.add("d-none");
+            preview.removeAttribute("src");
+            return;
+        }
+
+        if (file.size > maxSize) {
+            alert("Image must be smaller than 5 MB.");
+            input.value = "";
+            wrapper.classList.add("d-none");
             preview.removeAttribute("src");
             return;
         }
@@ -1502,18 +1587,16 @@ document.addEventListener("DOMContentLoaded", function () {
         const reader = new FileReader();
 
         reader.onload = function (event) {
-
             preview.src = event.target.result;
-
-            previewWrapper.classList.remove("d-none");
-
+            wrapper.classList.remove("d-none");
         };
 
         reader.readAsDataURL(file);
-
     });
 
 });
 </script>
 
 {% endblock %}
+
+]]>

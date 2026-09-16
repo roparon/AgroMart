@@ -18,11 +18,9 @@ from werkzeug.utils import secure_filename
 from app import db
 from app.forms.homepage import HomepageContentForm
 from app.forms.homepage_section import HomepageSectionForm
-from app.forms.homepage_settings import HomepageSettingsForm
 from app.models.homepage_content import HomepageContent
 from app.models.homepage_section import HomepageSection
 from app.models.homepage_setting import HomepageSetting
-
 
 
 homepage_bp = Blueprint(
@@ -39,6 +37,7 @@ ALLOWED_EXTENSIONS = {
 }
 
 MAX_IMAGE_SIZE = 5 * 1024 * 1024
+MAX_HERO_SLIDES = 10
 
 
 # ----------------------------------------------------------------------
@@ -273,11 +272,19 @@ def homepage():
         .first()
     )
 
+    hero_count = sum(
+        1
+        for section in sections
+        if section.section_type == "hero"
+    )
+
     return render_template(
         "admin/homepage.html",
         content=content,
         sections=sections,
         settings=settings,
+        hero_count=hero_count,
+        hero_limit=MAX_HERO_SLIDES,
     )
 
 
@@ -702,11 +709,31 @@ def add_section():
 
     form = HomepageSectionForm()
 
+    if request.method == "GET" and request.args.get("section_type") == "hero":
+        form.section_type.data = "hero"
+
     if form.validate_on_submit():
 
         key = normalize_text(
             form.key.data
         )
+
+        if form.section_type.data == "hero":
+            hero_count = HomepageSection.query.filter_by(
+                section_type="hero"
+            ).count()
+
+            if hero_count >= MAX_HERO_SLIDES:
+                flash(
+                    f"The maximum of {MAX_HERO_SLIDES} hero slides has been reached.",
+                    "danger",
+                )
+                return render_template(
+                    "admin/homepage_section_form.html",
+                    form=form,
+                    section=None,
+                    page_title="Add Hero Slide",
+                )
 
         existing = (
             HomepageSection.query
@@ -902,6 +929,26 @@ def edit_section(section_id):
                 section=section,
                 page_title="Edit Homepage Section",
             )
+
+        if (
+            form.section_type.data == "hero"
+            and section.section_type != "hero"
+        ):
+            hero_count = HomepageSection.query.filter_by(
+                section_type="hero"
+            ).count()
+
+            if hero_count >= MAX_HERO_SLIDES:
+                flash(
+                    f"The maximum of {MAX_HERO_SLIDES} hero slides has been reached.",
+                    "danger",
+                )
+                return render_template(
+                    "admin/homepage_section_form.html",
+                    form=form,
+                    section=section,
+                    page_title="Edit Homepage Section",
+                )
 
         old_image_url = (
             section.image_url
@@ -1293,11 +1340,7 @@ def settings():
 
     if homepage_settings is None:
 
-        homepage_settings = HomepageSetting(
-            site_title="Bomet Machineries Ltd.",
-            is_active=True,
-            announcement_active=False,
-        )
+        homepage_settings = HomepageSetting()
 
         db.session.add(
             homepage_settings
@@ -1305,56 +1348,70 @@ def settings():
 
         db.session.commit()
 
-    form = HomepageSettingsForm(
-        obj=homepage_settings
-    )
-
-    if form.validate_on_submit():
+    if request.method == "POST":
 
         try:
 
             homepage_settings.site_title = (
                 normalize_text(
-                    form.site_title.data
+                    request.form.get(
+                        "site_title"
+                    )
                 )
             )
 
             homepage_settings.meta_description = (
                 normalize_text(
-                    form.meta_description.data
+                    request.form.get(
+                        "meta_description"
+                    )
                 )
             )
 
             homepage_settings.meta_keywords = (
                 normalize_text(
-                    form.meta_keywords.data
+                    request.form.get(
+                        "meta_keywords"
+                    )
                 )
             )
 
             homepage_settings.og_image_url = (
                 normalize_text(
-                    form.og_image_url.data
+                    request.form.get(
+                        "og_image_url"
+                    )
                 )
             )
 
             homepage_settings.announcement_text = (
                 normalize_text(
-                    form.announcement_text.data
+                    request.form.get(
+                        "announcement_text"
+                    )
                 )
             )
 
             homepage_settings.announcement_url = (
                 normalize_text(
-                    form.announcement_url.data
+                    request.form.get(
+                        "announcement_url"
+                    )
                 )
             )
 
             homepage_settings.announcement_active = (
-                form.announcement_active.data
+                request.form.get(
+                    "announcement_active"
+                )
+                == "on"
             )
 
             homepage_settings.is_active = (
-                form.is_active.data
+                request.form.get(
+                    "is_active"
+                )
+                == "on"
             )
 
             db.session.commit()
@@ -1386,7 +1443,6 @@ def settings():
 
     return render_template(
         "admin/homepage_settings.html",
-        form=form,
         settings=homepage_settings,
     )
 
@@ -1395,7 +1451,9 @@ def settings():
 # HOMEPAGE PREVIEW
 # ----------------------------------------------------------------------
 
-@homepage_bp.route("/preview")
+@homepage_bp.route(
+    "/preview"
+)
 @login_required
 def preview():
 

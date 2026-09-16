@@ -927,6 +927,243 @@ Homepage CMS | Bomet Machineries Ltd.
             transition: none;
         }
     }
+
+    /* =========================================================
+       HERO SLIDER ADMIN
+       ========================================================= */
+
+    .hero-slider-admin-panel {
+        margin-bottom: 15px;
+    }
+
+    .hero-slider-admin-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .hero-slider-count {
+        display: inline-flex;
+        align-items: center;
+        min-height: 36px;
+        padding: 7px 10px;
+        border: 1px solid #d1fae5;
+        border-radius: 8px;
+        background: #f0fdf4;
+        color: #166534;
+        font-size: 10px;
+        font-weight: 800;
+    }
+
+    .hero-slider-limit-note {
+        display: inline-flex;
+        align-items: center;
+        min-height: 36px;
+        padding: 7px 10px;
+        border-radius: 8px;
+        background: #f3f4f6;
+        color: #6b7280;
+        font-size: 10px;
+        font-weight: 700;
+    }
+
+    .hero-slide-admin-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .hero-slide-admin-card {
+        overflow: hidden;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        background: #fff;
+    }
+
+    .hero-slide-admin-image-wrap {
+        position: relative;
+        height: 180px;
+        overflow: hidden;
+        background: #f8fafc;
+    }
+
+    .hero-slide-admin-image {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .hero-slide-admin-placeholder {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 5px;
+        color: #9ca3af;
+        font-size: 12px;
+    }
+
+    .hero-slide-admin-placeholder i {
+        font-size: 30px;
+    }
+
+    .hero-slide-number,
+    .hero-slide-status {
+        position: absolute;
+        top: 9px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        min-height: 28px;
+        padding: 5px 8px;
+        border-radius: 999px;
+        color: #fff;
+        font-size: 9px;
+        font-weight: 800;
+        backdrop-filter: blur(6px);
+    }
+
+    .hero-slide-number {
+        left: 9px;
+        background: rgba(17, 24, 39, .78);
+    }
+
+    .hero-slide-status {
+        right: 9px;
+        background: rgba(17, 24, 39, .78);
+    }
+
+    .hero-slide-status.is-active {
+        background: rgba(21, 128, 61, .92);
+    }
+
+    .hero-slide-status.is-inactive {
+        background: rgba(107, 114, 128, .92);
+    }
+
+    .hero-slide-admin-body {
+        padding: 13px;
+    }
+
+    .hero-slide-admin-order {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        color: #6b7280;
+        font-size: 9px;
+        font-weight: 700;
+    }
+
+    .hero-slide-key {
+        overflow: hidden;
+        color: #9ca3af;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .hero-slide-admin-title {
+        margin: 7px 0 5px;
+        color: #111827;
+        font-size: 14px;
+        font-weight: 800;
+        line-height: 1.35;
+    }
+
+    .hero-slide-admin-subtitle {
+        min-height: 34px;
+        margin: 0 0 11px;
+        color: #6b7280;
+        font-size: 10px;
+        line-height: 1.55;
+    }
+
+    .hero-slide-admin-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 6px;
+    }
+
+    .hero-slide-admin-actions form,
+    .hero-slide-admin-actions a,
+    .hero-slide-admin-actions button {
+        width: 100%;
+    }
+
+    .hero-slider-admin-note {
+        display: flex;
+        gap: 7px;
+        align-items: flex-start;
+        margin-top: 12px;
+        padding: 10px 11px;
+        border-radius: 9px;
+        background: #f8fafc;
+        color: #6b7280;
+        font-size: 10px;
+        line-height: 1.5;
+    }
+
+    .hero-slider-admin-note i {
+        color: #15803d;
+        margin-top: 1px;
+    }
+
+    .hero-slider-empty {
+        padding: 25px 12px;
+        text-align: center;
+    }
+
+    .hero-slider-empty-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 50px;
+        height: 50px;
+        margin-bottom: 9px;
+        border-radius: 12px;
+        background: #f0fdf4;
+        color: #15803d;
+        font-size: 21px;
+    }
+
+    .hero-slider-empty h3 {
+        margin: 0 0 5px;
+        color: #111827;
+        font-size: 14px;
+        font-weight: 800;
+    }
+
+    .hero-slider-empty p {
+        margin: 0 auto 12px;
+        max-width: 420px;
+        color: #6b7280;
+        font-size: 10px;
+        line-height: 1.5;
+    }
+
+    @media (min-width: 576px) {
+        .hero-slide-admin-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .hero-slide-admin-actions {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+    }
+
+    @media (min-width: 992px) {
+        .hero-slide-admin-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .hero-slide-admin-image-wrap {
+            height: 170px;
+        }
+    }
+
 </style>
 
 <div class="homepage-cms-page">
@@ -991,6 +1228,16 @@ Homepage CMS | Bomet Machineries Ltd.
             <i class="bi bi-layout-text-window-reverse me-1"></i>
             Add Section
         </a>
+
+        {% if hero_count|default(0) < hero_limit|default(10) %}
+        <a
+            href="{{ url_for('admin_homepage.add_section', section_type='hero') }}"
+            class="btn btn-success"
+        >
+            <i class="bi bi-images me-1"></i>
+            Add Hero Slide
+        </a>
+        {% endif %}
 
     </div>
 
@@ -1147,6 +1394,50 @@ Homepage CMS | Bomet Machineries Ltd.
     </div>
 
 
+    <!-- Hero Slider -->
+
+    <div class="col-6 col-xl-3">
+
+        <div class="cms-dashboard-card">
+
+            <div class="card-body">
+
+                <div class="cms-stat-top">
+
+                    <div>
+
+                        <div class="cms-stat-label">
+                            Hero Slider
+                        </div>
+
+                        <div class="cms-stat-value">
+                            {{ hero_count|default(0) }} / {{ hero_limit|default(10) }}
+                        </div>
+
+                    </div>
+
+                    <div class="cms-stat-icon green">
+                        <i class="bi bi-images"></i>
+                    </div>
+
+                </div>
+
+                <div class="cms-stat-footer">
+                    {% if hero_count|default(0) %}
+                        {{ sections|selectattr('section_type', 'equalto', 'hero')|selectattr('is_active')|list|length }}
+                        published slides
+                    {% else %}
+                        No hero slides created
+                    {% endif %}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
     <!-- Announcement -->
 
     <div class="col-6 col-xl-3">
@@ -1244,6 +1535,30 @@ Homepage CMS | Bomet Machineries Ltd.
 
             <div class="col-4 col-md-4 col-xl">
 
+                {% if hero_count|default(0) < hero_limit|default(10) %}
+                <a
+                    href="{{ url_for('admin_homepage.add_section', section_type='hero') }}"
+                    class="quick-action"
+                >
+                    <i class="bi bi-images"></i>
+                    <span>New Hero</span>
+                </a>
+                {% else %}
+                <div
+                    class="quick-action opacity-50"
+                    aria-disabled="true"
+                    title="The maximum of {{ hero_limit|default(10) }} hero slides has been reached."
+                >
+                    <i class="bi bi-images"></i>
+                    <span>Hero Limit</span>
+                </div>
+                {% endif %}
+
+            </div>
+
+
+            <div class="col-4 col-md-4 col-xl">
+
                 <a
                     href="{{ url_for('admin_homepage.add_content') }}"
                     class="quick-action"
@@ -1295,6 +1610,203 @@ Homepage CMS | Bomet Machineries Ltd.
             </div>
 
         </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     HERO SLIDER
+========================================================== -->
+
+<div class="cms-panel hero-slider-admin-panel">
+
+    <div class="cms-panel-header">
+
+        <div class="cms-panel-header-row">
+
+            <div>
+
+                <div class="cms-panel-heading">
+                    <span class="cms-panel-heading-icon">
+                        <i class="bi bi-images"></i>
+                    </span>
+
+                    <h2 class="cms-panel-title">
+                        Hero Slider
+                    </h2>
+                </div>
+
+                <p class="cms-panel-description">
+                    Manage the homepage's rotating hero slides. Each slide can have its own image, headline, description, CTA, visibility and display order.
+                </p>
+
+            </div>
+
+            <div class="hero-slider-admin-meta">
+                <span class="hero-slider-count">
+                    {{ hero_count|default(0) }} / {{ hero_limit|default(10) }} Hero Slides
+                </span>
+
+                {% if hero_count|default(0) < hero_limit|default(10) %}
+                <a
+                    href="{{ url_for('admin_homepage.add_section', section_type='hero') }}"
+                    class="btn btn-success"
+                >
+                    <i class="bi bi-plus-lg me-1"></i>
+                    Add Hero Slide
+                </a>
+                {% else %}
+                <span class="hero-slider-limit-note">
+                    Maximum reached
+                </span>
+                {% endif %}
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="cms-panel-body">
+
+        {% set hero_sections = sections|selectattr('section_type', 'equalto', 'hero')|list %}
+
+        {% if hero_sections %}
+
+        <div class="hero-slide-admin-grid">
+
+            {% for section in hero_sections[:hero_limit|default(10)] %}
+
+            <article class="hero-slide-admin-card">
+
+                <div class="hero-slide-admin-image-wrap">
+                    {% if section.image_url %}
+                    <img
+                        src="{{ section.image_url }}"
+                        alt="{{ section.image_alt or section.title or section.key }}"
+                        class="hero-slide-admin-image"
+                        loading="lazy"
+                        decoding="async"
+                    >
+                    {% else %}
+                    <div class="hero-slide-admin-placeholder">
+                        <i class="bi bi-image"></i>
+                        <span>No image</span>
+                    </div>
+                    {% endif %}
+
+                    <span class="hero-slide-number">
+                        Slide {{ loop.index }}
+                    </span>
+
+                    <span class="hero-slide-status {% if section.is_active %}is-active{% else %}is-inactive{% endif %}">
+                        <i class="bi {% if section.is_active %}bi-check-circle-fill{% else %}bi-eye-slash-fill{% endif %}"></i>
+                        {% if section.is_active %}Published{% else %}Hidden{% endif %}
+                    </span>
+                </div>
+
+                <div class="hero-slide-admin-body">
+                    <div class="hero-slide-admin-order">
+                        <span>Order {{ loop.index }}</span>
+                        <span class="hero-slide-key">{{ section.key }}</span>
+                    </div>
+
+                    <h3 class="hero-slide-admin-title">
+                        {{ section.title or 'Untitled hero slide' }}
+                    </h3>
+
+                    {% if section.subtitle %}
+                    <p class="hero-slide-admin-subtitle">
+                        {{ section.subtitle|truncate(115) }}
+                    </p>
+                    {% else %}
+                    <p class="hero-slide-admin-subtitle text-muted">
+                        No subtitle configured.
+                    </p>
+                    {% endif %}
+
+                    <div class="hero-slide-admin-actions">
+                        <a
+                            href="{{ url_for('admin_homepage.edit_section', section_id=section.id) }}"
+                            class="btn btn-outline-success"
+                        >
+                            <i class="bi bi-pencil me-1"></i>
+                            Edit
+                        </a>
+
+                        <form
+                            method="POST"
+                            action="{{ url_for('admin_homepage.toggle_section', section_id=section.id) }}"
+                        >
+                            <input
+                                type="hidden"
+                                name="csrf_token"
+                                value="{{ csrf_token() }}"
+                            >
+                            <button
+                                type="submit"
+                                class="btn btn-outline-secondary"
+                            >
+                                {% if section.is_active %}
+                                <i class="bi bi-eye-slash me-1"></i> Hide
+                                {% else %}
+                                <i class="bi bi-eye me-1"></i> Publish
+                                {% endif %}
+                            </button>
+                        </form>
+
+                        <form
+                            method="POST"
+                            action="{{ url_for('admin_homepage.delete_section', section_id=section.id) }}"
+                            onsubmit="return confirm('Delete this hero slide permanently?');"
+                        >
+                            <input
+                                type="hidden"
+                                name="csrf_token"
+                                value="{{ csrf_token() }}"
+                            >
+                            <button
+                                type="submit"
+                                class="btn btn-outline-danger"
+                            >
+                                <i class="bi bi-trash3 me-1"></i> Delete
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </article>
+
+            {% endfor %}
+
+        </div>
+
+        <div class="hero-slider-admin-note">
+            <i class="bi bi-info-circle"></i>
+            <span>
+                Drag the hero sections in the Homepage Sections panel below to change their position in the slider. The public slider displays active hero slides in saved order.
+            </span>
+        </div>
+
+        {% else %}
+
+        <div class="hero-slider-empty">
+            <div class="hero-slider-empty-icon">
+                <i class="bi bi-images"></i>
+            </div>
+            <h3>No hero slides yet</h3>
+            <p>Create up to {{ hero_limit|default(10) }} hero slides for the homepage slider.</p>
+            <a
+                href="{{ url_for('admin_homepage.add_section', section_type='hero') }}"
+                class="btn btn-success px-4"
+            >
+                <i class="bi bi-plus-lg me-1"></i>
+                Add Hero Slide
+            </a>
+        </div>
+
+        {% endif %}
 
     </div>
 
@@ -2093,3 +2605,5 @@ document.addEventListener("DOMContentLoaded", function () {
 </script>
 
 {% endblock %}
+
+]]>
