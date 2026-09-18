@@ -13,11 +13,13 @@ from flask import (
     url_for,
 )
 from flask_login import current_user, login_required
+from sqlalchemy.exc import IntegrityError
 from werkzeug.utils import secure_filename
 
 from app import db
 from app.forms.homepage import HomepageContentForm
 from app.forms.homepage_section import HomepageSectionForm
+from app.forms.homepage_settings import HomepageSettingsForm
 from app.models.homepage_content import HomepageContent
 from app.models.homepage_section import HomepageSection
 from app.models.homepage_setting import HomepageSetting
@@ -60,6 +62,45 @@ def admin_required():
 
 
 # ----------------------------------------------------------------------
+# FORM ERROR HELPERS
+# ----------------------------------------------------------------------
+
+def flash_form_errors(form):
+    """
+    Show useful validation errors when a form submission fails.
+
+    This prevents the administrator from being left wondering
+    why nothing happened after clicking Save.
+    """
+
+    shown = set()
+
+    for field_name, errors in form.errors.items():
+        for error in errors:
+            message = str(error).strip()
+
+            if not message:
+                continue
+
+            if message in shown:
+                continue
+
+            shown.add(message)
+
+            field = getattr(form, field_name, None)
+            label = (
+                field.label.text
+                if field is not None
+                else field_name.replace("_", " ").title()
+            )
+
+            flash(
+                f"{label}: {message}",
+                "danger",
+            )
+
+
+# ----------------------------------------------------------------------
 # IMAGE HELPERS
 # ----------------------------------------------------------------------
 
@@ -67,6 +108,9 @@ def allowed_file(filename):
     """
     Return True when the uploaded filename has an allowed extension.
     """
+
+    if not filename:
+        return False
 
     return (
         "." in filename
@@ -90,9 +134,19 @@ def save_homepage_image(image, folder="home"):
             "Only JPG, JPEG, PNG and WEBP images are allowed."
         )
 
-    image.seek(0, os.SEEK_END)
-    file_size = image.tell()
-    image.seek(0)
+    try:
+        image.seek(0, os.SEEK_END)
+        file_size = image.tell()
+        image.seek(0)
+    except (OSError, ValueError):
+        raise ValueError(
+            "Unable to read the uploaded image."
+        )
+
+    if file_size <= 0:
+        raise ValueError(
+            "The uploaded image is empty."
+        )
 
     if file_size > MAX_IMAGE_SIZE:
         raise ValueError(
@@ -108,10 +162,20 @@ def save_homepage_image(image, folder="home"):
             "Invalid image filename."
         )
 
+    if "." not in original_name:
+        raise ValueError(
+            "The uploaded image has no valid file extension."
+        )
+
     extension = original_name.rsplit(
         ".",
         1,
     )[1].lower()
+
+    if extension not in ALLOWED_EXTENSIONS:
+        raise ValueError(
+            "Only JPG, JPEG, PNG and WEBP images are allowed."
+        )
 
     filename = (
         f"{uuid.uuid4().hex}.{extension}"
@@ -123,17 +187,37 @@ def save_homepage_image(image, folder="home"):
         folder,
     )
 
-    os.makedirs(
-        upload_dir,
-        exist_ok=True,
-    )
+    try:
+        os.makedirs(
+            upload_dir,
+            exist_ok=True,
+        )
+    except OSError:
+        current_app.logger.exception(
+            "Unable to create homepage image directory: %s",
+            upload_dir,
+        )
+
+        raise ValueError(
+            "Unable to prepare the image upload directory."
+        )
 
     image_path = os.path.join(
         upload_dir,
         filename,
     )
 
-    image.save(image_path)
+    try:
+        image.save(image_path)
+    except (OSError, ValueError):
+        current_app.logger.exception(
+            "Unable to save homepage image: %s",
+            image_path,
+        )
+
+        raise ValueError(
+            "Unable to save the uploaded image. Please try again."
+        )
 
     return (
         f"/static/uploads/{folder}/{filename}"
@@ -198,26 +282,35 @@ def parse_config(value):
     Empty configuration becomes {}.
     """
 
-    if not value:
+    if value is None:
         return {}
 
     if isinstance(value, dict):
         return value
 
-    try:
-        parsed = json.loads(value)
-
-        if not isinstance(parsed, dict):
-            raise ValueError(
-                "Configuration must be a JSON object."
-            )
-
-        return parsed
-
-    except (TypeError, json.JSONDecodeError):
+    if not isinstance(value, str):
         raise ValueError(
             "Section configuration must contain valid JSON."
         )
+
+    value = value.strip()
+
+    if not value:
+        return {}
+
+    try:
+        parsed = json.loads(value)
+    except (TypeError, ValueError):
+        raise ValueError(
+            "Section configuration must contain valid JSON."
+        )
+
+    if not isinstance(parsed, dict):
+        raise ValueError(
+            "Section configuration must be a JSON object."
+        )
+
+    return parsed
 
 
 def normalize_text(value):
@@ -227,6 +320,9 @@ def normalize_text(value):
 
     if value is None:
         return None
+
+    if not isinstance(value, str):
+        value = str(value)
 
     value = value.strip()
 
@@ -267,10 +363,7 @@ def homepage():
         .all()
     )
 
-    settings = (
-        HomepageSetting.query
-        .first()
-    )
+    settings = HomepageSetting.query.first()
 
     hero_count = sum(
         1
@@ -290,7 +383,6 @@ def homepage():
 
 # ----------------------------------------------------------------------
 # HOMEPAGE CONTENT
-# Existing system — preserved
 # ----------------------------------------------------------------------
 
 @homepage_bp.route(
@@ -309,9 +401,7 @@ def add_content():
 
     if form.validate_on_submit():
 
-        key = normalize_text(
-            form.key.data
-        )
+        key = normalize_text(form.key.data)
 
         existing = (
             HomepageContent.query
@@ -321,7 +411,8 @@ def add_content():
 
         if existing:
             flash(
-                f'Content key "{key}" already exists.',
+                f'Content key "{key}" already exists. '
+                "Please choose another key.",
                 "danger",
             )
 
@@ -335,7 +426,6 @@ def add_content():
         image_url = None
 
         try:
-
             if form.image.data:
                 image_url = save_homepage_image(
                     form.image.data,
@@ -344,35 +434,28 @@ def add_content():
 
             content = HomepageContent(
                 key=key,
-
                 headline=normalize_text(
                     form.headline.data
                 ),
-
                 subheadline=normalize_text(
                     form.subheadline.data
                 ),
-
                 button_text=normalize_text(
                     form.button_text.data
                 ),
-
                 button_url=normalize_text(
                     form.button_url.data
                 ),
-
                 image_url=image_url,
-
                 image_alt=normalize_text(
                     form.image_alt.data
                 ),
-
                 css_class=normalize_text(
                     form.css_class.data
                 ),
-
-                is_active=form.is_active.data,
-
+                is_active=bool(
+                    form.is_active.data
+                ),
                 sort_order=(
                     form.sort_order.data or 0
                 ),
@@ -392,8 +475,42 @@ def add_content():
                 )
             )
 
-        except Exception as exc:
+        except IntegrityError:
+            db.session.rollback()
 
+            if image_url:
+                delete_homepage_image(
+                    image_url,
+                    "home",
+                )
+
+            current_app.logger.exception(
+                "Duplicate or invalid database value "
+                "while creating homepage content."
+            )
+
+            flash(
+                "The content could not be saved because "
+                "the content key may already exist. "
+                "Please choose a different key.",
+                "danger",
+            )
+
+        except ValueError as exc:
+            db.session.rollback()
+
+            if image_url:
+                delete_homepage_image(
+                    image_url,
+                    "home",
+                )
+
+            flash(
+                str(exc),
+                "danger",
+            )
+
+        except Exception as exc:
             db.session.rollback()
 
             if image_url:
@@ -408,9 +525,13 @@ def add_content():
             )
 
             flash(
-                "Unable to create homepage content.",
+                "Unable to create homepage content right now. "
+                "Please try again.",
                 "danger",
             )
+
+    elif request.method == "POST":
+        flash_form_errors(form)
 
     return render_template(
         "admin/homepage_form.html",
@@ -458,7 +579,8 @@ def edit_content(content_id):
 
         if duplicate:
             flash(
-                f'Content key "{new_key}" already exists.',
+                f'Content key "{new_key}" already exists. '
+                "Please choose another key.",
                 "danger",
             )
 
@@ -469,16 +591,10 @@ def edit_content(content_id):
                 page_title="Edit Homepage Content",
             )
 
-        old_image_url = (
-            content.image_url
-        )
-
-        new_image_url = (
-            old_image_url
-        )
+        old_image_url = content.image_url
+        new_image_url = old_image_url
 
         try:
-
             if form.image.data:
                 new_image_url = save_homepage_image(
                     form.image.data,
@@ -486,39 +602,28 @@ def edit_content(content_id):
                 )
 
             content.key = new_key
-
             content.headline = normalize_text(
                 form.headline.data
             )
-
             content.subheadline = normalize_text(
                 form.subheadline.data
             )
-
             content.button_text = normalize_text(
                 form.button_text.data
             )
-
             content.button_url = normalize_text(
                 form.button_url.data
             )
-
-            content.image_url = (
-                new_image_url
-            )
-
+            content.image_url = new_image_url
             content.image_alt = normalize_text(
                 form.image_alt.data
             )
-
             content.css_class = normalize_text(
                 form.css_class.data
             )
-
-            content.is_active = (
+            content.is_active = bool(
                 form.is_active.data
             )
-
             content.sort_order = (
                 form.sort_order.data or 0
             )
@@ -545,8 +650,48 @@ def edit_content(content_id):
                 )
             )
 
-        except Exception as exc:
+        except IntegrityError:
+            db.session.rollback()
 
+            if (
+                new_image_url
+                and new_image_url != old_image_url
+            ):
+                delete_homepage_image(
+                    new_image_url,
+                    "home",
+                )
+
+            current_app.logger.exception(
+                "Duplicate or invalid database value "
+                "while updating homepage content."
+            )
+
+            flash(
+                "The content could not be updated because "
+                "the content key may already exist. "
+                "Please choose a different key.",
+                "danger",
+            )
+
+        except ValueError as exc:
+            db.session.rollback()
+
+            if (
+                new_image_url
+                and new_image_url != old_image_url
+            ):
+                delete_homepage_image(
+                    new_image_url,
+                    "home",
+                )
+
+            flash(
+                str(exc),
+                "danger",
+            )
+
+        except Exception as exc:
             db.session.rollback()
 
             if (
@@ -564,9 +709,13 @@ def edit_content(content_id):
             )
 
             flash(
-                "Unable to update homepage content.",
+                "Unable to update homepage content right now. "
+                "Please try again.",
                 "danger",
             )
+
+    elif request.method == "POST":
+        flash_form_errors(form)
 
     return render_template(
         "admin/homepage_form.html",
@@ -594,9 +743,8 @@ def toggle_content(content_id):
     )
 
     try:
-
-        content.is_active = (
-            not content.is_active
+        content.is_active = not bool(
+            content.is_active
         )
 
         db.session.commit()
@@ -613,7 +761,6 @@ def toggle_content(content_id):
         )
 
     except Exception as exc:
-
         db.session.rollback()
 
         current_app.logger.exception(
@@ -622,7 +769,8 @@ def toggle_content(content_id):
         )
 
         flash(
-            "Unable to change the content status.",
+            "Unable to change the content status. "
+            "Please try again.",
             "danger",
         )
 
@@ -654,7 +802,6 @@ def delete_content(content_id):
     content_key = content.key
 
     try:
-
         db.session.delete(content)
         db.session.commit()
 
@@ -670,7 +817,6 @@ def delete_content(content_id):
         )
 
     except Exception as exc:
-
         db.session.rollback()
 
         current_app.logger.exception(
@@ -679,7 +825,8 @@ def delete_content(content_id):
         )
 
         flash(
-            "Unable to delete homepage content.",
+            "Unable to delete homepage content. "
+            "Please try again.",
             "danger",
         )
 
@@ -692,7 +839,6 @@ def delete_content(content_id):
 
 # ----------------------------------------------------------------------
 # HOMEPAGE SECTIONS
-# New CMS system
 # ----------------------------------------------------------------------
 
 @homepage_bp.route(
@@ -709,7 +855,10 @@ def add_section():
 
     form = HomepageSectionForm()
 
-    if request.method == "GET" and request.args.get("section_type") == "hero":
+    if (
+        request.method == "GET"
+        and request.args.get("section_type") == "hero"
+    ):
         form.section_type.data = "hero"
 
     if form.validate_on_submit():
@@ -717,23 +866,6 @@ def add_section():
         key = normalize_text(
             form.key.data
         )
-
-        if form.section_type.data == "hero":
-            hero_count = HomepageSection.query.filter_by(
-                section_type="hero"
-            ).count()
-
-            if hero_count >= MAX_HERO_SLIDES:
-                flash(
-                    f"The maximum of {MAX_HERO_SLIDES} hero slides has been reached.",
-                    "danger",
-                )
-                return render_template(
-                    "admin/homepage_section_form.html",
-                    form=form,
-                    section=None,
-                    page_title="Add Hero Slide",
-                )
 
         existing = (
             HomepageSection.query
@@ -743,7 +875,8 @@ def add_section():
 
         if existing:
             flash(
-                f'Section key "{key}" already exists.',
+                f'Section key "{key}" already exists. '
+                "Please choose another key.",
                 "danger",
             )
 
@@ -754,10 +887,30 @@ def add_section():
                 page_title="Add Homepage Section",
             )
 
+        if form.section_type.data == "hero":
+            hero_count = (
+                HomepageSection.query
+                .filter_by(section_type="hero")
+                .count()
+            )
+
+            if hero_count >= MAX_HERO_SLIDES:
+                flash(
+                    f"The maximum of {MAX_HERO_SLIDES} "
+                    "hero slides has been reached.",
+                    "danger",
+                )
+
+                return render_template(
+                    "admin/homepage_section_form.html",
+                    form=form,
+                    section=None,
+                    page_title="Add Hero Slide",
+                )
+
         image_url = None
 
         try:
-
             config = parse_config(
                 form.config.data
             )
@@ -769,49 +922,34 @@ def add_section():
                 )
 
             section = HomepageSection(
-
                 key=key,
-
-                section_type=(
-                    form.section_type.data
-                ),
-
+                section_type=form.section_type.data,
                 title=normalize_text(
                     form.title.data
                 ),
-
                 subtitle=normalize_text(
                     form.subtitle.data
                 ),
-
                 content=normalize_text(
                     form.content.data
                 ),
-
                 image_url=image_url,
-
                 image_alt=normalize_text(
                     form.image_alt.data
                 ),
-
                 button_text=normalize_text(
                     form.button_text.data
                 ),
-
                 button_url=normalize_text(
                     form.button_url.data
                 ),
-
                 config=config,
-
                 css_class=normalize_text(
                     form.css_class.data
                 ),
-
-                is_active=(
+                is_active=bool(
                     form.is_active.data
                 ),
-
                 sort_order=(
                     form.sort_order.data or 0
                 ),
@@ -831,8 +969,28 @@ def add_section():
                 )
             )
 
-        except ValueError as exc:
+        except IntegrityError:
+            db.session.rollback()
 
+            if image_url:
+                delete_homepage_image(
+                    image_url,
+                    "homepage",
+                )
+
+            current_app.logger.exception(
+                "Duplicate or invalid database value "
+                "while creating homepage section."
+            )
+
+            flash(
+                "The section could not be saved because "
+                "the section key may already exist. "
+                "Please choose a different key.",
+                "danger",
+            )
+
+        except ValueError as exc:
             db.session.rollback()
 
             if image_url:
@@ -847,7 +1005,6 @@ def add_section():
             )
 
         except Exception as exc:
-
             db.session.rollback()
 
             if image_url:
@@ -862,9 +1019,13 @@ def add_section():
             )
 
             flash(
-                "Unable to create homepage section.",
+                "Unable to create homepage section right now. "
+                "Please try again.",
                 "danger",
             )
+
+    elif request.method == "POST":
+        flash_form_errors(form)
 
     return render_template(
         "admin/homepage_section_form.html",
@@ -895,7 +1056,6 @@ def edit_section(section_id):
         obj=section
     )
 
-    # Convert database JSON into textarea JSON.
     if request.method == "GET":
         form.config.data = json.dumps(
             section.config or {},
@@ -919,7 +1079,8 @@ def edit_section(section_id):
 
         if duplicate:
             flash(
-                f'Section key "{new_key}" already exists.',
+                f'Section key "{new_key}" already exists. '
+                "Please choose another key.",
                 "danger",
             )
 
@@ -934,15 +1095,19 @@ def edit_section(section_id):
             form.section_type.data == "hero"
             and section.section_type != "hero"
         ):
-            hero_count = HomepageSection.query.filter_by(
-                section_type="hero"
-            ).count()
+            hero_count = (
+                HomepageSection.query
+                .filter_by(section_type="hero")
+                .count()
+            )
 
             if hero_count >= MAX_HERO_SLIDES:
                 flash(
-                    f"The maximum of {MAX_HERO_SLIDES} hero slides has been reached.",
+                    f"The maximum of {MAX_HERO_SLIDES} "
+                    "hero slides has been reached.",
                     "danger",
                 )
+
                 return render_template(
                     "admin/homepage_section_form.html",
                     form=form,
@@ -950,16 +1115,10 @@ def edit_section(section_id):
                     page_title="Edit Homepage Section",
                 )
 
-        old_image_url = (
-            section.image_url
-        )
-
-        new_image_url = (
-            old_image_url
-        )
+        old_image_url = section.image_url
+        new_image_url = old_image_url
 
         try:
-
             config = parse_config(
                 form.config.data
             )
@@ -971,49 +1130,35 @@ def edit_section(section_id):
                 )
 
             section.key = new_key
-
             section.section_type = (
                 form.section_type.data
             )
-
             section.title = normalize_text(
                 form.title.data
             )
-
             section.subtitle = normalize_text(
                 form.subtitle.data
             )
-
             section.content = normalize_text(
                 form.content.data
             )
-
-            section.image_url = (
-                new_image_url
-            )
-
+            section.image_url = new_image_url
             section.image_alt = normalize_text(
                 form.image_alt.data
             )
-
             section.button_text = normalize_text(
                 form.button_text.data
             )
-
             section.button_url = normalize_text(
                 form.button_url.data
             )
-
             section.config = config
-
             section.css_class = normalize_text(
                 form.css_class.data
             )
-
-            section.is_active = (
+            section.is_active = bool(
                 form.is_active.data
             )
-
             section.sort_order = (
                 form.sort_order.data or 0
             )
@@ -1040,8 +1185,31 @@ def edit_section(section_id):
                 )
             )
 
-        except ValueError as exc:
+        except IntegrityError:
+            db.session.rollback()
 
+            if (
+                new_image_url
+                and new_image_url != old_image_url
+            ):
+                delete_homepage_image(
+                    new_image_url,
+                    "homepage",
+                )
+
+            current_app.logger.exception(
+                "Duplicate or invalid database value "
+                "while updating homepage section."
+            )
+
+            flash(
+                "The section could not be updated because "
+                "the section key may already exist. "
+                "Please choose a different key.",
+                "danger",
+            )
+
+        except ValueError as exc:
             db.session.rollback()
 
             if (
@@ -1059,7 +1227,6 @@ def edit_section(section_id):
             )
 
         except Exception as exc:
-
             db.session.rollback()
 
             if (
@@ -1077,9 +1244,13 @@ def edit_section(section_id):
             )
 
             flash(
-                "Unable to update homepage section.",
+                "Unable to update homepage section right now. "
+                "Please try again.",
                 "danger",
             )
+
+    elif request.method == "POST":
+        flash_form_errors(form)
 
     return render_template(
         "admin/homepage_section_form.html",
@@ -1107,9 +1278,8 @@ def toggle_section(section_id):
     )
 
     try:
-
-        section.is_active = (
-            not section.is_active
+        section.is_active = not bool(
+            section.is_active
         )
 
         db.session.commit()
@@ -1121,12 +1291,12 @@ def toggle_section(section_id):
         )
 
         flash(
-            f'"{section.title or section.key}" is now {status}.',
+            f'"{section.title or section.key}" '
+            f"is now {status}.",
             "success",
         )
 
     except Exception as exc:
-
         db.session.rollback()
 
         current_app.logger.exception(
@@ -1135,7 +1305,8 @@ def toggle_section(section_id):
         )
 
         flash(
-            "Unable to change the section status.",
+            "Unable to change the section status. "
+            "Please try again.",
             "danger",
         )
 
@@ -1164,14 +1335,12 @@ def delete_section(section_id):
     )
 
     image_url = section.image_url
-
     section_name = (
         section.title
         or section.key
     )
 
     try:
-
         db.session.delete(section)
         db.session.commit()
 
@@ -1187,7 +1356,6 @@ def delete_section(section_id):
         )
 
     except Exception as exc:
-
         db.session.rollback()
 
         current_app.logger.exception(
@@ -1196,7 +1364,8 @@ def delete_section(section_id):
         )
 
         flash(
-            "Unable to delete homepage section.",
+            "Unable to delete homepage section. "
+            "Please try again.",
             "danger",
         )
 
@@ -1233,25 +1402,20 @@ def reorder_sections():
         silent=True
     )
 
-    if not data:
+    if not isinstance(data, dict):
         return (
             jsonify(
                 {
                     "success": False,
-                    "message": "Invalid request.",
+                    "message": "Invalid request data.",
                 }
             ),
             400,
         )
 
-    section_ids = data.get(
-        "section_ids"
-    )
+    section_ids = data.get("section_ids")
 
-    if not isinstance(
-        section_ids,
-        list,
-    ):
+    if not isinstance(section_ids, list):
         return (
             jsonify(
                 {
@@ -1262,31 +1426,63 @@ def reorder_sections():
             400,
         )
 
-    try:
+    if not section_ids:
+        return (
+            jsonify(
+                {
+                    "success": False,
+                    "message": "No sections were provided.",
+                }
+            ),
+            400,
+        )
 
-        for index, section_id in enumerate(
-            section_ids
-        ):
+    try:
+        cleaned_ids = []
+
+        for section_id in section_ids:
 
             try:
-                section_id = int(
-                    section_id
+                section_id = int(section_id)
+            except (TypeError, ValueError):
+                return (
+                    jsonify(
+                        {
+                            "success": False,
+                            "message": (
+                                "One or more section IDs "
+                                "are invalid."
+                            ),
+                        }
+                    ),
+                    400,
                 )
-            except (
-                TypeError,
-                ValueError,
-            ):
-                continue
 
-            section = (
-                HomepageSection.query
-                .get(section_id)
+            if section_id not in cleaned_ids:
+                cleaned_ids.append(section_id)
+
+        sections = (
+            HomepageSection.query
+            .filter(
+                HomepageSection.id.in_(cleaned_ids)
+            )
+            .all()
+        )
+
+        sections_by_id = {
+            section.id: section
+            for section in sections
+        }
+
+        for index, section_id in enumerate(
+            cleaned_ids
+        ):
+            section = sections_by_id.get(
+                section_id
             )
 
             if section:
-                section.sort_order = (
-                    index
-                )
+                section.sort_order = index
 
         db.session.commit()
 
@@ -1298,7 +1494,6 @@ def reorder_sections():
         )
 
     except Exception as exc:
-
         db.session.rollback()
 
         current_app.logger.exception(
@@ -1310,7 +1505,10 @@ def reorder_sections():
             jsonify(
                 {
                     "success": False,
-                    "message": "Unable to save section order.",
+                    "message": (
+                        "Unable to save section order. "
+                        "Please try again."
+                    ),
                 }
             ),
             500,
@@ -1334,84 +1532,99 @@ def settings():
         )
 
     homepage_settings = (
-        HomepageSetting.query
-        .first()
+        HomepageSetting.query.first()
     )
 
+    # Do not immediately commit an empty settings record.
+    # It will be created only when the administrator successfully
+    # submits valid settings.
     if homepage_settings is None:
-
-        homepage_settings = HomepageSetting()
-
-        db.session.add(
-            homepage_settings
+        homepage_settings = HomepageSetting(
+            site_title=None,
+            meta_description=None,
+            meta_keywords=None,
+            og_image_url=None,
+            announcement_text=None,
+            announcement_url=None,
+            announcement_active=False,
+            is_active=True,
         )
 
-        db.session.commit()
+    form = HomepageSettingsForm(
+        obj=homepage_settings
+    )
 
-    if request.method == "POST":
+    if form.validate_on_submit():
+
+        # If the announcement bar is enabled, require text.
+        announcement_text = normalize_text(
+            form.announcement_text.data
+        )
+
+        if (
+            form.announcement_active.data
+            and not announcement_text
+        ):
+            flash(
+                "Please enter announcement text before "
+                "enabling the announcement bar.",
+                "danger",
+            )
+
+            return render_template(
+                "admin/homepage_settings.html",
+                form=form,
+                settings=homepage_settings,
+            )
 
         try:
+            if HomepageSetting.query.first() is None:
+                db.session.add(
+                    homepage_settings
+                )
 
             homepage_settings.site_title = (
                 normalize_text(
-                    request.form.get(
-                        "site_title"
-                    )
+                    form.site_title.data
                 )
             )
 
             homepage_settings.meta_description = (
                 normalize_text(
-                    request.form.get(
-                        "meta_description"
-                    )
+                    form.meta_description.data
                 )
             )
 
             homepage_settings.meta_keywords = (
                 normalize_text(
-                    request.form.get(
-                        "meta_keywords"
-                    )
+                    form.meta_keywords.data
                 )
             )
 
             homepage_settings.og_image_url = (
                 normalize_text(
-                    request.form.get(
-                        "og_image_url"
-                    )
+                    form.og_image_url.data
                 )
             )
 
             homepage_settings.announcement_text = (
-                normalize_text(
-                    request.form.get(
-                        "announcement_text"
-                    )
-                )
+                announcement_text
             )
 
             homepage_settings.announcement_url = (
                 normalize_text(
-                    request.form.get(
-                        "announcement_url"
-                    )
+                    form.announcement_url.data
                 )
             )
 
             homepage_settings.announcement_active = (
-                request.form.get(
-                    "announcement_active"
+                bool(
+                    form.announcement_active.data
                 )
-                == "on"
             )
 
-            homepage_settings.is_active = (
-                request.form.get(
-                    "is_active"
-                )
-                == "on"
+            homepage_settings.is_active = bool(
+                form.is_active.data
             )
 
             db.session.commit()
@@ -1427,8 +1640,22 @@ def settings():
                 )
             )
 
-        except Exception as exc:
+        except IntegrityError:
+            db.session.rollback()
 
+            current_app.logger.exception(
+                "Database integrity error while "
+                "saving homepage settings."
+            )
+
+            flash(
+                "Homepage settings could not be saved "
+                "because of a database conflict. "
+                "Please try again.",
+                "danger",
+            )
+
+        except Exception as exc:
             db.session.rollback()
 
             current_app.logger.exception(
@@ -1437,12 +1664,17 @@ def settings():
             )
 
             flash(
-                "Unable to update homepage settings.",
+                "Unable to save homepage settings right now. "
+                "Please try again.",
                 "danger",
             )
 
+    elif request.method == "POST":
+        flash_form_errors(form)
+
     return render_template(
         "admin/homepage_settings.html",
+        form=form,
         settings=homepage_settings,
     )
 

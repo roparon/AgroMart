@@ -449,42 +449,10 @@
                     </h1>
 
                     <p>
-                        Login to your AgroMart account
+                        Login to your account
                     </p>
 
                 </div>
-
-
-                <!-- ==================================================
-                     FLASH MESSAGES
-                =================================================== -->
-
-                {% with messages = get_flashed_messages(
-                    with_categories=true
-                ) %}
-
-                    {% if messages %}
-
-                        <div class="login-alerts">
-
-                            {% for category, message in messages %}
-
-                                <div
-                                    class="alert alert-{{ category }} login-alert"
-                                    role="alert"
-                                >
-                                    {{ message }}
-                                </div>
-
-                            {% endfor %}
-
-                        </div>
-
-                    {% endif %}
-
-                {% endwith %}
-
-
                 <!-- ==================================================
                      LOGIN FORM
                 =================================================== -->
