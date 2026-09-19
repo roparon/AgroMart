@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block content %}
+
 <style>
 /* ============================================================
    BOMET MACHINERIES LTD.
@@ -17,20 +18,27 @@
     --bm-home-green-dark: #146c43;
     --bm-home-green-deep: #0f5132;
     --bm-home-green-soft: #edf8f1;
+
     --bm-home-gold: #d69e2e;
     --bm-home-gold-soft: #fff8e6;
+
     --bm-home-dark: #17211b;
     --bm-home-dark-2: #26332b;
     --bm-home-muted: #68756e;
+
     --bm-home-bg: #f6f8f7;
     --bm-home-white: #ffffff;
     --bm-home-border: #e3e9e5;
+
     --bm-home-danger: #dc3545;
     --bm-home-danger-soft: #fff1f2;
+
     --bm-home-shadow: 0 8px 28px rgba(16, 35, 25, .07);
     --bm-home-shadow-lg: 0 18px 48px rgba(16, 35, 25, .12);
+
     --bm-home-radius: 18px;
     --bm-home-radius-sm: 12px;
+
     --bm-home-container: 1380px;
 }
 
@@ -48,10 +56,17 @@
 
 .bm-home *,
 .bm-home *::before,
-.bm-home *::after { box-sizing: border-box; }
+.bm-home *::after {
+    box-sizing: border-box;
+}
 
-.bm-home img { max-width: 100%; }
-.bm-home a { -webkit-tap-highlight-color: transparent; }
+.bm-home img {
+    max-width: 100%;
+}
+
+.bm-home a {
+    -webkit-tap-highlight-color: transparent;
+}
 
 .bm-home-container {
     width: 100%;
@@ -60,14 +75,18 @@
     padding-inline: 1rem;
 }
 
-.bm-home-section { position: relative; }
+.bm-home-section {
+    position: relative;
+}
 
 .bm-home-content-section {
     content-visibility: auto;
     contain-intrinsic-size: 600px;
 }
 
-.bm-home-section-spacing { padding-block: 3.25rem; }
+.bm-home-section-spacing {
+    padding-block: 3.25rem;
+}
 
 .bm-home-section-heading {
     max-width: 760px;
@@ -177,7 +196,9 @@
 }
 
 .bm-home-hero .carousel-inner,
-.bm-home-hero .carousel-item { height: 430px; }
+.bm-home-hero .carousel-item {
+    height: 430px;
+}
 
 .bm-home-hero-slide {
     position: relative;
@@ -199,8 +220,16 @@
 
 .bm-home-hero-placeholder {
     background:
-        radial-gradient(circle at 80% 25%, rgba(25, 135, 84, .38), transparent 38%),
-        linear-gradient(135deg, #102019, #26382e);
+        radial-gradient(
+            circle at 80% 25%,
+            rgba(25, 135, 84, .38),
+            transparent 38%
+        ),
+        linear-gradient(
+            135deg,
+            #102019,
+            #26382e
+        );
 }
 
 .bm-home-hero-overlay {
@@ -208,7 +237,13 @@
     inset: 0;
     display: flex;
     align-items: center;
-    background: linear-gradient(90deg, rgba(7, 18, 12, .86) 0%, rgba(7, 18, 12, .67) 42%, rgba(7, 18, 12, .18) 100%);
+    background:
+        linear-gradient(
+            90deg,
+            rgba(7, 18, 12, .86) 0%,
+            rgba(7, 18, 12, .67) 42%,
+            rgba(7, 18, 12, .18) 100%
+        );
 }
 
 .bm-home-hero-content {
@@ -270,7 +305,12 @@
     font-size: .68rem;
     font-weight: 800;
     text-decoration: none;
-    transition: transform .18s ease, background-color .18s ease, border-color .18s ease, color .18s ease, box-shadow .18s ease;
+    transition:
+        transform .18s ease,
+        background-color .18s ease,
+        border-color .18s ease,
+        color .18s ease,
+        box-shadow .18s ease;
 }
 
 .bm-home-primary-btn {
@@ -323,7 +363,10 @@
     font-size: .8rem;
 }
 
-.bm-home-hero .carousel-indicators { z-index: 5; margin-bottom: .8rem; }
+.bm-home-hero .carousel-indicators {
+    z-index: 5;
+    margin-bottom: .8rem;
+}
 
 .bm-home-hero .carousel-indicators button {
     width: 24px;
@@ -334,24 +377,47 @@
 }
 
 .bm-home-hero .carousel-control-prev,
-.bm-home-hero .carousel-control-next { z-index: 5; width: 44px; }
+.bm-home-hero .carousel-control-next {
+    z-index: 5;
+    width: 44px;
+}
 
 .bm-home-hero .carousel-control-prev-icon,
-.bm-home-hero .carousel-control-next-icon { width: 1.35rem; height: 1.35rem; }
+.bm-home-hero .carousel-control-next-icon {
+    width: 1.35rem;
+    height: 1.35rem;
+}
 
 @media (min-width: 576px) {
     .bm-home-hero .carousel-inner,
-    .bm-home-hero .carousel-item { height: 500px; }
-    .bm-home-hero-description { font-size: .92rem; }
-    .bm-home-hero-trust { grid-template-columns: repeat(4, minmax(0,1fr)); }
+    .bm-home-hero .carousel-item {
+        height: 500px;
+    }
+
+    .bm-home-hero-description {
+        font-size: .92rem;
+    }
+
+    .bm-home-hero-trust {
+        grid-template-columns: repeat(4, minmax(0,1fr));
+    }
 }
 
 @media (min-width: 768px) {
     .bm-home-hero .carousel-inner,
-    .bm-home-hero .carousel-item { height: 570px; }
-    .bm-home-hero-description { font-size: 1rem; }
+    .bm-home-hero .carousel-item {
+        height: 570px;
+    }
+
+    .bm-home-hero-description {
+        font-size: 1rem;
+    }
+
     .bm-home-primary-btn,
-    .bm-home-secondary-btn { min-height: 48px; padding-inline: 1.25rem; }
+    .bm-home-secondary-btn {
+        min-height: 48px;
+        padding-inline: 1.25rem;
+    }
 }
 
 /* ============================================================
@@ -384,8 +450,13 @@
     border-bottom: 1px solid var(--bm-home-border);
 }
 
-.bm-home-value-item:nth-child(odd) { border-right: 1px solid var(--bm-home-border); }
-.bm-home-value-item:nth-child(n+3) { border-bottom: 0; }
+.bm-home-value-item:nth-child(odd) {
+    border-right: 1px solid var(--bm-home-border);
+}
+
+.bm-home-value-item:nth-child(n+3) {
+    border-bottom: 0;
+}
 
 .bm-home-value-icon {
     width: 34px;
@@ -415,14 +486,382 @@
 }
 
 @media (min-width: 768px) {
-    .bm-home-value-grid { grid-template-columns: repeat(4, minmax(0,1fr)); }
+    .bm-home-value-grid {
+        grid-template-columns: repeat(4, minmax(0,1fr));
+    }
+
     .bm-home-value-item,
     .bm-home-value-item:nth-child(n+3) {
         border-right: 1px solid var(--bm-home-border);
         border-bottom: 0;
         padding: 1rem;
     }
-    .bm-home-value-item:last-child { border-right: 0; }
+
+    .bm-home-value-item:last-child {
+        border-right: 0;
+    }
+}
+
+/* ============================================================
+   PROFESSIONAL INTRO SECTION
+   ============================================================ */
+
+.bm-home-intro {
+    position: relative;
+    overflow: hidden;
+    background: var(--bm-home-white);
+}
+
+.bm-home-intro::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 220px;
+    height: 220px;
+    pointer-events: none;
+    background: radial-gradient(
+        circle,
+        rgba(25,135,84,.07),
+        transparent 70%
+    );
+}
+
+.bm-home-intro-heading {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin-bottom: 2.25rem;
+}
+
+.bm-home-intro-heading .bm-home-section-title {
+    margin-bottom: .65rem;
+}
+
+.bm-home-intro-heading .bm-home-section-subtitle {
+    max-width: 760px;
+    margin-top: .7rem;
+}
+
+/* Main layout */
+
+.bm-home-intro-layout {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+    gap: 2rem;
+    align-items: center;
+}
+
+.bm-home-intro-layout-no-image {
+    display: block;
+    max-width: 850px;
+    margin-inline: auto;
+}
+
+/* Image */
+
+.bm-home-intro-media {
+    min-width: 0;
+}
+
+.bm-home-intro-image-wrap {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    border: 1px solid var(--bm-home-border);
+    border-radius: 20px;
+    background: #f3f6f4;
+    box-shadow: var(--bm-home-shadow-lg);
+}
+
+.bm-home-intro-image-wrap::before {
+    content: "";
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    z-index: 2;
+    width: 52px;
+    height: 52px;
+    border-top: 3px solid var(--bm-home-gold);
+    border-left: 3px solid var(--bm-home-gold);
+    border-radius: 8px 0 0 0;
+    pointer-events: none;
+}
+
+.bm-home-intro-image-wrap::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background:
+        linear-gradient(
+            180deg,
+            rgba(0,0,0,0) 60%,
+            rgba(7,25,15,.13)
+        );
+}
+
+.bm-home-intro-image {
+    position: relative;
+    z-index: 0;
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    object-position: center;
+    transition: transform .35s ease;
+}
+
+.bm-home-intro-image-wrap:hover .bm-home-intro-image {
+    transform: scale(1.015);
+}
+
+/* Image badge */
+
+.bm-home-intro-badge {
+    position: absolute;
+    right: .85rem;
+    bottom: .85rem;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .5rem .7rem;
+    border: 1px solid rgba(255,255,255,.3);
+    border-radius: 9px;
+    background: rgba(15,81,50,.92);
+    color: #fff;
+    font-size: .56rem;
+    font-weight: 800;
+    box-shadow: 0 8px 20px rgba(0,0,0,.14);
+    backdrop-filter: blur(8px);
+}
+
+.bm-home-intro-badge i {
+    color: #f3c969;
+}
+
+/* Image placeholder */
+
+.bm-home-intro-placeholder {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+        radial-gradient(
+            circle at 30% 30%,
+            rgba(25,135,84,.16),
+            transparent 35%
+        ),
+        var(--bm-home-green-soft);
+    color: var(--bm-home-green);
+    font-size: 3rem;
+}
+
+/* Copy */
+
+.bm-home-intro-copy {
+    min-width: 0;
+    max-width: 620px;
+    padding: .25rem 0;
+}
+
+.bm-home-intro-copy-full {
+    max-width: 850px;
+    margin-inline: auto;
+}
+
+.bm-home-intro-content {
+    color: var(--bm-home-muted);
+    font-size: .92rem;
+    line-height: 1.85;
+    overflow-wrap: anywhere;
+}
+
+.bm-home-intro-content p {
+    margin-bottom: 1rem;
+}
+
+.bm-home-intro-content p:last-child {
+    margin-bottom: 0;
+}
+
+.bm-home-intro-content h1,
+.bm-home-intro-content h2,
+.bm-home-intro-content h3,
+.bm-home-intro-content h4 {
+    color: var(--bm-home-dark);
+    font-weight: 800;
+    line-height: 1.25;
+}
+
+.bm-home-intro-content strong {
+    color: var(--bm-home-dark-2);
+    font-weight: 800;
+}
+
+.bm-home-intro-content ul,
+.bm-home-intro-content ol {
+    margin-bottom: 1rem;
+    padding-left: 1.2rem;
+}
+
+.bm-home-intro-content li + li {
+    margin-top: .35rem;
+}
+
+/* Intro highlights */
+
+.bm-home-intro-highlights {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: .55rem;
+    margin-top: 1.15rem;
+}
+
+.bm-home-intro-highlight {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .65rem;
+    border: 1px solid var(--bm-home-border);
+    border-radius: 10px;
+    background: #fff;
+}
+
+.bm-home-intro-highlight-icon {
+    width: 31px;
+    height: 31px;
+    flex: 0 0 31px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9px;
+    background: var(--bm-home-green-soft);
+    color: var(--bm-home-green);
+    font-size: .72rem;
+}
+
+.bm-home-intro-highlight-text {
+    min-width: 0;
+    color: var(--bm-home-dark);
+    font-size: .58rem;
+    font-weight: 800;
+    line-height: 1.35;
+}
+
+/* Intro button */
+
+.bm-home-intro-action {
+    margin-top: 1.35rem;
+}
+
+.bm-home-intro-action .bm-home-primary-btn {
+    min-height: 44px;
+}
+
+/* Mobile */
+
+@media (max-width: 767.98px) {
+
+    .bm-home-intro {
+        padding-block: 2.75rem;
+    }
+
+    .bm-home-intro-heading {
+        margin-bottom: 1.5rem;
+    }
+
+    .bm-home-intro-layout {
+        grid-template-columns: 1fr;
+        gap: 1.35rem;
+    }
+
+    .bm-home-intro-image-wrap {
+        border-radius: 16px;
+    }
+
+    .bm-home-intro-image {
+        aspect-ratio: 16 / 11;
+    }
+
+    .bm-home-intro-placeholder {
+        aspect-ratio: 16 / 11;
+    }
+
+    .bm-home-intro-copy {
+        max-width: none;
+        padding: 0 .1rem;
+    }
+
+    .bm-home-intro-content {
+        font-size: .88rem;
+        line-height: 1.8;
+    }
+
+    .bm-home-intro-highlights {
+        margin-top: 1rem;
+    }
+
+    .bm-home-intro-action {
+        margin-top: 1rem;
+    }
+
+    .bm-home-intro-action .bm-home-primary-btn {
+        width: 100%;
+    }
+}
+
+@media (min-width: 768px) {
+    .bm-home-intro-layout {
+        gap: 2.75rem;
+    }
+
+    .bm-home-intro-image,
+    .bm-home-intro-placeholder {
+        aspect-ratio: 16 / 11;
+    }
+}
+
+@media (min-width: 992px) {
+
+    .bm-home-intro-layout {
+        grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr);
+        gap: 4rem;
+    }
+
+    .bm-home-intro-image-wrap {
+        border-radius: 22px;
+    }
+
+    .bm-home-intro-copy {
+        padding-right: 1.25rem;
+    }
+
+    .bm-home-intro-content {
+        font-size: .96rem;
+    }
+
+    .bm-home-intro-highlights {
+        grid-template-columns: repeat(2, minmax(0,1fr));
+    }
+}
+
+@media (min-width: 1200px) {
+
+    .bm-home-intro-layout {
+        gap: 5rem;
+    }
+
+    .bm-home-intro-copy {
+        padding-right: 2rem;
+    }
 }
 
 /* ============================================================
@@ -447,7 +886,9 @@
     background: #edf1ee;
     box-shadow: 0 4px 16px rgba(0,0,0,.045);
     text-decoration: none;
-    transition: transform .2s ease, box-shadow .2s ease;
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
 }
 
 .bm-home-category-card:hover {
@@ -469,7 +910,9 @@
     transition: transform .3s ease;
 }
 
-.bm-home-category-card:hover .bm-home-category-image { transform: scale(1.04); }
+.bm-home-category-card:hover .bm-home-category-image {
+    transform: scale(1.04);
+}
 
 .bm-home-category-fallback {
     display: flex;
@@ -485,7 +928,10 @@
     z-index: 2;
     width: 100%;
     padding: 2.25rem .8rem .75rem;
-    background: linear-gradient(transparent, rgba(10,20,14,.88));
+    background: linear-gradient(
+        transparent,
+        rgba(10,20,14,.88)
+    );
 }
 
 .bm-home-category-name {
@@ -507,23 +953,42 @@
 }
 
 @media (min-width: 576px) {
-    .bm-home-category-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
-    .bm-home-category-card { min-height: 175px; }
+
+    .bm-home-category-grid {
+        grid-template-columns: repeat(3, minmax(0,1fr));
+    }
+
+    .bm-home-category-card {
+        min-height: 175px;
+    }
 }
 
 @media (min-width: 992px) {
-    .bm-home-category-grid { grid-template-columns: repeat(4, minmax(0,1fr)); }
-    .bm-home-category-card { min-height: 190px; }
+
+    .bm-home-category-grid {
+        grid-template-columns: repeat(4, minmax(0,1fr));
+    }
+
+    .bm-home-category-card {
+        min-height: 190px;
+    }
 }
 
 /* ============================================================
    PRODUCT GRID
    ============================================================ */
 
-.bm-home-product-section { background: var(--bm-home-bg); }
+.bm-home-product-section {
+    background: var(--bm-home-bg);
+}
 
-.bm-home-category-product-block { margin-bottom: 2.5rem; }
-.bm-home-category-product-block:last-child { margin-bottom: 0; }
+.bm-home-category-product-block {
+    margin-bottom: 2.5rem;
+}
+
+.bm-home-category-product-block:last-child {
+    margin-bottom: 0;
+}
 
 .bm-home-product-heading {
     display: flex;
@@ -585,7 +1050,10 @@
     border-radius: var(--bm-home-radius-sm);
     background: #fff;
     box-shadow: 0 3px 14px rgba(0,0,0,.035);
-    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        border-color .2s ease;
 }
 
 .bm-home-product-card:hover {
@@ -614,7 +1082,9 @@
     transition: transform .3s ease;
 }
 
-.bm-home-product-card:hover .bm-home-product-image { transform: scale(1.025); }
+.bm-home-product-card:hover .bm-home-product-image {
+    transform: scale(1.025);
+}
 
 .bm-home-product-placeholder {
     display: flex;
@@ -665,7 +1135,9 @@
     font-weight: 600;
 }
 
-.bm-home-product-price { margin-top: auto; }
+.bm-home-product-price {
+    margin-top: auto;
+}
 
 .bm-home-old-price {
     color: #98a19c;
@@ -685,8 +1157,13 @@
     font-size: .5rem;
 }
 
-.bm-home-product-stock.available { color: var(--bm-home-green); }
-.bm-home-product-stock.unavailable { color: var(--bm-home-danger); }
+.bm-home-product-stock.available {
+    color: var(--bm-home-green);
+}
+
+.bm-home-product-stock.unavailable {
+    color: var(--bm-home-danger);
+}
 
 .bm-home-product-btn {
     width: 100%;
@@ -711,36 +1188,62 @@
 }
 
 @media (min-width: 576px) {
-    .bm-home-product-grid { grid-template-columns: repeat(3, minmax(0,1fr)); gap: .9rem; }
+
+    .bm-home-product-grid {
+        grid-template-columns: repeat(3, minmax(0,1fr));
+        gap: .9rem;
+    }
+
     .bm-home-product-image,
-    .bm-home-product-placeholder { height: 190px; }
+    .bm-home-product-placeholder {
+        height: 190px;
+    }
 }
 
 @media (min-width: 768px) {
+
     .bm-home-product-heading {
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
     }
-    .bm-home-view-all { align-self: center; }
-    .bm-home-product-grid { grid-template-columns: repeat(4, minmax(0,1fr)); }
+
+    .bm-home-view-all {
+        align-self: center;
+    }
+
+    .bm-home-product-grid {
+        grid-template-columns: repeat(4, minmax(0,1fr));
+    }
+
     .bm-home-product-image,
-    .bm-home-product-placeholder { height: 205px; }
+    .bm-home-product-placeholder {
+        height: 205px;
+    }
 }
 
 @media (min-width: 992px) {
-    .bm-home-product-grid { grid-template-columns: repeat(5, minmax(0,1fr)); }
+
+    .bm-home-product-grid {
+        grid-template-columns: repeat(5, minmax(0,1fr));
+    }
 }
 
 @media (min-width: 1200px) {
-    .bm-home-product-grid { grid-template-columns: repeat(6, minmax(0,1fr)); }
+
+    .bm-home-product-grid {
+        grid-template-columns: repeat(6, minmax(0,1fr));
+    }
 }
 
 /* ============================================================
    IMAGE + TEXT
    ============================================================ */
 
-.bm-home-image-text { display: grid; gap: 1.5rem; }
+.bm-home-image-text {
+    display: grid;
+    gap: 1.5rem;
+}
 
 .bm-home-section-image,
 .bm-home-image-text-image {
@@ -771,7 +1274,9 @@
     overflow-wrap: anywhere;
 }
 
-.bm-home-section-content p:last-child { margin-bottom: 0; }
+.bm-home-section-content p:last-child {
+    margin-bottom: 0;
+}
 
 .bm-home-text-link {
     min-height: 44px;
@@ -795,211 +1300,17 @@
 }
 
 @media (min-width: 992px) {
+
     .bm-home-image-text {
         grid-template-columns: repeat(2, minmax(0,1fr));
         align-items: center;
         gap: 3rem;
     }
+
     .bm-home-section-image,
     .bm-home-image-text-image,
-    .bm-home-image-placeholder { height: 390px; }
-}
-
-/* ============================================================
-   CMS INTRO SECTION
-   ============================================================ */
-
-.bm-home-intro {
-    background: var(--bm-home-white);
-}
-
-.bm-home-intro-heading {
-    max-width: 900px;
-    margin-bottom: 2.25rem;
-}
-
-.bm-home-intro-heading .bm-home-section-title {
-    margin-bottom: .65rem;
-}
-
-.bm-home-intro-heading .bm-home-section-subtitle {
-    max-width: 760px;
-    margin-top: .7rem;
-}
-
-.bm-home-intro-layout {
-    display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
-    gap: 2rem;
-    align-items: center;
-}
-
-.bm-home-intro-layout-no-image {
-    display: block;
-    max-width: 850px;
-    margin-inline: auto;
-}
-
-.bm-home-intro-media {
-    min-width: 0;
-}
-
-.bm-home-intro-image-wrap {
-    position: relative;
-    overflow: hidden;
-    width: 100%;
-    border: 1px solid var(--bm-home-border);
-    border-radius: 20px;
-    background: #f3f6f4;
-    box-shadow: var(--bm-home-shadow-lg);
-}
-
-.bm-home-intro-image-wrap::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: linear-gradient(180deg, rgba(0,0,0,0) 65%, rgba(7,25,15,.10));
-}
-
-.bm-home-intro-image {
-    display: block;
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    object-fit: cover;
-    object-position: center;
-}
-
-.bm-home-intro-copy {
-    min-width: 0;
-    max-width: 620px;
-    padding: .25rem 0;
-}
-
-.bm-home-intro-copy-full {
-    max-width: 850px;
-    margin-inline: auto;
-}
-
-.bm-home-intro-content {
-    color: var(--bm-home-muted);
-    font-size: .92rem;
-    line-height: 1.85;
-}
-
-.bm-home-intro-content p {
-    margin-bottom: 1rem;
-}
-
-.bm-home-intro-content p:last-child {
-    margin-bottom: 0;
-}
-
-.bm-home-intro-content h1,
-.bm-home-intro-content h2,
-.bm-home-intro-content h3,
-.bm-home-intro-content h4 {
-    color: var(--bm-home-dark);
-    font-weight: 800;
-    line-height: 1.25;
-}
-
-.bm-home-intro-content strong {
-    color: var(--bm-home-dark-2);
-    font-weight: 800;
-}
-
-.bm-home-intro-content ul,
-.bm-home-intro-content ol {
-    margin-bottom: 1rem;
-    padding-left: 1.2rem;
-}
-
-.bm-home-intro-content li + li {
-    margin-top: .35rem;
-}
-
-.bm-home-intro-action {
-    margin-top: 1.35rem;
-}
-
-.bm-home-intro-action .bm-home-primary-btn {
-    min-height: 44px;
-}
-
-@media (max-width: 767.98px) {
-    .bm-home-intro-heading {
-        margin-bottom: 1.5rem;
-    }
-
-    .bm-home-intro-layout {
-        grid-template-columns: 1fr;
-        gap: 1.25rem;
-    }
-
-    .bm-home-intro-image-wrap {
-        border-radius: 16px;
-    }
-
-    .bm-home-intro-image {
-        aspect-ratio: 16 / 11;
-    }
-
-    .bm-home-intro-copy {
-        max-width: none;
-        padding: 0 .1rem;
-    }
-
-    .bm-home-intro-content {
-        font-size: .88rem;
-        line-height: 1.8;
-    }
-
-    .bm-home-intro-action {
-        margin-top: 1rem;
-    }
-
-    .bm-home-intro-action .bm-home-primary-btn {
-        width: 100%;
-    }
-}
-
-@media (min-width: 768px) {
-    .bm-home-intro-layout {
-        gap: 2.75rem;
-    }
-
-    .bm-home-intro-image {
-        aspect-ratio: 16 / 11;
-    }
-}
-
-@media (min-width: 992px) {
-    .bm-home-intro-layout {
-        grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr);
-        gap: 4rem;
-    }
-
-    .bm-home-intro-image-wrap {
-        border-radius: 22px;
-    }
-
-    .bm-home-intro-copy {
-        padding-right: 1.25rem;
-    }
-
-    .bm-home-intro-content {
-        font-size: .96rem;
-    }
-}
-
-@media (min-width: 1200px) {
-    .bm-home-intro-layout {
-        gap: 5rem;
-    }
-
-    .bm-home-intro-copy {
-        padding-right: 2rem;
+    .bm-home-image-placeholder {
+        height: 390px;
     }
 }
 
@@ -1020,7 +1331,9 @@
     border-radius: var(--bm-home-radius-sm);
     background: #fff;
     box-shadow: 0 4px 18px rgba(0,0,0,.035);
-    transition: transform .2s ease, box-shadow .2s ease;
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
 }
 
 .bm-home-feature-card:hover {
@@ -1056,11 +1369,17 @@
 }
 
 @media (min-width: 576px) {
-    .bm-home-feature-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+
+    .bm-home-feature-grid {
+        grid-template-columns: repeat(2, minmax(0,1fr));
+    }
 }
 
 @media (min-width: 992px) {
-    .bm-home-feature-grid { grid-template-columns: repeat(4, minmax(0,1fr)); }
+
+    .bm-home-feature-grid {
+        grid-template-columns: repeat(4, minmax(0,1fr));
+    }
 }
 
 /* ============================================================
@@ -1087,7 +1406,12 @@
 }
 
 .bm-home-banner-placeholder {
-    background: linear-gradient(135deg, var(--bm-home-green-deep), var(--bm-home-dark));
+    background:
+        linear-gradient(
+            135deg,
+            var(--bm-home-green-deep),
+            var(--bm-home-dark)
+        );
 }
 
 .bm-home-banner-overlay {
@@ -1125,7 +1449,11 @@
     position: relative;
     overflow: hidden;
     background:
-        radial-gradient(circle at 85% 10%, rgba(25,135,84,.35), transparent 35%),
+        radial-gradient(
+            circle at 85% 10%,
+            rgba(25,135,84,.35),
+            transparent 35%
+        ),
         var(--bm-home-dark);
     color: #fff;
 }
@@ -1175,7 +1503,9 @@
     background: #fff;
     box-shadow: 0 4px 16px rgba(0,0,0,.035);
     text-decoration: none;
-    transition: transform .2s ease, box-shadow .2s ease;
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
 }
 
 .bm-home-category-list-card:hover {
@@ -1203,7 +1533,9 @@
     font-size: 1.8rem;
 }
 
-.bm-home-category-list-body { padding: .7rem; }
+.bm-home-category-list-body {
+    padding: .7rem;
+}
 
 .bm-home-category-list-name {
     margin: 0;
@@ -1213,11 +1545,17 @@
 }
 
 @media (min-width: 576px) {
-    .bm-home-category-list { grid-template-columns: repeat(3, minmax(0,1fr)); }
+
+    .bm-home-category-list {
+        grid-template-columns: repeat(3, minmax(0,1fr));
+    }
 }
 
 @media (min-width: 768px) {
-    .bm-home-category-list { grid-template-columns: repeat(4, minmax(0,1fr)); }
+
+    .bm-home-category-list {
+        grid-template-columns: repeat(4, minmax(0,1fr));
+    }
 }
 
 /* ============================================================
@@ -1231,6 +1569,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
     .bm-home *,
     .bm-home *::before,
     .bm-home *::after {
@@ -1242,1048 +1581,1949 @@
 }
 </style>
 
+
 <div class="bm-home">
 
-    {# ==========================================================
-       ANNOUNCEMENT BAR
-       ========================================================== #}
-    {% if settings and settings.announcement_active and settings.announcement_text %}
-        <section class="bm-home-announcement" aria-label="Announcement">
+    {# ========================================================
+       ANNOUNCEMENT
+       ======================================================== #}
+
+    {% if settings and settings.announcement_active %}
+        <div class="bm-home-announcement">
             <div class="bm-home-container bm-home-announcement-inner">
+
                 {% if settings.announcement_url %}
-                    <a href="{{ settings.announcement_url }}">{{ settings.announcement_text }}</a>
+                    <a href="{{ settings.announcement_url }}">
+                        {{ settings.announcement_text }}
+                    </a>
                 {% else %}
                     <span>{{ settings.announcement_text }}</span>
                 {% endif %}
+
             </div>
-        </section>
+        </div>
     {% endif %}
 
-    {# ==========================================================
-       ADMIN PREVIEW NOTICE
-       ========================================================== #}
+
+    {# ========================================================
+       ADMIN PREVIEW
+       ======================================================== #}
+
     {% if preview %}
-        <section class="bm-home-preview">
+        <div class="bm-home-preview">
             <div class="bm-home-container bm-home-preview-inner">
-                <i class="bi bi-eye" aria-hidden="true"></i>
-                <span>Homepage Preview Mode — unpublished content is visible only to administrators.</span>
+                <i class="bi bi-eye"></i>
+                <span>Homepage Preview Mode</span>
             </div>
-        </section>
+        </div>
     {% endif %}
+
+
+    {# ========================================================
+       CMS HOMEPAGE
+       ======================================================== #}
 
     {% if sections %}
-        {# Collect all CMS hero sections into one carousel, preserving sort order. #}
-        {% set hero_sections = sections | selectattr('section_type', 'equalto', 'hero') | list %}
 
-        {# ======================================================
-           UNIFIED CMS HERO SLIDER
-           ====================================================== #}
+        {# -----------------------------------------------------
+           HERO SECTIONS
+           ----------------------------------------------------- #}
+
+        {% set hero_sections =
+            sections
+            | selectattr('section_type', 'equalto', 'hero')
+            | list
+        %}
+
         {% if hero_sections %}
-            <section id="bometHomepageHero" class="bm-home-hero bm-home-section" aria-label="Bomet Machineries Ltd. featured products">
-                <div id="bometHomepageHeroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
+
+            <section class="bm-home-hero">
+
+                <div
+                    id="bmHomeHeroCarousel"
+                    class="carousel slide carousel-fade"
+                    data-bs-ride="carousel"
+                >
 
                     {% if hero_sections|length > 1 %}
                         <div class="carousel-indicators">
+
                             {% for hero in hero_sections %}
-                                {% set hero_config = hero.config or {} %}
-                                <button type="button"
-                                        data-bs-target="#bometHomepageHeroCarousel"
-                                        data-bs-slide-to="{{ loop.index0 }}"
-                                        class="{% if loop.first %}active{% endif %}"
-                                        {% if loop.first %}aria-current="true"{% endif %}
-                                        aria-label="Go to hero slide {{ loop.index }}"></button>
+                                <button
+                                    type="button"
+                                    data-bs-target="#bmHomeHeroCarousel"
+                                    data-bs-slide-to="{{ loop.index0 }}"
+                                    class="{{ 'active' if loop.first else '' }}"
+                                    {% if loop.first %}
+                                        aria-current="true"
+                                    {% endif %}
+                                    aria-label="Slide {{ loop.index }}"
+                                ></button>
                             {% endfor %}
+
                         </div>
                     {% endif %}
 
+
                     <div class="carousel-inner">
+
                         {% for hero in hero_sections %}
-                            {% set hero_config = hero.config or {} %}
-                            {% set hero_interval = hero_config.get('interval', 5000) | int %}
-                            <div class="carousel-item {% if loop.first %}active{% endif %}"
-                                 data-bs-interval="{{ hero_interval if hero_interval > 0 else 5000 }}">
+
+                            {% set config = hero.config or {} %}
+
+                            <div
+                                class="carousel-item {{ 'active' if loop.first else '' }}"
+                                {% if config.interval %}
+                                    data-bs-interval="{{ config.interval }}"
+                                {% endif %}
+                            >
+
                                 <div class="bm-home-hero-slide">
 
                                     {% if hero.image_url %}
-                                        <img src="{{ hero.image_url }}"
-                                             {% if loop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}
-                                             decoding="async"
-                                             class="bm-home-hero-image"
-                                             alt="{{ hero.image_alt or hero.title or 'Bomet Machineries Ltd. agricultural machinery' }}">
+
+                                        <img
+                                            src="{{ hero.image_url }}"
+                                            alt="{{ hero.title or 'Bomet Machineries Ltd.' }}"
+                                            class="bm-home-hero-image"
+                                            {% if loop.first %}
+                                                fetchpriority="high"
+                                            {% else %}
+                                                loading="lazy"
+                                            {% endif %}
+                                            decoding="async"
+                                        >
+
                                     {% else %}
-                                        <div class="bm-home-hero-placeholder" aria-hidden="true"></div>
+
+                                        <div class="bm-home-hero-placeholder"></div>
+
                                     {% endif %}
 
+
                                     <div class="bm-home-hero-overlay">
+
                                         <div class="bm-home-container">
+
                                             <div class="bm-home-hero-content">
 
-                                                <span class="bm-home-hero-kicker">
-                                                    <i class="bi bi-shield-check" aria-hidden="true"></i>
-                                                    Bomet Machineries Ltd.
-                                                </span>
-
-                                                <h1 class="bm-home-hero-title">
-                                                    {{ hero.title or "Agricultural Machinery Built for Productivity" }}
-                                                </h1>
-
-                                                {% if hero.subtitle %}
-                                                    <p class="bm-home-hero-description">{{ hero.subtitle }}</p>
-                                                {% endif %}
-
-                                                {% if hero.button_text and hero.button_url %}
-                                                    <div class="bm-home-hero-actions">
-                                                        <a href="{{ hero.button_url }}" class="bm-home-primary-btn">
-                                                            {{ hero.button_text }}
-                                                            <i class="bi bi-arrow-right" aria-hidden="true"></i>
-                                                        </a>
-                                                        <a href="{{ url_for('product.products') }}" class="bm-home-secondary-btn">
-                                                            <i class="bi bi-grid" aria-hidden="true"></i>
-                                                            Shop Products
-                                                        </a>
-                                                    </div>
-                                                {% else %}
-                                                    <div class="bm-home-hero-actions">
-                                                        <a href="{{ url_for('product.products') }}" class="bm-home-primary-btn">
-                                                            Shop Products
-                                                            <i class="bi bi-arrow-right" aria-hidden="true"></i>
-                                                        </a>
+                                                {% if config.kicker %}
+                                                    <div class="bm-home-hero-kicker">
+                                                        <i class="bi bi-stars"></i>
+                                                        {{ config.kicker }}
                                                     </div>
                                                 {% endif %}
+
+
+                                                {% if hero.title %}
+                                                    <h1 class="bm-home-hero-title">
+                                                        {{ hero.title }}
+                                                    </h1>
+                                                {% endif %}
+
+
+                                                {% if hero.content %}
+                                                    <div class="bm-home-hero-description">
+                                                        {{ hero.content | safe }}
+                                                    </div>
+                                                {% endif %}
+
+
+                                                {% if config.primary_url or config.secondary_url %}
+
+                                                    <div class="bm-home-hero-actions">
+
+                                                        {% if config.primary_url %}
+                                                            <a
+                                                                href="{{ config.primary_url }}"
+                                                                class="bm-home-primary-btn"
+                                                            >
+                                                                <i class="bi bi-arrow-right-circle"></i>
+                                                                {{ config.primary_text or "Shop Now" }}
+                                                            </a>
+                                                        {% endif %}
+
+
+                                                        {% if config.secondary_url %}
+                                                            <a
+                                                                href="{{ config.secondary_url }}"
+                                                                class="bm-home-secondary-btn"
+                                                            >
+                                                                <i class="bi bi-grid"></i>
+                                                                {{ config.secondary_text or "Explore Products" }}
+                                                            </a>
+                                                        {% endif %}
+
+                                                    </div>
+
+                                                {% endif %}
+
 
                                                 <div class="bm-home-hero-trust">
-                                                    <span class="bm-home-hero-trust-item">
-                                                        <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
-                                                        Quality Machinery
-                                                    </span>
-                                                    <span class="bm-home-hero-trust-item">
-                                                        <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
-                                                        Genuine Parts
-                                                    </span>
-                                                    <span class="bm-home-hero-trust-item">
-                                                        <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
-                                                        Reliable Service
-                                                    </span>
-                                                    <span class="bm-home-hero-trust-item">
-                                                        <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
-                                                        Kenya Focused
-                                                    </span>
+
+                                                    <div class="bm-home-hero-trust-item">
+                                                        <i class="bi bi-patch-check-fill"></i>
+                                                        <span>Genuine Products</span>
+                                                    </div>
+
+                                                    <div class="bm-home-hero-trust-item">
+                                                        <i class="bi bi-truck"></i>
+                                                        <span>Reliable Delivery</span>
+                                                    </div>
+
+                                                    <div class="bm-home-hero-trust-item">
+                                                        <i class="bi bi-headset"></i>
+                                                        <span>Expert Support</span>
+                                                    </div>
+
+                                                    <div class="bm-home-hero-trust-item">
+                                                        <i class="bi bi-shield-check"></i>
+                                                        <span>Trusted Service</span>
+                                                    </div>
+
                                                 </div>
 
                                             </div>
+
                                         </div>
+
                                     </div>
+
                                 </div>
+
                             </div>
+
                         {% endfor %}
+
                     </div>
 
+
                     {% if hero_sections|length > 1 %}
-                        <button class="carousel-control-prev" type="button" data-bs-target="#bometHomepageHeroCarousel" data-bs-slide="prev" aria-label="Previous hero slide">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+
+                        <button
+                            class="carousel-control-prev"
+                            type="button"
+                            data-bs-target="#bmHomeHeroCarousel"
+                            data-bs-slide="prev"
+                        >
+                            <span
+                                class="carousel-control-prev-icon"
+                                aria-hidden="true"
+                            ></span>
                             <span class="visually-hidden">Previous</span>
                         </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#bometHomepageHeroCarousel" data-bs-slide="next" aria-label="Next hero slide">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+
+                        <button
+                            class="carousel-control-next"
+                            type="button"
+                            data-bs-target="#bmHomeHeroCarousel"
+                            data-bs-slide="next"
+                        >
+                            <span
+                                class="carousel-control-next-icon"
+                                aria-hidden="true"
+                            ></span>
                             <span class="visually-hidden">Next</span>
                         </button>
+
                     {% endif %}
 
                 </div>
+
             </section>
+
         {% endif %}
 
-        {# ======================================================
-           CMS NON-HERO SECTIONS
-           ====================================================== #}
+
+        {# ====================================================
+           OTHER CMS SECTIONS
+           ==================================================== #}
+
         {% for section in sections %}
-            {% set section_type = section.section_type %}
+
             {% set config = section.config or {} %}
-            {% set custom_class = section.css_class or '' %}
 
-            {% if section_type == "hero" %}
-                {# Hero already rendered above. #}
 
-            {# ==============================
+            {# =================================================
                INTRO
-               ============================== #}
-            {% elif section_type == "intro" %}
-                <section class="bm-home-section bm-home-section-spacing bm-home-content-section bm-home-intro {{ custom_class }}">
+               ================================================= #}
+
+            {% if section.section_type == 'intro' %}
+
+                <section class="bm-home-section bm-home-intro bm-home-section-spacing">
+
                     <div class="bm-home-container">
 
-                        {% if section.title or section.subtitle %}
-                            <div class="bm-home-section-heading bm-home-intro-heading">
-                                <span class="bm-home-eyebrow">About Our Solutions</span>
+                        <div class="bm-home-section-heading bm-home-intro-heading">
 
-                                {% if section.title %}
-                                    <h2 class="bm-home-section-title">{{ section.title }}</h2>
-                                {% endif %}
+                            <span class="bm-home-eyebrow">
+                                {{ config.eyebrow or "About Bomet Machineries" }}
+                            </span>
 
-                                {% if section.subtitle %}
-                                    <p class="bm-home-section-subtitle">{{ section.subtitle }}</p>
-                                {% endif %}
-                            </div>
-                        {% endif %}
-
-                        <div class="bm-home-intro-layout {% if not section.image_url %}bm-home-intro-layout-no-image{% endif %}">
-
-                            {% if section.image_url %}
-                                <div class="bm-home-intro-media">
-                                    <div class="bm-home-intro-image-wrap">
-                                        <img
-                                            src="{{ section.image_url }}"
-                                            loading="lazy"
-                                            decoding="async"
-                                            class="bm-home-intro-image"
-                                            alt="{{ section.image_alt or section.title or 'Bomet Machineries Ltd.' }}"
-                                        >
-                                    </div>
-                                </div>
+                            {% if section.title %}
+                                <h2 class="bm-home-section-title">
+                                    {{ section.title }}
+                                </h2>
                             {% endif %}
 
-                            {% if section.content or (section.button_text and section.button_url) %}
-                                <div class="bm-home-intro-copy {% if not section.image_url %}bm-home-intro-copy-full{% endif %}">
+                            {% if config.subtitle %}
+                                <p class="bm-home-section-subtitle">
+                                    {{ config.subtitle }}
+                                </p>
+                            {% endif %}
+
+                        </div>
+
+
+                        {% if section.image_url %}
+
+                            <div class="bm-home-intro-layout">
+
+                                <div class="bm-home-intro-media">
+
+                                    <div class="bm-home-intro-image-wrap">
+
+                                        <img
+                                            src="{{ section.image_url }}"
+                                            alt="{{ section.title or 'Bomet Machineries Ltd.' }}"
+                                            class="bm-home-intro-image"
+                                            loading="lazy"
+                                            decoding="async"
+                                        >
+
+                                        <div class="bm-home-intro-badge">
+                                            <i class="bi bi-patch-check-fill"></i>
+                                            Genuine Agricultural Solutions
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="bm-home-intro-copy">
+
+                                    <div class="bm-home-intro-content">
+                                        {{ section.content | safe }}
+                                    </div>
+
+
+                                    <div class="bm-home-intro-highlights">
+
+                                        <div class="bm-home-intro-highlight">
+
+                                            <span class="bm-home-intro-highlight-icon">
+                                                <i class="bi bi-gear-wide-connected"></i>
+                                            </span>
+
+                                            <span class="bm-home-intro-highlight-text">
+                                                Quality Machinery
+                                            </span>
+
+                                        </div>
+
+
+                                        <div class="bm-home-intro-highlight">
+
+                                            <span class="bm-home-intro-highlight-icon">
+                                                <i class="bi bi-tools"></i>
+                                            </span>
+
+                                            <span class="bm-home-intro-highlight-text">
+                                                Genuine Spare Parts
+                                            </span>
+
+                                        </div>
+
+
+                                        <div class="bm-home-intro-highlight">
+
+                                            <span class="bm-home-intro-highlight-icon">
+                                                <i class="bi bi-headset"></i>
+                                            </span>
+
+                                            <span class="bm-home-intro-highlight-text">
+                                                Expert Support
+                                            </span>
+
+                                        </div>
+
+
+                                        <div class="bm-home-intro-highlight">
+
+                                            <span class="bm-home-intro-highlight-icon">
+                                                <i class="bi bi-truck"></i>
+                                            </span>
+
+                                            <span class="bm-home-intro-highlight-text">
+                                                Reliable Delivery
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    {% if config.button_url %}
+
+                                        <div class="bm-home-intro-action">
+
+                                            <a
+                                                href="{{ config.button_url }}"
+                                                class="bm-home-primary-btn"
+                                            >
+                                                <i class="bi bi-arrow-right"></i>
+                                                {{ config.button_text or "Learn More" }}
+                                            </a>
+
+                                        </div>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        {% else %}
+
+                            <div class="bm-home-intro-layout-no-image">
+
+                                <div class="bm-home-intro-copy bm-home-intro-copy-full">
+
+                                    <div class="bm-home-intro-content">
+                                        {{ section.content | safe }}
+                                    </div>
+
+
+                                    {% if config.button_url %}
+
+                                        <div class="bm-home-intro-action">
+
+                                            <a
+                                                href="{{ config.button_url }}"
+                                                class="bm-home-primary-btn"
+                                            >
+                                                <i class="bi bi-arrow-right"></i>
+                                                {{ config.button_text or "Learn More" }}
+                                            </a>
+
+                                        </div>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </section>
+
+
+            {# =================================================
+               FEATURED CATEGORIES
+               ================================================= #}
+
+            {% elif section.section_type == 'featured_categories' %}
+
+                <section class="bm-home-section bm-home-section-spacing">
+
+                    <div class="bm-home-container">
+
+                        <div class="bm-home-section-heading">
+
+                            <span class="bm-home-eyebrow">
+                                {{ config.eyebrow or "Shop by Category" }}
+                            </span>
+
+                            <h2 class="bm-home-section-title">
+                                {{ section.title or "Explore Our Categories" }}
+                            </h2>
+
+                            {% if config.subtitle %}
+                                <p class="bm-home-section-subtitle">
+                                    {{ config.subtitle }}
+                                </p>
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="bm-home-category-grid">
+
+                            {% set category_limit = config.category_limit or 8 %}
+
+                            {% for category in categories[:category_limit] %}
+
+                                <a
+                                    href="{{ url_for('product.category_products', slug=category.slug) }}"
+                                    class="bm-home-category-card"
+                                >
+
+                                    {% if category.image_url %}
+
+                                        <img
+                                            src="{{ category.image_url }}"
+                                            alt="{{ category.name }}"
+                                            class="bm-home-category-image"
+                                            loading="lazy"
+                                            decoding="async"
+                                        >
+
+                                    {% else %}
+
+                                        <div class="bm-home-category-fallback">
+                                            <i class="bi bi-grid"></i>
+                                        </div>
+
+                                    {% endif %}
+
+
+                                    <div class="bm-home-category-overlay">
+
+                                        <span class="bm-home-category-name">
+                                            {{ category.name }}
+                                        </span>
+
+                                        <span class="bm-home-category-arrow">
+                                            Shop category
+                                            <i class="bi bi-arrow-right"></i>
+                                        </span>
+
+                                    </div>
+
+                                </a>
+
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+            {# =================================================
+               PRODUCT GRID
+               ================================================= #}
+
+            {% elif section.section_type == 'product_grid' %}
+
+                <section class="bm-home-section bm-home-product-section bm-home-section-spacing">
+
+                    <div class="bm-home-container">
+
+                        <div class="bm-home-section-heading">
+
+                            <span class="bm-home-eyebrow">
+                                {{ config.eyebrow or "Featured Products" }}
+                            </span>
+
+                            <h2 class="bm-home-section-title">
+                                {{ section.title or "Shop Our Products" }}
+                            </h2>
+
+                            {% if config.subtitle %}
+                                <p class="bm-home-section-subtitle">
+                                    {{ config.subtitle }}
+                                </p>
+                            {% endif %}
+
+                        </div>
+
+
+                        {% for category, products in featured_by_category.items() %}
+
+                            {% if products %}
+
+                                <div class="bm-home-category-product-block">
+
+                                    <div class="bm-home-product-heading">
+
+                                        <div>
+
+                                            <h3 class="bm-home-product-heading-title">
+                                                {{ category.name if category.name is defined else category }}
+                                            </h3>
+
+                                            {% if category.description is defined and category.description %}
+                                                <p class="bm-home-product-heading-description">
+                                                    {{ category.description }}
+                                                </p>
+                                            {% endif %}
+
+                                        </div>
+
+
+                                        {% if category.slug is defined %}
+
+                                            <a
+                                                href="{{ url_for('product.category_products', slug=category.slug) }}"
+                                                class="bm-home-view-all"
+                                            >
+                                                View All
+                                                <i class="bi bi-arrow-right"></i>
+                                            </a>
+
+                                        {% endif %}
+
+                                    </div>
+
+
+                                    <div class="bm-home-product-grid">
+
+                                        {% set product_limit = config.product_limit or 6 %}
+
+                                        {% for product in products[:product_limit] %}
+
+                                            <article class="bm-home-product-card">
+
+                                                <a
+                                                    href="{{ url_for('product.product_details', slug=product.slug) }}"
+                                                    class="bm-home-product-media"
+                                                >
+
+                                                    {% if product.discount and product.discount > 0 %}
+                                                        <span class="bm-home-product-badge">
+                                                            -{{ product.discount }}%
+                                                        </span>
+                                                    {% endif %}
+
+
+                                                    {% if product.images %}
+
+                                                        {% set primary_image =
+                                                            product.images
+                                                            | selectattr('is_primary')
+                                                            | first
+                                                        %}
+
+                                                        {% if primary_image %}
+
+                                                            <img
+                                                                src="{{ primary_image.url }}"
+                                                                alt="{{ product.name }}"
+                                                                class="bm-home-product-image"
+                                                                loading="lazy"
+                                                                decoding="async"
+                                                            >
+
+                                                        {% else %}
+
+                                                            <img
+                                                                src="{{ product.images[0].url }}"
+                                                                alt="{{ product.name }}"
+                                                                class="bm-home-product-image"
+                                                                loading="lazy"
+                                                                decoding="async"
+                                                            >
+
+                                                        {% endif %}
+
+                                                    {% else %}
+
+                                                        <div class="bm-home-product-placeholder">
+                                                            <i class="bi bi-image"></i>
+                                                        </div>
+
+                                                    {% endif %}
+
+                                                </a>
+
+
+                                                <div class="bm-home-product-body">
+
+                                                    <h3 class="bm-home-product-name">
+                                                        {{ product.name }}
+                                                    </h3>
+
+
+                                                    {% if product.brand %}
+                                                        <div class="bm-home-product-brand">
+                                                            {{ product.brand }}
+                                                        </div>
+                                                    {% endif %}
+
+
+                                                    <div class="bm-home-product-price">
+
+                                                        {% if product.discount and product.discount > 0 %}
+
+                                                            <div class="bm-home-old-price">
+                                                                KSh {{ "{:,.0f}".format(product.price) }}
+                                                            </div>
+
+                                                            <div class="bm-home-current-price">
+                                                                KSh {{ "{:,.0f}".format(product.discounted_price) }}
+                                                            </div>
+
+                                                        {% else %}
+
+                                                            <div class="bm-home-current-price">
+                                                                KSh {{ "{:,.0f}".format(product.price) }}
+                                                            </div>
+
+                                                        {% endif %}
+
+                                                    </div>
+
+
+                                                    {% if product.stock_quantity is defined %}
+
+                                                        {% if product.stock_quantity > 0 %}
+
+                                                            <div class="bm-home-product-stock available">
+                                                                <i class="bi bi-check-circle"></i>
+                                                                In stock
+                                                            </div>
+
+                                                        {% else %}
+
+                                                            <div class="bm-home-product-stock unavailable">
+                                                                <i class="bi bi-x-circle"></i>
+                                                                Out of stock
+                                                            </div>
+
+                                                        {% endif %}
+
+                                                    {% endif %}
+
+
+                                                    <a
+                                                        href="{{ url_for('product.product_details', slug=product.slug) }}"
+                                                        class="bm-home-product-btn"
+                                                    >
+                                                        <i class="bi bi-eye"></i>
+                                                        View Product
+                                                    </a>
+
+                                                </div>
+
+                                            </article>
+
+                                        {% endfor %}
+
+                                    </div>
+
+                                </div>
+
+                            {% endif %}
+
+                        {% endfor %}
+
+                    </div>
+
+                </section>
+
+
+            {# =================================================
+               PRODUCT CATEGORY
+               ================================================= #}
+
+            {% elif section.section_type == 'product_category' %}
+
+                {% set selected_category = none %}
+
+                {% for category in categories %}
+
+                    {% if category.slug == config.category_slug %}
+                        {% set selected_category = category %}
+                    {% endif %}
+
+                {% endfor %}
+
+
+                {% if selected_category %}
+
+                    <section class="bm-home-section bm-home-product-section bm-home-section-spacing">
+
+                        <div class="bm-home-container">
+
+                            <div class="bm-home-section-heading">
+
+                                <span class="bm-home-eyebrow">
+                                    {{ config.eyebrow or "Shop Now" }}
+                                </span>
+
+                                <h2 class="bm-home-section-title">
+                                    {{ section.title or selected_category.name }}
+                                </h2>
+
+                                {% if config.subtitle %}
+                                    <p class="bm-home-section-subtitle">
+                                        {{ config.subtitle }}
+                                    </p>
+                                {% endif %}
+
+                            </div>
+
+
+                            {% if featured_by_category[selected_category] %}
+
+                                <div class="bm-home-product-grid">
+
+                                    {% set product_limit = config.product_limit or 6 %}
+
+                                    {% for product in featured_by_category[selected_category][:product_limit] %}
+
+                                        <article class="bm-home-product-card">
+
+                                            <a
+                                                href="{{ url_for('product.product_details', slug=product.slug) }}"
+                                                class="bm-home-product-media"
+                                            >
+
+                                                {% if product.discount and product.discount > 0 %}
+                                                    <span class="bm-home-product-badge">
+                                                        -{{ product.discount }}%
+                                                    </span>
+                                                {% endif %}
+
+
+                                                {% if product.images %}
+
+                                                    {% set primary_image =
+                                                        product.images
+                                                        | selectattr('is_primary')
+                                                        | first
+                                                    %}
+
+                                                    {% if primary_image %}
+
+                                                        <img
+                                                            src="{{ primary_image.url }}"
+                                                            alt="{{ product.name }}"
+                                                            class="bm-home-product-image"
+                                                            loading="lazy"
+                                                            decoding="async"
+                                                        >
+
+                                                    {% else %}
+
+                                                        <img
+                                                            src="{{ product.images[0].url }}"
+                                                            alt="{{ product.name }}"
+                                                            class="bm-home-product-image"
+                                                            loading="lazy"
+                                                            decoding="async"
+                                                        >
+
+                                                    {% endif %}
+
+                                                {% else %}
+
+                                                    <div class="bm-home-product-placeholder">
+                                                        <i class="bi bi-image"></i>
+                                                    </div>
+
+                                                {% endif %}
+
+                                            </a>
+
+
+                                            <div class="bm-home-product-body">
+
+                                                <h3 class="bm-home-product-name">
+                                                    {{ product.name }}
+                                                </h3>
+
+                                                {% if product.brand %}
+                                                    <div class="bm-home-product-brand">
+                                                        {{ product.brand }}
+                                                    </div>
+                                                {% endif %}
+
+
+                                                <div class="bm-home-product-price">
+
+                                                    {% if product.discount and product.discount > 0 %}
+
+                                                        <div class="bm-home-old-price">
+                                                            KSh {{ "{:,.0f}".format(product.price) }}
+                                                        </div>
+
+                                                        <div class="bm-home-current-price">
+                                                            KSh {{ "{:,.0f}".format(product.discounted_price) }}
+                                                        </div>
+
+                                                    {% else %}
+
+                                                        <div class="bm-home-current-price">
+                                                            KSh {{ "{:,.0f}".format(product.price) }}
+                                                        </div>
+
+                                                    {% endif %}
+
+                                                </div>
+
+
+                                                <a
+                                                    href="{{ url_for('product.product_details', slug=product.slug) }}"
+                                                    class="bm-home-product-btn"
+                                                >
+                                                    <i class="bi bi-eye"></i>
+                                                    View Product
+                                                </a>
+
+                                            </div>
+
+                                        </article>
+
+                                    {% endfor %}
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </section>
+
+                {% endif %}
+
+
+            {# =================================================
+               IMAGE TEXT
+               ================================================= #}
+
+            {% elif section.section_type == 'image_text' %}
+
+                <section class="bm-home-section bm-home-section-spacing">
+
+                    <div class="bm-home-container">
+
+                        <div
+                            class="bm-home-image-text"
+                            {% if config.image_position == 'right' %}
+                                style="direction:rtl;"
+                            {% endif %}
+                        >
+
+                            <div style="direction:ltr;">
+
+                                {% if section.image_url %}
+
+                                    <img
+                                        src="{{ section.image_url }}"
+                                        alt="{{ section.title or 'Bomet Machineries' }}"
+                                        class="bm-home-image-text-image"
+                                        loading="lazy"
+                                        decoding="async"
+                                    >
+
+                                {% else %}
+
+                                    <div class="bm-home-image-placeholder">
+                                        <i class="bi bi-image"></i>
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <div style="direction:ltr;">
+
+                                <span class="bm-home-eyebrow">
+                                    {{ config.eyebrow or "Bomet Machineries" }}
+                                </span>
+
+                                {% if section.title %}
+                                    <h2 class="bm-home-section-title">
+                                        {{ section.title }}
+                                    </h2>
+                                {% endif %}
+
+                                <div class="bm-home-section-content mt-3">
+                                    {{ section.content | safe }}
+                                </div>
+
+
+                                {% if config.button_url %}
+
+                                    <a
+                                        href="{{ config.button_url }}"
+                                        class="bm-home-text-link"
+                                    >
+                                        {{ config.button_text or "Learn More" }}
+                                        <i class="bi bi-arrow-right"></i>
+                                    </a>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+            {# =================================================
+               TRUST
+               ================================================= #}
+
+            {% elif section.section_type == 'trust' %}
+
+                <section class="bm-home-section bm-home-section-spacing">
+
+                    <div class="bm-home-container">
+
+                        <div class="bm-home-section-heading">
+
+                            <span class="bm-home-eyebrow">
+                                {{ config.eyebrow or "Why Choose Us" }}
+                            </span>
+
+                            <h2 class="bm-home-section-title">
+                                {{ section.title or "Built Around Quality & Trust" }}
+                            </h2>
+
+                            {% if config.subtitle %}
+                                <p class="bm-home-section-subtitle">
+                                    {{ config.subtitle }}
+                                </p>
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="bm-home-feature-grid">
+
+                            {% set trust_items = config.items or [
+                                {
+                                    "icon": "bi-patch-check",
+                                    "title": "Genuine Products",
+                                    "text": "Quality agricultural machinery, equipment and genuine spare parts."
+                                },
+                                {
+                                    "icon": "bi-people",
+                                    "title": "Expert Support",
+                                    "text": "Practical product guidance to help you choose the right solution."
+                                },
+                                {
+                                    "icon": "bi-truck",
+                                    "title": "Reliable Delivery",
+                                    "text": "Convenient delivery options for customers across Kenya."
+                                },
+                                {
+                                    "icon": "bi-shield-check",
+                                    "title": "Trusted Service",
+                                    "text": "Professional service focused on reliability and customer satisfaction."
+                                }
+                            ] %}
+
+
+                            {% for item in trust_items %}
+
+                                <div class="bm-home-feature-card">
+
+                                    <div class="bm-home-feature-icon">
+                                        <i class="bi {{ item.icon or 'bi-check-circle' }}"></i>
+                                    </div>
+
+                                    <h3 class="bm-home-feature-title">
+                                        {{ item.title }}
+                                    </h3>
+
+                                    <p class="bm-home-feature-text">
+                                        {{ item.text }}
+                                    </p>
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+            {# =================================================
+               SERVICES
+               ================================================= #}
+
+            {% elif section.section_type == 'services' %}
+
+                <section class="bm-home-section bm-home-section-spacing">
+
+                    <div class="bm-home-container">
+
+                        <div class="bm-home-section-heading">
+
+                            <span class="bm-home-eyebrow">
+                                {{ config.eyebrow or "Our Services" }}
+                            </span>
+
+                            <h2 class="bm-home-section-title">
+                                {{ section.title or "Professional Agricultural Solutions" }}
+                            </h2>
+
+                            {% if config.subtitle %}
+                                <p class="bm-home-section-subtitle">
+                                    {{ config.subtitle }}
+                                </p>
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="bm-home-feature-grid">
+
+                            {% for item in config.items or [] %}
+
+                                <div class="bm-home-feature-card">
+
+                                    <div class="bm-home-feature-icon">
+                                        <i class="bi {{ item.icon or 'bi-gear' }}"></i>
+                                    </div>
+
+                                    <h3 class="bm-home-feature-title">
+                                        {{ item.title }}
+                                    </h3>
+
+                                    <p class="bm-home-feature-text">
+                                        {{ item.text }}
+                                    </p>
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+            {# =================================================
+               BANNER
+               ================================================= #}
+
+            {% elif section.section_type == 'banner' %}
+
+                <section class="bm-home-section bm-home-section-spacing">
+
+                    <div class="bm-home-container">
+
+                        <div
+                            class="bm-home-banner"
+                            {% if config.height %}
+                                style="min-height: {{ config.height }}px;"
+                            {% endif %}
+                        >
+
+                            {% if section.image_url %}
+
+                                <img
+                                    src="{{ section.image_url }}"
+                                    alt="{{ section.title or 'Bomet Machineries Ltd.' }}"
+                                    class="bm-home-banner-image"
+                                    loading="lazy"
+                                    decoding="async"
+                                >
+
+                            {% else %}
+
+                                <div class="bm-home-banner-placeholder"></div>
+
+                            {% endif %}
+
+
+                            <div class="bm-home-banner-overlay">
+
+                                <div>
+
+                                    {% if section.title %}
+                                        <h2 class="bm-home-banner-title">
+                                            {{ section.title }}
+                                        </h2>
+                                    {% endif %}
 
                                     {% if section.content %}
-                                        <div class="bm-home-section-content bm-home-intro-content">
+                                        <div class="bm-home-banner-text">
                                             {{ section.content | safe }}
                                         </div>
                                     {% endif %}
 
-                                    {% if section.button_text and section.button_url %}
-                                        <div class="bm-home-intro-action">
-                                            <a
-                                                href="{{ section.button_url }}"
-                                                class="bm-home-primary-btn"
-                                            >
-                                                {{ section.button_text }}
-                                                <i class="bi bi-arrow-right" aria-hidden="true"></i>
-                                            </a>
-                                        </div>
-                                    {% endif %}
 
-                                </div>
-                            {% endif %}
+                                    {% if config.button_url %}
 
-                        </div>
-                    </div>
-                </section>
-
-            {# ==============================
-               FEATURED CATEGORIES
-               ============================== #}
-            {% elif section_type == "featured_categories" %}
-                <section class="bm-home-section bm-home-section-spacing bm-home-content-section {{ custom_class }}">
-                    <div class="bm-home-container">
-                        {% if section.title or section.subtitle %}
-                            <div class="bm-home-section-heading">
-                                <span class="bm-home-eyebrow">Explore</span>
-                                {% if section.title %}<h2 class="bm-home-section-title">{{ section.title }}</h2>{% endif %}
-                                {% if section.subtitle %}<p class="bm-home-section-subtitle">{{ section.subtitle }}</p>{% endif %}
-                            </div>
-                        {% endif %}
-
-                        {% set category_limit = config.get('limit', 3) | int %}
-                        {% if category_limit < 1 %}{% set category_limit = 3 %}{% endif %}
-
-                        <div class="bm-home-category-grid">
-                            {% for category in categories[:category_limit] %}
-                                <a href="{{ url_for('product.category_products', slug=category.slug) }}"
-                                   class="bm-home-category-card"
-                                   aria-label="Shop {{ category.name }}">
-
-                                    {% if category.image_url %}
-                                        <img src="{{ category.image_url }}"
-                                             loading="lazy"
-                                             decoding="async"
-                                             class="bm-home-category-image"
-                                             alt="{{ category.name }}">
-                                    {% else %}
-                                        <div class="bm-home-category-fallback" aria-hidden="true">
-                                            <i class="bi bi-grid-3x3-gap" aria-hidden="true"></i>
-                                        </div>
-                                    {% endif %}
-
-                                    <div class="bm-home-category-overlay">
-                                        <span class="bm-home-category-name">{{ category.name }}</span>
-                                        <span class="bm-home-category-arrow">
-                                            Explore
-                                            <i class="bi bi-arrow-right" aria-hidden="true"></i>
-                                        </span>
-                                    </div>
-                                </a>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </section>
-
-            {# ==============================
-               PRODUCT GRID
-               ============================== #}
-            {% elif section_type == "product_grid" %}
-                <section class="bm-home-section bm-home-product-section bm-home-section-spacing bm-home-content-section {{ custom_class }}">
-                    <div class="bm-home-container">
-                        {% if section.title or section.subtitle %}
-                            <div class="bm-home-section-heading">
-                                <span class="bm-home-eyebrow">Shop</span>
-                                {% if section.title %}<h2 class="bm-home-section-title">{{ section.title }}</h2>{% endif %}
-                                {% if section.subtitle %}<p class="bm-home-section-subtitle">{{ section.subtitle }}</p>{% endif %}
-                            </div>
-                        {% endif %}
-
-                        {% set product_limit = config.get('limit', 6) | int %}
-                        {% if product_limit < 1 %}{% set product_limit = 6 %}{% endif %}
-
-                        {% for category in categories %}
-                            {% set products = featured_by_category.get(category.id, []) %}
-                            {% if products %}
-                                <div class="bm-home-category-product-block">
-                                    <div class="bm-home-product-heading">
-                                        <div>
-                                            <h3 class="bm-home-product-heading-title">{{ category.name }}</h3>
-                                            {% if category.description %}
-                                                <p class="bm-home-product-heading-description">{{ category.description }}</p>
-                                            {% endif %}
-                                        </div>
-                                        <a href="{{ url_for('product.category_products', slug=category.slug) }}" class="bm-home-view-all">
-                                            View All
-                                            <i class="bi bi-arrow-right" aria-hidden="true"></i>
-                                        </a>
-                                    </div>
-
-                                    <div class="bm-home-product-grid">
-                                        {% for product in products[:product_limit] %}
-                                            <article class="bm-home-product-card">
-                                                <a href="{{ url_for('product.product_details', id=product.id) }}"
-                                                   class="bm-home-product-media"
-                                                   aria-label="View {{ product.name }}">
-
-                                                    {% if product.discount and product.discount > 0 %}
-                                                        <span class="bm-home-product-badge">SALE</span>
-                                                    {% endif %}
-
-                                                    {% if product.images %}
-                                                        {% set primary_image = product.images | selectattr('is_primary', 'equalto', true) | first %}
-                                                        <img src="{{ primary_image.image_url if primary_image else product.images[0].image_url }}"
-                                                             loading="lazy"
-                                                             decoding="async"
-                                                             class="bm-home-product-image"
-                                                             alt="{{ product.name }}">
-                                                    {% else %}
-                                                        <div class="bm-home-product-placeholder" aria-label="{{ product.name }} image unavailable">
-                                                            <i class="bi bi-image" aria-hidden="true"></i>
-                                                        </div>
-                                                    {% endif %}
-                                                </a>
-
-                                                <div class="bm-home-product-body">
-                                                    <h3 class="bm-home-product-name" title="{{ product.name }}">{{ product.name }}</h3>
-
-                                                    {% if product.brand %}
-                                                        <div class="bm-home-product-brand">{{ product.brand }}</div>
-                                                    {% endif %}
-
-                                                    <div class="bm-home-product-price">
-                                                        {% if product.discount and product.discount > 0 %}
-                                                            <div class="bm-home-old-price">KSh {{ "{:,.2f}".format(product.price) }}</div>
-                                                            <div class="bm-home-current-price">KSh {{ "{:,.2f}".format(product.discounted_price) }}</div>
-                                                        {% else %}
-                                                            <div class="bm-home-current-price">KSh {{ "{:,.2f}".format(product.price) }}</div>
-                                                        {% endif %}
-                                                    </div>
-
-                                                    {% if product.stock is defined %}
-                                                        {% if product.stock > 0 %}
-                                                            <div class="bm-home-product-stock available">
-                                                                <i class="bi bi-check-circle" aria-hidden="true"></i>
-                                                                In stock
-                                                            </div>
-                                                        {% else %}
-                                                            <div class="bm-home-product-stock unavailable">
-                                                                <i class="bi bi-x-circle" aria-hidden="true"></i>
-                                                                Out of stock
-                                                            </div>
-                                                        {% endif %}
-                                                    {% endif %}
-
-                                                    <a href="{{ url_for('product.product_details', id=product.id) }}" class="bm-home-product-btn">
-                                                        View Product
-                                                        <i class="bi bi-arrow-right" aria-hidden="true"></i>
-                                                    </a>
-                                                </div>
-                                            </article>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                </section>
-
-            {# ==============================
-               PRODUCT CATEGORY
-               ============================== #}
-            {% elif section_type == "product_category" %}
-                {% set selected_category_slug = config.get('category_slug') %}
-                {% set ns = namespace(category=none) %}
-                {% for category in categories %}
-                    {% if category.slug == selected_category_slug %}
-                        {% set ns.category = category %}
-                    {% endif %}
-                {% endfor %}
-                {% set selected_category = ns.category %}
-
-                {% if selected_category %}
-                    {% set products = featured_by_category.get(selected_category.id, []) %}
-                    {% set category_product_limit = config.get('limit', 6) | int %}
-                    {% if category_product_limit < 1 %}{% set category_product_limit = 6 %}{% endif %}
-
-                    <section class="bm-home-section bm-home-section-spacing bm-home-content-section {{ custom_class }}">
-                        <div class="bm-home-container">
-                            <div class="bm-home-product-heading">
-                                <div>
-                                    <span class="bm-home-eyebrow">{{ selected_category.name }}</span>
-                                    <h2 class="bm-home-product-heading-title">
-                                        {{ section.title or selected_category.name }}
-                                    </h2>
-                                    {% if section.subtitle %}
-                                        <p class="bm-home-product-heading-description">{{ section.subtitle }}</p>
-                                    {% endif %}
-                                </div>
-                                <a href="{{ url_for('product.category_products', slug=selected_category.slug) }}" class="bm-home-view-all">
-                                    View Category
-                                    <i class="bi bi-arrow-right" aria-hidden="true"></i>
-                                </a>
-                            </div>
-
-                            <div class="bm-home-product-grid">
-                                {% for product in products[:category_product_limit] %}
-                                    <article class="bm-home-product-card">
-                                        <a href="{{ url_for('product.product_details', id=product.id) }}"
-                                           class="bm-home-product-media"
-                                           aria-label="View {{ product.name }}">
-
-                                            {% if product.discount and product.discount > 0 %}
-                                                <span class="bm-home-product-badge">SALE</span>
-                                            {% endif %}
-
-                                            {% if product.images %}
-                                                {% set primary_image = product.images | selectattr('is_primary', 'equalto', true) | first %}
-                                                <img src="{{ primary_image.image_url if primary_image else product.images[0].image_url }}"
-                                                     loading="lazy"
-                                                     decoding="async"
-                                                     class="bm-home-product-image"
-                                                     alt="{{ product.name }}">
-                                            {% else %}
-                                                <div class="bm-home-product-placeholder" aria-hidden="true">
-                                                    <i class="bi bi-image" aria-hidden="true"></i>
-                                                </div>
-                                            {% endif %}
+                                        <a
+                                            href="{{ config.button_url }}"
+                                            class="bm-home-primary-btn"
+                                        >
+                                            {{ config.button_text or "Explore More" }}
+                                            <i class="bi bi-arrow-right"></i>
                                         </a>
 
-                                        <div class="bm-home-product-body">
-                                            <h3 class="bm-home-product-name">{{ product.name }}</h3>
-
-                                            {% if product.brand %}
-                                                <div class="bm-home-product-brand">{{ product.brand }}</div>
-                                            {% endif %}
-
-                                            <div class="bm-home-product-price">
-                                                {% if product.discount and product.discount > 0 %}
-                                                    <div class="bm-home-old-price">KSh {{ "{:,.2f}".format(product.price) }}</div>
-                                                    <div class="bm-home-current-price">KSh {{ "{:,.2f}".format(product.discounted_price) }}</div>
-                                                {% else %}
-                                                    <div class="bm-home-current-price">KSh {{ "{:,.2f}".format(product.price) }}</div>
-                                                {% endif %}
-                                            </div>
-
-                                            {% if product.stock is defined %}
-                                                {% if product.stock > 0 %}
-                                                    <div class="bm-home-product-stock available">
-                                                        <i class="bi bi-check-circle" aria-hidden="true"></i>
-                                                        In stock
-                                                    </div>
-                                                {% else %}
-                                                    <div class="bm-home-product-stock unavailable">
-                                                        <i class="bi bi-x-circle" aria-hidden="true"></i>
-                                                        Out of stock
-                                                    </div>
-                                                {% endif %}
-                                            {% endif %}
-
-                                            <a href="{{ url_for('product.product_details', id=product.id) }}" class="bm-home-product-btn">
-                                                View Product
-                                                <i class="bi bi-arrow-right" aria-hidden="true"></i>
-                                            </a>
-                                        </div>
-                                    </article>
-                                {% else %}
-                                    <div class="col-12 text-center py-5">
-                                        <i class="bi bi-box-seam fs-1 text-secondary" aria-hidden="true"></i>
-                                        <p class="text-muted mt-3 mb-0">Products coming soon.</p>
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </section>
-                {% endif %}
-
-            {# ==============================
-               IMAGE + TEXT
-               ============================== #}
-            {% elif section_type == "image_text" %}
-                {% set image_left = config.get('image_position', 'left') == 'left' %}
-                <section class="bm-home-section bm-home-section-spacing bm-home-content-section {{ custom_class }}">
-                    <div class="bm-home-container">
-                        <div class="bm-home-image-text" {% if not image_left %}style="direction:rtl;"{% endif %}>
-                            <div style="{% if not image_left %}direction:ltr;{% endif %}">
-                                {% if section.image_url %}
-                                    <img src="{{ section.image_url }}"
-                                         loading="lazy"
-                                         decoding="async"
-                                         class="bm-home-image-text-image"
-                                         alt="{{ section.image_alt or section.title or 'Bomet Machineries Ltd.' }}">
-                                {% else %}
-                                    <div class="bm-home-image-placeholder">
-                                        <i class="bi bi-image" aria-hidden="true"></i>
-                                    </div>
-                                {% endif %}
-                            </div>
-
-                            <div style="{% if not image_left %}direction:ltr;{% endif %}">
-                                <span class="bm-home-eyebrow">Bomet Machineries Ltd.</span>
-
-                                {% if section.title %}
-                                    <h2 class="bm-home-section-title">{{ section.title }}</h2>
-                                {% endif %}
-
-                                {% if section.subtitle %}
-                                    <p class="bm-home-section-subtitle" style="margin-left:0;margin-right:0;">{{ section.subtitle }}</p>
-                                {% endif %}
-
-                                {% if section.content %}
-                                    <div class="bm-home-section-content mt-3">{{ section.content | safe }}</div>
-                                {% endif %}
-
-                                {% if section.button_text and section.button_url %}
-                                    <a href="{{ section.button_url }}" class="bm-home-text-link">
-                                        {{ section.button_text }}
-                                        <i class="bi bi-arrow-right" aria-hidden="true"></i>
-                                    </a>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-            {# ==============================
-               TRUST
-               ============================== #}
-            {% elif section_type == "trust" %}
-                <section class="bm-home-section bm-home-section-spacing bm-home-content-section" style="background:var(--bm-home-bg);">
-                    <div class="bm-home-container">
-                        <div class="bm-home-section-heading">
-                            <span class="bm-home-eyebrow">Why Choose Us</span>
-                            {% if section.title %}<h2 class="bm-home-section-title">{{ section.title }}</h2>{% endif %}
-                            {% if section.subtitle %}<p class="bm-home-section-subtitle">{{ section.subtitle }}</p>{% endif %}
-                        </div>
-
-                        {% set trust_items = config.get('items', []) %}
-
-                        <div class="bm-home-feature-grid">
-                            {% if trust_items %}
-                                {% for item in trust_items %}
-                                    <div class="bm-home-feature-card">
-                                        <div class="bm-home-feature-icon">
-                                            <i class="bi bi-{{ item.get('icon', 'check-circle') }}" aria-hidden="true"></i>
-                                        </div>
-                                        <h3 class="bm-home-feature-title">{{ item.get('title', 'Quality Service') }}</h3>
-                                        {% if item.get('text') %}
-                                            <p class="bm-home-feature-text">{{ item.get('text') }}</p>
-                                        {% endif %}
-                                    </div>
-                                {% endfor %}
-                            {% else %}
-                                <div class="bm-home-feature-card">
-                                    <div class="bm-home-feature-icon"><i class="bi bi-award" aria-hidden="true"></i></div>
-                                    <h3 class="bm-home-feature-title">Quality Agricultural Equipment</h3>
-                                    <p class="bm-home-feature-text">Reliable machinery and equipment selected to support agricultural productivity.</p>
-                                </div>
-                                <div class="bm-home-feature-card">
-                                    <div class="bm-home-feature-icon"><i class="bi bi-tools" aria-hidden="true"></i></div>
-                                    <h3 class="bm-home-feature-title">Genuine Spare Parts</h3>
-                                    <p class="bm-home-feature-text">Quality replacement parts designed to help keep machinery operating reliably.</p>
-                                </div>
-                                <div class="bm-home-feature-card">
-                                    <div class="bm-home-feature-icon"><i class="bi bi-headset" aria-hidden="true"></i></div>
-                                    <h3 class="bm-home-feature-title">Practical Support</h3>
-                                    <p class="bm-home-feature-text">Professional assistance for farmers, businesses and agricultural processors.</p>
-                                </div>
-                                <div class="bm-home-feature-card">
-                                    <div class="bm-home-feature-icon"><i class="bi bi-truck" aria-hidden="true"></i></div>
-                                    <h3 class="bm-home-feature-title">Reliable Service</h3>
-                                    <p class="bm-home-feature-text">A customer-focused approach built around dependable agricultural solutions.</p>
-                                </div>
-                            {% endif %}
-                        </div>
-                    </div>
-                </section>
-
-            {# ==============================
-               SERVICES
-               ============================== #}
-            {% elif section_type == "services" %}
-                <section class="bm-home-section bm-home-section-spacing bm-home-content-section {{ custom_class }}">
-                    <div class="bm-home-container">
-                        <div class="bm-home-section-heading">
-                            <span class="bm-home-eyebrow">Our Solutions</span>
-                            {% if section.title %}<h2 class="bm-home-section-title">{{ section.title }}</h2>{% endif %}
-                            {% if section.subtitle %}<p class="bm-home-section-subtitle">{{ section.subtitle }}</p>{% endif %}
-                        </div>
-
-                        {% set service_items = config.get('items', []) %}
-
-                        {% if service_items %}
-                            <div class="bm-home-feature-grid">
-                                {% for item in service_items %}
-                                    <div class="bm-home-feature-card">
-                                        <div class="bm-home-feature-icon">
-                                            <i class="bi bi-{{ item.get('icon', 'gear') }}" aria-hidden="true"></i>
-                                        </div>
-                                        <h3 class="bm-home-feature-title">{{ item.get('title', 'Agricultural Solutions') }}</h3>
-                                        {% if item.get('text') %}
-                                            <p class="bm-home-feature-text">{{ item.get('text') }}</p>
-                                        {% endif %}
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-                    </div>
-                </section>
-
-            {# ==============================
-               BANNER
-               ============================== #}
-            {% elif section_type == "banner" %}
-                {% set banner_height = config.get('height', 320) | int %}
-                {% if banner_height < 180 %}{% set banner_height = 320 %}{% endif %}
-
-                <section class="bm-home-section bm-home-section-spacing bm-home-content-section {{ custom_class }}">
-                    <div class="bm-home-container">
-                        <div class="bm-home-banner">
-                            {% if section.image_url %}
-                                <img src="{{ section.image_url }}"
-                                     loading="lazy"
-                                     decoding="async"
-                                     class="bm-home-banner-image"
-                                     style="height:{{ banner_height }}px;"
-                                     alt="{{ section.image_alt or section.title or 'Bomet Machineries Ltd.' }}">
-                            {% else %}
-                                <div class="bm-home-banner-placeholder" style="height:{{ banner_height }}px;" aria-hidden="true"></div>
-                            {% endif %}
-
-                            <div class="bm-home-banner-overlay">
-                                <div>
-                                    {% if section.title %}<h2 class="bm-home-banner-title">{{ section.title }}</h2>{% endif %}
-                                    {% if section.subtitle %}<p class="bm-home-banner-text">{{ section.subtitle }}</p>{% endif %}
-                                    {% if section.button_text and section.button_url %}
-                                        <a href="{{ section.button_url }}" class="bm-home-primary-btn">
-                                            {{ section.button_text }}
-                                            <i class="bi bi-arrow-right" aria-hidden="true"></i>
-                                        </a>
                                     {% endif %}
+
                                 </div>
+
                             </div>
+
                         </div>
+
                     </div>
+
                 </section>
 
-            {# ==============================
+
+            {# =================================================
                CTA
-               ============================== #}
-            {% elif section_type == "cta" %}
-                <section class="bm-home-cta bm-home-section bm-home-content-section {{ custom_class }}">
+               ================================================= #}
+
+            {% elif section.section_type == 'cta' %}
+
+                <section class="bm-home-cta">
+
                     <div class="bm-home-container bm-home-cta-inner">
-                        <span class="bm-home-eyebrow" style="color:#b9e3c9;">Get Started</span>
 
-                        {% if section.title %}<h2 class="bm-home-cta-title">{{ section.title }}</h2>{% endif %}
-                        {% if section.subtitle %}<p class="bm-home-cta-text">{{ section.subtitle }}</p>{% endif %}
+                        {% if section.title %}
+                            <h2 class="bm-home-cta-title">
+                                {{ section.title }}
+                            </h2>
+                        {% endif %}
 
-                        {% if section.button_text and section.button_url %}
-                            <div class="bm-home-cta-actions">
-                                <a href="{{ section.button_url }}" class="bm-home-primary-btn">
-                                    {{ section.button_text }}
-                                    <i class="bi bi-arrow-right" aria-hidden="true"></i>
-                                </a>
+                        {% if section.content %}
+                            <div class="bm-home-cta-text">
+                                {{ section.content | safe }}
                             </div>
                         {% endif %}
+
+
+                        {% if config.button_url %}
+
+                            <div class="bm-home-cta-actions">
+
+                                <a
+                                    href="{{ config.button_url }}"
+                                    class="bm-home-primary-btn"
+                                >
+                                    {{ config.button_text or "Get Started" }}
+                                    <i class="bi bi-arrow-right"></i>
+                                </a>
+
+                            </div>
+
+                        {% endif %}
+
                     </div>
+
                 </section>
 
-            {# ==============================
+
+            {# =================================================
                SPARE PARTS
-               ============================== #}
-            {% elif section_type == "spare_parts" %}
-                <section class="bm-home-section bm-home-section-spacing bm-home-content-section {{ custom_class }}">
+               ================================================= #}
+
+            {% elif section.section_type == 'spare_parts' %}
+
+                <section class="bm-home-section bm-home-section-spacing">
+
                     <div class="bm-home-container">
+
                         <div class="bm-home-image-text">
+
                             <div>
+
                                 {% if section.image_url %}
-                                    <img src="{{ section.image_url }}"
-                                         loading="lazy"
-                                         decoding="async"
-                                         class="bm-home-section-image"
-                                         alt="{{ section.image_alt or section.title or 'Genuine spare parts' }}">
+
+                                    <img
+                                        src="{{ section.image_url }}"
+                                        alt="{{ section.title or 'Genuine Spare Parts' }}"
+                                        class="bm-home-section-image"
+                                        loading="lazy"
+                                        decoding="async"
+                                    >
+
                                 {% else %}
+
                                     <div class="bm-home-image-placeholder">
-                                        <i class="bi bi-tools" aria-hidden="true"></i>
+                                        <i class="bi bi-tools"></i>
                                     </div>
+
                                 {% endif %}
+
                             </div>
+
 
                             <div>
-                                <span class="bm-home-eyebrow">Genuine Spare Parts</span>
 
-                                <h2 class="bm-home-section-title">
-                                    {{ section.title or "Genuine Spare Parts for Your Machinery" }}
-                                </h2>
-
-                                {% if section.subtitle %}
-                                    <p class="bm-home-section-subtitle" style="margin-left:0;margin-right:0;">{{ section.subtitle }}</p>
-                                {% endif %}
-
-                                {% if section.content %}
-                                    <div class="bm-home-section-content mt-3">{{ section.content | safe }}</div>
-                                {% endif %}
-
-                                {% if section.button_text and section.button_url %}
-                                    <a href="{{ section.button_url }}" class="bm-home-text-link">
-                                        {{ section.button_text }}
-                                        <i class="bi bi-arrow-right" aria-hidden="true"></i>
-                                    </a>
-                                {% else %}
-                                    <a href="{{ url_for('product.products') }}" class="bm-home-text-link">
-                                        Browse Products
-                                        <i class="bi bi-arrow-right" aria-hidden="true"></i>
-                                    </a>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-            {# ==============================
-               CUSTOM HTML
-               ============================== #}
-            {% elif section_type == "custom_html" %}
-                <section class="bm-home-section bm-home-content-section {{ custom_class }}">
-                    {{ section.content | safe }}
-                </section>
-            {% endif %}
-        {% endfor %}
-
-    {% else %}
-        {# ======================================================
-           LEGACY FALLBACK HOMEPAGE
-           ====================================================== #}
-        {% set hero_keys = ['hero_1','hero_2','hero_3','hero_4','hero_5','hero_6','hero_7','hero_8'] %}
-        {% set active_heroes = [] %}
-        {% for key in hero_keys %}
-            {% set hero = cms.get(key) if cms else none %}
-            {% if hero and hero.is_active %}
-                {% set ignored = active_heroes.append(hero) %}
-            {% endif %}
-        {% endfor %}
-
-        {# ==============================
-           LEGACY HERO
-           ============================== #}
-        <section id="bometLegacyHero" class="bm-home-hero bm-home-section" aria-label="Bomet Machineries Ltd. featured products">
-            {% if active_heroes %}
-                <div id="bometLegacyHeroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
-
-                    {% if active_heroes|length > 1 %}
-                        <div class="carousel-indicators">
-                            {% for hero in active_heroes %}
-                                <button type="button"
-                                        data-bs-target="#bometLegacyHeroCarousel"
-                                        data-bs-slide-to="{{ loop.index0 }}"
-                                        class="{% if loop.first %}active{% endif %}"
-                                        {% if loop.first %}aria-current="true"{% endif %}
-                                        aria-label="Go to slide {{ loop.index }}"></button>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-
-                    <div class="carousel-inner">
-                        {% for hero in active_heroes %}
-                            <div class="carousel-item {% if loop.first %}active{% endif %}">
-                                <div class="bm-home-hero-slide">
-                                    {% if hero.image_url %}
-                                        <img src="{{ hero.image_url }}"
-                                             {% if loop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}
-                                             decoding="async"
-                                             class="bm-home-hero-image"
-                                             alt="{{ hero.image_alt or hero.headline or 'Bomet Machineries Ltd.' }}">
-                                    {% else %}
-                                        <div class="bm-home-hero-placeholder" aria-hidden="true"></div>
-                                    {% endif %}
-
-                                    <div class="bm-home-hero-overlay">
-                                        <div class="bm-home-container">
-                                            <div class="bm-home-hero-content">
-                                                <span class="bm-home-hero-kicker">
-                                                    <i class="bi bi-shield-check" aria-hidden="true"></i>
-                                                    Bomet Machineries Ltd.
-                                                </span>
-
-                                                {% if hero.headline %}
-                                                    <h1 class="bm-home-hero-title">{{ hero.headline }}</h1>
-                                                {% else %}
-                                                    <h1 class="bm-home-hero-title">Agricultural Machinery Built for Productivity</h1>
-                                                {% endif %}
-
-                                                {% if hero.subheadline %}
-                                                    <p class="bm-home-hero-description">{{ hero.subheadline }}</p>
-                                                {% endif %}
-
-                                                {% if hero.button_text and hero.button_url %}
-                                                    <div class="bm-home-hero-actions">
-                                                        <a href="{{ hero.button_url }}" class="bm-home-primary-btn">
-                                                            {{ hero.button_text }}
-                                                            <i class="bi bi-arrow-right" aria-hidden="true"></i>
-                                                        </a>
-                                                        <a href="{{ url_for('product.products') }}" class="bm-home-secondary-btn">
-                                                            <i class="bi bi-grid" aria-hidden="true"></i>
-                                                            Shop Products
-                                                        </a>
-                                                    </div>
-                                                {% else %}
-                                                    <div class="bm-home-hero-actions">
-                                                        <a href="{{ url_for('product.products') }}" class="bm-home-primary-btn">
-                                                            Shop Products
-                                                            <i class="bi bi-arrow-right" aria-hidden="true"></i>
-                                                        </a>
-                                                    </div>
-                                                {% endif %}
-
-                                                <div class="bm-home-hero-trust">
-                                                    <span class="bm-home-hero-trust-item">
-                                                        <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
-                                                        Quality Machinery
-                                                    </span>
-                                                    <span class="bm-home-hero-trust-item">
-                                                        <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
-                                                        Genuine Parts
-                                                    </span>
-                                                    <span class="bm-home-hero-trust-item">
-                                                        <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
-                                                        Reliable Service
-                                                    </span>
-                                                    <span class="bm-home-hero-trust-item">
-                                                        <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
-                                                        Kenya Focused
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-
-                    {% if active_heroes|length > 1 %}
-                        <button class="carousel-control-prev" type="button" data-bs-target="#bometLegacyHeroCarousel" data-bs-slide="prev" aria-label="Previous hero slide">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#bometLegacyHeroCarousel" data-bs-slide="next" aria-label="Next hero slide">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </button>
-                    {% endif %}
-                </div>
-
-            {% else %}
-                <div class="bm-home-hero-slide">
-                    <div class="bm-home-hero-placeholder" aria-hidden="true"></div>
-                    <div class="bm-home-hero-overlay">
-                        <div class="bm-home-container">
-                            <div class="bm-home-hero-content">
-                                <span class="bm-home-hero-kicker">
-                                    <i class="bi bi-shield-check" aria-hidden="true"></i>
-                                    Bomet Machineries Ltd.
+                                <span class="bm-home-eyebrow">
+                                    Genuine Parts
                                 </span>
 
-                                <h1 class="bm-home-hero-title">Agricultural Machinery Built for Productivity</h1>
+                                {% if section.title %}
+                                    <h2 class="bm-home-section-title">
+                                        {{ section.title }}
+                                    </h2>
+                                {% endif %}
 
-                                <p class="bm-home-hero-description">
-                                    Quality agricultural machinery, equipment and genuine spare parts for farmers and businesses in Kenya.
-                                </p>
-
-                                <div class="bm-home-hero-actions">
-                                    <a href="{{ url_for('product.products') }}" class="bm-home-primary-btn">
-                                        Shop Products
-                                        <i class="bi bi-arrow-right" aria-hidden="true"></i>
-                                    </a>
+                                <div class="bm-home-section-content mt-3">
+                                    {{ section.content | safe }}
                                 </div>
+
+
+                                {% if config.button_url %}
+
+                                    <a
+                                        href="{{ config.button_url }}"
+                                        class="bm-home-text-link"
+                                    >
+                                        {{ config.button_text or "Shop Spare Parts" }}
+                                        <i class="bi bi-arrow-right"></i>
+                                    </a>
+
+                                {% else %}
+
+                                    <a
+                                        href="{{ url_for('product.products') }}"
+                                        class="bm-home-text-link"
+                                    >
+                                        Shop Spare Parts
+                                        <i class="bi bi-arrow-right"></i>
+                                    </a>
+
+                                {% endif %}
+
                             </div>
+
                         </div>
+
                     </div>
-                </div>
+
+                </section>
+
+
+            {# =================================================
+               CUSTOM HTML
+               ================================================= #}
+
+            {% elif section.section_type == 'custom_html' %}
+
+                <section class="bm-home-section bm-home-section-spacing">
+
+                    <div class="bm-home-container">
+
+                        {{ section.content | safe }}
+
+                    </div>
+
+                </section>
+
             {% endif %}
-        </section>
 
-        {# ==============================
+        {% endfor %}
+
+
+    {# ========================================================
+       LEGACY HOMEPAGE FALLBACK
+       ======================================================== #}
+
+    {% else %}
+
+        {# -----------------------------------------------------
+           LEGACY HERO
+           ----------------------------------------------------- #}
+
+        {% set legacy_heroes = [] %}
+
+        {% for i in range(1, 9) %}
+
+            {% set hero_key = 'hero_' ~ i %}
+
+            {% if cms and cms.get(hero_key) and cms.get(hero_key).active %}
+                {% set legacy_heroes =
+                    legacy_heroes + [cms.get(hero_key)]
+                %}
+            {% endif %}
+
+        {% endfor %}
+
+
+        {% if legacy_heroes %}
+
+            <section class="bm-home-hero">
+
+                <div
+                    id="bmLegacyHeroCarousel"
+                    class="carousel slide carousel-fade"
+                    data-bs-ride="carousel"
+                >
+
+                    {% if legacy_heroes|length > 1 %}
+
+                        <div class="carousel-indicators">
+
+                            {% for hero in legacy_heroes %}
+
+                                <button
+                                    type="button"
+                                    data-bs-target="#bmLegacyHeroCarousel"
+                                    data-bs-slide-to="{{ loop.index0 }}"
+                                    class="{{ 'active' if loop.first else '' }}"
+                                    {% if loop.first %}
+                                        aria-current="true"
+                                    {% endif %}
+                                    aria-label="Slide {{ loop.index }}"
+                                ></button>
+
+                            {% endfor %}
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <div class="carousel-inner">
+
+                        {% for hero in legacy_heroes %}
+
+                            <div
+                                class="carousel-item {{ 'active' if loop.first else '' }}"
+                            >
+
+                                <div class="bm-home-hero-slide">
+
+                                    {% if hero.image_url %}
+
+                                        <img
+                                            src="{{ hero.image_url }}"
+                                            alt="{{ hero.title or 'Bomet Machineries Ltd.' }}"
+                                            class="bm-home-hero-image"
+                                            {% if loop.first %}
+                                                fetchpriority="high"
+                                            {% else %}
+                                                loading="lazy"
+                                            {% endif %}
+                                            decoding="async"
+                                        >
+
+                                    {% else %}
+
+                                        <div class="bm-home-hero-placeholder"></div>
+
+                                    {% endif %}
+
+
+                                    <div class="bm-home-hero-overlay">
+
+                                        <div class="bm-home-container">
+
+                                            <div class="bm-home-hero-content">
+
+                                                {% if hero.kicker %}
+                                                    <div class="bm-home-hero-kicker">
+                                                        <i class="bi bi-stars"></i>
+                                                        {{ hero.kicker }}
+                                                    </div>
+                                                {% endif %}
+
+
+                                                {% if hero.title %}
+                                                    <h1 class="bm-home-hero-title">
+                                                        {{ hero.title }}
+                                                    </h1>
+                                                {% endif %}
+
+
+                                                {% if hero.content %}
+                                                    <div class="bm-home-hero-description">
+                                                        {{ hero.content | safe }}
+                                                    </div>
+                                                {% endif %}
+
+
+                                                {% if hero.button_url %}
+
+                                                    <div class="bm-home-hero-actions">
+
+                                                        <a
+                                                            href="{{ hero.button_url }}"
+                                                            class="bm-home-primary-btn"
+                                                        >
+                                                            {{ hero.button_text or "Shop Now" }}
+                                                            <i class="bi bi-arrow-right"></i>
+                                                        </a>
+
+                                                    </div>
+
+                                                {% endif %}
+
+
+                                                <div class="bm-home-hero-trust">
+
+                                                    <div class="bm-home-hero-trust-item">
+                                                        <i class="bi bi-patch-check-fill"></i>
+                                                        <span>Genuine Products</span>
+                                                    </div>
+
+                                                    <div class="bm-home-hero-trust-item">
+                                                        <i class="bi bi-truck"></i>
+                                                        <span>Reliable Delivery</span>
+                                                    </div>
+
+                                                    <div class="bm-home-hero-trust-item">
+                                                        <i class="bi bi-headset"></i>
+                                                        <span>Expert Support</span>
+                                                    </div>
+
+                                                    <div class="bm-home-hero-trust-item">
+                                                        <i class="bi bi-shield-check"></i>
+                                                        <span>Trusted Service</span>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    {% if legacy_heroes|length > 1 %}
+
+                        <button
+                            class="carousel-control-prev"
+                            type="button"
+                            data-bs-target="#bmLegacyHeroCarousel"
+                            data-bs-slide="prev"
+                        >
+                            <span
+                                class="carousel-control-prev-icon"
+                                aria-hidden="true"
+                            ></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+
+
+                        <button
+                            class="carousel-control-next"
+                            type="button"
+                            data-bs-target="#bmLegacyHeroCarousel"
+                            data-bs-slide="next"
+                        >
+                            <span
+                                class="carousel-control-next-icon"
+                                aria-hidden="true"
+                            ></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+
+                    {% endif %}
+
+                </div>
+
+            </section>
+
+        {% endif %}
+
+
+        {# -----------------------------------------------------
            VALUE STRIP
-           ============================== #}
+           ----------------------------------------------------- #}
+
         <section class="bm-home-value-strip">
+
             <div class="bm-home-container">
+
                 <div class="bm-home-value-grid">
+
                     <div class="bm-home-value-item">
-                        <span class="bm-home-value-icon"><i class="bi bi-award" aria-hidden="true"></i></span>
-                        <span>
-                            <strong class="bm-home-value-title">Quality Machinery</strong>
-                            <small class="bm-home-value-text">Built for productive work</small>
+
+                        <span class="bm-home-value-icon">
+                            <i class="bi bi-patch-check"></i>
                         </span>
+
+                        <span>
+                            <span class="bm-home-value-title">
+                                Genuine Products
+                            </span>
+
+                            <span class="bm-home-value-text">
+                                Quality equipment
+                            </span>
+                        </span>
+
                     </div>
+
+
                     <div class="bm-home-value-item">
-                        <span class="bm-home-value-icon"><i class="bi bi-tools" aria-hidden="true"></i></span>
-                        <span>
-                            <strong class="bm-home-value-title">Genuine Spare Parts</strong>
-                            <small class="bm-home-value-text">Keep equipment running</small>
+
+                        <span class="bm-home-value-icon">
+                            <i class="bi bi-truck"></i>
                         </span>
+
+                        <span>
+                            <span class="bm-home-value-title">
+                                Reliable Delivery
+                            </span>
+
+                            <span class="bm-home-value-text">
+                                Across Kenya
+                            </span>
+                        </span>
+
                     </div>
+
+
                     <div class="bm-home-value-item">
-                        <span class="bm-home-value-icon"><i class="bi bi-headset" aria-hidden="true"></i></span>
-                        <span>
-                            <strong class="bm-home-value-title">Practical Support</strong>
-                            <small class="bm-home-value-text">Customer-focused service</small>
+
+                        <span class="bm-home-value-icon">
+                            <i class="bi bi-headset"></i>
                         </span>
+
+                        <span>
+                            <span class="bm-home-value-title">
+                                Expert Support
+                            </span>
+
+                            <span class="bm-home-value-text">
+                                Helpful guidance
+                            </span>
+                        </span>
+
                     </div>
+
+
                     <div class="bm-home-value-item">
-                        <span class="bm-home-value-icon"><i class="bi bi-truck" aria-hidden="true"></i></span>
-                        <span>
-                            <strong class="bm-home-value-title">Kenya Focused</strong>
-                            <small class="bm-home-value-text">Agricultural solutions</small>
+
+                        <span class="bm-home-value-icon">
+                            <i class="bi bi-shield-check"></i>
                         </span>
+
+                        <span>
+                            <span class="bm-home-value-title">
+                                Trusted Service
+                            </span>
+
+                            <span class="bm-home-value-text">
+                                Customer focused
+                            </span>
+                        </span>
+
                     </div>
+
                 </div>
+
             </div>
+
         </section>
 
-        {# ==============================
-           COMPANY INTRODUCTION
-           ============================== #}
-        <section class="bm-home-section bm-home-section-spacing" style="background:var(--bm-home-bg);">
-            <div class="bm-home-container">
-                <div class="bm-home-image-text">
-                    <div>
-                        <div class="bm-home-image-placeholder">
-                            <i class="bi bi-gear-wide-connected" aria-hidden="true"></i>
-                        </div>
-                    </div>
 
-                    <div>
-                        <span class="bm-home-eyebrow">Bomet Machineries Ltd.</span>
+        {# -----------------------------------------------------
+           LEGACY COMPANY INTRO
+           ----------------------------------------------------- #}
 
-                        <h2 class="bm-home-section-title">Agricultural Machinery You Can Rely On</h2>
+        {% if cms and cms.get('company_intro') %}
 
-                        <p class="bm-home-section-subtitle" style="margin-left:0;margin-right:0;">
-                            Professional agricultural machinery, equipment and genuine spare parts for farmers, businesses and agricultural processors in Kenya.
-                        </p>
+            {% set intro = cms.get('company_intro') %}
 
-                        <div class="bm-home-section-content mt-3">
-                            <p>
-                                We focus on practical agricultural solutions designed to improve productivity, reduce equipment downtime and support dependable day-to-day operations.
+            <section class="bm-home-section bm-home-intro bm-home-section-spacing">
+
+                <div class="bm-home-container">
+
+                    <div class="bm-home-section-heading bm-home-intro-heading">
+
+                        <span class="bm-home-eyebrow">
+                            About Bomet Machineries
+                        </span>
+
+                        <h2 class="bm-home-section-title">
+                            {{ intro.title or "Your Trusted Agricultural Machinery Partner" }}
+                        </h2>
+
+                        {% if intro.subtitle %}
+                            <p class="bm-home-section-subtitle">
+                                {{ intro.subtitle }}
                             </p>
+                        {% endif %}
+
+                    </div>
+
+
+                    {% if intro.image_url %}
+
+                        <div class="bm-home-intro-layout">
+
+                            <div class="bm-home-intro-media">
+
+                                <div class="bm-home-intro-image-wrap">
+
+                                    <img
+                                        src="{{ intro.image_url }}"
+                                        alt="{{ intro.title or 'Bomet Machineries Ltd.' }}"
+                                        class="bm-home-intro-image"
+                                        loading="lazy"
+                                        decoding="async"
+                                    >
+
+                                    <div class="bm-home-intro-badge">
+                                        <i class="bi bi-patch-check-fill"></i>
+                                        Trusted Agricultural Solutions
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="bm-home-intro-copy">
+
+                                <div class="bm-home-intro-content">
+                                    {{ intro.content | safe }}
+                                </div>
+
+
+                                <div class="bm-home-intro-highlights">
+
+                                    <div class="bm-home-intro-highlight">
+
+                                        <span class="bm-home-intro-highlight-icon">
+                                            <i class="bi bi-gear-wide-connected"></i>
+                                        </span>
+
+                                        <span class="bm-home-intro-highlight-text">
+                                            Quality Machinery
+                                        </span>
+
+                                    </div>
+
+
+                                    <div class="bm-home-intro-highlight">
+
+                                        <span class="bm-home-intro-highlight-icon">
+                                            <i class="bi bi-tools"></i>
+                                        </span>
+
+                                        <span class="bm-home-intro-highlight-text">
+                                            Genuine Spare Parts
+                                        </span>
+
+                                    </div>
+
+
+                                    <div class="bm-home-intro-highlight">
+
+                                        <span class="bm-home-intro-highlight-icon">
+                                            <i class="bi bi-headset"></i>
+                                        </span>
+
+                                        <span class="bm-home-intro-highlight-text">
+                                            Expert Support
+                                        </span>
+
+                                    </div>
+
+
+                                    <div class="bm-home-intro-highlight">
+
+                                        <span class="bm-home-intro-highlight-icon">
+                                            <i class="bi bi-truck"></i>
+                                        </span>
+
+                                        <span class="bm-home-intro-highlight-text">
+                                            Reliable Delivery
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+
+                                {% if intro.button_url %}
+
+                                    <div class="bm-home-intro-action">
+
+                                        <a
+                                            href="{{ intro.button_url }}"
+                                            class="bm-home-primary-btn"
+                                        >
+                                            {{ intro.button_text or "Learn More" }}
+                                            <i class="bi bi-arrow-right"></i>
+                                        </a>
+
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
                         </div>
 
-                        <a href="{{ url_for('product.products') }}" class="bm-home-text-link">
-                            Explore Products
-                            <i class="bi bi-arrow-right" aria-hidden="true"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
+                    {% else %}
 
-        {# ==============================
-           TRUST
-           ============================== #}
-        <section class="bm-home-section bm-home-section-spacing" style="background:var(--bm-home-bg);">
-            <div class="bm-home-container">
-                <div class="bm-home-section-heading">
-                    <span class="bm-home-eyebrow">Why Bomet Machineries</span>
-                    <h2 class="bm-home-section-title">Built Around Your Agricultural Needs</h2>
-                    <p class="bm-home-section-subtitle">
-                        Professional products and practical support for agricultural work in Kenya.
-                    </p>
+                        <div class="bm-home-intro-layout-no-image">
+
+                            <div class="bm-home-intro-copy bm-home-intro-copy-full">
+
+                                <div class="bm-home-intro-content">
+                                    {{ intro.content | safe }}
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    {% endif %}
+
                 </div>
+
+            </section>
+
+        {% endif %}
+
+
+        {# -----------------------------------------------------
+           LEGACY TRUST
+           ----------------------------------------------------- #}
+
+        <section class="bm-home-section bm-home-section-spacing">
+
+            <div class="bm-home-container">
+
+                <div class="bm-home-section-heading">
+
+                    <span class="bm-home-eyebrow">
+                        Why Choose Us
+                    </span>
+
+                    <h2 class="bm-home-section-title">
+                        Quality, Reliability & Support
+                    </h2>
+
+                </div>
+
 
                 <div class="bm-home-feature-grid">
+
                     <div class="bm-home-feature-card">
-                        <div class="bm-home-feature-icon"><i class="bi bi-award" aria-hidden="true"></i></div>
-                        <h3 class="bm-home-feature-title">Quality Equipment</h3>
+
+                        <div class="bm-home-feature-icon">
+                            <i class="bi bi-patch-check"></i>
+                        </div>
+
+                        <h3 class="bm-home-feature-title">
+                            Genuine Products
+                        </h3>
+
                         <p class="bm-home-feature-text">
-                            Agricultural machinery and equipment selected with productivity and reliability in mind.
+                            Quality agricultural machinery, equipment and genuine spare parts.
                         </p>
+
                     </div>
+
+
                     <div class="bm-home-feature-card">
-                        <div class="bm-home-feature-icon"><i class="bi bi-tools" aria-hidden="true"></i></div>
-                        <h3 class="bm-home-feature-title">Genuine Spare Parts</h3>
+
+                        <div class="bm-home-feature-icon">
+                            <i class="bi bi-people"></i>
+                        </div>
+
+                        <h3 class="bm-home-feature-title">
+                            Expert Support
+                        </h3>
+
                         <p class="bm-home-feature-text">
-                            Replacement parts to help keep your machinery operating efficiently.
+                            Practical guidance to help you choose the right agricultural solution.
                         </p>
+
                     </div>
+
+
                     <div class="bm-home-feature-card">
-                        <div class="bm-home-feature-icon"><i class="bi bi-headset" aria-hidden="true"></i></div>
-                        <h3 class="bm-home-feature-title">Expert Support</h3>
+
+                        <div class="bm-home-feature-icon">
+                            <i class="bi bi-truck"></i>
+                        </div>
+
+                        <h3 class="bm-home-feature-title">
+                            Reliable Delivery
+                        </h3>
+
                         <p class="bm-home-feature-text">
-                            Practical assistance for farmers, businesses and agricultural processors.
+                            Convenient delivery options for customers across Kenya.
                         </p>
+
                     </div>
+
+
                     <div class="bm-home-feature-card">
-                        <div class="bm-home-feature-icon"><i class="bi bi-truck" aria-hidden="true"></i></div>
-                        <h3 class="bm-home-feature-title">Reliable Service</h3>
+
+                        <div class="bm-home-feature-icon">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+
+                        <h3 class="bm-home-feature-title">
+                            Trusted Service
+                        </h3>
+
                         <p class="bm-home-feature-text">
-                            A customer-focused approach to agricultural machinery and equipment solutions.
+                            Professional service focused on reliability and customer satisfaction.
                         </p>
+
                     </div>
+
                 </div>
+
             </div>
+
         </section>
 
-        {# ==============================
-           FINAL CTA
-           ============================== #}
-        <section class="bm-home-cta">
-            <div class="bm-home-container bm-home-cta-inner">
-                <span class="bm-home-eyebrow" style="color:#b9e3c9;">Ready to Get Started?</span>
 
-                <h2 class="bm-home-cta-title">Equip Your Farm for Better Productivity</h2>
+        {# -----------------------------------------------------
+           FINAL CTA
+           ----------------------------------------------------- #}
+
+        <section class="bm-home-cta">
+
+            <div class="bm-home-container bm-home-cta-inner">
+
+                <h2 class="bm-home-cta-title">
+                    Ready to Find the Right Equipment?
+                </h2>
 
                 <p class="bm-home-cta-text">
-                    Browse agricultural machinery, equipment and genuine spare parts from Bomet Machineries Ltd.
+                    Explore agricultural machinery, farm tools, generators,
+                    water pumps, refrigeration equipment and genuine spare parts.
                 </p>
 
+
                 <div class="bm-home-cta-actions">
-                    <a href="{{ url_for('product.products') }}" class="bm-home-primary-btn">
+
+                    <a
+                        href="{{ url_for('product.products') }}"
+                        class="bm-home-primary-btn"
+                    >
                         Shop Products
-                        <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                        <i class="bi bi-arrow-right"></i>
                     </a>
 
-                    {% if categories %}
-                        <a href="{{ url_for('product.category_products', slug=categories[0].slug) }}" class="bm-home-secondary-btn">
-                            Browse Categories
-                            <i class="bi bi-grid" aria-hidden="true"></i>
-                        </a>
-                    {% endif %}
                 </div>
+
             </div>
+
         </section>
+
     {% endif %}
 
 </div>
+
 {% endblock %}

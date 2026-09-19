@@ -1268,3 +1268,190 @@ def order_details(order_id):
         "order_details.html",
         order=order,
     )
+
+
+# ============================================================
+# CANCEL ORDER
+# ============================================================
+
+@cart_bp.route(
+    "/orders/<int:order_id>/cancel",
+    methods=["POST"]
+)
+@login_required
+def cancel_order(order_id):
+
+    order = Order.query.get_or_404(order_id)
+
+    # --------------------------------------------------------
+    # SECURITY
+    # --------------------------------------------------------
+
+    if order.user_id != current_user.id:
+
+        flash(
+            "You are not authorized to modify this order.",
+            "danger",
+        )
+
+        return redirect(
+            url_for("cart.my_orders")
+        )
+
+    # --------------------------------------------------------
+    # ONLY PENDING / PROCESSING ORDERS CAN BE CANCELLED
+    # --------------------------------------------------------
+
+    cancellable_statuses = [
+        "pending",
+        "processing",
+        "Pending",
+        "Processing",
+    ]
+
+    if order.status not in cancellable_statuses:
+
+        flash(
+            f"Order {order.order_code} can no longer be cancelled.",
+            "warning",
+        )
+
+        return redirect(
+            url_for(
+                "cart.order_details",
+                order_id=order.id,
+            )
+        )
+
+    # --------------------------------------------------------
+    # RESTOCK ITEMS
+    # --------------------------------------------------------
+
+    for item in order.items:
+
+        if item.product:
+
+            item.product.stock += item.quantity
+
+    # --------------------------------------------------------
+    # UPDATE STATUS
+    # --------------------------------------------------------
+
+    order.status = "Cancelled"
+
+    try:
+
+        db.session.commit()
+
+    except Exception:
+
+        db.session.rollback()
+
+        flash(
+            "Unable to cancel the order. Please try again.",
+            "danger",
+        )
+
+        return redirect(
+            url_for(
+                "cart.order_details",
+                order_id=order.id,
+            )
+        )
+
+    flash(
+        f"Order {order.order_code} has been cancelled.",
+        "success",
+    )
+
+    return redirect(
+        url_for(
+            "cart.order_details",
+            order_id=order.id,
+        )
+    )
+
+
+# ============================================================
+# DELETE ORDER
+# ============================================================
+
+@cart_bp.route(
+    "/orders/<int:order_id>/delete",
+    methods=["POST"]
+)
+@login_required
+def delete_order(order_id):
+
+    order = Order.query.get_or_404(order_id)
+
+    # --------------------------------------------------------
+    # SECURITY
+    # --------------------------------------------------------
+
+    if order.user_id != current_user.id:
+
+        flash(
+            "You are not authorized to modify this order.",
+            "danger",
+        )
+
+        return redirect(
+            url_for("cart.my_orders")
+        )
+
+    # --------------------------------------------------------
+    # ONLY CANCELLED ORDERS CAN BE DELETED
+    # --------------------------------------------------------
+
+    if order.status not in ["Cancelled", "cancelled"]:
+
+        flash(
+            "Only cancelled orders can be deleted. "
+            "Cancel the order first.",
+            "warning",
+        )
+
+        return redirect(
+            url_for(
+                "cart.order_details",
+                order_id=order.id,
+            )
+        )
+
+    order_code = order.order_code
+
+    # --------------------------------------------------------
+    # DELETE ORDER (cascade removes OrderItems)
+    # --------------------------------------------------------
+
+    db.session.delete(order)
+
+    try:
+
+        db.session.commit()
+
+    except Exception:
+
+        db.session.rollback()
+
+        flash(
+            "Unable to delete the order. Please try again.",
+            "danger",
+        )
+
+        return redirect(
+            url_for(
+                "cart.order_details",
+                order_id=order.id,
+            )
+        )
+
+    flash(
+        f"Order {order_code} has been deleted.",
+        "success",
+    )
+
+    return redirect(
+        url_for("cart.my_orders")
+    )
