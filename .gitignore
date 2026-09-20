@@ -29,3 +29,5 @@ Thumbs.db
 # Local migration / temporary files
 migrate_sqlite_to_neon.py
 *.backup
+.vercel
+.env*
