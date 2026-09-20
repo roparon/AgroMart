@@ -8,9 +8,9 @@
 
 <style>
 /* ============================================================
-   BOMET MACHINERIES LTD.
-   PREMIUM ECOMMERCE HOMEPAGE
-   Mobile-first / CMS-compatible / Lightweight
+   BOMET MACHINERIES LTD. — RESPONSIVE HOMEPAGE
+   Mobile-first / Lightweight / CMS-compatible
+   Existing Flask + Jinja functionality preserved
    ============================================================ */
 
 :root {
@@ -27,23 +27,25 @@
     --bm-home-muted: #68756e;
 
     --bm-home-bg: #f6f8f7;
-    --bm-home-white: #ffffff;
+    --bm-home-white: #fff;
     --bm-home-border: #e3e9e5;
 
     --bm-home-danger: #dc3545;
     --bm-home-danger-soft: #fff1f2;
 
-    --bm-home-shadow: 0 8px 28px rgba(16, 35, 25, .07);
-    --bm-home-shadow-lg: 0 18px 48px rgba(16, 35, 25, .12);
+    --bm-home-shadow: 0 5px 20px rgba(16, 35, 25, .06);
+    --bm-home-shadow-lg: 0 12px 34px rgba(16, 35, 25, .09);
 
     --bm-home-radius: 18px;
     --bm-home-radius-sm: 12px;
 
     --bm-home-container: 1380px;
+    --bm-home-touch: 44px;
 }
 
+
 /* ============================================================
-   GLOBAL HOMEPAGE
+   BASE
    ============================================================ */
 
 .bm-home {
@@ -52,6 +54,7 @@
     overflow-x: clip;
     background: var(--bm-home-white);
     color: var(--bm-home-dark);
+    -webkit-text-size-adjust: 100%;
 }
 
 .bm-home *,
@@ -61,6 +64,7 @@
 }
 
 .bm-home img {
+    display: block;
     max-width: 100%;
 }
 
@@ -68,15 +72,21 @@
     -webkit-tap-highlight-color: transparent;
 }
 
+.bm-home button,
+.bm-home a {
+    touch-action: manipulation;
+}
+
 .bm-home-container {
     width: 100%;
     max-width: var(--bm-home-container);
     margin-inline: auto;
-    padding-inline: 1rem;
+    padding-inline: clamp(.85rem, 3vw, 1.5rem);
 }
 
 .bm-home-section {
     position: relative;
+    min-width: 0;
 }
 
 .bm-home-content-section {
@@ -85,53 +95,64 @@
 }
 
 .bm-home-section-spacing {
-    padding-block: 3.25rem;
+    padding-block: clamp(2.5rem, 6vw, 5rem);
 }
 
+
+/* ============================================================
+   SECTION HEADINGS
+   ============================================================ */
+
 .bm-home-section-heading {
-    max-width: 760px;
+    width: 100%;
+    max-width: 780px;
     margin-inline: auto;
-    margin-bottom: 2rem;
+    margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
     text-align: center;
 }
 
 .bm-home-eyebrow {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: .4rem;
-    margin-bottom: .65rem;
+    margin-bottom: .6rem;
     color: var(--bm-home-green);
-    font-size: .68rem;
+    font-size: clamp(.62rem, 1.5vw, .72rem);
     font-weight: 800;
-    letter-spacing: .13em;
+    letter-spacing: .12em;
     line-height: 1.3;
     text-transform: uppercase;
 }
 
 .bm-home-eyebrow::before {
     content: "";
-    width: 22px;
+    width: 20px;
     height: 2px;
+    flex: 0 0 20px;
     border-radius: 99px;
     background: var(--bm-home-gold);
 }
 
 .bm-home-section-title {
+    max-width: 900px;
     margin: 0;
     color: var(--bm-home-dark);
-    font-size: clamp(1.45rem, 5vw, 2.35rem);
+    font-size: clamp(1.45rem, 5vw, 2.5rem);
     font-weight: 800;
-    line-height: 1.15;
+    line-height: 1.12;
     letter-spacing: -.035em;
+    overflow-wrap: anywhere;
 }
 
 .bm-home-section-subtitle {
-    max-width: 680px;
-    margin: .75rem auto 0;
+    max-width: 700px;
+    margin: .7rem auto 0;
     color: var(--bm-home-muted);
-    font-size: .82rem;
-    line-height: 1.7;
+    font-size: clamp(.76rem, 1.8vw, .92rem);
+    line-height: 1.65;
 }
+
 
 /* ============================================================
    ANNOUNCEMENT
@@ -140,8 +161,8 @@
 .bm-home-announcement {
     background: var(--bm-home-green-deep);
     color: #fff;
-    font-size: .72rem;
-    line-height: 1.5;
+    font-size: clamp(.65rem, 1.6vw, .74rem);
+    line-height: 1.45;
 }
 
 .bm-home-announcement-inner {
@@ -151,6 +172,12 @@
     justify-content: center;
     padding-block: .45rem;
     text-align: center;
+}
+
+.bm-home-announcement span,
+.bm-home-announcement a {
+    max-width: 100%;
+    overflow-wrap: anywhere;
 }
 
 .bm-home-announcement a {
@@ -164,6 +191,7 @@
     text-decoration: underline;
 }
 
+
 /* ============================================================
    PREVIEW NOTICE
    ============================================================ */
@@ -171,7 +199,7 @@
 .bm-home-preview {
     background: var(--bm-home-gold);
     color: #211b0b;
-    font-size: .72rem;
+    font-size: clamp(.65rem, 1.6vw, .74rem);
     font-weight: 800;
 }
 
@@ -185,6 +213,7 @@
     text-align: center;
 }
 
+
 /* ============================================================
    HERO
    ============================================================ */
@@ -197,11 +226,13 @@
 
 .bm-home-hero .carousel-inner,
 .bm-home-hero .carousel-item {
-    height: 430px;
+    height: clamp(390px, 78svh, 570px);
+    min-height: 390px;
 }
 
 .bm-home-hero-slide {
     position: relative;
+    width: 100%;
     height: 100%;
     overflow: hidden;
 }
@@ -213,7 +244,6 @@
 }
 
 .bm-home-hero-image {
-    display: block;
     object-fit: cover;
     object-position: center;
 }
@@ -222,7 +252,7 @@
     background:
         radial-gradient(
             circle at 80% 25%,
-            rgba(25, 135, 84, .38),
+            rgba(25, 135, 84, .3),
             transparent 38%
         ),
         linear-gradient(
@@ -240,136 +270,151 @@
     background:
         linear-gradient(
             90deg,
-            rgba(7, 18, 12, .86) 0%,
-            rgba(7, 18, 12, .67) 42%,
-            rgba(7, 18, 12, .18) 100%
+            rgba(7, 18, 12, .88) 0%,
+            rgba(7, 18, 12, .7) 45%,
+            rgba(7, 18, 12, .25) 100%
         );
 }
 
 .bm-home-hero-content {
     width: 100%;
     max-width: 760px;
-    padding-block: 2rem;
+    padding-block: 1.25rem 2.5rem;
 }
 
 .bm-home-hero-kicker {
     display: inline-flex;
     align-items: center;
-    gap: .45rem;
-    margin-bottom: .85rem;
-    padding: .42rem .7rem;
+    gap: .4rem;
+    max-width: 100%;
+    margin-bottom: .7rem;
+    padding: .4rem .65rem;
     border: 1px solid rgba(255,255,255,.22);
     border-radius: 999px;
     background: rgba(255,255,255,.08);
     color: #fff;
-    font-size: .61rem;
+    font-size: clamp(.55rem, 1.5vw, .66rem);
     font-weight: 800;
-    letter-spacing: .12em;
+    letter-spacing: .1em;
+    line-height: 1.3;
     text-transform: uppercase;
-    backdrop-filter: blur(8px);
+}
+
+.bm-home-hero-kicker i {
+    flex: 0 0 auto;
 }
 
 .bm-home-hero-title {
     max-width: 760px;
-    margin: 0 0 1rem;
+    margin: 0 0 .8rem;
     color: #fff;
-    font-size: clamp(1.85rem, 7vw, 4rem);
+    font-size: clamp(1.75rem, 8vw, 4.25rem);
     font-weight: 800;
-    line-height: 1.04;
+    line-height: 1.02;
     letter-spacing: -.045em;
+    overflow-wrap: anywhere;
 }
 
 .bm-home-hero-description {
     max-width: 680px;
-    margin: 0 0 1.35rem;
-    color: rgba(255,255,255,.84);
-    font-size: .84rem;
-    line-height: 1.7;
+    margin: 0 0 1.15rem;
+    color: rgba(255,255,255,.86);
+    font-size: clamp(.75rem, 2vw, 1rem);
+    line-height: 1.65;
+}
+
+.bm-home-hero-description p {
+    margin-bottom: .5rem;
+}
+
+.bm-home-hero-description p:last-child {
+    margin-bottom: 0;
 }
 
 .bm-home-hero-actions {
     display: flex;
     flex-wrap: wrap;
-    gap: .55rem;
+    gap: .5rem;
 }
 
 .bm-home-primary-btn,
 .bm-home-secondary-btn {
-    min-height: 45px;
+    min-height: var(--bm-home-touch);
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: .4rem;
-    padding: .7rem 1rem;
+    max-width: 100%;
+    padding: .65rem .9rem;
     border-radius: 10px;
-    font-size: .68rem;
+    font-size: clamp(.62rem, 1.6vw, .72rem);
     font-weight: 800;
+    line-height: 1.2;
+    text-align: center;
     text-decoration: none;
     transition:
-        transform .18s ease,
-        background-color .18s ease,
-        border-color .18s ease,
-        color .18s ease,
-        box-shadow .18s ease;
+        background-color .15s ease,
+        border-color .15s ease,
+        color .15s ease;
 }
 
 .bm-home-primary-btn {
     border: 1px solid var(--bm-home-green);
     background: var(--bm-home-green);
     color: #fff;
-    box-shadow: 0 8px 22px rgba(25,135,84,.22);
+    box-shadow: 0 5px 16px rgba(25,135,84,.16);
 }
 
 .bm-home-primary-btn:hover {
     background: var(--bm-home-green-dark);
     border-color: var(--bm-home-green-dark);
     color: #fff;
-    transform: translateY(-1px);
 }
 
 .bm-home-secondary-btn {
     border: 1px solid rgba(255,255,255,.38);
     background: rgba(255,255,255,.08);
     color: #fff;
-    backdrop-filter: blur(8px);
 }
 
 .bm-home-secondary-btn:hover {
     border-color: rgba(255,255,255,.65);
-    background: rgba(255,255,255,.16);
+    background: rgba(255,255,255,.15);
     color: #fff;
-    transform: translateY(-1px);
 }
 
 .bm-home-hero-trust {
     display: grid;
     grid-template-columns: repeat(2, minmax(0,1fr));
-    gap: .45rem;
+    gap: .5rem;
     max-width: 600px;
-    margin-top: 1.4rem;
+    margin-top: 1.1rem;
 }
 
 .bm-home-hero-trust-item {
+    min-width: 0;
     display: flex;
     align-items: center;
-    gap: .45rem;
-    color: rgba(255,255,255,.78);
-    font-size: .58rem;
+    gap: .4rem;
+    color: rgba(255,255,255,.8);
+    font-size: clamp(.52rem, 1.5vw, .62rem);
     font-weight: 700;
+    line-height: 1.35;
 }
 
 .bm-home-hero-trust-item i {
+    flex: 0 0 auto;
     color: #f3c969;
-    font-size: .8rem;
+    font-size: .78rem;
 }
 
 .bm-home-hero .carousel-indicators {
     z-index: 5;
-    margin-bottom: .8rem;
+    margin-bottom: .65rem;
 }
 
 .bm-home-hero .carousel-indicators button {
-    width: 24px;
+    width: 22px;
     height: 3px;
     margin-inline: 3px;
     border: 0;
@@ -379,23 +424,19 @@
 .bm-home-hero .carousel-control-prev,
 .bm-home-hero .carousel-control-next {
     z-index: 5;
-    width: 44px;
+    width: 42px;
 }
 
 .bm-home-hero .carousel-control-prev-icon,
 .bm-home-hero .carousel-control-next-icon {
-    width: 1.35rem;
-    height: 1.35rem;
+    width: 1.25rem;
+    height: 1.25rem;
 }
 
 @media (min-width: 576px) {
-    .bm-home-hero .carousel-inner,
-    .bm-home-hero .carousel-item {
-        height: 500px;
-    }
 
-    .bm-home-hero-description {
-        font-size: .92rem;
+    .bm-home-hero-content {
+        padding-block: 2rem 3rem;
     }
 
     .bm-home-hero-trust {
@@ -404,31 +445,29 @@
 }
 
 @media (min-width: 768px) {
+
     .bm-home-hero .carousel-inner,
     .bm-home-hero .carousel-item {
         height: 570px;
     }
 
-    .bm-home-hero-description {
-        font-size: 1rem;
-    }
-
     .bm-home-primary-btn,
     .bm-home-secondary-btn {
         min-height: 48px;
-        padding-inline: 1.25rem;
+        padding-inline: 1.15rem;
     }
 }
 
+
 /* ============================================================
-   QUICK VALUE STRIP
+   VALUE STRIP
    ============================================================ */
 
 .bm-home-value-strip {
     position: relative;
     z-index: 3;
-    margin-top: -1.1rem;
-    padding-bottom: .5rem;
+    margin-top: -1rem;
+    padding-bottom: .4rem;
 }
 
 .bm-home-value-grid {
@@ -445,8 +484,8 @@
     min-width: 0;
     display: flex;
     align-items: center;
-    gap: .6rem;
-    padding: .85rem .75rem;
+    gap: .55rem;
+    padding: .75rem .65rem;
     border-bottom: 1px solid var(--bm-home-border);
 }
 
@@ -465,36 +504,43 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 10px;
+    border-radius: 9px;
     background: var(--bm-home-green-soft);
     color: var(--bm-home-green);
-    font-size: .82rem;
+    font-size: .8rem;
+}
+
+.bm-home-value-item > span:last-child {
+    min-width: 0;
 }
 
 .bm-home-value-title {
     display: block;
     color: var(--bm-home-dark);
-    font-size: .61rem;
+    font-size: clamp(.56rem, 1.5vw, .65rem);
     font-weight: 800;
+    line-height: 1.3;
 }
 
 .bm-home-value-text {
     display: block;
-    margin-top: .12rem;
+    margin-top: .1rem;
     color: var(--bm-home-muted);
-    font-size: .53rem;
+    font-size: clamp(.48rem, 1.3vw, .56rem);
+    line-height: 1.3;
 }
 
 @media (min-width: 768px) {
+
     .bm-home-value-grid {
         grid-template-columns: repeat(4, minmax(0,1fr));
     }
 
     .bm-home-value-item,
     .bm-home-value-item:nth-child(n+3) {
+        padding: 1rem;
         border-right: 1px solid var(--bm-home-border);
         border-bottom: 0;
-        padding: 1rem;
     }
 
     .bm-home-value-item:last-child {
@@ -502,8 +548,9 @@
     }
 }
 
+
 /* ============================================================
-   PROFESSIONAL INTRO SECTION
+   INTRO
    ============================================================ */
 
 .bm-home-intro {
@@ -515,8 +562,8 @@
 .bm-home-intro::before {
     content: "";
     position: absolute;
-    top: 0;
-    right: 0;
+    top: -80px;
+    right: -80px;
     width: 220px;
     height: 220px;
     pointer-events: none;
@@ -531,26 +578,18 @@
     position: relative;
     z-index: 1;
     max-width: 900px;
-    margin-bottom: 2.25rem;
-}
-
-.bm-home-intro-heading .bm-home-section-title {
-    margin-bottom: .65rem;
 }
 
 .bm-home-intro-heading .bm-home-section-subtitle {
     max-width: 760px;
-    margin-top: .7rem;
 }
-
-/* Main layout */
 
 .bm-home-intro-layout {
     position: relative;
     z-index: 1;
     display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
-    gap: 2rem;
+    grid-template-columns: 1fr;
+    gap: clamp(1.25rem, 4vw, 3rem);
     align-items: center;
 }
 
@@ -559,8 +598,6 @@
     max-width: 850px;
     margin-inline: auto;
 }
-
-/* Image */
 
 .bm-home-intro-media {
     min-width: 0;
@@ -571,7 +608,7 @@
     overflow: hidden;
     width: 100%;
     border: 1px solid var(--bm-home-border);
-    border-radius: 20px;
+    border-radius: clamp(14px, 2vw, 22px);
     background: #f3f6f4;
     box-shadow: var(--bm-home-shadow-lg);
 }
@@ -579,14 +616,14 @@
 .bm-home-intro-image-wrap::before {
     content: "";
     position: absolute;
-    top: 14px;
-    left: 14px;
+    top: 12px;
+    left: 12px;
     z-index: 2;
-    width: 52px;
-    height: 52px;
+    width: 42px;
+    height: 42px;
     border-top: 3px solid var(--bm-home-gold);
     border-left: 3px solid var(--bm-home-gold);
-    border-radius: 8px 0 0 0;
+    border-radius: 7px 0 0 0;
     pointer-events: none;
 }
 
@@ -596,55 +633,44 @@
     inset: 0;
     z-index: 1;
     pointer-events: none;
-    background:
-        linear-gradient(
-            180deg,
-            rgba(0,0,0,0) 60%,
-            rgba(7,25,15,.13)
-        );
+    background: linear-gradient(
+        180deg,
+        transparent 60%,
+        rgba(7,25,15,.14)
+    );
 }
 
 .bm-home-intro-image {
     position: relative;
     z-index: 0;
-    display: block;
     width: 100%;
     aspect-ratio: 4 / 3;
     object-fit: cover;
     object-position: center;
-    transition: transform .35s ease;
 }
-
-.bm-home-intro-image-wrap:hover .bm-home-intro-image {
-    transform: scale(1.015);
-}
-
-/* Image badge */
 
 .bm-home-intro-badge {
     position: absolute;
-    right: .85rem;
-    bottom: .85rem;
+    right: .7rem;
+    bottom: .7rem;
     z-index: 3;
     display: inline-flex;
     align-items: center;
-    gap: .4rem;
-    padding: .5rem .7rem;
-    border: 1px solid rgba(255,255,255,.3);
-    border-radius: 9px;
-    background: rgba(15,81,50,.92);
+    gap: .35rem;
+    max-width: calc(100% - 1.4rem);
+    padding: .45rem .6rem;
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 8px;
+    background: rgba(15,81,50,.94);
     color: #fff;
-    font-size: .56rem;
+    font-size: clamp(.5rem, 1.5vw, .58rem);
     font-weight: 800;
-    box-shadow: 0 8px 20px rgba(0,0,0,.14);
-    backdrop-filter: blur(8px);
+    line-height: 1.25;
 }
 
 .bm-home-intro-badge i {
     color: #f3c969;
 }
-
-/* Image placeholder */
 
 .bm-home-intro-placeholder {
     width: 100%;
@@ -663,12 +689,9 @@
     font-size: 3rem;
 }
 
-/* Copy */
-
 .bm-home-intro-copy {
     min-width: 0;
     max-width: 620px;
-    padding: .25rem 0;
 }
 
 .bm-home-intro-copy-full {
@@ -678,13 +701,13 @@
 
 .bm-home-intro-content {
     color: var(--bm-home-muted);
-    font-size: .92rem;
-    line-height: 1.85;
+    font-size: clamp(.82rem, 2vw, .96rem);
+    line-height: 1.78;
     overflow-wrap: anywhere;
 }
 
 .bm-home-intro-content p {
-    margin-bottom: 1rem;
+    margin-bottom: .85rem;
 }
 
 .bm-home-intro-content p:last-child {
@@ -707,125 +730,65 @@
 
 .bm-home-intro-content ul,
 .bm-home-intro-content ol {
-    margin-bottom: 1rem;
-    padding-left: 1.2rem;
+    margin-bottom: .9rem;
+    padding-left: 1.15rem;
 }
 
 .bm-home-intro-content li + li {
-    margin-top: .35rem;
+    margin-top: .3rem;
 }
-
-/* Intro highlights */
 
 .bm-home-intro-highlights {
     display: grid;
     grid-template-columns: repeat(2, minmax(0,1fr));
-    gap: .55rem;
-    margin-top: 1.15rem;
+    gap: .5rem;
+    margin-top: 1rem;
 }
 
 .bm-home-intro-highlight {
     min-width: 0;
     display: flex;
     align-items: center;
-    gap: .5rem;
-    padding: .65rem;
+    gap: .45rem;
+    padding: .6rem;
     border: 1px solid var(--bm-home-border);
     border-radius: 10px;
     background: #fff;
 }
 
 .bm-home-intro-highlight-icon {
-    width: 31px;
-    height: 31px;
-    flex: 0 0 31px;
+    width: 30px;
+    height: 30px;
+    flex: 0 0 30px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 9px;
+    border-radius: 8px;
     background: var(--bm-home-green-soft);
     color: var(--bm-home-green);
-    font-size: .72rem;
+    font-size: .7rem;
 }
 
 .bm-home-intro-highlight-text {
     min-width: 0;
     color: var(--bm-home-dark);
-    font-size: .58rem;
+    font-size: clamp(.52rem, 1.4vw, .6rem);
     font-weight: 800;
-    line-height: 1.35;
+    line-height: 1.3;
 }
 
-/* Intro button */
-
 .bm-home-intro-action {
-    margin-top: 1.35rem;
+    margin-top: 1rem;
 }
 
 .bm-home-intro-action .bm-home-primary-btn {
     min-height: 44px;
 }
 
-/* Mobile */
-
-@media (max-width: 767.98px) {
-
-    .bm-home-intro {
-        padding-block: 2.75rem;
-    }
-
-    .bm-home-intro-heading {
-        margin-bottom: 1.5rem;
-    }
-
-    .bm-home-intro-layout {
-        grid-template-columns: 1fr;
-        gap: 1.35rem;
-    }
-
-    .bm-home-intro-image-wrap {
-        border-radius: 16px;
-    }
-
-    .bm-home-intro-image {
-        aspect-ratio: 16 / 11;
-    }
-
-    .bm-home-intro-placeholder {
-        aspect-ratio: 16 / 11;
-    }
-
-    .bm-home-intro-copy {
-        max-width: none;
-        padding: 0 .1rem;
-    }
-
-    .bm-home-intro-content {
-        font-size: .88rem;
-        line-height: 1.8;
-    }
-
-    .bm-home-intro-highlights {
-        margin-top: 1rem;
-    }
-
-    .bm-home-intro-action {
-        margin-top: 1rem;
-    }
-
-    .bm-home-intro-action .bm-home-primary-btn {
-        width: 100%;
-    }
-}
-
 @media (min-width: 768px) {
-    .bm-home-intro-layout {
-        gap: 2.75rem;
-    }
 
-    .bm-home-intro-image,
-    .bm-home-intro-placeholder {
-        aspect-ratio: 16 / 11;
+    .bm-home-intro-layout {
+        grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
     }
 }
 
@@ -836,20 +799,8 @@
         gap: 4rem;
     }
 
-    .bm-home-intro-image-wrap {
-        border-radius: 22px;
-    }
-
-    .bm-home-intro-copy {
-        padding-right: 1.25rem;
-    }
-
     .bm-home-intro-content {
         font-size: .96rem;
-    }
-
-    .bm-home-intro-highlights {
-        grid-template-columns: repeat(2, minmax(0,1fr));
     }
 }
 
@@ -858,43 +809,31 @@
     .bm-home-intro-layout {
         gap: 5rem;
     }
-
-    .bm-home-intro-copy {
-        padding-right: 2rem;
-    }
 }
 
+
 /* ============================================================
-   CATEGORY DISCOVERY
+   CATEGORIES
    ============================================================ */
 
 .bm-home-category-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0,1fr));
-    gap: .75rem;
+    gap: clamp(.55rem, 2vw, .9rem);
 }
 
 .bm-home-category-card {
     position: relative;
     min-width: 0;
+    min-height: 135px;
     overflow: hidden;
-    min-height: 145px;
     display: flex;
     align-items: flex-end;
     border: 1px solid var(--bm-home-border);
     border-radius: var(--bm-home-radius-sm);
     background: #edf1ee;
-    box-shadow: 0 4px 16px rgba(0,0,0,.045);
+    box-shadow: 0 3px 12px rgba(0,0,0,.035);
     text-decoration: none;
-    transition:
-        transform .2s ease,
-        box-shadow .2s ease;
-}
-
-.bm-home-category-card:hover {
-    color: inherit;
-    transform: translateY(-3px);
-    box-shadow: var(--bm-home-shadow);
 }
 
 .bm-home-category-image,
@@ -907,11 +846,6 @@
 
 .bm-home-category-image {
     object-fit: cover;
-    transition: transform .3s ease;
-}
-
-.bm-home-category-card:hover .bm-home-category-image {
-    transform: scale(1.04);
 }
 
 .bm-home-category-fallback {
@@ -920,35 +854,36 @@
     justify-content: center;
     background: var(--bm-home-green-soft);
     color: var(--bm-home-green);
-    font-size: 2rem;
+    font-size: 1.8rem;
 }
 
 .bm-home-category-overlay {
     position: relative;
     z-index: 2;
     width: 100%;
-    padding: 2.25rem .8rem .75rem;
+    padding: 2rem .7rem .65rem;
     background: linear-gradient(
         transparent,
-        rgba(10,20,14,.88)
+        rgba(10,20,14,.9)
     );
 }
 
 .bm-home-category-name {
     display: block;
     color: #fff;
-    font-size: .72rem;
+    font-size: clamp(.62rem, 1.8vw, .74rem);
     font-weight: 800;
     line-height: 1.25;
+    overflow-wrap: anywhere;
 }
 
 .bm-home-category-arrow {
     display: inline-flex;
     align-items: center;
-    gap: .25rem;
-    margin-top: .25rem;
+    gap: .22rem;
+    margin-top: .22rem;
     color: rgba(255,255,255,.76);
-    font-size: .54rem;
+    font-size: clamp(.48rem, 1.4vw, .56rem);
     font-weight: 700;
 }
 
@@ -959,7 +894,7 @@
     }
 
     .bm-home-category-card {
-        min-height: 175px;
+        min-height: 165px;
     }
 }
 
@@ -974,8 +909,9 @@
     }
 }
 
+
 /* ============================================================
-   PRODUCT GRID
+   PRODUCT SECTION
    ============================================================ */
 
 .bm-home-product-section {
@@ -983,7 +919,7 @@
 }
 
 .bm-home-category-product-block {
-    margin-bottom: 2.5rem;
+    margin-bottom: clamp(2rem, 5vw, 3rem);
 }
 
 .bm-home-category-product-block:last-child {
@@ -993,39 +929,47 @@
 .bm-home-product-heading {
     display: flex;
     flex-direction: column;
-    gap: .7rem;
-    margin-bottom: 1rem;
+    gap: .65rem;
+    margin-bottom: .9rem;
+}
+
+.bm-home-product-heading > div {
+    min-width: 0;
 }
 
 .bm-home-product-heading-title {
     margin: 0;
     color: var(--bm-home-dark);
-    font-size: 1rem;
+    font-size: clamp(.92rem, 2.5vw, 1.08rem);
     font-weight: 800;
     letter-spacing: -.02em;
+    overflow-wrap: anywhere;
 }
 
 .bm-home-product-heading-description {
-    margin: .25rem 0 0;
+    max-width: 700px;
+    margin: .2rem 0 0;
     color: var(--bm-home-muted);
-    font-size: .68rem;
+    font-size: clamp(.6rem, 1.6vw, .7rem);
     line-height: 1.55;
 }
 
 .bm-home-view-all {
     align-self: flex-start;
-    min-height: 38px;
+    min-height: 40px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: .3rem;
-    padding: .55rem .8rem;
+    padding: .55rem .75rem;
     border: 1px solid var(--bm-home-green);
     border-radius: 9px;
     color: var(--bm-home-green);
-    font-size: .6rem;
+    font-size: clamp(.56rem, 1.5vw, .64rem);
     font-weight: 800;
+    line-height: 1.2;
     text-decoration: none;
+    white-space: nowrap;
 }
 
 .bm-home-view-all:hover {
@@ -1033,10 +977,15 @@
     color: #fff;
 }
 
+
+/* ============================================================
+   PRODUCT GRID
+   ============================================================ */
+
 .bm-home-product-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0,1fr));
-    gap: .7rem;
+    gap: clamp(.55rem, 2vw, .9rem);
 }
 
 .bm-home-product-card {
@@ -1049,22 +998,13 @@
     border: 1px solid var(--bm-home-border);
     border-radius: var(--bm-home-radius-sm);
     background: #fff;
-    box-shadow: 0 3px 14px rgba(0,0,0,.035);
-    transition:
-        transform .2s ease,
-        box-shadow .2s ease,
-        border-color .2s ease;
-}
-
-.bm-home-product-card:hover {
-    border-color: #c9dbd0;
-    transform: translateY(-3px);
-    box-shadow: var(--bm-home-shadow);
+    box-shadow: 0 2px 10px rgba(0,0,0,.03);
 }
 
 .bm-home-product-media {
     position: relative;
     display: block;
+    width: 100%;
     overflow: hidden;
     background: #f4f6f5;
     text-decoration: none;
@@ -1073,17 +1013,12 @@
 .bm-home-product-image,
 .bm-home-product-placeholder {
     width: 100%;
-    height: 160px;
+    aspect-ratio: 1 / 1;
 }
 
 .bm-home-product-image {
-    display: block;
     object-fit: cover;
-    transition: transform .3s ease;
-}
-
-.bm-home-product-card:hover .bm-home-product-image {
-    transform: scale(1.025);
+    object-position: center;
 }
 
 .bm-home-product-placeholder {
@@ -1091,20 +1026,21 @@
     align-items: center;
     justify-content: center;
     color: #9aa59e;
-    font-size: 1.8rem;
+    font-size: 1.6rem;
 }
 
 .bm-home-product-badge {
     position: absolute;
-    top: .5rem;
-    left: .5rem;
+    top: .45rem;
+    left: .45rem;
     z-index: 2;
-    padding: .28rem .45rem;
-    border-radius: 7px;
+    padding: .25rem .4rem;
+    border-radius: 6px;
     background: var(--bm-home-danger);
     color: #fff;
-    font-size: .49rem;
+    font-size: .48rem;
     font-weight: 800;
+    line-height: 1.2;
 }
 
 .bm-home-product-body {
@@ -1112,49 +1048,61 @@
     display: flex;
     flex: 1;
     flex-direction: column;
-    padding: .72rem;
+    padding: clamp(.55rem, 2vw, .75rem);
 }
 
 .bm-home-product-name {
     display: -webkit-box;
-    min-height: 2.25rem;
-    margin: 0 0 .35rem;
+    min-height: 2.35rem;
+    margin: 0 0 .28rem;
     overflow: hidden;
     color: var(--bm-home-dark);
-    font-size: .66rem;
+    font-size: clamp(.62rem, 1.8vw, .72rem);
     font-weight: 750;
     line-height: 1.35;
+    overflow-wrap: anywhere;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
 }
 
 .bm-home-product-brand {
-    margin-bottom: .45rem;
+    min-width: 0;
+    margin-bottom: .4rem;
+    overflow: hidden;
     color: var(--bm-home-muted);
-    font-size: .54rem;
+    font-size: clamp(.5rem, 1.4vw, .56rem);
     font-weight: 600;
+    line-height: 1.3;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .bm-home-product-price {
     margin-top: auto;
+    min-width: 0;
 }
 
 .bm-home-old-price {
     color: #98a19c;
-    font-size: .55rem;
+    font-size: clamp(.5rem, 1.4vw, .57rem);
+    line-height: 1.3;
     text-decoration: line-through;
 }
 
 .bm-home-current-price {
     color: var(--bm-home-green);
-    font-size: .72rem;
+    font-size: clamp(.68rem, 2vw, .78rem);
     font-weight: 850;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
 }
 
 .bm-home-product-stock {
-    margin-top: .3rem;
+    min-width: 0;
+    margin-top: .28rem;
     color: var(--bm-home-muted);
-    font-size: .5rem;
+    font-size: clamp(.48rem, 1.4vw, .54rem);
+    line-height: 1.3;
 }
 
 .bm-home-product-stock.available {
@@ -1165,20 +1113,52 @@
     color: var(--bm-home-danger);
 }
 
+
+/* ============================================================
+   PRODUCT ACTIONS
+   ============================================================ */
+
+/*
+   This action grid is intentionally prepared for existing
+   product actions without inventing new backend endpoints.
+
+   If the application already supplies multiple actions inside
+   a product card, .bm-home-product-actions will automatically
+   keep them on one row where space permits.
+*/
+
+.bm-home-product-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: .35rem;
+    margin-top: .6rem;
+}
+
+.bm-home-product-actions[data-actions="2"] {
+    grid-template-columns: repeat(2, minmax(0,1fr));
+}
+
+.bm-home-product-actions[data-actions="3"] {
+    grid-template-columns: repeat(3, minmax(0,1fr));
+}
+
 .bm-home-product-btn {
     width: 100%;
+    min-width: 0;
     min-height: 38px;
-    margin-top: .65rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: .3rem;
+    gap: .25rem;
+    padding: .45rem .35rem;
     border: 1px solid var(--bm-home-green);
     border-radius: 8px;
     background: #fff;
     color: var(--bm-home-green);
-    font-size: .57rem;
+    font-size: clamp(.49rem, 1.4vw, .58rem);
     font-weight: 800;
+    line-height: 1.15;
+    text-align: center;
     text-decoration: none;
 }
 
@@ -1187,16 +1167,36 @@
     color: #fff;
 }
 
+.bm-home-product-btn i {
+    flex: 0 0 auto;
+    font-size: .72rem;
+}
+
+@media (max-width: 360px) {
+
+    .bm-home-product-actions[data-actions="3"] {
+        gap: .25rem;
+    }
+
+    .bm-home-product-btn {
+        min-height: 36px;
+        padding-inline: .2rem;
+        font-size: .46rem;
+    }
+
+    .bm-home-product-btn i {
+        font-size: .62rem;
+    }
+}
+
 @media (min-width: 576px) {
 
     .bm-home-product-grid {
         grid-template-columns: repeat(3, minmax(0,1fr));
-        gap: .9rem;
     }
 
-    .bm-home-product-image,
-    .bm-home-product-placeholder {
-        height: 190px;
+    .bm-home-product-actions[data-actions="3"] {
+        gap: .35rem;
     }
 }
 
@@ -1215,11 +1215,6 @@
     .bm-home-product-grid {
         grid-template-columns: repeat(4, minmax(0,1fr));
     }
-
-    .bm-home-product-image,
-    .bm-home-product-placeholder {
-        height: 205px;
-    }
 }
 
 @media (min-width: 992px) {
@@ -1236,19 +1231,22 @@
     }
 }
 
+
 /* ============================================================
    IMAGE + TEXT
    ============================================================ */
 
 .bm-home-image-text {
     display: grid;
-    gap: 1.5rem;
+    grid-template-columns: 1fr;
+    gap: clamp(1.25rem, 4vw, 3rem);
+    align-items: center;
 }
 
 .bm-home-section-image,
 .bm-home-image-text-image {
     width: 100%;
-    height: 280px;
+    aspect-ratio: 4 / 3;
     object-fit: cover;
     border-radius: var(--bm-home-radius);
     background: #eef2ef;
@@ -1257,7 +1255,7 @@
 
 .bm-home-image-placeholder {
     width: 100%;
-    height: 280px;
+    aspect-ratio: 4 / 3;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1269,9 +1267,29 @@
 
 .bm-home-section-content {
     color: var(--bm-home-muted);
-    font-size: .78rem;
-    line-height: 1.8;
+    font-size: clamp(.76rem, 1.8vw, .86rem);
+    line-height: 1.75;
     overflow-wrap: anywhere;
+}
+
+.bm-home-section-content h1,
+.bm-home-section-content h2,
+.bm-home-section-content h3,
+.bm-home-section-content h4 {
+    color: var(--bm-home-dark);
+    line-height: 1.25;
+}
+
+.bm-home-section-content img {
+    max-width: 100%;
+    height: auto;
+}
+
+.bm-home-section-content table {
+    width: 100%;
+    max-width: 100%;
+    display: block;
+    overflow-x: auto;
 }
 
 .bm-home-section-content p:last-child {
@@ -1284,13 +1302,16 @@
     align-items: center;
     justify-content: center;
     gap: .35rem;
+    max-width: 100%;
     margin-top: 1rem;
-    padding: .7rem 1rem;
+    padding: .65rem 1rem;
     border-radius: 9px;
     background: var(--bm-home-green);
     color: #fff;
-    font-size: .63rem;
+    font-size: clamp(.58rem, 1.5vw, .66rem);
     font-weight: 800;
+    line-height: 1.2;
+    text-align: center;
     text-decoration: none;
 }
 
@@ -1303,16 +1324,15 @@
 
     .bm-home-image-text {
         grid-template-columns: repeat(2, minmax(0,1fr));
-        align-items: center;
-        gap: 3rem;
     }
 
     .bm-home-section-image,
     .bm-home-image-text-image,
     .bm-home-image-placeholder {
-        height: 390px;
+        aspect-ratio: 4 / 3;
     }
 }
+
 
 /* ============================================================
    TRUST / SERVICES
@@ -1321,51 +1341,47 @@
 .bm-home-feature-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: .75rem;
+    gap: clamp(.6rem, 2vw, .9rem);
 }
 
 .bm-home-feature-card {
+    min-width: 0;
     height: 100%;
-    padding: 1rem;
+    padding: clamp(.85rem, 2.5vw, 1.15rem);
     border: 1px solid var(--bm-home-border);
     border-radius: var(--bm-home-radius-sm);
     background: #fff;
-    box-shadow: 0 4px 18px rgba(0,0,0,.035);
-    transition:
-        transform .2s ease,
-        box-shadow .2s ease;
-}
-
-.bm-home-feature-card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--bm-home-shadow);
+    box-shadow: 0 3px 14px rgba(0,0,0,.03);
 }
 
 .bm-home-feature-icon {
-    width: 44px;
-    height: 44px;
+    width: 42px;
+    height: 42px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: .75rem;
-    border-radius: 12px;
+    margin-bottom: .65rem;
+    border-radius: 11px;
     background: var(--bm-home-green-soft);
     color: var(--bm-home-green);
-    font-size: 1rem;
+    font-size: .95rem;
 }
 
 .bm-home-feature-title {
-    margin: 0 0 .35rem;
+    margin: 0 0 .3rem;
     color: var(--bm-home-dark);
-    font-size: .76rem;
+    font-size: clamp(.7rem, 1.8vw, .8rem);
     font-weight: 800;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
 }
 
 .bm-home-feature-text {
     margin: 0;
     color: var(--bm-home-muted);
-    font-size: .63rem;
-    line-height: 1.65;
+    font-size: clamp(.58rem, 1.5vw, .66rem);
+    line-height: 1.6;
+    overflow-wrap: anywhere;
 }
 
 @media (min-width: 576px) {
@@ -1382,12 +1398,14 @@
     }
 }
 
+
 /* ============================================================
    BANNER
    ============================================================ */
 
 .bm-home-banner {
     position: relative;
+    min-height: clamp(250px, 40vw, 390px);
     overflow: hidden;
     border-radius: var(--bm-home-radius);
     background: var(--bm-home-dark);
@@ -1397,12 +1415,13 @@
 .bm-home-banner-image,
 .bm-home-banner-placeholder {
     width: 100%;
-    min-height: 300px;
+    height: 100%;
+    min-height: inherit;
 }
 
 .bm-home-banner-image {
-    display: block;
     object-fit: cover;
+    object-position: center;
 }
 
 .bm-home-banner-placeholder {
@@ -1420,26 +1439,34 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1.25rem;
-    background: rgba(5,15,9,.58);
+    padding: clamp(1rem, 4vw, 2rem);
+    background: rgba(5,15,9,.6);
     text-align: center;
 }
 
+.bm-home-banner-overlay > div {
+    width: 100%;
+    max-width: 780px;
+}
+
 .bm-home-banner-title {
-    margin: 0 0 .65rem;
+    margin: 0 0 .6rem;
     color: #fff;
-    font-size: clamp(1.35rem, 5vw, 2.5rem);
+    font-size: clamp(1.3rem, 5vw, 2.6rem);
     font-weight: 800;
-    line-height: 1.15;
+    line-height: 1.1;
+    letter-spacing: -.03em;
+    overflow-wrap: anywhere;
 }
 
 .bm-home-banner-text {
     max-width: 680px;
-    margin: 0 auto 1.1rem;
-    color: rgba(255,255,255,.82);
-    font-size: .75rem;
-    line-height: 1.65;
+    margin: 0 auto 1rem;
+    color: rgba(255,255,255,.84);
+    font-size: clamp(.68rem, 1.8vw, .82rem);
+    line-height: 1.6;
 }
+
 
 /* ============================================================
    CTA
@@ -1451,7 +1478,7 @@
     background:
         radial-gradient(
             circle at 85% 10%,
-            rgba(25,135,84,.35),
+            rgba(25,135,84,.28),
             transparent 35%
         ),
         var(--bm-home-dark);
@@ -1459,32 +1486,36 @@
 }
 
 .bm-home-cta-inner {
-    padding-block: 3rem;
+    padding-block: clamp(2.5rem, 6vw, 4.5rem);
     text-align: center;
 }
 
 .bm-home-cta-title {
-    margin: 0 0 .7rem;
+    max-width: 850px;
+    margin: 0 auto .6rem;
     color: #fff;
-    font-size: clamp(1.45rem, 5vw, 2.35rem);
+    font-size: clamp(1.4rem, 5vw, 2.5rem);
     font-weight: 800;
+    line-height: 1.12;
     letter-spacing: -.035em;
+    overflow-wrap: anywhere;
 }
 
 .bm-home-cta-text {
-    max-width: 650px;
-    margin: 0 auto 1.3rem;
-    color: rgba(255,255,255,.68);
-    font-size: .78rem;
-    line-height: 1.7;
+    max-width: 680px;
+    margin: 0 auto 1.15rem;
+    color: rgba(255,255,255,.72);
+    font-size: clamp(.7rem, 1.8vw, .82rem);
+    line-height: 1.65;
 }
 
 .bm-home-cta-actions {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: .55rem;
+    gap: .5rem;
 }
+
 
 /* ============================================================
    LEGACY CATEGORY CARDS
@@ -1493,34 +1524,26 @@
 .bm-home-category-list {
     display: grid;
     grid-template-columns: repeat(2, minmax(0,1fr));
-    gap: .75rem;
+    gap: clamp(.55rem, 2vw, .85rem);
 }
 
 .bm-home-category-list-card {
+    min-width: 0;
     overflow: hidden;
     border: 1px solid var(--bm-home-border);
     border-radius: var(--bm-home-radius-sm);
     background: #fff;
-    box-shadow: 0 4px 16px rgba(0,0,0,.035);
+    box-shadow: 0 3px 12px rgba(0,0,0,.03);
     text-decoration: none;
-    transition:
-        transform .2s ease,
-        box-shadow .2s ease;
-}
-
-.bm-home-category-list-card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--bm-home-shadow);
 }
 
 .bm-home-category-list-image,
 .bm-home-category-list-placeholder {
     width: 100%;
-    height: 125px;
+    aspect-ratio: 4 / 3;
 }
 
 .bm-home-category-list-image {
-    display: block;
     object-fit: cover;
 }
 
@@ -1534,14 +1557,16 @@
 }
 
 .bm-home-category-list-body {
-    padding: .7rem;
+    padding: .65rem;
 }
 
 .bm-home-category-list-name {
     margin: 0;
     color: var(--bm-home-dark);
-    font-size: .66rem;
+    font-size: clamp(.6rem, 1.6vw, .68rem);
     font-weight: 800;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
 }
 
 @media (min-width: 576px) {
@@ -1558,14 +1583,47 @@
     }
 }
 
+
 /* ============================================================
    ACCESSIBILITY
    ============================================================ */
 
 .bm-home a:focus-visible,
 .bm-home button:focus-visible {
-    outline: 3px solid rgba(25,135,84,.45);
-    outline-offset: 3px;
+    outline: 3px solid rgba(25,135,84,.5);
+    outline-offset: 2px;
+}
+
+.bm-home a,
+.bm-home button {
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+
+    .bm-home-category-card,
+    .bm-home-category-list-card,
+    .bm-home-feature-card,
+    .bm-home-product-card {
+        transition:
+            transform .16s ease,
+            box-shadow .16s ease,
+            border-color .16s ease;
+    }
+
+    .bm-home-category-card:hover,
+    .bm-home-category-list-card:hover,
+    .bm-home-feature-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--bm-home-shadow);
+    }
+
+    .bm-home-product-card:hover {
+        border-color: #c9dbd0;
+        transform: translateY(-2px);
+        box-shadow: var(--bm-home-shadow);
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1579,6 +1637,54 @@
         animation-iteration-count: 1 !important;
     }
 }
+
+
+/* ============================================================
+   VERY SMALL DEVICES
+   ============================================================ */
+
+@media (max-width: 359.98px) {
+
+    .bm-home-container {
+        padding-inline: .7rem;
+    }
+
+    .bm-home-section-spacing {
+        padding-block: 2.2rem;
+    }
+
+    .bm-home-product-grid {
+        gap: .45rem;
+    }
+
+    .bm-home-product-body {
+        padding: .48rem;
+    }
+
+    .bm-home-product-name {
+        font-size: .59rem;
+    }
+
+    .bm-home-current-price {
+        font-size: .65rem;
+    }
+
+    .bm-home-product-stock {
+        font-size: .46rem;
+    }
+}
+
+
+/* ============================================================
+   LARGE DESKTOP
+   ============================================================ */
+
+@media (min-width: 1400px) {
+
+    .bm-home-container {
+        padding-inline: 1.25rem;
+    }
+}
 </style>
 
 
@@ -1589,19 +1695,27 @@
        ======================================================== #}
 
     {% if settings and settings.announcement_active %}
+
         <div class="bm-home-announcement">
             <div class="bm-home-container bm-home-announcement-inner">
 
                 {% if settings.announcement_url %}
+
                     <a href="{{ settings.announcement_url }}">
                         {{ settings.announcement_text }}
                     </a>
+
                 {% else %}
-                    <span>{{ settings.announcement_text }}</span>
+
+                    <span>
+                        {{ settings.announcement_text }}
+                    </span>
+
                 {% endif %}
 
             </div>
         </div>
+
     {% endif %}
 
 
@@ -1610,12 +1724,14 @@
        ======================================================== #}
 
     {% if preview %}
+
         <div class="bm-home-preview">
             <div class="bm-home-container bm-home-preview-inner">
-                <i class="bi bi-eye"></i>
+                <i class="bi bi-eye" aria-hidden="true"></i>
                 <span>Homepage Preview Mode</span>
             </div>
         </div>
+
     {% endif %}
 
 
@@ -1625,9 +1741,9 @@
 
     {% if sections %}
 
-        {# -----------------------------------------------------
+        {# ====================================================
            HERO SECTIONS
-           ----------------------------------------------------- #}
+           ==================================================== #}
 
         {% set hero_sections =
             sections
@@ -1637,7 +1753,7 @@
 
         {% if hero_sections %}
 
-            <section class="bm-home-hero">
+            <section class="bm-home-hero" aria-label="Featured">
 
                 <div
                     id="bmHomeHeroCarousel"
@@ -1646,9 +1762,11 @@
                 >
 
                     {% if hero_sections|length > 1 %}
+
                         <div class="carousel-indicators">
 
                             {% for hero in hero_sections %}
+
                                 <button
                                     type="button"
                                     data-bs-target="#bmHomeHeroCarousel"
@@ -1659,9 +1777,11 @@
                                     {% endif %}
                                     aria-label="Slide {{ loop.index }}"
                                 ></button>
+
                             {% endfor %}
 
                         </div>
+
                     {% endif %}
 
 
@@ -1673,8 +1793,8 @@
 
                             <div
                                 class="carousel-item {{ 'active' if loop.first else '' }}"
-                                {% if config.interval %}
-                                    data-bs-interval="{{ config.interval }}"
+                                {% if config.get('interval') %}
+                                    data-bs-interval="{{ config.get('interval') }}"
                                 {% endif %}
                             >
 
@@ -1696,7 +1816,10 @@
 
                                     {% else %}
 
-                                        <div class="bm-home-hero-placeholder"></div>
+                                        <div
+                                            class="bm-home-hero-placeholder"
+                                            aria-hidden="true"
+                                        ></div>
 
                                     {% endif %}
 
@@ -1707,51 +1830,72 @@
 
                                             <div class="bm-home-hero-content">
 
-                                                {% if config.kicker %}
+                                                {% if config.get('kicker') %}
+
                                                     <div class="bm-home-hero-kicker">
-                                                        <i class="bi bi-stars"></i>
-                                                        {{ config.kicker }}
+                                                        <i
+                                                            class="bi bi-stars"
+                                                            aria-hidden="true"
+                                                        ></i>
+                                                        {{ config.get('kicker') }}
                                                     </div>
+
                                                 {% endif %}
 
 
                                                 {% if hero.title %}
+
                                                     <h1 class="bm-home-hero-title">
                                                         {{ hero.title }}
                                                     </h1>
+
                                                 {% endif %}
 
 
                                                 {% if hero.content %}
+
                                                     <div class="bm-home-hero-description">
                                                         {{ hero.content | safe }}
                                                     </div>
+
                                                 {% endif %}
 
 
-                                                {% if config.primary_url or config.secondary_url %}
+                                                {% if config.get('primary_url') or config.get('secondary_url') %}
 
                                                     <div class="bm-home-hero-actions">
 
-                                                        {% if config.primary_url %}
+                                                        {% if config.get('primary_url') %}
+
                                                             <a
-                                                                href="{{ config.primary_url }}"
+                                                                href="{{ config.get('primary_url') }}"
                                                                 class="bm-home-primary-btn"
                                                             >
-                                                                <i class="bi bi-arrow-right-circle"></i>
-                                                                {{ config.primary_text or "Shop Now" }}
+                                                                <i
+                                                                    class="bi bi-arrow-right-circle"
+                                                                    aria-hidden="true"
+                                                                ></i>
+
+                                                                {{ config.get('primary_text') or "Shop Now" }}
                                                             </a>
+
                                                         {% endif %}
 
 
-                                                        {% if config.secondary_url %}
+                                                        {% if config.get('secondary_url') %}
+
                                                             <a
-                                                                href="{{ config.secondary_url }}"
+                                                                href="{{ config.get('secondary_url') }}"
                                                                 class="bm-home-secondary-btn"
                                                             >
-                                                                <i class="bi bi-grid"></i>
-                                                                {{ config.secondary_text or "Explore Products" }}
+                                                                <i
+                                                                    class="bi bi-grid"
+                                                                    aria-hidden="true"
+                                                                ></i>
+
+                                                                {{ config.get('secondary_text') or "Explore Products" }}
                                                             </a>
+
                                                         {% endif %}
 
                                                     </div>
@@ -1762,22 +1906,34 @@
                                                 <div class="bm-home-hero-trust">
 
                                                     <div class="bm-home-hero-trust-item">
-                                                        <i class="bi bi-patch-check-fill"></i>
+                                                        <i
+                                                            class="bi bi-patch-check-fill"
+                                                            aria-hidden="true"
+                                                        ></i>
                                                         <span>Genuine Products</span>
                                                     </div>
 
                                                     <div class="bm-home-hero-trust-item">
-                                                        <i class="bi bi-truck"></i>
+                                                        <i
+                                                            class="bi bi-truck"
+                                                            aria-hidden="true"
+                                                        ></i>
                                                         <span>Reliable Delivery</span>
                                                     </div>
 
                                                     <div class="bm-home-hero-trust-item">
-                                                        <i class="bi bi-headset"></i>
+                                                        <i
+                                                            class="bi bi-headset"
+                                                            aria-hidden="true"
+                                                        ></i>
                                                         <span>Expert Support</span>
                                                     </div>
 
                                                     <div class="bm-home-hero-trust-item">
-                                                        <i class="bi bi-shield-check"></i>
+                                                        <i
+                                                            class="bi bi-shield-check"
+                                                            aria-hidden="true"
+                                                        ></i>
                                                         <span>Trusted Service</span>
                                                     </div>
 
@@ -1805,25 +1961,34 @@
                             type="button"
                             data-bs-target="#bmHomeHeroCarousel"
                             data-bs-slide="prev"
+                            aria-label="Previous slide"
                         >
                             <span
                                 class="carousel-control-prev-icon"
                                 aria-hidden="true"
                             ></span>
-                            <span class="visually-hidden">Previous</span>
+
+                            <span class="visually-hidden">
+                                Previous
+                            </span>
                         </button>
+
 
                         <button
                             class="carousel-control-next"
                             type="button"
                             data-bs-target="#bmHomeHeroCarousel"
                             data-bs-slide="next"
+                            aria-label="Next slide"
                         >
                             <span
                                 class="carousel-control-next-icon"
                                 aria-hidden="true"
                             ></span>
-                            <span class="visually-hidden">Next</span>
+
+                            <span class="visually-hidden">
+                                Next
+                            </span>
                         </button>
 
                     {% endif %}
@@ -1857,19 +2022,24 @@
                         <div class="bm-home-section-heading bm-home-intro-heading">
 
                             <span class="bm-home-eyebrow">
-                                {{ config.eyebrow or "About Bomet Machineries" }}
+                                {{ config.get('eyebrow') or "About Bomet Machineries" }}
                             </span>
 
                             {% if section.title %}
+
                                 <h2 class="bm-home-section-title">
                                     {{ section.title }}
                                 </h2>
+
                             {% endif %}
 
-                            {% if config.subtitle %}
+
+                            {% if config.get('subtitle') %}
+
                                 <p class="bm-home-section-subtitle">
-                                    {{ config.subtitle }}
+                                    {{ config.get('subtitle') }}
                                 </p>
+
                             {% endif %}
 
                         </div>
@@ -1892,7 +2062,10 @@
                                         >
 
                                         <div class="bm-home-intro-badge">
-                                            <i class="bi bi-patch-check-fill"></i>
+                                            <i
+                                                class="bi bi-patch-check-fill"
+                                                aria-hidden="true"
+                                            ></i>
                                             Genuine Agricultural Solutions
                                         </div>
 
@@ -1913,7 +2086,10 @@
                                         <div class="bm-home-intro-highlight">
 
                                             <span class="bm-home-intro-highlight-icon">
-                                                <i class="bi bi-gear-wide-connected"></i>
+                                                <i
+                                                    class="bi bi-gear-wide-connected"
+                                                    aria-hidden="true"
+                                                ></i>
                                             </span>
 
                                             <span class="bm-home-intro-highlight-text">
@@ -1926,7 +2102,10 @@
                                         <div class="bm-home-intro-highlight">
 
                                             <span class="bm-home-intro-highlight-icon">
-                                                <i class="bi bi-tools"></i>
+                                                <i
+                                                    class="bi bi-tools"
+                                                    aria-hidden="true"
+                                                ></i>
                                             </span>
 
                                             <span class="bm-home-intro-highlight-text">
@@ -1939,7 +2118,10 @@
                                         <div class="bm-home-intro-highlight">
 
                                             <span class="bm-home-intro-highlight-icon">
-                                                <i class="bi bi-headset"></i>
+                                                <i
+                                                    class="bi bi-headset"
+                                                    aria-hidden="true"
+                                                ></i>
                                             </span>
 
                                             <span class="bm-home-intro-highlight-text">
@@ -1952,7 +2134,10 @@
                                         <div class="bm-home-intro-highlight">
 
                                             <span class="bm-home-intro-highlight-icon">
-                                                <i class="bi bi-truck"></i>
+                                                <i
+                                                    class="bi bi-truck"
+                                                    aria-hidden="true"
+                                                ></i>
                                             </span>
 
                                             <span class="bm-home-intro-highlight-text">
@@ -1964,16 +2149,20 @@
                                     </div>
 
 
-                                    {% if config.button_url %}
+                                    {% if config.get('button_url') %}
 
                                         <div class="bm-home-intro-action">
 
                                             <a
-                                                href="{{ config.button_url }}"
+                                                href="{{ config.get('button_url') }}"
                                                 class="bm-home-primary-btn"
                                             >
-                                                <i class="bi bi-arrow-right"></i>
-                                                {{ config.button_text or "Learn More" }}
+                                                <i
+                                                    class="bi bi-arrow-right"
+                                                    aria-hidden="true"
+                                                ></i>
+
+                                                {{ config.get('button_text') or "Learn More" }}
                                             </a>
 
                                         </div>
@@ -1995,16 +2184,20 @@
                                     </div>
 
 
-                                    {% if config.button_url %}
+                                    {% if config.get('button_url') %}
 
                                         <div class="bm-home-intro-action">
 
                                             <a
-                                                href="{{ config.button_url }}"
+                                                href="{{ config.get('button_url') }}"
                                                 class="bm-home-primary-btn"
                                             >
-                                                <i class="bi bi-arrow-right"></i>
-                                                {{ config.button_text or "Learn More" }}
+                                                <i
+                                                    class="bi bi-arrow-right"
+                                                    aria-hidden="true"
+                                                ></i>
+
+                                                {{ config.get('button_text') or "Learn More" }}
                                             </a>
 
                                         </div>
@@ -2035,17 +2228,20 @@
                         <div class="bm-home-section-heading">
 
                             <span class="bm-home-eyebrow">
-                                {{ config.eyebrow or "Shop by Category" }}
+                                {{ config.get('eyebrow') or "Shop by Category" }}
                             </span>
 
                             <h2 class="bm-home-section-title">
                                 {{ section.title or "Explore Our Categories" }}
                             </h2>
 
-                            {% if config.subtitle %}
+
+                            {% if config.get('subtitle') %}
+
                                 <p class="bm-home-section-subtitle">
-                                    {{ config.subtitle }}
+                                    {{ config.get('subtitle') }}
                                 </p>
+
                             {% endif %}
 
                         </div>
@@ -2053,13 +2249,14 @@
 
                         <div class="bm-home-category-grid">
 
-                            {% set category_limit = config.category_limit or 8 %}
+                            {% set category_limit = config.get('category_limit') or 8 %}
 
                             {% for category in categories[:category_limit] %}
 
                                 <a
                                     href="{{ url_for('product.category_products', slug=category.slug) }}"
                                     class="bm-home-category-card"
+                                    aria-label="Shop {{ category.name }}"
                                 >
 
                                     {% if category.image_url %}
@@ -2074,7 +2271,10 @@
 
                                     {% else %}
 
-                                        <div class="bm-home-category-fallback">
+                                        <div
+                                            class="bm-home-category-fallback"
+                                            aria-hidden="true"
+                                        >
                                             <i class="bi bi-grid"></i>
                                         </div>
 
@@ -2089,7 +2289,10 @@
 
                                         <span class="bm-home-category-arrow">
                                             Shop category
-                                            <i class="bi bi-arrow-right"></i>
+                                            <i
+                                                class="bi bi-arrow-right"
+                                                aria-hidden="true"
+                                            ></i>
                                         </span>
 
                                     </div>
@@ -2118,17 +2321,20 @@
                         <div class="bm-home-section-heading">
 
                             <span class="bm-home-eyebrow">
-                                {{ config.eyebrow or "Featured Products" }}
+                                {{ config.get('eyebrow') or "Featured Products" }}
                             </span>
 
                             <h2 class="bm-home-section-title">
                                 {{ section.title or "Shop Our Products" }}
                             </h2>
 
-                            {% if config.subtitle %}
+
+                            {% if config.get('subtitle') %}
+
                                 <p class="bm-home-section-subtitle">
-                                    {{ config.subtitle }}
+                                    {{ config.get('subtitle') }}
                                 </p>
+
                             {% endif %}
 
                         </div>
@@ -2148,10 +2354,13 @@
                                                 {{ category.name if category.name is defined else category }}
                                             </h3>
 
+
                                             {% if category.description is defined and category.description %}
+
                                                 <p class="bm-home-product-heading-description">
                                                     {{ category.description }}
                                                 </p>
+
                                             {% endif %}
 
                                         </div>
@@ -2164,7 +2373,10 @@
                                                 class="bm-home-view-all"
                                             >
                                                 View All
-                                                <i class="bi bi-arrow-right"></i>
+                                                <i
+                                                    class="bi bi-arrow-right"
+                                                    aria-hidden="true"
+                                                ></i>
                                             </a>
 
                                         {% endif %}
@@ -2174,7 +2386,7 @@
 
                                     <div class="bm-home-product-grid">
 
-                                        {% set product_limit = config.product_limit or 6 %}
+                                        {% set product_limit = config.get('product_limit') or 6 %}
 
                                         {% for product in products[:product_limit] %}
 
@@ -2183,12 +2395,15 @@
                                                 <a
                                                     href="{{ url_for('product.product_details', slug=product.slug) }}"
                                                     class="bm-home-product-media"
+                                                    aria-label="View {{ product.name }}"
                                                 >
 
                                                     {% if product.discount and product.discount > 0 %}
+
                                                         <span class="bm-home-product-badge">
                                                             -{{ product.discount }}%
                                                         </span>
+
                                                     {% endif %}
 
 
@@ -2199,6 +2414,7 @@
                                                             | selectattr('is_primary')
                                                             | first
                                                         %}
+
 
                                                         {% if primary_image %}
 
@@ -2224,7 +2440,10 @@
 
                                                     {% else %}
 
-                                                        <div class="bm-home-product-placeholder">
+                                                        <div
+                                                            class="bm-home-product-placeholder"
+                                                            aria-hidden="true"
+                                                        >
                                                             <i class="bi bi-image"></i>
                                                         </div>
 
@@ -2241,9 +2460,11 @@
 
 
                                                     {% if product.brand %}
+
                                                         <div class="bm-home-product-brand">
                                                             {{ product.brand }}
                                                         </div>
+
                                                     {% endif %}
 
 
@@ -2275,14 +2496,20 @@
                                                         {% if product.stock_quantity > 0 %}
 
                                                             <div class="bm-home-product-stock available">
-                                                                <i class="bi bi-check-circle"></i>
+                                                                <i
+                                                                    class="bi bi-check-circle"
+                                                                    aria-hidden="true"
+                                                                ></i>
                                                                 In stock
                                                             </div>
 
                                                         {% else %}
 
                                                             <div class="bm-home-product-stock unavailable">
-                                                                <i class="bi bi-x-circle"></i>
+                                                                <i
+                                                                    class="bi bi-x-circle"
+                                                                    aria-hidden="true"
+                                                                ></i>
                                                                 Out of stock
                                                             </div>
 
@@ -2291,13 +2518,21 @@
                                                     {% endif %}
 
 
-                                                    <a
-                                                        href="{{ url_for('product.product_details', slug=product.slug) }}"
-                                                        class="bm-home-product-btn"
-                                                    >
-                                                        <i class="bi bi-eye"></i>
-                                                        View Product
-                                                    </a>
+                                                    <div class="bm-home-product-actions">
+
+                                                        <a
+                                                            href="{{ url_for('product.product_details', slug=product.slug) }}"
+                                                            class="bm-home-product-btn"
+                                                            aria-label="View {{ product.name }}"
+                                                        >
+                                                            <i
+                                                                class="bi bi-eye"
+                                                                aria-hidden="true"
+                                                            ></i>
+                                                            <span>View</span>
+                                                        </a>
+
+                                                    </div>
 
                                                 </div>
 
@@ -2328,8 +2563,10 @@
 
                 {% for category in categories %}
 
-                    {% if category.slug == config.category_slug %}
+                    {% if category.slug == config.get('category_slug') %}
+
                         {% set selected_category = category %}
+
                     {% endif %}
 
                 {% endfor %}
@@ -2344,17 +2581,20 @@
                             <div class="bm-home-section-heading">
 
                                 <span class="bm-home-eyebrow">
-                                    {{ config.eyebrow or "Shop Now" }}
+                                    {{ config.get('eyebrow') or "Shop Now" }}
                                 </span>
 
                                 <h2 class="bm-home-section-title">
                                     {{ section.title or selected_category.name }}
                                 </h2>
 
-                                {% if config.subtitle %}
+
+                                {% if config.get('subtitle') %}
+
                                     <p class="bm-home-section-subtitle">
-                                        {{ config.subtitle }}
+                                        {{ config.get('subtitle') }}
                                     </p>
+
                                 {% endif %}
 
                             </div>
@@ -2364,7 +2604,7 @@
 
                                 <div class="bm-home-product-grid">
 
-                                    {% set product_limit = config.product_limit or 6 %}
+                                    {% set product_limit = config.get('product_limit') or 6 %}
 
                                     {% for product in featured_by_category[selected_category][:product_limit] %}
 
@@ -2373,12 +2613,15 @@
                                             <a
                                                 href="{{ url_for('product.product_details', slug=product.slug) }}"
                                                 class="bm-home-product-media"
+                                                aria-label="View {{ product.name }}"
                                             >
 
                                                 {% if product.discount and product.discount > 0 %}
+
                                                     <span class="bm-home-product-badge">
                                                         -{{ product.discount }}%
                                                     </span>
+
                                                 {% endif %}
 
 
@@ -2389,6 +2632,7 @@
                                                         | selectattr('is_primary')
                                                         | first
                                                     %}
+
 
                                                     {% if primary_image %}
 
@@ -2414,7 +2658,10 @@
 
                                                 {% else %}
 
-                                                    <div class="bm-home-product-placeholder">
+                                                    <div
+                                                        class="bm-home-product-placeholder"
+                                                        aria-hidden="true"
+                                                    >
                                                         <i class="bi bi-image"></i>
                                                     </div>
 
@@ -2429,10 +2676,13 @@
                                                     {{ product.name }}
                                                 </h3>
 
+
                                                 {% if product.brand %}
+
                                                     <div class="bm-home-product-brand">
                                                         {{ product.brand }}
                                                     </div>
+
                                                 {% endif %}
 
 
@@ -2459,13 +2709,48 @@
                                                 </div>
 
 
-                                                <a
-                                                    href="{{ url_for('product.product_details', slug=product.slug) }}"
-                                                    class="bm-home-product-btn"
-                                                >
-                                                    <i class="bi bi-eye"></i>
-                                                    View Product
-                                                </a>
+                                                {% if product.stock_quantity is defined %}
+
+                                                    {% if product.stock_quantity > 0 %}
+
+                                                        <div class="bm-home-product-stock available">
+                                                            <i
+                                                                class="bi bi-check-circle"
+                                                                aria-hidden="true"
+                                                            ></i>
+                                                            In stock
+                                                        </div>
+
+                                                    {% else %}
+
+                                                        <div class="bm-home-product-stock unavailable">
+                                                            <i
+                                                                class="bi bi-x-circle"
+                                                                aria-hidden="true"
+                                                            ></i>
+                                                            Out of stock
+                                                        </div>
+
+                                                    {% endif %}
+
+                                                {% endif %}
+
+
+                                                <div class="bm-home-product-actions">
+
+                                                    <a
+                                                        href="{{ url_for('product.product_details', slug=product.slug) }}"
+                                                        class="bm-home-product-btn"
+                                                        aria-label="View {{ product.name }}"
+                                                    >
+                                                        <i
+                                                            class="bi bi-eye"
+                                                            aria-hidden="true"
+                                                        ></i>
+                                                        <span>View</span>
+                                                    </a>
+
+                                                </div>
 
                                             </div>
 
@@ -2496,7 +2781,7 @@
 
                         <div
                             class="bm-home-image-text"
-                            {% if config.image_position == 'right' %}
+                            {% if config.get('image_position') == 'right' %}
                                 style="direction:rtl;"
                             {% endif %}
                         >
@@ -2515,7 +2800,10 @@
 
                                 {% else %}
 
-                                    <div class="bm-home-image-placeholder">
+                                    <div
+                                        class="bm-home-image-placeholder"
+                                        aria-hidden="true"
+                                    >
                                         <i class="bi bi-image"></i>
                                     </div>
 
@@ -2527,28 +2815,36 @@
                             <div style="direction:ltr;">
 
                                 <span class="bm-home-eyebrow">
-                                    {{ config.eyebrow or "Bomet Machineries" }}
+                                    {{ config.get('eyebrow') or "Bomet Machineries" }}
                                 </span>
 
+
                                 {% if section.title %}
+
                                     <h2 class="bm-home-section-title">
                                         {{ section.title }}
                                     </h2>
+
                                 {% endif %}
+
 
                                 <div class="bm-home-section-content mt-3">
                                     {{ section.content | safe }}
                                 </div>
 
 
-                                {% if config.button_url %}
+                                {% if config.get('button_url') %}
 
                                     <a
-                                        href="{{ config.button_url }}"
+                                        href="{{ config.get('button_url') }}"
                                         class="bm-home-text-link"
                                     >
-                                        {{ config.button_text or "Learn More" }}
-                                        <i class="bi bi-arrow-right"></i>
+                                        {{ config.get('button_text') or "Learn More" }}
+
+                                        <i
+                                            class="bi bi-arrow-right"
+                                            aria-hidden="true"
+                                        ></i>
                                     </a>
 
                                 {% endif %}
@@ -2575,17 +2871,20 @@
                         <div class="bm-home-section-heading">
 
                             <span class="bm-home-eyebrow">
-                                {{ config.eyebrow or "Why Choose Us" }}
+                                {{ config.get('eyebrow') or "Why Choose Us" }}
                             </span>
 
                             <h2 class="bm-home-section-title">
                                 {{ section.title or "Built Around Quality & Trust" }}
                             </h2>
 
-                            {% if config.subtitle %}
+
+                            {% if config.get('subtitle') %}
+
                                 <p class="bm-home-section-subtitle">
-                                    {{ config.subtitle }}
+                                    {{ config.get('subtitle') }}
                                 </p>
+
                             {% endif %}
 
                         </div>
@@ -2593,7 +2892,7 @@
 
                         <div class="bm-home-feature-grid">
 
-                            {% set trust_items = config.items or [
+                            {% set trust_items = config.get('items') or [
                                 {
                                     "icon": "bi-patch-check",
                                     "title": "Genuine Products",
@@ -2622,7 +2921,10 @@
                                 <div class="bm-home-feature-card">
 
                                     <div class="bm-home-feature-icon">
-                                        <i class="bi {{ item.icon or 'bi-check-circle' }}"></i>
+                                        <i
+                                            class="bi {{ item.icon or 'bi-check-circle' }}"
+                                            aria-hidden="true"
+                                        ></i>
                                     </div>
 
                                     <h3 class="bm-home-feature-title">
@@ -2657,17 +2959,20 @@
                         <div class="bm-home-section-heading">
 
                             <span class="bm-home-eyebrow">
-                                {{ config.eyebrow or "Our Services" }}
+                                {{ config.get('eyebrow') or "Our Services" }}
                             </span>
 
                             <h2 class="bm-home-section-title">
                                 {{ section.title or "Professional Agricultural Solutions" }}
                             </h2>
 
-                            {% if config.subtitle %}
+
+                            {% if config.get('subtitle') %}
+
                                 <p class="bm-home-section-subtitle">
-                                    {{ config.subtitle }}
+                                    {{ config.get('subtitle') }}
                                 </p>
+
                             {% endif %}
 
                         </div>
@@ -2675,12 +2980,15 @@
 
                         <div class="bm-home-feature-grid">
 
-                            {% for item in config.items or [] %}
+                            {% for item in config.get('items') or [] %}
 
                                 <div class="bm-home-feature-card">
 
                                     <div class="bm-home-feature-icon">
-                                        <i class="bi {{ item.icon or 'bi-gear' }}"></i>
+                                        <i
+                                            class="bi {{ item.icon or 'bi-gear' }}"
+                                            aria-hidden="true"
+                                        ></i>
                                     </div>
 
                                     <h3 class="bm-home-feature-title">
@@ -2714,8 +3022,8 @@
 
                         <div
                             class="bm-home-banner"
-                            {% if config.height %}
-                                style="min-height: {{ config.height }}px;"
+                            {% if config.get('height') %}
+                                style="min-height: {{ config.get('height') }}px;"
                             {% endif %}
                         >
 
@@ -2731,7 +3039,10 @@
 
                             {% else %}
 
-                                <div class="bm-home-banner-placeholder"></div>
+                                <div
+                                    class="bm-home-banner-placeholder"
+                                    aria-hidden="true"
+                                ></div>
 
                             {% endif %}
 
@@ -2741,26 +3052,35 @@
                                 <div>
 
                                     {% if section.title %}
+
                                         <h2 class="bm-home-banner-title">
                                             {{ section.title }}
                                         </h2>
+
                                     {% endif %}
 
+
                                     {% if section.content %}
+
                                         <div class="bm-home-banner-text">
                                             {{ section.content | safe }}
                                         </div>
+
                                     {% endif %}
 
 
-                                    {% if config.button_url %}
+                                    {% if config.get('button_url') %}
 
                                         <a
-                                            href="{{ config.button_url }}"
+                                            href="{{ config.get('button_url') }}"
                                             class="bm-home-primary-btn"
                                         >
-                                            {{ config.button_text or "Explore More" }}
-                                            <i class="bi bi-arrow-right"></i>
+                                            {{ config.get('button_text') or "Explore More" }}
+
+                                            <i
+                                                class="bi bi-arrow-right"
+                                                aria-hidden="true"
+                                            ></i>
                                         </a>
 
                                     {% endif %}
@@ -2787,28 +3107,37 @@
                     <div class="bm-home-container bm-home-cta-inner">
 
                         {% if section.title %}
+
                             <h2 class="bm-home-cta-title">
                                 {{ section.title }}
                             </h2>
+
                         {% endif %}
 
+
                         {% if section.content %}
+
                             <div class="bm-home-cta-text">
                                 {{ section.content | safe }}
                             </div>
+
                         {% endif %}
 
 
-                        {% if config.button_url %}
+                        {% if config.get('button_url') %}
 
                             <div class="bm-home-cta-actions">
 
                                 <a
-                                    href="{{ config.button_url }}"
+                                    href="{{ config.get('button_url') }}"
                                     class="bm-home-primary-btn"
                                 >
-                                    {{ config.button_text or "Get Started" }}
-                                    <i class="bi bi-arrow-right"></i>
+                                    {{ config.get('button_text') or "Get Started" }}
+
+                                    <i
+                                        class="bi bi-arrow-right"
+                                        aria-hidden="true"
+                                    ></i>
                                 </a>
 
                             </div>
@@ -2846,7 +3175,10 @@
 
                                 {% else %}
 
-                                    <div class="bm-home-image-placeholder">
+                                    <div
+                                        class="bm-home-image-placeholder"
+                                        aria-hidden="true"
+                                    >
                                         <i class="bi bi-tools"></i>
                                     </div>
 
@@ -2861,25 +3193,33 @@
                                     Genuine Parts
                                 </span>
 
+
                                 {% if section.title %}
+
                                     <h2 class="bm-home-section-title">
                                         {{ section.title }}
                                     </h2>
+
                                 {% endif %}
+
 
                                 <div class="bm-home-section-content mt-3">
                                     {{ section.content | safe }}
                                 </div>
 
 
-                                {% if config.button_url %}
+                                {% if config.get('button_url') %}
 
                                     <a
-                                        href="{{ config.button_url }}"
+                                        href="{{ config.get('button_url') }}"
                                         class="bm-home-text-link"
                                     >
-                                        {{ config.button_text or "Shop Spare Parts" }}
-                                        <i class="bi bi-arrow-right"></i>
+                                        {{ config.get('button_text') or "Shop Spare Parts" }}
+
+                                        <i
+                                            class="bi bi-arrow-right"
+                                            aria-hidden="true"
+                                        ></i>
                                     </a>
 
                                 {% else %}
@@ -2889,7 +3229,11 @@
                                         class="bm-home-text-link"
                                     >
                                         Shop Spare Parts
-                                        <i class="bi bi-arrow-right"></i>
+
+                                        <i
+                                            class="bi bi-arrow-right"
+                                            aria-hidden="true"
+                                        ></i>
                                     </a>
 
                                 {% endif %}
@@ -2930,9 +3274,10 @@
 
     {% else %}
 
-        {# -----------------------------------------------------
+
+        {# ====================================================
            LEGACY HERO
-           ----------------------------------------------------- #}
+           ==================================================== #}
 
         {% set legacy_heroes = [] %}
 
@@ -2941,9 +3286,11 @@
             {% set hero_key = 'hero_' ~ i %}
 
             {% if cms and cms.get(hero_key) and cms.get(hero_key).active %}
+
                 {% set legacy_heroes =
                     legacy_heroes + [cms.get(hero_key)]
                 %}
+
             {% endif %}
 
         {% endfor %}
@@ -2951,7 +3298,7 @@
 
         {% if legacy_heroes %}
 
-            <section class="bm-home-hero">
+            <section class="bm-home-hero" aria-label="Featured">
 
                 <div
                     id="bmLegacyHeroCarousel"
@@ -3009,7 +3356,10 @@
 
                                     {% else %}
 
-                                        <div class="bm-home-hero-placeholder"></div>
+                                        <div
+                                            class="bm-home-hero-placeholder"
+                                            aria-hidden="true"
+                                        ></div>
 
                                     {% endif %}
 
@@ -3021,24 +3371,33 @@
                                             <div class="bm-home-hero-content">
 
                                                 {% if hero.kicker %}
+
                                                     <div class="bm-home-hero-kicker">
-                                                        <i class="bi bi-stars"></i>
+                                                        <i
+                                                            class="bi bi-stars"
+                                                            aria-hidden="true"
+                                                        ></i>
                                                         {{ hero.kicker }}
                                                     </div>
+
                                                 {% endif %}
 
 
                                                 {% if hero.title %}
+
                                                     <h1 class="bm-home-hero-title">
                                                         {{ hero.title }}
                                                     </h1>
+
                                                 {% endif %}
 
 
                                                 {% if hero.content %}
+
                                                     <div class="bm-home-hero-description">
                                                         {{ hero.content | safe }}
                                                     </div>
+
                                                 {% endif %}
 
 
@@ -3051,7 +3410,11 @@
                                                             class="bm-home-primary-btn"
                                                         >
                                                             {{ hero.button_text or "Shop Now" }}
-                                                            <i class="bi bi-arrow-right"></i>
+
+                                                            <i
+                                                                class="bi bi-arrow-right"
+                                                                aria-hidden="true"
+                                                            ></i>
                                                         </a>
 
                                                     </div>
@@ -3062,22 +3425,34 @@
                                                 <div class="bm-home-hero-trust">
 
                                                     <div class="bm-home-hero-trust-item">
-                                                        <i class="bi bi-patch-check-fill"></i>
+                                                        <i
+                                                            class="bi bi-patch-check-fill"
+                                                            aria-hidden="true"
+                                                        ></i>
                                                         <span>Genuine Products</span>
                                                     </div>
 
                                                     <div class="bm-home-hero-trust-item">
-                                                        <i class="bi bi-truck"></i>
+                                                        <i
+                                                            class="bi bi-truck"
+                                                            aria-hidden="true"
+                                                        ></i>
                                                         <span>Reliable Delivery</span>
                                                     </div>
 
                                                     <div class="bm-home-hero-trust-item">
-                                                        <i class="bi bi-headset"></i>
+                                                        <i
+                                                            class="bi bi-headset"
+                                                            aria-hidden="true"
+                                                        ></i>
                                                         <span>Expert Support</span>
                                                     </div>
 
                                                     <div class="bm-home-hero-trust-item">
-                                                        <i class="bi bi-shield-check"></i>
+                                                        <i
+                                                            class="bi bi-shield-check"
+                                                            aria-hidden="true"
+                                                        ></i>
                                                         <span>Trusted Service</span>
                                                     </div>
 
@@ -3105,12 +3480,16 @@
                             type="button"
                             data-bs-target="#bmLegacyHeroCarousel"
                             data-bs-slide="prev"
+                            aria-label="Previous slide"
                         >
                             <span
                                 class="carousel-control-prev-icon"
                                 aria-hidden="true"
                             ></span>
-                            <span class="visually-hidden">Previous</span>
+
+                            <span class="visually-hidden">
+                                Previous
+                            </span>
                         </button>
 
 
@@ -3119,12 +3498,16 @@
                             type="button"
                             data-bs-target="#bmLegacyHeroCarousel"
                             data-bs-slide="next"
+                            aria-label="Next slide"
                         >
                             <span
                                 class="carousel-control-next-icon"
                                 aria-hidden="true"
                             ></span>
-                            <span class="visually-hidden">Next</span>
+
+                            <span class="visually-hidden">
+                                Next
+                            </span>
                         </button>
 
                     {% endif %}
@@ -3136,9 +3519,9 @@
         {% endif %}
 
 
-        {# -----------------------------------------------------
+        {# ====================================================
            VALUE STRIP
-           ----------------------------------------------------- #}
+           ==================================================== #}
 
         <section class="bm-home-value-strip">
 
@@ -3149,10 +3532,14 @@
                     <div class="bm-home-value-item">
 
                         <span class="bm-home-value-icon">
-                            <i class="bi bi-patch-check"></i>
+                            <i
+                                class="bi bi-patch-check"
+                                aria-hidden="true"
+                            ></i>
                         </span>
 
                         <span>
+
                             <span class="bm-home-value-title">
                                 Genuine Products
                             </span>
@@ -3160,6 +3547,7 @@
                             <span class="bm-home-value-text">
                                 Quality equipment
                             </span>
+
                         </span>
 
                     </div>
@@ -3168,10 +3556,14 @@
                     <div class="bm-home-value-item">
 
                         <span class="bm-home-value-icon">
-                            <i class="bi bi-truck"></i>
+                            <i
+                                class="bi bi-truck"
+                                aria-hidden="true"
+                            ></i>
                         </span>
 
                         <span>
+
                             <span class="bm-home-value-title">
                                 Reliable Delivery
                             </span>
@@ -3179,6 +3571,7 @@
                             <span class="bm-home-value-text">
                                 Across Kenya
                             </span>
+
                         </span>
 
                     </div>
@@ -3187,10 +3580,14 @@
                     <div class="bm-home-value-item">
 
                         <span class="bm-home-value-icon">
-                            <i class="bi bi-headset"></i>
+                            <i
+                                class="bi bi-headset"
+                                aria-hidden="true"
+                            ></i>
                         </span>
 
                         <span>
+
                             <span class="bm-home-value-title">
                                 Expert Support
                             </span>
@@ -3198,6 +3595,7 @@
                             <span class="bm-home-value-text">
                                 Helpful guidance
                             </span>
+
                         </span>
 
                     </div>
@@ -3206,10 +3604,14 @@
                     <div class="bm-home-value-item">
 
                         <span class="bm-home-value-icon">
-                            <i class="bi bi-shield-check"></i>
+                            <i
+                                class="bi bi-shield-check"
+                                aria-hidden="true"
+                            ></i>
                         </span>
 
                         <span>
+
                             <span class="bm-home-value-title">
                                 Trusted Service
                             </span>
@@ -3217,6 +3619,7 @@
                             <span class="bm-home-value-text">
                                 Customer focused
                             </span>
+
                         </span>
 
                     </div>
@@ -3228,9 +3631,9 @@
         </section>
 
 
-        {# -----------------------------------------------------
+        {# ====================================================
            LEGACY COMPANY INTRO
-           ----------------------------------------------------- #}
+           ==================================================== #}
 
         {% if cms and cms.get('company_intro') %}
 
@@ -3250,10 +3653,13 @@
                             {{ intro.title or "Your Trusted Agricultural Machinery Partner" }}
                         </h2>
 
+
                         {% if intro.subtitle %}
+
                             <p class="bm-home-section-subtitle">
                                 {{ intro.subtitle }}
                             </p>
+
                         {% endif %}
 
                     </div>
@@ -3276,7 +3682,10 @@
                                     >
 
                                     <div class="bm-home-intro-badge">
-                                        <i class="bi bi-patch-check-fill"></i>
+                                        <i
+                                            class="bi bi-patch-check-fill"
+                                            aria-hidden="true"
+                                        ></i>
                                         Trusted Agricultural Solutions
                                     </div>
 
@@ -3297,7 +3706,10 @@
                                     <div class="bm-home-intro-highlight">
 
                                         <span class="bm-home-intro-highlight-icon">
-                                            <i class="bi bi-gear-wide-connected"></i>
+                                            <i
+                                                class="bi bi-gear-wide-connected"
+                                                aria-hidden="true"
+                                            ></i>
                                         </span>
 
                                         <span class="bm-home-intro-highlight-text">
@@ -3310,7 +3722,10 @@
                                     <div class="bm-home-intro-highlight">
 
                                         <span class="bm-home-intro-highlight-icon">
-                                            <i class="bi bi-tools"></i>
+                                            <i
+                                                class="bi bi-tools"
+                                                aria-hidden="true"
+                                            ></i>
                                         </span>
 
                                         <span class="bm-home-intro-highlight-text">
@@ -3323,7 +3738,10 @@
                                     <div class="bm-home-intro-highlight">
 
                                         <span class="bm-home-intro-highlight-icon">
-                                            <i class="bi bi-headset"></i>
+                                            <i
+                                                class="bi bi-headset"
+                                                aria-hidden="true"
+                                            ></i>
                                         </span>
 
                                         <span class="bm-home-intro-highlight-text">
@@ -3336,7 +3754,10 @@
                                     <div class="bm-home-intro-highlight">
 
                                         <span class="bm-home-intro-highlight-icon">
-                                            <i class="bi bi-truck"></i>
+                                            <i
+                                                class="bi bi-truck"
+                                                aria-hidden="true"
+                                            ></i>
                                         </span>
 
                                         <span class="bm-home-intro-highlight-text">
@@ -3357,7 +3778,11 @@
                                             class="bm-home-primary-btn"
                                         >
                                             {{ intro.button_text or "Learn More" }}
-                                            <i class="bi bi-arrow-right"></i>
+
+                                            <i
+                                                class="bi bi-arrow-right"
+                                                aria-hidden="true"
+                                            ></i>
                                         </a>
 
                                     </div>
@@ -3391,9 +3816,9 @@
         {% endif %}
 
 
-        {# -----------------------------------------------------
+        {# ====================================================
            LEGACY TRUST
-           ----------------------------------------------------- #}
+           ==================================================== #}
 
         <section class="bm-home-section bm-home-section-spacing">
 
@@ -3417,7 +3842,10 @@
                     <div class="bm-home-feature-card">
 
                         <div class="bm-home-feature-icon">
-                            <i class="bi bi-patch-check"></i>
+                            <i
+                                class="bi bi-patch-check"
+                                aria-hidden="true"
+                            ></i>
                         </div>
 
                         <h3 class="bm-home-feature-title">
@@ -3434,7 +3862,10 @@
                     <div class="bm-home-feature-card">
 
                         <div class="bm-home-feature-icon">
-                            <i class="bi bi-people"></i>
+                            <i
+                                class="bi bi-people"
+                                aria-hidden="true"
+                            ></i>
                         </div>
 
                         <h3 class="bm-home-feature-title">
@@ -3451,7 +3882,10 @@
                     <div class="bm-home-feature-card">
 
                         <div class="bm-home-feature-icon">
-                            <i class="bi bi-truck"></i>
+                            <i
+                                class="bi bi-truck"
+                                aria-hidden="true"
+                            ></i>
                         </div>
 
                         <h3 class="bm-home-feature-title">
@@ -3468,7 +3902,10 @@
                     <div class="bm-home-feature-card">
 
                         <div class="bm-home-feature-icon">
-                            <i class="bi bi-shield-check"></i>
+                            <i
+                                class="bi bi-shield-check"
+                                aria-hidden="true"
+                            ></i>
                         </div>
 
                         <h3 class="bm-home-feature-title">
@@ -3488,9 +3925,9 @@
         </section>
 
 
-        {# -----------------------------------------------------
+        {# ====================================================
            FINAL CTA
-           ----------------------------------------------------- #}
+           ==================================================== #}
 
         <section class="bm-home-cta">
 
@@ -3513,7 +3950,11 @@
                         class="bm-home-primary-btn"
                     >
                         Shop Products
-                        <i class="bi bi-arrow-right"></i>
+
+                        <i
+                            class="bi bi-arrow-right"
+                            aria-hidden="true"
+                        ></i>
                     </a>
 
                 </div>

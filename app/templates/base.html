@@ -1,291 +1,390 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <meta name="theme-color" content="#198754">
 
-    <meta
-        name="description"
-        content="Bomet Machineries Ltd. — quality agricultural machinery, farm tools, generators, water pumps, refrigeration equipment, genuine spare parts and more."
-    >
+    <meta name="description"
+          content="Bomet Machineries Ltd. — quality agricultural machinery, farm tools, generators, water pumps, refrigeration equipment, genuine spare parts and more.">
 
     <title>{% block title %}Bomet Machineries Ltd.{% endblock %}</title>
 
-
     <!-- =========================================================
-         PERFORMANCE PRECONNECTS & CDN FONTS
+         PERFORMANCE / CORE DEPENDENCIES
+         Bootstrap and Bootstrap Icons are retained because the
+         existing application actively uses their classes/scripts.
     ========================================================== -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 
-    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+          rel="stylesheet">
 
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin
-    >
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet"
-    >
-
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-    >
-
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
-        rel="stylesheet"
-    >
-
-
-    <!-- Global CSS -->
-
-    <link
-        rel="stylesheet"
-        href="{{ url_for('static', filename='css/style.css') }}"
-    >
+    <!-- Global application stylesheet -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
 
     {% block extra_css %}{% endblock %}
-
     {% block styles %}{% endblock %}
 
-
     <style>
-
-        /* =====================================================
-           ROOT VARIABLES & THEMING
-        ====================================================== */
+        /* =========================================================
+           BOMET MACHINERIES LTD.
+           MOBILE-FIRST APPLICATION SHELL
+           Lightweight / Responsive / Accessible
+        ========================================================== */
 
         :root {
-
+            /* Brand */
             --bomet-green: #198754;
-
             --bomet-green-dark: #0f5132;
-
             --bomet-green-deep: #073b24;
-
             --bomet-green-soft: #eaf7ef;
 
+            /* Surfaces */
             --bomet-white: #ffffff;
-
             --bomet-bg: #f7f9f7;
+            --bomet-surface: #ffffff;
+            --bomet-surface-soft: #f3f6f4;
 
+            /* Text */
             --bomet-text: #17211b;
-
             --bomet-muted: #6c7770;
+            --bomet-muted-light: #8a948d;
 
+            /* Borders */
             --bomet-border: #e4e9e5;
+            --bomet-border-light: #eef1ef;
 
+            /* Status */
+            --bomet-success: #198754;
+            --bomet-warning: #f0ad00;
+            --bomet-danger: #dc3545;
+            --bomet-info: #0dcaf0;
+
+            /* Radius */
+            --bomet-radius-sm: 9px;
             --bomet-radius: 14px;
-
             --bomet-radius-lg: 20px;
 
-            --bomet-shadow: 0 4px 20px rgba(15, 81, 50, .07);
+            /* Shadows */
+            --bomet-shadow:
+                0 4px 20px rgba(15, 81, 50, .07);
 
-            --bomet-shadow-lg: 0 12px 40px rgba(15, 81, 50, .12);
+            --bomet-shadow-lg:
+                0 12px 40px rgba(15, 81, 50, .12);
 
-            --bottom-nav-height: 70px;
+            /* Layout */
+            --bomet-container-max: 1380px;
+            --bomet-mobile-header-height: 66px;
+            --bomet-bottom-nav-height: 68px;
 
+            /* Motion */
+            --bomet-transition-fast:
+                150ms ease;
+
+            --bomet-transition:
+                200ms ease;
         }
 
+        /* =========================================================
+           GLOBAL RESET
+        ========================================================== */
 
-        /* =====================================================
-           GLOBAL RESET & BASICS
-        ====================================================== */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
 
         html {
-
+            min-width: 320px;
+            overflow-x: clip;
             scroll-behavior: smooth;
-
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
         }
 
         body {
-
             margin: 0;
+            min-width: 320px;
+            max-width: 100%;
+            overflow-x: clip;
 
             background: var(--bomet-bg);
-
             color: var(--bomet-text);
 
+            /*
+             * System font stack removes the additional Google Fonts
+             * network request while maintaining excellent readability.
+             */
             font-family:
-                "Plus Jakarta Sans",
                 system-ui,
                 -apple-system,
                 BlinkMacSystemFont,
                 "Segoe UI",
+                Roboto,
+                Helvetica,
+                Arial,
                 sans-serif;
 
+            font-size: 15px;
+            line-height: 1.5;
+
             -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
 
-            padding-bottom: 0;
+        /* Prevent long content from creating horizontal overflow */
+        img,
+        picture,
+        video,
+        canvas,
+        svg,
+        iframe {
+            max-width: 100%;
+        }
 
+        img {
+            height: auto;
+            vertical-align: middle;
+        }
+
+        video,
+        iframe {
+            display: block;
+        }
+
+        table {
+            max-width: 100%;
+        }
+
+        pre,
+        code {
+            max-width: 100%;
+        }
+
+        pre {
+            overflow-x: auto;
         }
 
         a {
-
+            color: inherit;
             text-decoration: none;
+        }
 
+        button,
+        input,
+        select,
+        textarea {
+            font: inherit;
         }
 
         button,
         a,
         input,
-        select {
-
+        select,
+        textarea {
             -webkit-tap-highlight-color: transparent;
-
         }
 
         button,
         .btn,
         .nav-link,
-        .quick-action {
+        .quick-action,
+        .dock-item,
+        .header-action {
+            touch-action: manipulation;
+        }
 
+        /* =========================================================
+           ACCESSIBILITY
+        ========================================================== */
+
+        :focus {
+            outline: none;
+        }
+
+        :focus-visible {
+            outline: 3px solid rgba(25, 135, 84, .35);
+            outline-offset: 2px;
+        }
+
+        a:focus-visible,
+        button:focus-visible,
+        input:focus-visible,
+        select:focus-visible,
+        textarea:focus-visible {
+            outline: 3px solid rgba(25, 135, 84, .35);
+            outline-offset: 2px;
+        }
+
+        .visually-hidden-focusable:not(:focus) {
+            position: absolute !important;
+            width: 1px !important;
+            height: 1px !important;
+            padding: 0 !important;
+            margin: -1px !important;
+            overflow: hidden !important;
+            clip: rect(0, 0, 0, 0) !important;
+            white-space: nowrap !important;
+            border: 0 !important;
+        }
+
+        /* =========================================================
+           SHARED MOTION
+        ========================================================== */
+
+        button,
+        .btn,
+        .nav-link,
+        .quick-action,
+        .header-action,
+        .dock-item,
+        .footer-link,
+        .footer-social-link,
+        .footer-call-btn,
+        .offcanvas-link,
+        .bomet-brand {
             transition:
-                transform .15s ease,
-                background-color .15s ease,
-                border-color .15s ease,
-                box-shadow .15s ease,
-                color .15s ease;
-
+                color var(--bomet-transition-fast),
+                background-color var(--bomet-transition-fast),
+                border-color var(--bomet-transition-fast),
+                box-shadow var(--bomet-transition-fast),
+                transform var(--bomet-transition-fast),
+                opacity var(--bomet-transition-fast);
         }
 
         button:active,
         .btn:active,
-        .nav-link:active,
+        .header-action:active,
+        .dock-item:active,
         .quick-action:active {
-
-            transform: scale(.97);
-
+            transform: scale(.98);
         }
 
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
 
-        /* =====================================================
-           TOP UTILITY BAR (DESKTOP)
-        ====================================================== */
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: .01ms !important;
+            }
+        }
+
+        /* =========================================================
+           TOP UTILITY BAR
+        ========================================================== */
 
         .bomet-topbar {
-
             display: none;
-
             background: var(--bomet-green-deep);
-
-            color: rgba(255,255,255,.85);
-
-            font-size: .75rem;
-
+            color: rgba(255, 255, 255, .84);
+            font-size: .72rem;
         }
 
         @media (min-width: 768px) {
-
             .bomet-topbar {
-
                 display: block;
-
             }
-
         }
 
         .bomet-topbar-inner {
-
             min-height: 34px;
-
             display: flex;
-
             align-items: center;
-
             justify-content: space-between;
+            gap: 18px;
+            overflow: hidden;
+        }
 
+        .bomet-topbar-inner > div {
+            min-width: 0;
         }
 
         .bomet-topbar a {
-
-            color: rgba(255,255,255,.85);
-
+            color: rgba(255, 255, 255, .85);
         }
 
-
-        /* =====================================================
-           HEADER & BRANDING
-        ====================================================== */
+        /* =========================================================
+           MAIN HEADER
+        ========================================================== */
 
         .bomet-header {
-
             position: sticky;
-
             top: 0;
-
             z-index: 1030;
 
-            background: rgba(255,255,255,.97);
+            background: rgba(255, 255, 255, .98);
 
             border-bottom: 1px solid var(--bomet-border);
 
-            backdrop-filter: blur(12px);
-
-            -webkit-backdrop-filter: blur(12px);
-
+            /*
+             * Avoiding backdrop-filter keeps the header inexpensive
+             * on lower-powered mobile devices.
+             */
         }
 
         .bomet-header-main {
-
-            min-height: 66px;
+            min-height: var(--bomet-mobile-header-height);
 
             display: flex;
-
             align-items: center;
 
+            gap: 5px;
+
+            padding-block:
+                max(4px, env(safe-area-inset-top, 0px));
         }
 
+        /* =========================================================
+           BRAND
+        ========================================================== */
+
         .bomet-brand {
+            min-width: 0;
+            flex: 1 1 auto;
 
             display: inline-flex;
-
             align-items: center;
 
-            gap: 10px;
+            gap: 8px;
 
             color: var(--bomet-green-dark);
-
             font-weight: 800;
 
-            letter-spacing: -.5px;
-
-            white-space: nowrap;
-
+            letter-spacing: -.35px;
         }
 
         .bomet-brand:hover {
-
             color: var(--bomet-green);
-
         }
 
         .bomet-logo {
-
             width: 40px;
-
             height: 40px;
 
+            flex: 0 0 40px;
+
             display: inline-flex;
-
             align-items: center;
-
             justify-content: center;
 
-            border-radius: 12px;
+            border-radius: 11px;
 
             background:
                 linear-gradient(
@@ -294,95 +393,174 @@
                     var(--bomet-green-dark)
                 );
 
-            color: white;
+            color: #fff;
 
-            font-size: 1.2rem;
+            font-size: 1.15rem;
 
             box-shadow:
-                0 5px 15px rgba(25,135,84,.22);
+                0 5px 15px rgba(25, 135, 84, .18);
+        }
 
+        .bomet-brand > span:last-child {
+            min-width: 0;
         }
 
         .bomet-brand-name {
+            display: block;
 
-            font-size: 1.05rem;
+            max-width: 100%;
 
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+
+            font-size: clamp(.88rem, 3.8vw, 1.05rem);
             line-height: 1.1;
-
         }
 
         .bomet-brand-subtitle {
-
             display: block;
-
-            color: var(--bomet-muted);
-
-            font-size: .62rem;
-
-            font-weight: 600;
-
-            letter-spacing: .2px;
 
             margin-top: 2px;
 
+            color: var(--bomet-muted);
+
+            font-size: clamp(.55rem, 2vw, .62rem);
+            font-weight: 600;
+
+            letter-spacing: .15px;
+
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
+        /* =========================================================
+           HEADER ACTIONS
+        ========================================================== */
 
-        /* =====================================================
-           DESKTOP SEARCH & ACTIONS
-        ====================================================== */
+        .header-actions {
+            flex: 0 0 auto;
+
+            display: flex;
+            align-items: center;
+
+            gap: 2px;
+        }
+
+        .header-action {
+            position: relative;
+
+            width: 44px;
+            min-width: 44px;
+            height: 44px;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 0;
+
+            border: 0;
+            border-radius: 11px;
+
+            color: var(--bomet-text);
+            background: transparent;
+
+            font-size: 1.08rem;
+        }
+
+        .header-action:hover {
+            color: var(--bomet-green);
+            background: var(--bomet-green-soft);
+        }
+
+        .mobile-menu-btn {
+            display: inline-flex;
+            flex: 0 0 44px;
+        }
+
+        /* =========================================================
+           CART / WISHLIST BADGES
+        ========================================================== */
+
+        .cart-badge {
+            position: absolute;
+
+            top: 1px;
+            right: 0;
+
+            min-width: 18px;
+            height: 18px;
+
+            padding: 0 4px;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 999px;
+
+            background: var(--bomet-green);
+            color: #fff;
+
+            border: 2px solid #fff;
+
+            font-size: .56rem;
+            font-weight: 800;
+
+            line-height: 1;
+
+            white-space: nowrap;
+        }
+
+        /* =========================================================
+           DESKTOP SEARCH
+        ========================================================== */
 
         .desktop-search {
-
             display: none;
-
         }
 
         @media (min-width: 992px) {
-
             .desktop-search {
-
                 display: flex;
-
-                flex: 1;
+                flex: 1 1 480px;
 
                 max-width: 650px;
 
-                margin: 0 30px;
-
+                margin-inline: clamp(12px, 2vw, 30px);
             }
-
         }
 
         .desktop-search .input-group {
+            width: 100%;
 
-            background: #f5f7f5;
+            background: var(--bomet-surface-soft);
 
             border: 1px solid var(--bomet-border);
 
             border-radius: 12px;
 
             overflow: hidden;
-
         }
 
         .desktop-search select {
-
+            width: 145px;
             max-width: 145px;
 
             border: 0;
-
             border-right: 1px solid var(--bomet-border);
 
             background: transparent;
 
-            font-size: .82rem;
+            font-size: .78rem;
 
             box-shadow: none;
-
         }
 
         .desktop-search input {
+            min-width: 0;
 
             border: 0;
 
@@ -390,301 +568,241 @@
 
             box-shadow: none;
 
-            font-size: .86rem;
-
+            font-size: .84rem;
         }
 
         .desktop-search input:focus {
-
             box-shadow: none;
-
         }
 
         .desktop-search button {
+            width: 48px;
+            min-width: 48px;
 
             border: 0;
 
-            width: 48px;
-
             background: var(--bomet-green);
-
-            color: white;
-
+            color: #fff;
         }
 
         .desktop-search button:hover {
-
             background: var(--bomet-green-dark);
-
         }
 
-
-        /* =====================================================
-           HEADER ACTIONS
-        ====================================================== */
-
-        .header-actions {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 5px;
-
-            margin-left: auto;
-
-        }
-
-        .header-action {
-
-            position: relative;
-
-            width: 42px;
-
-            height: 42px;
-
-            border-radius: 12px;
-
-            display: inline-flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            color: var(--bomet-text);
-
-            background: transparent;
-
-            border: 0;
-
-            font-size: 1.15rem;
-
-        }
-
-        .header-action:hover {
-
-            color: var(--bomet-green);
-
-            background: var(--bomet-green-soft);
-
-        }
-
-
-        /* =====================================================
-           CART / WISHLIST BADGE
-        ====================================================== */
-
-        .cart-badge {
-
-            position: absolute;
-
-            top: 1px;
-
-            right: 1px;
-
-            min-width: 18px;
-
-            height: 18px;
-
-            padding: 0 5px;
-
-            display: inline-flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            border-radius: 50px;
-
-            background: var(--bomet-green);
-
-            color: white;
-
-            border: 2px solid white;
-
-            font-size: .58rem;
-
-            font-weight: 800;
-
-        }
-
-
-        /* =====================================================
-           DESKTOP NAVIGATION & ACTIVE STATE
-        ====================================================== */
+        /* =========================================================
+           DESKTOP NAVIGATION
+        ========================================================== */
 
         .desktop-navigation {
-
             display: none;
 
-            border-top: 1px solid #f0f2f0;
-
+            border-top: 1px solid var(--bomet-border-light);
         }
 
         @media (min-width: 992px) {
-
             .desktop-navigation {
-
                 display: block;
-
             }
-
         }
 
         .desktop-nav-inner {
-
-            min-height: 48px;
+            min-height: 46px;
 
             display: flex;
-
             align-items: center;
 
-            gap: 6px;
+            gap: 4px;
 
+            overflow-x: auto;
+            overflow-y: hidden;
+
+            scrollbar-width: none;
+        }
+
+        .desktop-nav-inner::-webkit-scrollbar {
+            display: none;
         }
 
         .desktop-nav-link {
-
             position: relative;
 
-            padding: 8px 14px;
+            flex: 0 0 auto;
+
+            min-height: 40px;
+
+            display: inline-flex;
+            align-items: center;
+
+            padding: 7px 12px;
 
             border-radius: 9px;
 
             color: #46524a;
 
-            font-size: .78rem;
-
+            font-size: .77rem;
             font-weight: 600;
 
-            transition: all 0.2s ease-in-out;
-
+            white-space: nowrap;
         }
 
         .desktop-nav-link:hover {
-
             color: var(--bomet-green);
-
             background: var(--bomet-green-soft);
-
         }
 
         .desktop-nav-link.active {
-
             color: var(--bomet-green);
-
             font-weight: 700;
-
         }
 
         .desktop-nav-link.active::after {
-
-            content: '';
+            content: "";
 
             position: absolute;
 
-            bottom: 0;
-
             left: 10px;
-
             right: 10px;
+            bottom: 0;
 
             height: 3px;
 
-            background-color: var(--bomet-green);
+            background: var(--bomet-green);
 
             border-radius: 2px;
-
         }
 
-
-        /* =====================================================
-           MOBILE SEARCH & OFFCANVAS
-        ====================================================== */
-
-        .mobile-menu-btn {
-
-            display: inline-flex;
-
-        }
-
-        @media (min-width: 992px) {
-
-            .mobile-menu-btn {
-
-                display: none;
-
-            }
-
-        }
+        /* =========================================================
+           MOBILE SEARCH OVERLAY
+        ========================================================== */
 
         .mobile-search-overlay {
-
             position: fixed;
 
             inset: 0;
 
             z-index: 2000;
 
-            background: rgba(255,255,255,.98);
-
             display: none;
 
-            padding: 18px;
+            width: 100%;
+            height: 100dvh;
 
+            overflow-y: auto;
+
+            padding:
+                max(14px, env(safe-area-inset-top))
+                14px
+                max(20px, env(safe-area-inset-bottom));
+
+            background: #fff;
         }
 
         .mobile-search-overlay.active {
-
             display: block;
-
         }
 
         .mobile-search-header {
+            min-height: 48px;
 
             display: flex;
-
             align-items: center;
 
             gap: 10px;
 
-            margin-bottom: 20px;
+            margin-bottom: 18px;
+        }
 
+        .mobile-search-header strong {
+            min-width: 0;
+
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+            font-size: .9rem;
+        }
+
+        .mobile-search-header .btn {
+            flex: 0 0 44px;
+
+            width: 44px;
+            height: 44px;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 0;
         }
 
         .mobile-search-input {
+            min-height: 52px;
 
-            border-radius: 14px;
+            border-radius: 13px;
 
             border: 1px solid var(--bomet-border);
 
-            background: #f7f9f7;
+            background: var(--bomet-bg);
 
-            min-height: 52px;
-
-            font-size: .95rem;
-
+            font-size: .94rem;
         }
 
-        .bomet-offcanvas {
+        .mobile-search-input:focus {
+            border-color: var(--bomet-green);
+            box-shadow:
+                0 0 0 3px rgba(25, 135, 84, .1);
+        }
 
-            width: min(88vw, 350px) !important;
+        .mobile-search-overlay .input-group .btn {
+            min-width: 52px;
+        }
+
+        /* =========================================================
+           MOBILE OFFCANVAS
+        ========================================================== */
+
+        .bomet-offcanvas {
+            width: min(88vw, 360px) !important;
+            max-width: 360px;
 
             border: 0 !important;
 
+            /*
+             * Safe area support for modern phones.
+             */
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
         }
 
-        .offcanvas-header {
+        .bomet-offcanvas .offcanvas-header {
+            min-height: 68px;
 
-            padding: 18px;
+            padding:
+                10px 14px;
 
             border-bottom: 1px solid var(--bomet-border);
+        }
 
+        .bomet-offcanvas .offcanvas-header .bomet-brand {
+            min-width: 0;
+        }
+
+        .bomet-offcanvas .btn-close {
+            flex: 0 0 auto;
+
+            width: 44px;
+            height: 44px;
+
+            margin: 0;
+
+            padding: 0;
+
+            border-radius: 10px;
+
+            background-size: 12px;
         }
 
         .offcanvas-user {
-
-            padding: 18px;
+            padding: 14px;
 
             background:
                 linear-gradient(
@@ -694,280 +812,365 @@
                 );
 
             border-bottom: 1px solid var(--bomet-border);
+        }
 
+        .offcanvas-user .fw-bold {
+            font-size: .86rem;
+        }
+
+        .offcanvas-user .small {
+            max-width: 210px;
+
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+
+            font-size: .7rem;
         }
 
         .offcanvas-avatar {
+            width: 44px;
+            height: 44px;
 
-            width: 46px;
-
-            height: 46px;
+            flex: 0 0 44px;
 
             display: inline-flex;
-
             align-items: center;
-
             justify-content: center;
 
             border-radius: 50%;
 
             background: var(--bomet-green);
+            color: #fff;
 
-            color: white;
-
+            font-size: .9rem;
             font-weight: 800;
+        }
 
+        .bomet-offcanvas .offcanvas-body {
+            min-height: 0;
+
+            overflow-y: auto;
+            overflow-x: hidden;
+
+            overscroll-behavior: contain;
+
+            -webkit-overflow-scrolling: touch;
         }
 
         .offcanvas-section-title {
-
-            padding: 15px 18px 7px;
+            padding: 13px 16px 6px;
 
             color: var(--bomet-muted);
 
-            font-size: .67rem;
-
+            font-size: .64rem;
             font-weight: 800;
 
             text-transform: uppercase;
-
             letter-spacing: .08em;
+        }
 
+        /*
+         * Categories are deliberately constrained.
+         * This prevents 20+ categories from making the entire
+         * mobile drawer unnecessarily long.
+         */
+        .offcanvas-category-list {
+            max-height: min(38vh, 320px);
+
+            overflow-y: auto;
+            overflow-x: hidden;
+
+            padding-bottom: 3px;
+
+            overscroll-behavior: contain;
+            -webkit-overflow-scrolling: touch;
+
+            scrollbar-width: thin;
+        }
+
+        .offcanvas-category-list::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .offcanvas-category-list::-webkit-scrollbar-thumb {
+            background: #cfd8d2;
+            border-radius: 999px;
         }
 
         .offcanvas-link {
+            min-height: 46px;
 
             display: flex;
-
             align-items: center;
 
-            gap: 12px;
+            gap: 11px;
 
-            margin: 2px 10px;
+            margin: 2px 9px;
 
-            padding: 12px;
+            padding: 9px 11px;
 
             border-radius: 11px;
 
             color: var(--bomet-text);
 
-            font-size: .86rem;
-
+            font-size: .83rem;
             font-weight: 600;
 
+            overflow: hidden;
+        }
+
+        .offcanvas-link span {
+            min-width: 0;
         }
 
         .offcanvas-link:hover,
         .offcanvas-link.active {
-
             color: var(--bomet-green-dark);
-
             background: var(--bomet-green-soft);
-
         }
 
         .offcanvas-link i {
-
             width: 22px;
+            min-width: 22px;
 
             text-align: center;
 
             color: var(--bomet-green);
 
-            font-size: 1.05rem;
-
+            font-size: 1rem;
         }
 
+        .offcanvas-link.text-danger i {
+            color: var(--bomet-danger);
+        }
 
-        /* =====================================================
-           FLASH / TOAST MESSAGES
-        ====================================================== */
+        /* =========================================================
+           FLASH MESSAGES
+        ========================================================== */
 
         .bomet-flash-container {
-
             position: fixed;
 
-            top: 78px;
+            top:
+                calc(
+                    var(--bomet-mobile-header-height)
+                    + env(safe-area-inset-top)
+                    + 8px
+                );
 
-            right: 18px;
+            left: 12px;
+            right: 12px;
 
             z-index: 2050;
 
-            width: min(420px, calc(100vw - 36px));
+            width: auto;
 
+            pointer-events: none;
+        }
+
+        .bomet-flash-container .bomet-flash {
+            pointer-events: auto;
         }
 
         .bomet-flash {
+            margin-bottom: 8px !important;
 
             border: 0;
 
-            border-radius: 14px;
+            border-radius: var(--bomet-radius);
 
             box-shadow: var(--bomet-shadow-lg);
 
-            font-size: .82rem;
-
+            font-size: .79rem;
+            line-height: 1.45;
         }
 
-        @media (max-width: 767.98px) {
+        .bomet-flash .btn-close {
+            padding: .9rem;
+        }
 
+        @media (min-width: 768px) {
             .bomet-flash-container {
+                top: 78px;
+                left: auto;
+                right: 18px;
 
-                top: 74px;
-
-                left: 12px;
-
-                right: 12px;
-
-                width: auto;
-
+                width: min(420px, calc(100vw - 36px));
             }
-
         }
 
-
-        /* =====================================================
-           MAIN LAYOUT & MOBILE BOTTOM DOCK
-        ====================================================== */
+        /* =========================================================
+           MAIN CONTENT
+        ========================================================== */
 
         .bomet-main {
-
             min-height: 55vh;
 
+            width: 100%;
+            max-width: 100%;
+
+            overflow-x: clip;
         }
 
         @media (max-width: 767.98px) {
-
             .bomet-main {
-
                 padding-bottom:
                     calc(
-                        var(--bottom-nav-height)
+                        var(--bomet-bottom-nav-height)
                         + env(safe-area-inset-bottom)
-                        + 28px
+                        + 20px
                     );
-
             }
-
         }
+
+        /* =========================================================
+           MOBILE BOTTOM NAVIGATION
+        ========================================================== */
 
         .mobile-bottom-dock {
+            display: block;
 
-            display: none;
+            position: fixed;
 
-        }
+            left: 0;
+            right: 0;
+            bottom: 0;
 
-        @media (max-width: 767.98px) {
+            z-index: 1040;
 
-            .mobile-bottom-dock {
+            padding:
+                6px
+                7px
+                calc(
+                    6px
+                    + env(safe-area-inset-bottom)
+                );
 
-                display: block;
+            background: rgba(255, 255, 255, .98);
 
-                position: fixed;
+            border-top: 1px solid var(--bomet-border);
 
-                left: 0;
-
-                right: 0;
-
-                bottom: 0;
-
-                z-index: 1040;
-
-                padding:
-                    7px 8px
-                    calc(7px + env(safe-area-inset-bottom));
-
-                background: rgba(255,255,255,.97);
-
-                border-top: 1px solid var(--bomet-border);
-
-                box-shadow:
-                    0 -5px 25px rgba(0,0,0,.07);
-
-                backdrop-filter: blur(12px);
-
-                -webkit-backdrop-filter: blur(12px);
-
-            }
-
+            box-shadow:
+                0 -5px 22px rgba(0, 0, 0, .06);
         }
 
         .mobile-dock-inner {
+            width: min(100%, 560px);
+
+            margin-inline: auto;
 
             display: grid;
 
-            grid-template-columns: repeat(6, 1fr);
+            grid-template-columns:
+                repeat(6, minmax(0, 1fr));
 
-            max-width: 560px;
-
-            margin: auto;
-
+            gap: 2px;
         }
 
         .dock-item {
-
             position: relative;
 
-            min-height: 52px;
+            min-width: 0;
+            min-height: 50px;
 
             display: flex;
-
             flex-direction: column;
-
             align-items: center;
-
             justify-content: center;
 
-            gap: 3px;
+            gap: 2px;
+
+            padding: 3px 2px;
+
+            border: 0;
+
+            border-radius: 11px;
 
             color: #657068;
 
-            border-radius: 12px;
-
-            font-size: .62rem;
-
+            font-size: .58rem;
             font-weight: 700;
 
+            line-height: 1.1;
+
+            overflow: visible;
         }
 
         .dock-item i {
+            font-size: 1.1rem;
+            line-height: 1;
+        }
 
-            font-size: 1.15rem;
+        .dock-item span {
+            max-width: 100%;
 
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .dock-item:hover,
         .dock-item.active {
-
             color: var(--bomet-green);
-
             background: var(--bomet-green-soft);
-
         }
 
+        .mobile-dock-inner .cart-badge {
+            top: 1px;
+            right: 8px;
+        }
 
-        /* =====================================================
-           FOOTER STYLES — PROFESSIONAL, MOBILE-FIRST
-        ====================================================== */
+        @media (min-width: 768px) {
+            .mobile-bottom-dock {
+                display: none;
+            }
+        }
+
+        @media (max-width: 359.98px) {
+            .mobile-dock-inner {
+                grid-template-columns:
+                    repeat(6, minmax(0, 1fr));
+            }
+
+            .dock-item {
+                min-height: 48px;
+                font-size: .54rem;
+            }
+
+            .dock-item i {
+                font-size: 1.03rem;
+            }
+
+            .mobile-dock-inner .cart-badge {
+                right: 4px;
+            }
+        }
+
+        /* =========================================================
+           FOOTER
+        ========================================================== */
 
         .bomet-footer {
-
             position: relative;
 
             background:
-                linear-gradient(180deg, var(--bomet-green-deep) 0%, #062f1d 100%);
+                var(--bomet-green-deep);
 
-            color: white;
+            color: #fff;
 
             overflow: hidden;
 
-            border-top: 1px solid rgba(255,255,255,.08);
-
+            border-top:
+                1px solid rgba(255, 255, 255, .08);
         }
 
+        /*
+         * Lightweight decorative background.
+         * No blur/backdrop filters or animated effects.
+         */
         .bomet-footer::before {
-
-            content: '';
+            content: "";
 
             position: absolute;
 
@@ -976,298 +1179,215 @@
             pointer-events: none;
 
             background:
-                radial-gradient(circle at 8% 8%, rgba(255,255,255,.055), transparent 30%),
-                radial-gradient(circle at 92% 90%, rgba(25,135,84,.16), transparent 32%);
-
+                radial-gradient(
+                    circle at 8% 8%,
+                    rgba(255, 255, 255, .045),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at 92% 90%,
+                    rgba(25, 135, 84, .13),
+                    transparent 32%
+                );
         }
 
         .bomet-footer .container {
-
             position: relative;
-
             z-index: 1;
-
         }
 
         .footer-top {
-
-            padding: 8px 0 28px;
-
+            padding: 5px 0 24px;
         }
 
         .footer-brand-wrap {
-
             display: flex;
-
             align-items: flex-start;
 
-            gap: 12px;
+            gap: 11px;
 
             margin-bottom: 12px;
-
         }
 
         .footer-brand-mark {
-
             width: 42px;
-
             height: 42px;
 
             flex: 0 0 42px;
 
             display: inline-flex;
-
             align-items: center;
-
             justify-content: center;
 
-            border-radius: 12px;
+            border-radius: 11px;
 
-            background: rgba(255,255,255,.10);
+            background: rgba(255, 255, 255, .09);
 
-            border: 1px solid rgba(255,255,255,.12);
+            border:
+                1px solid rgba(255, 255, 255, .1);
 
-            color: white;
-
-            box-shadow: 0 8px 24px rgba(0,0,0,.12);
-
+            color: #fff;
         }
 
         .footer-brand {
+            color: #fff;
 
-            color: white;
-
-            font-size: 1rem;
-
+            font-size: .96rem;
             line-height: 1.25;
-
             font-weight: 800;
-
-            letter-spacing: -.2px;
-
         }
 
         .footer-brand-subtitle {
-
             display: block;
 
             margin-top: 3px;
 
-            color: rgba(255,255,255,.55);
+            color: rgba(255, 255, 255, .53);
 
-            font-size: .62rem;
-
+            font-size: .59rem;
             font-weight: 700;
 
             letter-spacing: .04em;
 
             text-transform: uppercase;
-
         }
 
         .footer-text {
+            color: rgba(255, 255, 255, .67);
 
-            color: rgba(255,255,255,.68);
+            font-size: .74rem;
 
-            font-size: .76rem;
-
-            line-height: 1.72;
-
+            line-height: 1.68;
         }
 
         .footer-description {
-
             max-width: 440px;
 
-            margin-bottom: 14px;
-
+            margin-bottom: 12px;
         }
 
         .footer-trust-row {
-
             display: grid;
 
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns:
+                repeat(3, minmax(0, 1fr));
 
-            gap: 7px;
+            gap: 6px;
 
-            margin-top: 14px;
-
+            margin-top: 13px;
         }
 
         .footer-trust-item {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 7px;
-
             min-width: 0;
 
-            padding: 8px 9px;
+            display: flex;
+            align-items: center;
 
-            border: 1px solid rgba(255,255,255,.09);
+            gap: 6px;
 
-            border-radius: 10px;
+            padding: 8px 7px;
 
-            background: rgba(255,255,255,.045);
+            border:
+                1px solid rgba(255, 255, 255, .08);
 
-            color: rgba(255,255,255,.76);
+            border-radius: 9px;
 
-            font-size: .66rem;
+            background:
+                rgba(255, 255, 255, .035);
 
+            color:
+                rgba(255, 255, 255, .75);
+
+            font-size: .61rem;
             font-weight: 700;
 
-            line-height: 1.35;
-
+            line-height: 1.3;
         }
 
         .footer-trust-item i {
-
             flex: 0 0 auto;
 
             color: #b8dfc7;
 
-            font-size: .9rem;
-
+            font-size: .84rem;
         }
 
         .footer-heading {
+            color: #fff;
 
-            color: white;
-
-            font-size: .72rem;
-
+            font-size: .7rem;
             font-weight: 800;
 
             letter-spacing: .07em;
 
             text-transform: uppercase;
 
-            margin-bottom: 11px;
-
+            margin-bottom: 10px;
         }
 
         .footer-link {
+            width: fit-content;
+            max-width: 100%;
+
+            min-height: 32px;
 
             display: flex;
-
             align-items: center;
 
             gap: 7px;
 
-            width: fit-content;
+            padding: 4px 0;
 
-            max-width: 100%;
-
-            color: rgba(255,255,255,.68);
-
-            font-size: .74rem;
-
-            line-height: 1.45;
-
-            padding: 5px 0;
-
-            border-radius: 5px;
-
-            transition:
-                color .15s ease,
-                transform .15s ease;
-
-        }
-
-        .footer-link i {
-
-            color: rgba(184,223,199,.78);
+            color:
+                rgba(255, 255, 255, .67);
 
             font-size: .72rem;
 
+            line-height: 1.45;
+        }
+
+        .footer-link i {
+            flex: 0 0 auto;
+
+            color:
+                rgba(184, 223, 199, .78);
+
+            font-size: .7rem;
         }
 
         .footer-link:hover,
         .footer-link:focus-visible {
-
-            color: white;
+            color: #fff;
 
             transform: translateX(2px);
-
-        }
-
-        .footer-link:focus-visible,
-        .footer-contact-link:focus-visible,
-        .footer-social-link:focus-visible {
-
-            outline: 2px solid rgba(255,255,255,.8);
-
-            outline-offset: 3px;
-
         }
 
         .footer-contact-list {
-
             display: grid;
-
-            gap: 9px;
-
+            gap: 8px;
         }
 
-        .footer-contact-link {
-
+        .footer-contact-link,
+        .footer-contact-static {
             display: flex;
-
             align-items: flex-start;
 
-            gap: 9px;
+            gap: 8px;
 
-            color: rgba(255,255,255,.7);
+            color:
+                rgba(255, 255, 255, .69);
 
-            font-size: .74rem;
+            font-size: .72rem;
 
             line-height: 1.5;
-
-            transition: color .15s ease;
-
-        }
-
-        .footer-contact-link i {
-
-            flex: 0 0 17px;
-
-            width: 17px;
-
-            margin-top: 2px;
-
-            color: #b8dfc7;
-
-            text-align: center;
-
         }
 
         .footer-contact-link:hover {
-
-            color: white;
-
+            color: #fff;
         }
 
-        .footer-contact-static {
-
-            display: flex;
-
-            align-items: flex-start;
-
-            gap: 9px;
-
-            color: rgba(255,255,255,.7);
-
-            font-size: .74rem;
-
-            line-height: 1.5;
-
-        }
-
+        .footer-contact-link i,
         .footer-contact-static i {
-
             flex: 0 0 17px;
 
             width: 17px;
@@ -1277,500 +1397,478 @@
             color: #b8dfc7;
 
             text-align: center;
-
         }
 
         .footer-social-row {
-
             display: flex;
-
             flex-wrap: wrap;
 
-            gap: 7px;
+            gap: 6px;
 
-            margin-top: 15px;
-
+            margin-top: 14px;
         }
 
         .footer-social-link {
-
             width: 34px;
-
             height: 34px;
 
             display: inline-flex;
-
             align-items: center;
-
             justify-content: center;
 
             border-radius: 9px;
 
-            border: 1px solid rgba(255,255,255,.11);
+            border:
+                1px solid rgba(255, 255, 255, .1);
 
-            background: rgba(255,255,255,.05);
+            background:
+                rgba(255, 255, 255, .045);
 
-            color: rgba(255,255,255,.78);
-
-            transition:
-                background-color .15s ease,
-                color .15s ease,
-                transform .15s ease;
-
+            color:
+                rgba(255, 255, 255, .78);
         }
 
         .footer-social-link:hover {
+            background:
+                rgba(255, 255, 255, .11);
 
-            background: rgba(255,255,255,.12);
-
-            color: white;
+            color: #fff;
 
             transform: translateY(-1px);
-
         }
 
+        /* =========================================================
+           FOOTER CTA
+        ========================================================== */
+
         .footer-cta {
-
             display: flex;
-
             flex-direction: column;
 
-            gap: 11px;
+            gap: 10px;
 
-            padding: 14px;
+            padding: 13px;
 
-            margin-top: 20px;
+            margin-top: 18px;
 
-            border: 1px solid rgba(255,255,255,.10);
+            border:
+                1px solid rgba(255, 255, 255, .09);
 
-            border-radius: 14px;
+            border-radius: 13px;
 
-            background: rgba(255,255,255,.045);
-
+            background:
+                rgba(255, 255, 255, .035);
         }
 
         .footer-cta-title {
+            color: #fff;
 
-            color: white;
-
-            font-size: .8rem;
-
+            font-size: .77rem;
             font-weight: 800;
 
-            margin-bottom: 3px;
-
+            margin-bottom: 2px;
         }
 
         .footer-cta-text {
+            color:
+                rgba(255, 255, 255, .61);
 
-            color: rgba(255,255,255,.62);
+            font-size: .66rem;
 
-            font-size: .68rem;
-
-            line-height: 1.55;
+            line-height: 1.5;
 
             margin: 0;
-
         }
 
         .footer-call-btn {
+            width: 100%;
+
+            min-height: 40px;
 
             display: inline-flex;
-
             align-items: center;
-
             justify-content: center;
 
             gap: 7px;
-
-            min-height: 40px;
 
             padding: 8px 12px;
 
             border-radius: 9px;
 
-            background: white;
-
+            background: #fff;
             color: var(--bomet-green-dark);
 
-            font-size: .7rem;
-
+            font-size: .69rem;
             font-weight: 800;
-
-            transition:
-                transform .15s ease,
-                box-shadow .15s ease;
-
         }
 
         .footer-call-btn:hover {
-
             color: var(--bomet-green-deep);
 
             transform: translateY(-1px);
 
-            box-shadow: 0 7px 18px rgba(0,0,0,.14);
-
+            box-shadow:
+                0 7px 18px rgba(0, 0, 0, .12);
         }
 
+        /* =========================================================
+           DESKTOP / MOBILE FOOTER SWITCH
+        ========================================================== */
+
         .desktop-footer {
-
             display: none;
-
         }
 
         .mobile-footer {
-
             display: block;
-
         }
 
         .mobile-footer .accordion {
-
-            border-top: 1px solid rgba(255,255,255,.10);
-
+            border-top:
+                1px solid rgba(255, 255, 255, .09);
         }
 
         .mobile-footer .accordion-item {
-
             background: transparent;
 
-            border-color: rgba(255,255,255,.10);
-
+            border-color:
+                rgba(255, 255, 255, .09);
         }
 
         .mobile-footer .accordion-button {
-
             min-height: 50px;
+
+            padding: 11px 0;
 
             background: transparent;
 
-            color: white;
+            color: #fff;
 
             box-shadow: none;
 
-            padding: 12px 0;
-
-            font-size: .76rem;
-
+            font-size: .74rem;
             font-weight: 800;
-
         }
 
         .mobile-footer .accordion-button:not(.collapsed) {
-
             background: transparent;
-
             color: #d9f0e1;
-
         }
 
         .mobile-footer .accordion-button::after {
-
             filter: brightness(0) invert(1);
-
-            opacity: .75;
-
+            opacity: .72;
         }
 
         .mobile-footer .accordion-body {
-
-            padding: 0 0 13px;
-
+            padding: 0 0 12px;
         }
 
         .mobile-footer .footer-link {
-
             width: 100%;
-
             min-height: 38px;
-
-            padding: 7px 0;
-
+            padding: 6px 0;
         }
 
+        /* =========================================================
+           FOOTER BOTTOM
+        ========================================================== */
+
         .footer-bottom {
-
             display: flex;
-
             flex-direction: column;
 
             gap: 6px;
 
-            padding: 15px 0 4px;
+            padding:
+                14px 0
+                max(4px, env(safe-area-inset-bottom));
 
-            border-top: 1px solid rgba(255,255,255,.10);
-
+            border-top:
+                1px solid rgba(255, 255, 255, .09);
         }
 
         .footer-bottom-copy {
-
-            color: rgba(255,255,255,.52);
-
-            font-size: .64rem;
-
-            line-height: 1.5;
-
-        }
-
-        .footer-bottom-note {
-
-            color: rgba(255,255,255,.42);
+            color:
+                rgba(255, 255, 255, .51);
 
             font-size: .61rem;
 
             line-height: 1.5;
-
         }
 
-        @media (min-width: 576px) {
+        .footer-bottom-note {
+            color:
+                rgba(255, 255, 255, .4);
 
-            .footer-trust-row {
+            font-size: .59rem;
 
-                grid-template-columns: repeat(3, 1fr);
-
-            }
-
-            .footer-cta {
-
-                flex-direction: row;
-
-                align-items: center;
-
-                justify-content: space-between;
-
-            }
-
-            .footer-call-btn {
-
-                flex: 0 0 auto;
-
-            }
-
+            line-height: 1.5;
         }
 
-        @media (min-width: 768px) {
-
-            .desktop-footer {
-
-                display: block;
-
-            }
-
-            .mobile-footer {
-
-                display: none;
-
-            }
-
-            .footer-top {
-
-                padding: 4px 0 30px;
-
-            }
-
-            .footer-cta {
-
-                margin-top: 24px;
-
-            }
-
-            .footer-bottom {
-
-                flex-direction: row;
-
-                align-items: center;
-
-                justify-content: space-between;
-
-            }
-
-            .footer-bottom-note {
-
-                text-align: right;
-
-            }
-
-        }
-
-        @media (min-width: 992px) {
-
-            .footer-top {
-
-                padding-top: 6px;
-
-                padding-bottom: 34px;
-
-            }
-
-            .footer-description {
-
-                max-width: 390px;
-
-            }
-
-            .footer-trust-row {
-
-                max-width: 430px;
-
-            }
-
-        }
+        /* =========================================================
+           SMALL PHONE OPTIMIZATION
+        ========================================================== */
 
         @media (max-width: 359.98px) {
 
-            .bomet-footer .container {
-
-                padding-left: 13px;
-
-                padding-right: 13px;
-
-            }
-
-            .footer-trust-row {
-
-                grid-template-columns: 1fr;
-
-            }
-
-            .footer-cta {
-
-                padding: 12px;
-
-            }
-
-        }
-
-
-        /* =====================================================
-           MOBILE HAMBURGER — EXTREME LEFT POSITION
-        ====================================================== */
-
-        @media (max-width: 991.98px) {
-
-            .bomet-header > .container {
-
-                padding-left: 0 !important;
-
+            .bomet-header-main {
+                gap: 2px;
             }
 
             .mobile-menu-btn {
+                width: 42px;
+                min-width: 42px;
+                height: 42px;
+            }
 
-                margin-left: 0 !important;
+            .header-action {
+                width: 42px;
+                min-width: 42px;
+                height: 42px;
+            }
 
-                margin-right: 0px !important;
+            .bomet-logo {
+                width: 38px;
+                height: 38px;
+                flex-basis: 38px;
+            }
 
-                width: 44px;
+            .bomet-brand-name {
+                font-size: .84rem;
+            }
 
-                min-width: 44px;
+            .bomet-brand-subtitle {
+                font-size: .53rem;
+            }
 
-                height: 44px;
+            .bomet-footer .container {
+                padding-left: 13px;
+                padding-right: 13px;
+            }
 
-                padding: 0 !important;
+            .footer-trust-row {
+                grid-template-columns: 1fr;
+            }
 
-                display: inline-flex;
+            .footer-cta {
+                padding: 11px;
+            }
+        }
+
+        /* =========================================================
+           LARGE MOBILE
+        ========================================================== */
+
+        @media (min-width: 576px) {
+
+            .bomet-header-main {
+                min-height: 68px;
+            }
+
+            .bomet-brand {
+                gap: 10px;
+            }
+
+            .bomet-logo {
+                width: 42px;
+                height: 42px;
+                flex-basis: 42px;
+            }
+
+            .bomet-brand-name {
+                font-size: 1rem;
+            }
+
+            .bomet-brand-subtitle {
+                font-size: .6rem;
+            }
+
+            .footer-trust-row {
+                grid-template-columns:
+                    repeat(3, minmax(0, 1fr));
+            }
+
+            .footer-cta {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .footer-call-btn {
+                width: auto;
+                flex: 0 0 auto;
+            }
+        }
+
+        /* =========================================================
+           TABLET
+        ========================================================== */
+
+        @media (min-width: 768px) {
+
+            .bomet-header-main {
+                min-height: 70px;
+            }
+
+            .bomet-main {
+                min-height: 60vh;
+            }
+
+            .footer-top {
+                padding:
+                    4px 0 30px;
+            }
+
+            .footer-bottom {
+                flex-direction: row;
 
                 align-items: center;
-
-                justify-content: center;
-
-                flex-shrink: 0;
-
+                justify-content: space-between;
             }
 
+            .footer-bottom-note {
+                text-align: right;
+            }
         }
 
+        /* =========================================================
+           DESKTOP
+        ========================================================== */
 
-        /* =====================================================
-           MOBILE WISHLIST / CART BADGE
-        ====================================================== */
+        @media (min-width: 992px) {
 
-        @media (max-width: 767.98px) {
-
-            .mobile-dock-inner .cart-badge {
-
-                top: 2px;
-
-                right: 14%;
-
+            .mobile-menu-btn {
+                display: none;
             }
 
+            .bomet-header-main {
+                min-height: 72px;
+            }
+
+            .desktop-footer {
+                display: block;
+            }
+
+            .mobile-footer {
+                display: none;
+            }
+
+            .footer-top {
+                padding-top: 6px;
+                padding-bottom: 34px;
+            }
+
+            .footer-description {
+                max-width: 390px;
+            }
+
+            .footer-trust-row {
+                max-width: 430px;
+            }
         }
 
+        /* =========================================================
+           LARGE DESKTOP
+        ========================================================== */
+
+        @media (min-width: 1200px) {
+
+            .bomet-brand-name {
+                font-size: 1.05rem;
+            }
+
+            .desktop-nav-link {
+                padding-inline: 13px;
+            }
+        }
+
+        @media (min-width: 1400px) {
+
+            .desktop-search {
+                max-width: 680px;
+            }
+
+            .desktop-nav-inner {
+                gap: 5px;
+            }
+        }
+
+        /* =========================================================
+           GLOBAL THIRD-PARTY OCR SAFETY
+           
+           Existing project behavior is preserved: known OCR
+           overlays are prevented from obstructing mobile screens.
+        ========================================================== */
+
+        @media (max-width: 991.98px) {
+
+            [id*="ocr" i],
+            [class*="ocr-" i],
+            [class*="ocr_" i],
+            #ocr-widget,
+            #ocrWidget,
+            .ocr-widget,
+            .ocr-panel,
+            .ocr-overlay {
+                display: none !important;
+                visibility: hidden !important;
+                pointer-events: none !important;
+
+                width: 0 !important;
+                height: 0 !important;
+
+                overflow: hidden !important;
+            }
+        }
     </style>
-
 </head>
-
 
 <body>
 
-
     <!-- =========================================================
-         TOP UTILITY BAR (DESKTOP)
+         TOP UTILITY BAR
     ========================================================== -->
 
     <div class="bomet-topbar">
-
         <div class="container">
-
             <div class="bomet-topbar-inner">
 
                 <div class="d-flex flex-wrap align-items-center gap-1">
-
                     <span>
-
-                        <i class="bi bi-truck me-2"></i>
-
+                        <i class="bi bi-truck me-2" aria-hidden="true"></i>
                         Quality agricultural machinery &amp; genuine spare parts
-
                     </span>
 
                     <span class="text-muted">|</span>
 
                     <span>
-
-                        <i class="bi bi-geo-alt me-2"></i>
-
+                        <i class="bi bi-geo-alt me-2" aria-hidden="true"></i>
                         Along Kipchamba Street, Opp. Isenya Building
-
                     </span>
 
                     <span class="text-muted">|</span>
 
                     <span>
-
-                        <i class="bi bi-telephone-outbound-fill me-2"></i>
-
+                        <i class="bi bi-telephone-outbound-fill me-2" aria-hidden="true"></i>
                         +254 722 434 519 / +254 725 733 411
-
                     </span>
-
                 </div>
 
                 <div class="d-flex gap-3">
-
                     <span>
-
-                        <i class="bi bi-geo-alt me-1"></i>
-
+                        <i class="bi bi-geo-alt me-1" aria-hidden="true"></i>
                         Bomet, Kenya
-
                     </span>
 
                     <span>
-
-                        <i class="bi bi-shield-check me-1"></i>
-
+                        <i class="bi bi-shield-check me-1" aria-hidden="true"></i>
                         Trusted Machinery
-
                     </span>
-
                 </div>
 
             </div>
-
         </div>
-
     </div>
 
 
@@ -1784,94 +1882,72 @@
 
             <div class="bomet-header-main">
 
-
-                <!-- Mobile Hamburger Button -->
-
+                <!-- Mobile Menu -->
                 <button
-                    class="btn header-action mobile-menu-btn me-1"
+                    class="btn header-action mobile-menu-btn"
                     type="button"
                     data-bs-toggle="offcanvas"
                     data-bs-target="#bometMobileMenu"
                     aria-controls="bometMobileMenu"
-                    aria-label="Open navigation menu"
-                >
+                    aria-label="Open navigation menu">
 
-                    <i class="bi bi-list fs-4"></i>
+                    <i class="bi bi-list fs-4" aria-hidden="true"></i>
 
                 </button>
 
 
-                <!-- Brand Logo -->
-
+                <!-- Brand -->
                 <a
                     class="bomet-brand"
                     href="{{ url_for('home.home') }}"
-                    aria-label="Bomet Machineries Ltd Home"
-                >
+                    aria-label="Bomet Machineries Ltd Home">
 
-                    <span class="bomet-logo">
-
+                    <span class="bomet-logo" aria-hidden="true">
                         <i class="bi bi-gear-wide-connected"></i>
-
                     </span>
 
                     <span>
-
                         <span class="bomet-brand-name">
-
                             Bomet Machineries Ltd.
-
                         </span>
 
                         <span class="bomet-brand-subtitle">
-
                             Quality Machinery • Genuine Parts
-
                         </span>
-
                     </span>
 
                 </a>
 
 
                 <!-- Desktop Search -->
-
                 <form
                     class="desktop-search"
                     method="GET"
                     action="{{ url_for('product.products') }}"
-                    role="search"
-                >
+                    role="search">
 
                     <div class="input-group">
 
                         <select
                             name="category"
                             class="form-select"
-                            aria-label="Product category"
-                        >
+                            aria-label="Product category">
 
-                            <option value="">All Categories</option>
+                            <option value="">
+                                All Categories
+                            </option>
 
                             {% if categories %}
-
                                 {% for cat in categories %}
-
                                     <option
                                         value="{{ cat.id }}"
-                                        {% if category_id|string == cat.id|string %}selected{% endif %}
-                                    >
-
+                                        {% if category_id|string == cat.id|string %}selected{% endif %}>
                                         {{ cat.name }}
-
                                     </option>
-
                                 {% endfor %}
-
                             {% endif %}
 
                         </select>
-
 
                         <input
                             type="search"
@@ -1879,16 +1955,13 @@
                             value="{{ search or '' }}"
                             class="form-control"
                             placeholder="Search machinery, tools, spare parts..."
-                            aria-label="Search products"
-                        >
-
+                            aria-label="Search products">
 
                         <button
                             type="submit"
-                            aria-label="Search"
-                        >
+                            aria-label="Search">
 
-                            <i class="bi bi-search"></i>
+                            <i class="bi bi-search" aria-hidden="true"></i>
 
                         </button>
 
@@ -1897,29 +1970,22 @@
                 </form>
 
 
-                <!-- =================================================
-                     ACTION LINKS
-                ================================================== -->
-
+                <!-- Header Actions -->
                 <div class="header-actions">
 
-
                     <!-- Mobile Search -->
-
                     <button
                         type="button"
                         class="header-action d-lg-none"
                         onclick="openBometSearch()"
-                        aria-label="Search Bomet Machineries products"
-                    >
+                        aria-label="Search Bomet Machineries products">
 
-                        <i class="bi bi-search"></i>
+                        <i class="bi bi-search" aria-hidden="true"></i>
 
                     </button>
 
 
                     <!-- Account -->
-
                     {% if current_user.is_authenticated %}
 
                         {% if current_user.is_admin %}
@@ -1927,10 +1993,9 @@
                             <a
                                 href="{{ url_for('auth.admin_profile') }}"
                                 class="header-action d-none d-lg-inline-flex"
-                                aria-label="Administrator profile"
-                            >
+                                aria-label="Administrator profile">
 
-                                <i class="bi bi-person-gear"></i>
+                                <i class="bi bi-person-gear" aria-hidden="true"></i>
 
                             </a>
 
@@ -1939,10 +2004,9 @@
                             <a
                                 href="{{ url_for('auth.account') }}"
                                 class="header-action d-none d-lg-inline-flex"
-                                aria-label="My account"
-                            >
+                                aria-label="My account">
 
-                                <i class="bi bi-person-circle"></i>
+                                <i class="bi bi-person-circle" aria-hidden="true"></i>
 
                             </a>
 
@@ -1953,38 +2017,29 @@
                         <a
                             href="{{ url_for('auth.login') }}"
                             class="header-action d-none d-lg-inline-flex"
-                            aria-label="Login"
-                        >
+                            aria-label="Login">
 
-                            <i class="bi bi-person"></i>
+                            <i class="bi bi-person" aria-hidden="true"></i>
 
                         </a>
 
                     {% endif %}
 
 
-                    <!-- =================================================
-                         WISHLIST
-                    ================================================== -->
-
+                    <!-- Wishlist -->
                     {% if current_user.is_authenticated and not current_user.is_admin %}
 
                         <a
                             href="{{ url_for('wishlist.wishlist') }}"
                             class="header-action d-none d-lg-inline-flex"
-                            aria-label="Wishlist"
-                        >
+                            aria-label="Wishlist">
 
-                            <i class="bi bi-heart"></i>
+                            <i class="bi bi-heart" aria-hidden="true"></i>
 
                             {% if wishlist_count and wishlist_count > 0 %}
-
                                 <span class="cart-badge">
-
                                     {{ wishlist_count }}
-
                                 </span>
-
                             {% endif %}
 
                         </a>
@@ -1992,34 +2047,25 @@
                     {% endif %}
 
 
-                    <!-- =================================================
-                         SHOPPING CART
-                    ================================================== -->
-
+                    <!-- Cart -->
                     {% if current_user.is_authenticated and not current_user.is_admin %}
 
                         <a
                             href="{{ url_for('cart.cart') }}"
                             class="header-action d-none d-lg-inline-flex"
-                            aria-label="Shopping cart"
-                        >
+                            aria-label="Shopping cart">
 
-                            <i class="bi bi-bag"></i>
+                            <i class="bi bi-bag" aria-hidden="true"></i>
 
                             {% if cart_count and cart_count > 0 %}
-
                                 <span class="cart-badge">
-
                                     {{ cart_count }}
-
                                 </span>
-
                             {% endif %}
 
                         </a>
 
                     {% endif %}
-
 
                 </div>
 
@@ -2028,24 +2074,23 @@
         </div>
 
 
-        <!-- =========================================================
-             DESKTOP NAVIGATION BAR
-        ========================================================== -->
+        <!-- =====================================================
+             DESKTOP NAVIGATION
+        ====================================================== -->
 
         <div class="desktop-navigation">
 
             <div class="container">
 
-                <div class="desktop-nav-inner">
-
+                <nav
+                    class="desktop-nav-inner"
+                    aria-label="Main navigation">
 
                     <a
                         href="{{ url_for('home.home') }}"
-                        class="desktop-nav-link {% if request.endpoint == 'home.home' %}active{% endif %}"
-                    >
+                        class="desktop-nav-link {% if request.endpoint == 'home.home' %}active{% endif %}">
 
-                        <i class="bi bi-house me-1"></i>
-
+                        <i class="bi bi-house me-1" aria-hidden="true"></i>
                         Home
 
                     </a>
@@ -2053,11 +2098,9 @@
 
                     <a
                         href="{{ url_for('product.products') }}"
-                        class="desktop-nav-link {% if request.endpoint == 'product.products' and not category_id %}active{% endif %}"
-                    >
+                        class="desktop-nav-link {% if request.endpoint == 'product.products' and not category_id %}active{% endif %}">
 
-                        <i class="bi bi-grid me-1"></i>
-
+                        <i class="bi bi-grid me-1" aria-hidden="true"></i>
                         Shop
 
                     </a>
@@ -2069,8 +2112,7 @@
 
                             <a
                                 href="{{ url_for('product.products', category=cat.id) }}"
-                                class="desktop-nav-link {% if category_id|string == cat.id|string %}active{% endif %}"
-                            >
+                                class="desktop-nav-link {% if category_id|string == cat.id|string %}active{% endif %}">
 
                                 {{ cat.name }}
 
@@ -2085,22 +2127,20 @@
 
                         <div class="ms-auto d-flex align-items-center gap-1">
 
-
                             <a
                                 href="{{ url_for('dashboard.dashboard') }}"
-                                class="desktop-nav-link {% if request.endpoint == 'dashboard.dashboard' %}active{% endif %}"
-                            >
+                                class="desktop-nav-link {% if request.endpoint == 'dashboard.dashboard' %}active{% endif %}">
 
-                                <i class="bi bi-speedometer2 me-1"></i>
-
+                                <i class="bi bi-speedometer2 me-1" aria-hidden="true"></i>
                                 Dashboard
 
                             </a>
 
+                        </div>
+
                     {% endif %}
 
-
-                </div>
+                </nav>
 
             </div>
 
@@ -2116,8 +2156,7 @@
     <div
         id="mobileSearchOverlay"
         class="mobile-search-overlay"
-        aria-hidden="true"
-    >
+        aria-hidden="true">
 
         <div class="mobile-search-header">
 
@@ -2125,17 +2164,14 @@
                 type="button"
                 class="btn btn-light rounded-circle"
                 onclick="closeBometSearch()"
-                aria-label="Close search"
-            >
+                aria-label="Close search">
 
-                <i class="bi bi-arrow-left"></i>
+                <i class="bi bi-arrow-left" aria-hidden="true"></i>
 
             </button>
 
             <strong>
-
                 Search Bomet Machineries Ltd.
-
             </strong>
 
         </div>
@@ -2144,7 +2180,7 @@
         <form
             method="GET"
             action="{{ url_for('product.products') }}"
-        >
+            role="search">
 
             <div class="input-group mb-3">
 
@@ -2156,16 +2192,15 @@
                     class="form-control mobile-search-input"
                     placeholder="Search machinery, tools, spare parts..."
                     autocomplete="off"
-                    required
-                >
-
+                    aria-label="Search products"
+                    required>
 
                 <button
                     type="submit"
                     class="btn btn-success px-4"
-                >
+                    aria-label="Submit search">
 
-                    <i class="bi bi-search"></i>
+                    <i class="bi bi-search" aria-hidden="true"></i>
 
                 </button>
 
@@ -2175,9 +2210,7 @@
 
 
         <div class="small text-muted mb-3">
-
             Popular categories
-
         </div>
 
 
@@ -2189,8 +2222,7 @@
 
                     <a
                         href="{{ url_for('product.products', category=cat.id) }}"
-                        class="btn btn-sm btn-light border rounded-pill"
-                    >
+                        class="btn btn-sm btn-light border rounded-pill">
 
                         {{ cat.name }}
 
@@ -2213,37 +2245,27 @@
         class="offcanvas offcanvas-start bomet-offcanvas"
         tabindex="-1"
         id="bometMobileMenu"
-        aria-labelledby="bometMobileMenuLabel"
-    >
-
+        aria-labelledby="bometMobileMenuLabel">
 
         <div class="offcanvas-header">
 
             <a
                 href="{{ url_for('home.home') }}"
                 class="bomet-brand"
-            >
+                id="bometMobileMenuLabel">
 
-                <span class="bomet-logo">
-
+                <span class="bomet-logo" aria-hidden="true">
                     <i class="bi bi-gear-wide-connected"></i>
-
                 </span>
 
                 <span>
-
                     <span class="bomet-brand-name">
-
                         Bomet Machineries
-
                     </span>
 
                     <span class="bomet-brand-subtitle">
-
                         Quality Machinery
-
                     </span>
-
                 </span>
 
             </a>
@@ -2253,12 +2275,13 @@
                 type="button"
                 class="btn-close"
                 data-bs-dismiss="offcanvas"
-                aria-label="Close"
-            ></button>
+                aria-label="Close navigation menu">
+            </button>
 
         </div>
 
 
+        <!-- Logged-in User -->
         {% if current_user.is_authenticated %}
 
             <div class="offcanvas-user">
@@ -2273,14 +2296,14 @@
 
                         {% else %}
 
-                            <i class="bi bi-person"></i>
+                            <i class="bi bi-person" aria-hidden="true"></i>
 
                         {% endif %}
 
                     </div>
 
 
-                    <div>
+                    <div class="min-w-0">
 
                         <div class="fw-bold">
 
@@ -2296,11 +2319,8 @@
 
                         </div>
 
-
                         <div class="text-muted small">
-
                             {{ current_user.email }}
-
                         </div>
 
                     </div>
@@ -2314,111 +2334,146 @@
 
         <div class="offcanvas-body p-0">
 
+            <!-- Navigation -->
 
             <div class="offcanvas-section-title">
-
                 Navigation
-
             </div>
 
 
             <a
                 href="{{ url_for('home.home') }}"
-                class="offcanvas-link {% if request.endpoint == 'home.home' %}active{% endif %}"
-            >
+                class="offcanvas-link {% if request.endpoint == 'home.home' %}active{% endif %}">
 
-                <i class="bi bi-house"></i>
+                <i class="bi bi-house" aria-hidden="true"></i>
 
-                Home
+                <span>Home</span>
 
             </a>
 
 
             <a
                 href="{{ url_for('product.products') }}"
-                class="offcanvas-link {% if request.endpoint == 'product.products' and not category_id %}active{% endif %}"
-            >
+                class="offcanvas-link {% if request.endpoint == 'product.products' and not category_id %}active{% endif %}">
 
-                <i class="bi bi-grid"></i>
+                <i class="bi bi-grid" aria-hidden="true"></i>
 
-                All Products
+                <span>All Products</span>
 
             </a>
 
 
-            <div class="offcanvas-section-title">
+            <!-- Categories -->
 
+            <div class="offcanvas-section-title">
                 Categories
+            </div>
+
+
+            <div class="offcanvas-category-list">
+
+                {% if categories %}
+
+                    {% for cat in categories %}
+
+                        <a
+                            href="{{ url_for('product.products', category=cat.id) }}"
+                            class="offcanvas-link {% if category_id|string == cat.id|string %}active{% endif %}">
+
+                            <i class="bi bi-tag" aria-hidden="true"></i>
+
+                            <span class="flex-grow-1 text-truncate">
+                                {{ cat.name }}
+                            </span>
+
+                        </a>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <div class="px-3 py-2 text-muted small">
+                        No categories available.
+                    </div>
+
+                {% endif %}
 
             </div>
 
 
-            {% if categories %}
-
-                {% for cat in categories %}
-
-                    <a
-                        href="{{ url_for('product.products', category=cat.id) }}"
-                        class="offcanvas-link {% if category_id|string == cat.id|string %}active{% endif %}"
-                    >
-
-                        <i class="bi bi-tag"></i>
-
-                        {{ cat.name }}
-
-                    </a>
-
-                {% endfor %}
-
-            {% endif %}
-
+            <!-- Account -->
 
             <div class="offcanvas-section-title">
-
                 Account
-
             </div>
 
 
             {% if current_user.is_authenticated %}
 
+                {% if current_user.is_admin %}
 
-                <a
-                    href="{{ url_for('auth.account') }}"
-                    class="offcanvas-link"
-                >
+                    <a
+                        href="{{ url_for('auth.admin_profile') }}"
+                        class="offcanvas-link">
 
-                    <i class="bi bi-person-circle"></i>
+                        <i class="bi bi-person-gear" aria-hidden="true"></i>
 
-                    My Account
+                        <span>Administrator Profile</span>
 
-                </a>
+                    </a>
 
+                {% else %}
 
-                <!-- Mobile Offcanvas Wishlist -->
+                    <a
+                        href="{{ url_for('auth.account') }}"
+                        class="offcanvas-link">
+
+                        <i class="bi bi-person-circle" aria-hidden="true"></i>
+
+                        <span>My Account</span>
+
+                    </a>
+
+                {% endif %}
+
 
                 {% if not current_user.is_admin %}
 
                     <a
                         href="{{ url_for('wishlist.wishlist') }}"
-                        class="offcanvas-link"
-                    >
+                        class="offcanvas-link">
 
-                        <i class="bi bi-heart"></i>
+                        <i class="bi bi-heart" aria-hidden="true"></i>
 
                         <span class="flex-grow-1">
-
                             Wishlist
-
                         </span>
-
 
                         {% if wishlist_count and wishlist_count > 0 %}
 
                             <span class="badge rounded-pill bg-success">
-
                                 {{ wishlist_count }}
+                            </span>
 
+                        {% endif %}
+
+                    </a>
+
+
+                    <a
+                        href="{{ url_for('cart.cart') }}"
+                        class="offcanvas-link">
+
+                        <i class="bi bi-bag" aria-hidden="true"></i>
+
+                        <span class="flex-grow-1">
+                            Shopping Cart
+                        </span>
+
+                        {% if cart_count and cart_count > 0 %}
+
+                            <span class="badge rounded-pill bg-success">
+                                {{ cart_count }}
                             </span>
 
                         {% endif %}
@@ -2428,35 +2483,51 @@
                 {% endif %}
 
 
+                {% if current_user.is_admin %}
+
+                    <a
+                        href="{{ url_for('dashboard.dashboard') }}"
+                        class="offcanvas-link">
+
+                        <i class="bi bi-speedometer2" aria-hidden="true"></i>
+
+                        <span>Dashboard</span>
+
+                    </a>
+
+                {% endif %}
+
+
                 <a
                     href="{{ url_for('auth.logout') }}"
-                    class="offcanvas-link text-danger"
-                >
+                    class="offcanvas-link text-danger">
 
-                    <i class="bi bi-box-arrow-right text-danger"></i>
+                    <i
+                        class="bi bi-box-arrow-right text-danger"
+                        aria-hidden="true">
+                    </i>
 
-                    Logout
+                    <span>Logout</span>
 
                 </a>
 
 
             {% else %}
 
-
                 <a
                     href="{{ url_for('auth.login') }}"
-                    class="offcanvas-link"
-                >
+                    class="offcanvas-link">
 
-                    <i class="bi bi-box-arrow-in-right"></i>
+                    <i
+                        class="bi bi-box-arrow-in-right"
+                        aria-hidden="true">
+                    </i>
 
-                    Login / Register
+                    <span>Login / Register</span>
 
                 </a>
 
-
             {% endif %}
-
 
         </div>
 
@@ -2464,31 +2535,32 @@
 
 
     <!-- =========================================================
-         FLASH TOAST MESSAGES
+         FLASH MESSAGES
     ========================================================== -->
 
     {% with messages = get_flashed_messages(with_categories=true) %}
 
         {% if messages %}
 
-            <div class="bomet-flash-container">
+            <div
+                class="bomet-flash-container"
+                aria-live="polite"
+                aria-atomic="false">
 
                 {% for category, message in messages %}
 
                     <div
-                        class="alert alert-{{ category if category != 'error' else 'danger' }} alert-dismissible fade show bomet-flash mb-2"
-                        role="alert"
-                    >
+                        class="alert alert-{{ category if category != 'error' else 'danger' }} alert-dismissible fade show bomet-flash"
+                        role="alert">
 
                         {{ message }}
-
 
                         <button
                             type="button"
                             class="btn-close"
                             data-bs-dismiss="alert"
-                            aria-label="Close"
-                        ></button>
+                            aria-label="Close notification">
+                        </button>
 
                     </div>
 
@@ -2502,7 +2574,7 @@
 
 
     <!-- =========================================================
-         MAIN CONTENT AREA
+         MAIN CONTENT
     ========================================================== -->
 
     <main class="bomet-main">
@@ -2513,75 +2585,73 @@
 
 
     <!-- =========================================================
-         MOBILE BOTTOM STICKY DOCK
+         MOBILE BOTTOM NAVIGATION
     ========================================================== -->
 
-    <div class="mobile-bottom-dock">
+    <nav
+        class="mobile-bottom-dock"
+        aria-label="Mobile navigation">
 
         <div class="mobile-dock-inner">
 
-
-            <!-- HOME -->
+            <!-- Home -->
 
             <a
                 href="{{ url_for('home.home') }}"
                 class="dock-item {% if request.endpoint == 'home.home' %}active{% endif %}"
-            >
+                {% if request.endpoint == 'home.home' %}aria-current="page"{% endif %}>
 
-                <i class="bi bi-house"></i>
+                <i class="bi bi-house" aria-hidden="true"></i>
 
                 <span>Home</span>
 
             </a>
 
 
-            <!-- SHOP -->
+            <!-- Shop -->
 
             <a
                 href="{{ url_for('product.products') }}"
                 class="dock-item {% if request.endpoint == 'product.products' %}active{% endif %}"
-            >
+                {% if request.endpoint == 'product.products' %}aria-current="page"{% endif %}>
 
-                <i class="bi bi-grid"></i>
+                <i class="bi bi-grid" aria-hidden="true"></i>
 
                 <span>Shop</span>
 
             </a>
 
 
-            <!-- SEARCH -->
+            <!-- Search -->
 
             <button
                 type="button"
-                class="dock-item border-0 bg-transparent"
+                class="dock-item bg-transparent"
                 onclick="openBometSearch()"
-            >
+                aria-label="Search products">
 
-                <i class="bi bi-search"></i>
+                <i class="bi bi-search" aria-hidden="true"></i>
 
                 <span>Search</span>
 
             </button>
 
 
-            <!-- WISHLIST -->
+            <!-- Wishlist -->
 
             <a
                 href="{% if current_user.is_authenticated and not current_user.is_admin %}{{ url_for('wishlist.wishlist') }}{% else %}{{ url_for('auth.login') }}{% endif %}"
                 class="dock-item {% if request.endpoint == 'wishlist.wishlist' %}active{% endif %}"
-            >
+                {% if request.endpoint == 'wishlist.wishlist' %}aria-current="page"{% endif %}>
 
-                <i class="bi bi-heart"></i>
+                <i class="bi bi-heart" aria-hidden="true"></i>
 
                 <span>Wishlist</span>
-
 
                 {% if current_user.is_authenticated and not current_user.is_admin and wishlist_count and wishlist_count > 0 %}
 
                     <span class="cart-badge">
-
                         {{ wishlist_count }}
-
                     </span>
 
                 {% endif %}
@@ -2589,24 +2659,21 @@
             </a>
 
 
-            <!-- CART -->
+            <!-- Cart -->
 
             <a
                 href="{% if current_user.is_authenticated and not current_user.is_admin %}{{ url_for('cart.cart') }}{% else %}{{ url_for('auth.login') }}{% endif %}"
                 class="dock-item {% if request.endpoint == 'cart.cart' %}active{% endif %}"
-            >
+                {% if request.endpoint == 'cart.cart' %}aria-current="page"{% endif %}>
 
-                <i class="bi bi-bag"></i>
+                <i class="bi bi-bag" aria-hidden="true"></i>
 
                 <span>Cart</span>
-
 
                 {% if current_user.is_authenticated and not current_user.is_admin and cart_count and cart_count > 0 %}
 
                     <span class="cart-badge">
-
                         {{ cart_count }}
-
                     </span>
 
                 {% endif %}
@@ -2614,35 +2681,37 @@
             </a>
 
 
-            <!-- ACCOUNT -->
+            <!-- Account -->
 
             <a
-                href="{% if current_user.is_authenticated %}{{ url_for('auth.account') }}{% else %}{{ url_for('auth.login') }}{% endif %}"
-                class="dock-item {% if request.endpoint and 'auth' in request.endpoint %}active{% endif %}"
-            >
+                href="{% if current_user.is_authenticated %}{% if current_user.is_admin %}{{ url_for('auth.admin_profile') }}{% else %}{{ url_for('auth.account') }}{% endif %}{% else %}{{ url_for('auth.login') }}{% endif %}"
+                class="dock-item {% if request.endpoint in ['auth.account', 'auth.admin_profile', 'auth.login'] %}active{% endif %}"
+                {% if request.endpoint in ['auth.account', 'auth.admin_profile', 'auth.login'] %}aria-current="page"{% endif %}>
 
-                <i class="bi bi-person"></i>
+                <i class="bi bi-person" aria-hidden="true"></i>
 
                 <span>Account</span>
 
             </a>
 
-
         </div>
 
-    </div>
+    </nav>
 
 
     <!-- =========================================================
          FOOTER
     ========================================================== -->
 
-    <footer class="bomet-footer pt-4 pt-md-5 pb-3" aria-label="Bomet Machineries Ltd. website footer">
+    <footer
+        class="bomet-footer pt-4 pt-md-5 pb-3"
+        aria-label="Bomet Machineries Ltd. website footer">
 
         <div class="container">
 
-
-            <!-- Desktop Footer -->
+            <!-- =====================================================
+                 DESKTOP FOOTER
+            ====================================================== -->
 
             <div class="desktop-footer">
 
@@ -2650,14 +2719,15 @@
 
                     <div class="row g-4 g-lg-5">
 
-
                         <!-- Company -->
 
                         <div class="col-md-5 col-lg-4">
 
                             <div class="footer-brand-wrap">
 
-                                <span class="footer-brand-mark" aria-hidden="true">
+                                <span
+                                    class="footer-brand-mark"
+                                    aria-hidden="true">
 
                                     <i class="bi bi-gear-wide-connected"></i>
 
@@ -2666,53 +2736,67 @@
                                 <div>
 
                                     <div class="footer-brand">
-
                                         Bomet Machineries Ltd.
-
                                     </div>
 
                                     <span class="footer-brand-subtitle">
-
                                         Quality Machinery • Genuine Parts
-
                                     </span>
 
                                 </div>
 
                             </div>
 
+
                             <p class="footer-text footer-description">
-
-                                Your trusted partner for quality agricultural machinery,
-                                farm equipment, heavy machinery and genuine spare parts,
-                                serving farmers and businesses across Kenya with reliable
+                                Your trusted partner for quality agricultural
+                                machinery, farm equipment, heavy machinery and
+                                genuine spare parts, serving farmers and
+                                businesses across Kenya with reliable
                                 machinery solutions.
-
                             </p>
 
-                            <div class="footer-trust-row" aria-label="Why shop with Bomet Machineries">
+
+                            <div
+                                class="footer-trust-row"
+                                aria-label="Why shop with Bomet Machineries">
 
                                 <div class="footer-trust-item">
 
-                                    <i class="bi bi-check-circle" aria-hidden="true"></i>
+                                    <i
+                                        class="bi bi-check-circle"
+                                        aria-hidden="true">
+                                    </i>
 
-                                    <span>Quality Products</span>
+                                    <span>
+                                        Quality Products
+                                    </span>
 
                                 </div>
 
                                 <div class="footer-trust-item">
 
-                                    <i class="bi bi-gear" aria-hidden="true"></i>
+                                    <i
+                                        class="bi bi-gear"
+                                        aria-hidden="true">
+                                    </i>
 
-                                    <span>Genuine Spare Parts</span>
+                                    <span>
+                                        Genuine Spare Parts
+                                    </span>
 
                                 </div>
 
                                 <div class="footer-trust-item">
 
-                                    <i class="bi bi-headset" aria-hidden="true"></i>
+                                    <i
+                                        class="bi bi-headset"
+                                        aria-hidden="true">
+                                    </i>
 
-                                    <span>Reliable Support</span>
+                                    <span>
+                                        Reliable Support
+                                    </span>
 
                                 </div>
 
@@ -2726,15 +2810,12 @@
                         <div class="col-6 col-md-3 col-lg-2">
 
                             <div class="footer-heading">
-
                                 Quick Links
-
                             </div>
 
                             <a
                                 href="{{ url_for('home.home') }}"
-                                class="footer-link"
-                            >
+                                class="footer-link">
 
                                 <i class="bi bi-house" aria-hidden="true"></i>
                                 Home
@@ -2743,58 +2824,91 @@
 
                             <a
                                 href="{{ url_for('product.products') }}"
-                                class="footer-link"
-                            >
+                                class="footer-link">
 
                                 <i class="bi bi-grid" aria-hidden="true"></i>
                                 Products
 
                             </a>
 
+
                             {% if current_user.is_authenticated %}
 
-                                <a
-                                    href="{{ url_for('auth.account') }}"
-                                    class="footer-link"
-                                >
+                                {% if current_user.is_admin %}
 
-                                    <i class="bi bi-person-circle" aria-hidden="true"></i>
-                                    My Account
+                                    <a
+                                        href="{{ url_for('auth.admin_profile') }}"
+                                        class="footer-link">
 
-                                </a>
+                                        <i
+                                            class="bi bi-person-gear"
+                                            aria-hidden="true">
+                                        </i>
+
+                                        Administrator Profile
+
+                                    </a>
+
+                                {% else %}
+
+                                    <a
+                                        href="{{ url_for('auth.account') }}"
+                                        class="footer-link">
+
+                                        <i
+                                            class="bi bi-person-circle"
+                                            aria-hidden="true">
+                                        </i>
+
+                                        My Account
+
+                                    </a>
+
+                                {% endif %}
 
                             {% else %}
 
                                 <a
                                     href="{{ url_for('auth.login') }}"
-                                    class="footer-link"
-                                >
+                                    class="footer-link">
 
-                                    <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>
+                                    <i
+                                        class="bi bi-box-arrow-in-right"
+                                        aria-hidden="true">
+                                    </i>
+
                                     Login / Register
 
                                 </a>
 
                             {% endif %}
 
+
                             {% if current_user.is_authenticated and not current_user.is_admin %}
 
                                 <a
                                     href="{{ url_for('wishlist.wishlist') }}"
-                                    class="footer-link"
-                                >
+                                    class="footer-link">
 
-                                    <i class="bi bi-heart" aria-hidden="true"></i>
+                                    <i
+                                        class="bi bi-heart"
+                                        aria-hidden="true">
+                                    </i>
+
                                     Wishlist
 
                                 </a>
 
+
                                 <a
                                     href="{{ url_for('cart.cart') }}"
-                                    class="footer-link"
-                                >
+                                    class="footer-link">
 
-                                    <i class="bi bi-bag" aria-hidden="true"></i>
+                                    <i
+                                        class="bi bi-bag"
+                                        aria-hidden="true">
+                                    </i>
+
                                     Cart
 
                                 </a>
@@ -2809,9 +2923,7 @@
                         <div class="col-6 col-md-4 col-lg-3">
 
                             <div class="footer-heading">
-
                                 Shop by Category
-
                             </div>
 
                             {% if categories %}
@@ -2820,11 +2932,16 @@
 
                                     <a
                                         href="{{ url_for('product.products', category=cat.id) }}"
-                                        class="footer-link"
-                                    >
+                                        class="footer-link">
 
-                                        <i class="bi bi-tag" aria-hidden="true"></i>
-                                        {{ cat.name }}
+                                        <i
+                                            class="bi bi-tag"
+                                            aria-hidden="true">
+                                        </i>
+
+                                        <span>
+                                            {{ cat.name }}
+                                        </span>
 
                                     </a>
 
@@ -2833,9 +2950,8 @@
                             {% else %}
 
                                 <div class="footer-text">
-
-                                    Browse our agricultural machinery, farm equipment and spare parts collection.
-
+                                    Browse our agricultural machinery,
+                                    farm equipment and spare parts collection.
                                 </div>
 
                             {% endif %}
@@ -2848,68 +2964,85 @@
                         <div class="col-md-5 col-lg-3">
 
                             <div class="footer-heading">
-
                                 Customer Support
-
                             </div>
+
 
                             <div class="footer-contact-list">
 
                                 <div class="footer-contact-static">
 
-                                    <i class="bi bi-geo-alt" aria-hidden="true"></i>
+                                    <i
+                                        class="bi bi-geo-alt"
+                                        aria-hidden="true">
+                                    </i>
 
-                                    <span>Kipchamba Street, Bomet</span>
+                                    <span>
+                                        Kipchamba Street, Bomet
+                                    </span>
 
                                 </div>
+
 
                                 <a
                                     href="tel:+254722434519"
                                     class="footer-contact-link"
-                                    aria-label="Call Bomet Machineries Ltd. at plus 254 722 434 519"
-                                >
+                                    aria-label="Call Bomet Machineries Ltd. at plus 254 722 434 519">
 
-                                    <i class="bi bi-telephone" aria-hidden="true"></i>
+                                    <i
+                                        class="bi bi-telephone"
+                                        aria-hidden="true">
+                                    </i>
 
-                                    <span>+254 722 434 519</span>
+                                    <span>
+                                        +254 722 434 519
+                                    </span>
 
                                 </a>
 
+
                                 <div class="footer-contact-static">
 
-                                    <i class="bi bi-truck" aria-hidden="true"></i>
+                                    <i
+                                        class="bi bi-truck"
+                                        aria-hidden="true">
+                                    </i>
 
-                                    <span>Serving customers across Kenya</span>
+                                    <span>
+                                        Serving customers across Kenya
+                                    </span>
 
                                 </div>
 
                             </div>
+
 
                             <div class="footer-cta">
 
                                 <div>
 
                                     <div class="footer-cta-title">
-
                                         Need machinery or spare parts?
-
                                     </div>
 
                                     <p class="footer-cta-text">
-
-                                        Call us for product enquiries and assistance.
-
+                                        Call us for product enquiries
+                                        and assistance.
                                     </p>
 
                                 </div>
 
+
                                 <a
                                     href="tel:+254722434519"
                                     class="footer-call-btn"
-                                    aria-label="Call Bomet Machineries Ltd."
-                                >
+                                    aria-label="Call Bomet Machineries Ltd.">
 
-                                    <i class="bi bi-telephone-outbound" aria-hidden="true"></i>
+                                    <i
+                                        class="bi bi-telephone-outbound"
+                                        aria-hidden="true">
+                                    </i>
+
                                     Call Us
 
                                 </a>
@@ -2925,7 +3058,9 @@
             </div>
 
 
-            <!-- Mobile Footer -->
+            <!-- =====================================================
+                 MOBILE FOOTER
+            ====================================================== -->
 
             <div class="mobile-footer mb-3">
 
@@ -2933,7 +3068,9 @@
 
                     <div class="footer-brand-wrap">
 
-                        <span class="footer-brand-mark" aria-hidden="true">
+                        <span
+                            class="footer-brand-mark"
+                            aria-hidden="true">
 
                             <i class="bi bi-gear-wide-connected"></i>
 
@@ -2942,82 +3079,98 @@
                         <div>
 
                             <div class="footer-brand">
-
                                 Bomet Machineries Ltd.
-
                             </div>
 
                             <span class="footer-brand-subtitle">
-
                                 Quality Machinery • Genuine Parts
-
                             </span>
 
                         </div>
 
                     </div>
 
+
                     <p class="footer-text footer-description">
-
-                        Your trusted partner for agricultural machinery, farm equipment,
-                        machinery spare parts and reliable machinery solutions for farmers
-                        and businesses across Kenya.
-
+                        Your trusted partner for agricultural machinery,
+                        farm equipment, machinery spare parts and reliable
+                        machinery solutions for farmers and businesses
+                        across Kenya.
                     </p>
 
-                    <div class="footer-trust-row" aria-label="Bomet Machineries service values">
+
+                    <div
+                        class="footer-trust-row"
+                        aria-label="Bomet Machineries service values">
 
                         <div class="footer-trust-item">
 
-                            <i class="bi bi-check-circle" aria-hidden="true"></i>
+                            <i
+                                class="bi bi-check-circle"
+                                aria-hidden="true">
+                            </i>
 
-                            <span>Quality Products</span>
+                            <span>
+                                Quality Products
+                            </span>
 
                         </div>
 
                         <div class="footer-trust-item">
 
-                            <i class="bi bi-gear" aria-hidden="true"></i>
+                            <i
+                                class="bi bi-gear"
+                                aria-hidden="true">
+                            </i>
 
-                            <span>Genuine Parts</span>
+                            <span>
+                                Genuine Parts
+                            </span>
 
                         </div>
 
                         <div class="footer-trust-item">
 
-                            <i class="bi bi-headset" aria-hidden="true"></i>
+                            <i
+                                class="bi bi-headset"
+                                aria-hidden="true">
+                            </i>
 
-                            <span>Reliable Support</span>
+                            <span>
+                                Reliable Support
+                            </span>
 
                         </div>
 
                     </div>
+
 
                     <div class="footer-cta">
 
                         <div>
 
                             <div class="footer-cta-title">
-
                                 Machinery &amp; spare parts enquiries
-
                             </div>
 
                             <p class="footer-cta-text">
-
-                                Speak with Bomet Machineries Ltd. for help finding the right equipment or parts.
-
+                                Speak with Bomet Machineries Ltd. for help
+                                finding the right equipment or parts.
                             </p>
 
                         </div>
 
+
                         <a
                             href="tel:+254722434519"
                             class="footer-call-btn"
-                            aria-label="Call Bomet Machineries Ltd. at plus 254 722 434 519"
-                        >
+                            aria-label="Call Bomet Machineries Ltd. at plus 254 722 434 519">
 
-                            <i class="bi bi-telephone-outbound" aria-hidden="true"></i>
+                            <i
+                                class="bi bi-telephone-outbound"
+                                aria-hidden="true">
+                            </i>
+
                             Call Us
 
                         </a>
@@ -3027,16 +3180,19 @@
                 </div>
 
 
+                <!-- Mobile Footer Accordion -->
+
                 <div
                     class="accordion accordion-flush"
-                    id="footerAccordion"
-                >
+                    id="footerAccordion">
 
                     <!-- Quick Navigation -->
 
                     <div class="accordion-item">
 
-                        <h2 class="accordion-header" id="footAccOneHeading">
+                        <h2
+                            class="accordion-header"
+                            id="footAccOneHeading">
 
                             <button
                                 class="accordion-button collapsed"
@@ -3044,8 +3200,7 @@
                                 data-bs-toggle="collapse"
                                 data-bs-target="#footAccOne"
                                 aria-expanded="false"
-                                aria-controls="footAccOne"
-                            >
+                                aria-controls="footAccOne">
 
                                 Quick Navigation
 
@@ -3053,80 +3208,129 @@
 
                         </h2>
 
+
                         <div
                             id="footAccOne"
                             class="accordion-collapse collapse"
                             aria-labelledby="footAccOneHeading"
-                            data-bs-parent="#footerAccordion"
-                        >
+                            data-bs-parent="#footerAccordion">
 
                             <div class="accordion-body">
 
                                 <a
                                     href="{{ url_for('home.home') }}"
-                                    class="footer-link"
-                                >
+                                    class="footer-link">
 
-                                    <i class="bi bi-house" aria-hidden="true"></i>
+                                    <i
+                                        class="bi bi-house"
+                                        aria-hidden="true">
+                                    </i>
+
                                     Home
 
                                 </a>
 
+
                                 <a
                                     href="{{ url_for('product.products') }}"
-                                    class="footer-link"
-                                >
+                                    class="footer-link">
 
-                                    <i class="bi bi-grid" aria-hidden="true"></i>
+                                    <i
+                                        class="bi bi-grid"
+                                        aria-hidden="true">
+                                    </i>
+
                                     Products
 
                                 </a>
 
+
                                 {% if current_user.is_authenticated %}
 
-                                    <a
-                                        href="{{ url_for('auth.account') }}"
-                                        class="footer-link"
-                                    >
+                                    {% if current_user.is_admin %}
 
-                                        <i class="bi bi-person-circle" aria-hidden="true"></i>
-                                        My Account
+                                        <a
+                                            href="{{ url_for('auth.admin_profile') }}"
+                                            class="footer-link">
 
-                                    </a>
+                                            <i
+                                                class="bi bi-person-gear"
+                                                aria-hidden="true">
+                                            </i>
+
+                                            Administrator Profile
+
+                                        </a>
+
+                                    {% else %}
+
+                                        <a
+                                            href="{{ url_for('auth.account') }}"
+                                            class="footer-link">
+
+                                            <i
+                                                class="bi bi-person-circle"
+                                                aria-hidden="true">
+                                            </i>
+
+                                            My Account
+
+                                        </a>
+
+                                    {% endif %}
 
                                 {% else %}
 
                                     <a
                                         href="{{ url_for('auth.login') }}"
-                                        class="footer-link"
-                                    >
+                                        class="footer-link">
 
-                                        <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>
+                                        <i
+                                            class="bi bi-box-arrow-in-right"
+                                            aria-hidden="true">
+                                        </i>
+
                                         Login / Register
 
                                     </a>
 
                                 {% endif %}
 
+
                                 {% if current_user.is_authenticated and not current_user.is_admin %}
 
                                     <a
                                         href="{{ url_for('wishlist.wishlist') }}"
-                                        class="footer-link"
-                                    >
+                                        class="footer-link">
 
-                                        <i class="bi bi-heart" aria-hidden="true"></i>
-                                        Wishlist{% if wishlist_count and wishlist_count > 0 %} ({{ wishlist_count }}){% endif %}
+                                        <i
+                                            class="bi bi-heart"
+                                            aria-hidden="true">
+                                        </i>
+
+                                        Wishlist
+
+                                        {% if wishlist_count and wishlist_count > 0 %}
+                                            ({{ wishlist_count }})
+                                        {% endif %}
 
                                     </a>
 
+
                                     <a
                                         href="{{ url_for('cart.cart') }}"
-                                        class="footer-link"
-                                    >
+                                        class="footer-link">
 
-                                        <i class="bi bi-bag" aria-hidden="true"></i>
-                                        Cart{% if cart_count and cart_count > 0 %} ({{ cart_count }}){% endif %}
+                                        <i
+                                            class="bi bi-bag"
+                                            aria-hidden="true">
+                                        </i>
+
+                                        Cart
+
+                                        {% if cart_count and cart_count > 0 %}
+                                            ({{ cart_count }})
+                                        {% endif %}
 
                                     </a>
 
@@ -3143,7 +3347,9 @@
 
                     <div class="accordion-item">
 
-                        <h2 class="accordion-header" id="footAccTwoHeading">
+                        <h2
+                            class="accordion-header"
+                            id="footAccTwoHeading">
 
                             <button
                                 class="accordion-button collapsed"
@@ -3151,8 +3357,7 @@
                                 data-bs-toggle="collapse"
                                 data-bs-target="#footAccTwo"
                                 aria-expanded="false"
-                                aria-controls="footAccTwo"
-                            >
+                                aria-controls="footAccTwo">
 
                                 Shop by Category
 
@@ -3160,12 +3365,12 @@
 
                         </h2>
 
+
                         <div
                             id="footAccTwo"
                             class="accordion-collapse collapse"
                             aria-labelledby="footAccTwoHeading"
-                            data-bs-parent="#footerAccordion"
-                        >
+                            data-bs-parent="#footerAccordion">
 
                             <div class="accordion-body">
 
@@ -3175,10 +3380,13 @@
 
                                         <a
                                             href="{{ url_for('product.products', category=cat.id) }}"
-                                            class="footer-link"
-                                        >
+                                            class="footer-link">
 
-                                            <i class="bi bi-tag" aria-hidden="true"></i>
+                                            <i
+                                                class="bi bi-tag"
+                                                aria-hidden="true">
+                                            </i>
+
                                             {{ cat.name }}
 
                                         </a>
@@ -3188,9 +3396,8 @@
                                 {% else %}
 
                                     <div class="footer-text py-2">
-
-                                        Browse our agricultural machinery, farm equipment and spare parts collection.
-
+                                        Browse our agricultural machinery,
+                                        farm equipment and spare parts collection.
                                     </div>
 
                                 {% endif %}
@@ -3206,7 +3413,9 @@
 
                     <div class="accordion-item">
 
-                        <h2 class="accordion-header" id="footAccThreeHeading">
+                        <h2
+                            class="accordion-header"
+                            id="footAccThreeHeading">
 
                             <button
                                 class="accordion-button collapsed"
@@ -3214,8 +3423,7 @@
                                 data-bs-toggle="collapse"
                                 data-bs-target="#footAccThree"
                                 aria-expanded="false"
-                                aria-controls="footAccThree"
-                            >
+                                aria-controls="footAccThree">
 
                                 Customer Support
 
@@ -3223,12 +3431,12 @@
 
                         </h2>
 
+
                         <div
                             id="footAccThree"
                             class="accordion-collapse collapse"
                             aria-labelledby="footAccThreeHeading"
-                            data-bs-parent="#footerAccordion"
-                        >
+                            data-bs-parent="#footerAccordion">
 
                             <div class="accordion-body">
 
@@ -3236,29 +3444,45 @@
 
                                     <div class="footer-contact-static">
 
-                                        <i class="bi bi-geo-alt" aria-hidden="true"></i>
+                                        <i
+                                            class="bi bi-geo-alt"
+                                            aria-hidden="true">
+                                        </i>
 
-                                        <span>Kipchamba Street, Bomet</span>
+                                        <span>
+                                            Kipchamba Street, Bomet
+                                        </span>
 
                                     </div>
+
 
                                     <a
                                         href="tel:+254722434519"
                                         class="footer-contact-link"
-                                        aria-label="Call Bomet Machineries Ltd. at plus 254 722 434 519"
-                                    >
+                                        aria-label="Call Bomet Machineries Ltd. at plus 254 722 434 519">
 
-                                        <i class="bi bi-telephone" aria-hidden="true"></i>
+                                        <i
+                                            class="bi bi-telephone"
+                                            aria-hidden="true">
+                                        </i>
 
-                                        <span>+254 722 434 519</span>
+                                        <span>
+                                            +254 722 434 519
+                                        </span>
 
                                     </a>
 
+
                                     <div class="footer-contact-static">
 
-                                        <i class="bi bi-truck" aria-hidden="true"></i>
+                                        <i
+                                            class="bi bi-truck"
+                                            aria-hidden="true">
+                                        </i>
 
-                                        <span>Serving customers across Kenya</span>
+                                        <span>
+                                            Serving customers across Kenya
+                                        </span>
 
                                     </div>
 
@@ -3273,20 +3497,21 @@
                 </div>
 
             </div>
-            <!-- Footer Bottom -->
+
+
+            <!-- =====================================================
+                 FOOTER BOTTOM
+            ====================================================== -->
 
             <div class="footer-bottom">
 
                 <div class="footer-bottom-copy">
-
                     © {{ 2026 }} Bomet Machineries Ltd. All rights reserved.
-
                 </div>
 
                 <div class="footer-bottom-note">
-
-                    Agricultural Machinery • Farm Equipment • Genuine Machinery Spare Parts • Kenya
-
+                    Agricultural Machinery • Farm Equipment • Genuine
+                    Machinery Spare Parts • Kenya
                 </div>
 
             </div>
@@ -3297,77 +3522,177 @@
 
 
     <!-- =========================================================
-         SCRIPTS
+         BOOTSTRAP JAVASCRIPT
+         Single copy only.
     ========================================================== -->
 
     <script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-    ></script>
-
-    <script>
-
-        function openBometSearch() {
-
-            document
-                .getElementById('mobileSearchOverlay')
-                .classList
-                .add('active');
-
-            document
-                .getElementById('mobileSearchInput')
-                .focus();
-
-        }
-
-
-        function closeBometSearch() {
-
-            document
-                .getElementById('mobileSearchOverlay')
-                .classList
-                .remove('active');
-
-        }
-
-
-        /* =========================================================
-        GLOBAL FLASH MESSAGE AUTO-DISMISS
-        ========================================================== */
-
-        document.addEventListener("DOMContentLoaded", function () {
-
-            const flashMessages = document.querySelectorAll(
-                ".bomet-flash-container .bomet-flash"
-            );
-
-            flashMessages.forEach(function (flash) {
-
-                // Keep visible for 4 seconds
-                setTimeout(function () {
-
-                    // Trigger Bootstrap fade-out
-                    flash.classList.remove("show");
-
-                    // Remove completely after fade animation
-                    setTimeout(function () {
-
-                        flash.remove();
-
-                    }, 300);
-
-                }, 4000);
-
-            });
-
-        });
-
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
     </script>
 
+
+    <!-- =========================================================
+         LIGHTWEIGHT BASE JAVASCRIPT
+    ========================================================== -->
+
+    <script>
+        (function () {
+            "use strict";
+
+            const searchOverlay =
+                document.getElementById("mobileSearchOverlay");
+
+            const searchInput =
+                document.getElementById("mobileSearchInput");
+
+
+            /* =====================================================
+               MOBILE SEARCH
+            ====================================================== */
+
+            window.openBometSearch = function () {
+
+                if (!searchOverlay) {
+                    return;
+                }
+
+                searchOverlay.classList.add("active");
+
+                searchOverlay.setAttribute(
+                    "aria-hidden",
+                    "false"
+                );
+
+                document.body.classList.add(
+                    "overflow-hidden"
+                );
+
+                /*
+                 * Focus after rendering so mobile browsers have
+                 * a better chance of opening the keyboard correctly.
+                 */
+                if (searchInput) {
+                    window.setTimeout(function () {
+                        searchInput.focus();
+                    }, 50);
+                }
+            };
+
+
+            window.closeBometSearch = function () {
+
+                if (!searchOverlay) {
+                    return;
+                }
+
+                searchOverlay.classList.remove("active");
+
+                searchOverlay.setAttribute(
+                    "aria-hidden",
+                    "true"
+                );
+
+                document.body.classList.remove(
+                    "overflow-hidden"
+                );
+            };
+
+
+            /* =====================================================
+               ESCAPE-TO-CLOSE
+            ====================================================== */
+
+            document.addEventListener(
+                "keydown",
+                function (event) {
+
+                    if (event.key !== "Escape") {
+                        return;
+                    }
+
+                    if (
+                        searchOverlay &&
+                        searchOverlay.classList.contains("active")
+                    ) {
+                        window.closeBometSearch();
+                    }
+
+                }
+            );
+
+
+            /* =====================================================
+               FLASH MESSAGE AUTO DISMISS
+            ====================================================== */
+
+            document.addEventListener(
+                "DOMContentLoaded",
+                function () {
+
+                    const flashMessages =
+                        document.querySelectorAll(
+                            ".bomet-flash-container .bomet-flash"
+                        );
+
+
+                    flashMessages.forEach(
+                        function (flash) {
+
+                            window.setTimeout(
+                                function () {
+
+                                    /*
+                                     * Respect reduced-motion users.
+                                     * Bootstrap handles the normal
+                                     * dismissal animation.
+                                     */
+                                    if (
+                                        window.matchMedia &&
+                                        window.matchMedia(
+                                            "(prefers-reduced-motion: reduce)"
+                                        ).matches
+                                    ) {
+                                        flash.remove();
+                                        return;
+                                    }
+
+
+                                    flash.classList.remove(
+                                        "show"
+                                    );
+
+
+                                    window.setTimeout(
+                                        function () {
+
+                                            if (flash.isConnected) {
+                                                flash.remove();
+                                            }
+
+                                        },
+                                        300
+                                    );
+
+                                },
+                                4000
+                            );
+
+                        }
+                    );
+
+                }
+            );
+
+        })();
+    </script>
+
+
+    <!-- =========================================================
+         CHILD TEMPLATE JAVASCRIPT BLOCKS
+    ========================================================== -->
 
     {% block extra_js %}{% endblock %}
     {% block scripts %}{% endblock %}
 
-
 </body>
-
 </html>

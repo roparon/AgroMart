@@ -1,23 +1,13 @@
 {% extends "base.html" %}
-
 {% block title %}
-
 {% if category %}
-
 {{ category.name }} | Bomet Machineries Ltd.
-
 {% elif search %}
-
 Search: {{ search }} | Bomet Machineries Ltd.
-
 {% else %}
-
 Products | Bomet Machineries Ltd.
-
 {% endif %}
-
 {% endblock %}
-
 {% block content %}
 
 <style>
@@ -97,9 +87,9 @@ Products | Bomet Machineries Ltd.
 .products-header h1 {
     margin: 0;
     color: var(--bomet-dark);
-    font-size: 5px;
+    font-size: 24px;
     font-weight: 800;
-    line-height: 0.5;
+    line-height: 1.2;
 }
 
 .products-header p {

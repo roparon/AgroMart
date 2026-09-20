@@ -1,0 +1,12 @@
+services:
+  web:
+    build: .
+    container_name: bomet-machineries
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - ./instance:/app/instance
+      - ./uploads:/app/uploads
+    restart: unless-stopped
