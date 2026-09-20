@@ -31,12 +31,6 @@ def upgrade():
         batch_op.drop_index(batch_op.f('ix_homepage_content_key'))
         batch_op.create_index(batch_op.f('ix_homepage_content_key'), ['key'], unique=True)
 
-    with op.batch_alter_table('orders', schema=None) as batch_op:
-        batch_op.alter_column('order_code',
-               existing_type=sa.VARCHAR(length=30),
-               nullable=False)
-        batch_op.create_unique_constraint('uq_orders_order_code', ['order_code'])
-
     with op.batch_alter_table('wishlist', schema=None) as batch_op:
         batch_op.create_unique_constraint('uq_wishlist_user_product', ['user_id', 'product_id'])
 

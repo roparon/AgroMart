@@ -1,8 +1,31 @@
-agromart/
+# Python virtual environment
+.agromart/
+
+# Python cache / compiled files
 __pycache__/
 *.pyc
-instance/
+*.pyo
+*.pyd
+
+# Environment / secrets
 .env
+.env.*
+!.env.example
+
+# Local databases
+instance/
+*.db
+*.sqlite
+*.sqlite3
+
+# IDE / editor
 .vscode/
 .idea/
-*.sqlite3
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Local migration / temporary files
+migrate_sqlite_to_neon.py
+*.backup
