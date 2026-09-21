@@ -16,6 +16,8 @@ from flask_login import current_user, login_required
 from sqlalchemy.exc import IntegrityError
 from werkzeug.utils import secure_filename
 
+from vercel.blob import BlobClient
+
 from app import db
 from app.forms.homepage import HomepageContentForm
 from app.forms.homepage_section import HomepageSectionForm
@@ -38,8 +40,11 @@ ALLOWED_EXTENSIONS = {
     "webp",
 }
 
-MAX_IMAGE_SIZE = 5 * 1024 * 1024
+MAX_IMAGE_SIZE = 4 * 1024 * 1024
 MAX_HERO_SLIDES = 10
+
+BLOB_FOLDER_CONTENT = "homepage/content"
+BLOB_FOLDER_SECTIONS = "homepage/sections"
 
 
 # ----------------------------------------------------------------------
@@ -68,9 +73,6 @@ def admin_required():
 def flash_form_errors(form):
     """
     Show useful validation errors when a form submission fails.
-
-    This prevents the administrator from being left wondering
-    why nothing happened after clicking Save.
     """
 
     shown = set()
@@ -88,6 +90,7 @@ def flash_form_errors(form):
             shown.add(message)
 
             field = getattr(form, field_name, None)
+
             label = (
                 field.label.text
                 if field is not None
@@ -119,11 +122,36 @@ def allowed_file(filename):
     )
 
 
-def save_homepage_image(image, folder="home"):
+def _get_blob_client():
     """
-    Save a homepage image safely using a UUID filename.
+    Create a Vercel Blob client.
 
-    Returns the public URL of the saved image.
+    The client reads BLOB_READ_WRITE_TOKEN from the Vercel
+    production environment when deployed.
+    """
+
+    try:
+        return BlobClient()
+    except Exception as exc:
+        current_app.logger.exception(
+            "Unable to initialize Vercel Blob client: %s",
+            exc,
+        )
+
+        raise RuntimeError(
+            "Vercel Blob storage is not available. "
+            "Please verify that the Blob store is connected "
+            "to the production project."
+        ) from exc
+
+
+def save_homepage_image(image, folder="content"):
+    """
+    Upload a homepage image to Vercel Blob.
+
+    Returns the permanent public Blob URL.
+
+    No image is written to the Vercel function filesystem.
     """
 
     if not image or not image.filename:
@@ -133,6 +161,10 @@ def save_homepage_image(image, folder="home"):
         raise ValueError(
             "Only JPG, JPEG, PNG and WEBP images are allowed."
         )
+
+    # --------------------------------------------------------------
+    # Validate file size without loading the entire file first.
+    # --------------------------------------------------------------
 
     try:
         image.seek(0, os.SEEK_END)
@@ -152,6 +184,10 @@ def save_homepage_image(image, folder="home"):
         raise ValueError(
             "Image must be smaller than 5 MB."
         )
+
+    # --------------------------------------------------------------
+    # Sanitize filename and determine extension.
+    # --------------------------------------------------------------
 
     original_name = secure_filename(
         image.filename
@@ -177,98 +213,154 @@ def save_homepage_image(image, folder="home"):
             "Only JPG, JPEG, PNG and WEBP images are allowed."
         )
 
+    # --------------------------------------------------------------
+    # Determine content type.
+    # --------------------------------------------------------------
+
+    content_types = {
+        "jpg": "image/jpeg",
+        "jpeg": "image/jpeg",
+        "png": "image/png",
+        "webp": "image/webp",
+    }
+
+    content_type = content_types.get(
+        extension,
+        "application/octet-stream",
+    )
+
+    # --------------------------------------------------------------
+    # Generate a collision-safe filename.
+    # --------------------------------------------------------------
+
     filename = (
         f"{uuid.uuid4().hex}.{extension}"
     )
 
-    upload_dir = os.path.join(
-        current_app.static_folder,
-        "uploads",
-        folder,
+    blob_folder = (
+        BLOB_FOLDER_CONTENT
+        if folder == "home"
+        else BLOB_FOLDER_SECTIONS
     )
 
-    try:
-        os.makedirs(
-            upload_dir,
-            exist_ok=True,
-        )
-    except OSError:
-        current_app.logger.exception(
-            "Unable to create homepage image directory: %s",
-            upload_dir,
-        )
-
-        raise ValueError(
-            "Unable to prepare the image upload directory."
-        )
-
-    image_path = os.path.join(
-        upload_dir,
-        filename,
+    blob_path = (
+        f"{blob_folder}/{filename}"
     )
 
+    # --------------------------------------------------------------
+    # Read the uploaded file into memory.
+    #
+    # The file is limited to 5 MB above, which keeps memory usage
+    # controlled for this server-side upload approach.
+    # --------------------------------------------------------------
+
     try:
-        image.save(image_path)
+        image.seek(0)
+        image_data = image.read()
     except (OSError, ValueError):
-        current_app.logger.exception(
-            "Unable to save homepage image: %s",
-            image_path,
-        )
-
         raise ValueError(
-            "Unable to save the uploaded image. Please try again."
+            "Unable to read the uploaded image."
         )
 
-    return (
-        f"/static/uploads/{folder}/{filename}"
+    if not image_data:
+        raise ValueError(
+            "The uploaded image is empty."
+        )
+
+    # --------------------------------------------------------------
+    # Upload to Vercel Blob.
+    # --------------------------------------------------------------
+
+    try:
+        client = _get_blob_client()
+
+        uploaded = client.put(
+            blob_path,
+            image_data,
+            access="public",
+            content_type=content_type,
+            add_random_suffix=False,
+        )
+
+    except Exception as exc:
+        current_app.logger.exception(
+            "Vercel Blob upload failed for %s: %s",
+            blob_path,
+            exc,
+        )
+
+        raise RuntimeError(
+            "The image could not be uploaded to cloud storage. "
+            "Please try again."
+        ) from exc
+
+    # --------------------------------------------------------------
+    # Extract the permanent Blob URL.
+    # --------------------------------------------------------------
+
+    image_url = getattr(
+        uploaded,
+        "url",
+        None,
     )
 
+    if not image_url and isinstance(
+        uploaded,
+        dict,
+    ):
+        image_url = uploaded.get("url")
 
-def delete_homepage_image(
-    image_url,
-    folder="home",
-):
+    if not image_url:
+        current_app.logger.error(
+            "Vercel Blob returned no URL for %s",
+            blob_path,
+        )
+
+        raise RuntimeError(
+            "The image was uploaded but no image URL was returned."
+        )
+
+    return image_url
+
+
+def delete_homepage_image(image_url, folder=None):
     """
-    Delete an image only when it belongs to our
-    managed homepage upload directory.
+    Delete a homepage image from Vercel Blob.
+
+    Existing old /static/uploads/... images are deliberately
+    ignored so historical data is not damaged.
     """
 
     if not image_url:
         return
 
-    prefix = (
-        f"/static/uploads/{folder}/"
-    )
+    # --------------------------------------------------------------
+    # Only delete actual Vercel Blob URLs.
+    #
+    # This protects your existing SQLite-era/local image records.
+    # --------------------------------------------------------------
 
-    if not image_url.startswith(prefix):
+    if (
+        "blob.vercel-storage.com" not in image_url
+        and ".blob.vercel-storage.com" not in image_url
+    ):
         return
 
-    filename = os.path.basename(
-        image_url
-    )
+    try:
+        client = _get_blob_client()
 
-    if not filename:
-        return
+        client.delete(
+            image_url
+        )
 
-    upload_dir = os.path.join(
-        current_app.static_folder,
-        "uploads",
-        folder,
-    )
-
-    image_path = os.path.join(
-        upload_dir,
-        filename,
-    )
-
-    if os.path.isfile(image_path):
-        try:
-            os.remove(image_path)
-        except OSError:
-            current_app.logger.warning(
-                "Unable to delete homepage image: %s",
-                image_path,
-            )
+    except Exception as exc:
+        # Image deletion should never cause a successful database
+        # operation to become a failed request.
+        current_app.logger.warning(
+            "Unable to delete Vercel Blob image %s: %s",
+            image_url,
+            exc,
+        )
 
 
 # ----------------------------------------------------------------------
@@ -277,7 +369,7 @@ def delete_homepage_image(
 
 def parse_config(value):
     """
-    Convert the configuration textarea into a Python dictionary.
+    Convert configuration textarea into a Python dictionary.
 
     Empty configuration becomes {}.
     """
@@ -496,7 +588,7 @@ def add_content():
                 "danger",
             )
 
-        except ValueError as exc:
+        except (ValueError, RuntimeError) as exc:
             db.session.rollback()
 
             if image_url:
@@ -674,7 +766,7 @@ def edit_content(content_id):
                 "danger",
             )
 
-        except ValueError as exc:
+        except (ValueError, RuntimeError) as exc:
             db.session.rollback()
 
             if (
@@ -990,7 +1082,7 @@ def add_section():
                 "danger",
             )
 
-        except ValueError as exc:
+        except (ValueError, RuntimeError) as exc:
             db.session.rollback()
 
             if image_url:
@@ -1209,7 +1301,7 @@ def edit_section(section_id):
                 "danger",
             )
 
-        except ValueError as exc:
+        except (ValueError, RuntimeError) as exc:
             db.session.rollback()
 
             if (
@@ -1535,9 +1627,6 @@ def settings():
         HomepageSetting.query.first()
     )
 
-    # Do not immediately commit an empty settings record.
-    # It will be created only when the administrator successfully
-    # submits valid settings.
     if homepage_settings is None:
         homepage_settings = HomepageSetting(
             site_title=None,
@@ -1556,7 +1645,6 @@ def settings():
 
     if form.validate_on_submit():
 
-        # If the announcement bar is enabled, require text.
         announcement_text = normalize_text(
             form.announcement_text.data
         )

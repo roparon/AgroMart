@@ -1,4 +1,3 @@
-import os
 import uuid
 
 from flask import (
@@ -7,9 +6,12 @@ from flask import (
     redirect,
     url_for,
     flash,
-    current_app,
     request,
 )
+
+from flask_login import login_required
+
+from vercel.blob import BlobClient
 
 from werkzeug.utils import secure_filename
 
@@ -18,11 +20,13 @@ from app import db
 from app.forms.product_forms import ProductForm
 
 from app.models.product import Product
-
 from app.models.category import Category
-
 from app.models.product_image import ProductImage
 
+
+# ============================================================
+# BLUEPRINT
+# ============================================================
 
 products_bp = Blueprint(
     "admin_products",
@@ -31,7 +35,7 @@ products_bp = Blueprint(
 
 
 # ============================================================
-# ALLOWED IMAGE TYPES
+# IMAGE CONFIGURATION
 # ============================================================
 
 ALLOWED_IMAGE_EXTENSIONS = {
@@ -41,17 +45,263 @@ ALLOWED_IMAGE_EXTENSIONS = {
     "webp",
 }
 
+MAX_IMAGE_SIZE = 4 * 1024 * 1024
+
+BLOB_PRODUCT_FOLDER = "products"
+
+
+# ============================================================
+# IMAGE VALIDATION
+# ============================================================
 
 def allowed_image(filename):
     """
-    Check whether the uploaded file has an allowed extension.
+    Check whether an uploaded filename has an allowed extension.
     """
 
-    return (
-        "." in filename
-        and filename.rsplit(".", 1)[1].lower()
-        in ALLOWED_IMAGE_EXTENSIONS
+    if not filename or "." not in filename:
+        return False
+
+    extension = filename.rsplit(
+        ".",
+        1,
+    )[1].lower()
+
+    return extension in ALLOWED_IMAGE_EXTENSIONS
+
+
+def validate_image_size(image):
+    """
+    Validate the uploaded image size.
+
+    Uses the file stream directly so we do not need to load
+    the complete image into memory just for validation.
+    """
+
+    if not image:
+        return False
+
+    try:
+        current_position = image.tell()
+
+        image.seek(
+            0,
+            2,
+        )
+
+        file_size = image.tell()
+
+        image.seek(
+            current_position,
+        )
+
+    except (OSError, AttributeError):
+        return True
+
+    if file_size <= 0:
+        raise ValueError(
+            "The uploaded image is empty."
+        )
+
+    if file_size > MAX_IMAGE_SIZE:
+        raise ValueError(
+            "Image size must not exceed 4 MB."
+        )
+
+    return True
+
+
+# ============================================================
+# VERCEL BLOB CLIENT
+# ============================================================
+
+def _get_blob_client():
+    """
+    Create a Vercel Blob client.
+
+    Vercel automatically provides the Blob token in the
+    production environment when the Blob store is connected
+    correctly to the project.
+    """
+
+    return BlobClient()
+
+
+# ============================================================
+# UPLOAD PRODUCT IMAGE
+# ============================================================
+
+def upload_product_image(image):
+    """
+    Upload a product image to Vercel Blob.
+
+    Returns:
+        str | None:
+            Public Blob URL.
+
+    Raises:
+        ValueError:
+            For invalid image files.
+        RuntimeError:
+            When Blob upload does not return a URL.
+    """
+
+    if not image or not image.filename:
+        return None
+
+    # --------------------------------------------------------
+    # SECURE ORIGINAL FILENAME
+    # --------------------------------------------------------
+
+    original_filename = secure_filename(
+        image.filename
     )
+
+    if not original_filename:
+        raise ValueError(
+            "Invalid image filename."
+        )
+
+    # --------------------------------------------------------
+    # VALIDATE EXTENSION
+    # --------------------------------------------------------
+
+    if not allowed_image(
+        original_filename
+    ):
+        raise ValueError(
+            "Unsupported image format. "
+            "Allowed formats: JPG, JPEG, PNG and WEBP."
+        )
+
+    extension = original_filename.rsplit(
+        ".",
+        1,
+    )[1].lower()
+
+    # --------------------------------------------------------
+    # VALIDATE SIZE
+    # --------------------------------------------------------
+
+    validate_image_size(
+        image
+    )
+
+    # --------------------------------------------------------
+    # READ IMAGE DATA
+    # --------------------------------------------------------
+
+    image.seek(0)
+
+    image_data = image.read()
+
+    if not image_data:
+        raise ValueError(
+            "The uploaded image is empty."
+        )
+
+    # --------------------------------------------------------
+    # GENERATE UNIQUE BLOB NAME
+    # --------------------------------------------------------
+
+    unique_filename = (
+        f"{uuid.uuid4().hex}.{extension}"
+    )
+
+    blob_path = (
+        f"{BLOB_PRODUCT_FOLDER}/"
+        f"{unique_filename}"
+    )
+
+    # --------------------------------------------------------
+    # UPLOAD TO VERCEL BLOB
+    # --------------------------------------------------------
+
+    client = _get_blob_client()
+
+    uploaded = client.put(
+        blob_path,
+        image_data,
+        access="public",
+        content_type=(
+            image.mimetype
+            or "application/octet-stream"
+        ),
+        add_random_suffix=False,
+    )
+
+    # --------------------------------------------------------
+    # GET PUBLIC URL
+    # --------------------------------------------------------
+
+    image_url = getattr(
+        uploaded,
+        "url",
+        None,
+    )
+
+    # Defensive support in case the SDK returns a dictionary.
+    if not image_url and isinstance(
+        uploaded,
+        dict,
+    ):
+        image_url = uploaded.get(
+            "url"
+        )
+
+    if not image_url:
+        raise RuntimeError(
+            "Vercel Blob upload succeeded but "
+            "no public image URL was returned."
+        )
+
+    return image_url
+
+
+# ============================================================
+# DELETE PRODUCT IMAGE FROM VERCEL BLOB
+# ============================================================
+
+def delete_product_image_file(image_url):
+    """
+    Delete an image from Vercel Blob.
+
+    Important:
+    Older images using local URLs such as:
+
+        /static/uploads/products/...
+
+    are intentionally left untouched.
+
+    Only Vercel Blob URLs are sent to the Blob API.
+    """
+
+    if not image_url:
+        return
+
+    # --------------------------------------------------------
+    # ONLY DELETE VERCEL BLOB OBJECTS
+    # --------------------------------------------------------
+
+    if "blob.vercel-storage.com" not in image_url:
+        return
+
+    try:
+
+        client = _get_blob_client()
+
+        client.delete(
+            image_url
+        )
+
+    except Exception as exc:
+
+        # Blob deletion failure should never prevent the
+        # database operation from completing.
+        print(
+            "Warning: could not delete "
+            f"Vercel Blob image: {exc}"
+        )
 
 
 # ============================================================
@@ -59,6 +309,7 @@ def allowed_image(filename):
 # ============================================================
 
 @products_bp.route("/")
+@login_required
 def products():
 
     products = Product.query.order_by(
@@ -79,9 +330,14 @@ def products():
     "/add",
     methods=["GET", "POST"],
 )
+@login_required
 def add_product():
 
     form = ProductForm()
+
+    # --------------------------------------------------------
+    # LOAD ACTIVE CATEGORIES
+    # --------------------------------------------------------
 
     categories = Category.query.filter_by(
         is_active=True
@@ -90,14 +346,21 @@ def add_product():
     ).all()
 
     form.category.choices = [
-        (category.id, category.name)
+        (
+            category.id,
+            category.name,
+        )
         for category in categories
     ]
+
+    # --------------------------------------------------------
+    # VALIDATE FORM
+    # --------------------------------------------------------
 
     if form.validate_on_submit():
 
         # ----------------------------------------------------
-        # CHECK SLUG
+        # CHECK DUPLICATE SLUG
         # ----------------------------------------------------
 
         if form.slug.data:
@@ -136,119 +399,144 @@ def add_product():
             is_active=form.is_active.data,
         )
 
-        db.session.add(product)
+        db.session.add(
+            product
+        )
 
         # ----------------------------------------------------
         # FLUSH
-        # This gives the product its database ID.
+        #
+        # Gives product its database ID before images are
+        # inserted.
         # ----------------------------------------------------
 
         db.session.flush()
 
         # ----------------------------------------------------
-        # AUTO-GENERATE SKU
-        # Example:
-        # BM-000001
-        # BM-000002
-        # BM-000003
+        # GENERATE SKU
         # ----------------------------------------------------
 
-        product.sku = f"BM-{product.id:06d}"
+        product.sku = (
+            f"BM-{product.id:06d}"
+        )
 
         # ----------------------------------------------------
-        # SAVE PRODUCT IMAGES
+        # GET UPLOADED IMAGES
         # ----------------------------------------------------
 
         uploaded_images = request.files.getlist(
             "images"
         )
 
-        upload_folder = current_app.config[
-            "UPLOAD_FOLDER"
-        ]
-
-        os.makedirs(
-            upload_folder,
-            exist_ok=True
-        )
-
         image_number = 0
 
-        for image in uploaded_images:
+        try:
 
-            if not image or not image.filename:
-                continue
+            for image in uploaded_images:
 
-            if not allowed_image(image.filename):
+                if not image or not image.filename:
+                    continue
 
-                flash(
-                    f"Invalid image format: {image.filename}",
-                    "danger",
+                # --------------------------------------------
+                # VALIDATE IMAGE TYPE
+                # --------------------------------------------
+
+                if not allowed_image(
+                    image.filename
+                ):
+
+                    raise ValueError(
+                        f"Invalid image format: "
+                        f"{image.filename}"
+                    )
+
+                # --------------------------------------------
+                # UPLOAD TO VERCEL BLOB
+                # --------------------------------------------
+
+                image_url = upload_product_image(
+                    image
                 )
 
-                db.session.rollback()
+                if not image_url:
+                    continue
 
-                return render_template(
-                    "admin/product_form.html",
-                    form=form,
-                    title="Add Product",
+                # --------------------------------------------
+                # CREATE IMAGE DATABASE RECORD
+                # --------------------------------------------
+
+                product_image = ProductImage(
+                    image_url=image_url,
+                    product_id=product.id,
+                    is_primary=(
+                        image_number == 0
+                    ),
                 )
 
-            # ------------------------------------------------
-            # CREATE SAFE UNIQUE FILE NAME
-            # ------------------------------------------------
+                db.session.add(
+                    product_image
+                )
 
-            original_filename = secure_filename(
-                image.filename
+                image_number += 1
+
+        except Exception as exc:
+
+            db.session.rollback()
+
+            print(
+                "Product image upload failed: "
+                f"{exc}"
             )
 
-            extension = original_filename.rsplit(
-                ".",
-                1
-            )[1].lower()
-
-            unique_filename = (
-                f"{uuid.uuid4().hex}.{extension}"
+            flash(
+                "The product could not be created because "
+                "the image upload failed. Please check the "
+                "image format and size and try again.",
+                "danger",
             )
 
-            file_path = os.path.join(
-                upload_folder,
-                unique_filename,
+            return render_template(
+                "admin/product_form.html",
+                form=form,
+                title="Add Product",
             )
-
-            # ------------------------------------------------
-            # SAVE FILE
-            # ------------------------------------------------
-
-            image.save(file_path)
-
-            # ------------------------------------------------
-            # SAVE DATABASE RECORD
-            # ------------------------------------------------
-
-            product_image = ProductImage(
-                image_url=(
-                    f"/static/uploads/products/"
-                    f"{unique_filename}"
-                ),
-                product_id=product.id,
-                is_primary=(
-                    image_number == 0
-                ),
-            )
-
-            db.session.add(product_image)
-
-            image_number += 1
 
         # ----------------------------------------------------
         # COMMIT PRODUCT + IMAGES
         # ----------------------------------------------------
 
-        db.session.commit()
+        try:
+
+            db.session.commit()
+
+        except Exception as exc:
+
+            db.session.rollback()
+
+            print(
+                "Product database commit failed: "
+                f"{exc}"
+            )
+
+            flash(
+                "The product could not be saved. "
+                "Please try again.",
+                "danger",
+            )
+
+            return render_template(
+                "admin/product_form.html",
+                form=form,
+                title="Add Product",
+            )
+
+        # ----------------------------------------------------
+        # SUCCESS
+        # ----------------------------------------------------
 
         flash(
-            f"Product created successfully. SKU: {product.sku}",
+            f"Product created successfully. "
+            f"SKU: {product.sku}",
             "success",
         )
 
@@ -257,6 +545,10 @@ def add_product():
                 "admin_products.products"
             )
         )
+
+    # --------------------------------------------------------
+    # DISPLAY FORM
+    # --------------------------------------------------------
 
     return render_template(
         "admin/product_form.html",
@@ -273,6 +565,7 @@ def add_product():
     "/<int:product_id>/edit",
     methods=["GET", "POST"],
 )
+@login_required
 def edit_product(product_id):
 
     product = Product.query.get_or_404(
@@ -283,6 +576,10 @@ def edit_product(product_id):
         obj=product
     )
 
+    # --------------------------------------------------------
+    # LOAD ACTIVE CATEGORIES
+    # --------------------------------------------------------
+
     categories = Category.query.filter_by(
         is_active=True
     ).order_by(
@@ -290,17 +587,34 @@ def edit_product(product_id):
     ).all()
 
     form.category.choices = [
-        (category.id, category.name)
+        (
+            category.id,
+            category.name,
+        )
         for category in categories
     ]
 
+    # --------------------------------------------------------
+    # SET INITIAL FORM VALUES
+    # --------------------------------------------------------
+
     if not form.is_submitted():
 
-        form.category.data = product.category_id
+        form.category.data = (
+            product.category_id
+        )
 
-        form.featured.data = product.featured
+        form.featured.data = (
+            product.featured
+        )
 
-        form.is_active.data = product.is_active
+        form.is_active.data = (
+            product.is_active
+        )
+
+    # --------------------------------------------------------
+    # PROCESS UPDATE
+    # --------------------------------------------------------
 
     if form.validate_on_submit():
 
@@ -351,10 +665,11 @@ def edit_product(product_id):
                     "admin/product_form.html",
                     form=form,
                     title="Edit Product",
+                    product=product,
                 )
 
         # ----------------------------------------------------
-        # UPDATE PRODUCT
+        # UPDATE PRODUCT FIELDS
         # ----------------------------------------------------
 
         product.name = form.name.data
@@ -369,20 +684,11 @@ def edit_product(product_id):
         product.is_active = form.is_active.data
 
         # ----------------------------------------------------
-        # SAVE NEW IMAGES
+        # GET NEW IMAGES
         # ----------------------------------------------------
 
         uploaded_images = request.files.getlist(
             "images"
-        )
-
-        upload_folder = current_app.config[
-            "UPLOAD_FOLDER"
-        ]
-
-        os.makedirs(
-            upload_folder,
-            exist_ok=True
         )
 
         existing_images = ProductImage.query.filter_by(
@@ -391,66 +697,111 @@ def edit_product(product_id):
 
         image_number = existing_images
 
-        for image in uploaded_images:
+        try:
 
-            if not image or not image.filename:
-                continue
+            for image in uploaded_images:
 
-            if not allowed_image(image.filename):
+                if not image or not image.filename:
+                    continue
 
-                flash(
-                    f"Invalid image format: {image.filename}",
-                    "danger",
+                # --------------------------------------------
+                # VALIDATE TYPE
+                # --------------------------------------------
+
+                if not allowed_image(
+                    image.filename
+                ):
+
+                    raise ValueError(
+                        f"Invalid image format: "
+                        f"{image.filename}"
+                    )
+
+                # --------------------------------------------
+                # UPLOAD TO VERCEL BLOB
+                # --------------------------------------------
+
+                image_url = upload_product_image(
+                    image
                 )
 
-                db.session.rollback()
+                if not image_url:
+                    continue
 
-                return render_template(
-                    "admin/product_form.html",
-                    form=form,
-                    title="Edit Product",
+                # --------------------------------------------
+                # CREATE DATABASE RECORD
+                # --------------------------------------------
+
+                product_image = ProductImage(
+                    image_url=image_url,
+                    product_id=product.id,
+                    is_primary=(
+                        image_number == 0
+                    ),
                 )
 
-            original_filename = secure_filename(
-                image.filename
+                db.session.add(
+                    product_image
+                )
+
+                image_number += 1
+
+        except Exception as exc:
+
+            db.session.rollback()
+
+            print(
+                "Product image upload failed: "
+                f"{exc}"
             )
 
-            extension = original_filename.rsplit(
-                ".",
-                1
-            )[1].lower()
-
-            unique_filename = (
-                f"{uuid.uuid4().hex}.{extension}"
+            flash(
+                "The product could not be updated because "
+                "the image upload failed. Please check the "
+                "image format and size and try again.",
+                "danger",
             )
 
-            file_path = os.path.join(
-                upload_folder,
-                unique_filename,
+            return render_template(
+                "admin/product_form.html",
+                form=form,
+                title="Edit Product",
+                product=product,
             )
-
-            image.save(file_path)
-
-            product_image = ProductImage(
-                image_url=(
-                    f"/static/uploads/products/"
-                    f"{unique_filename}"
-                ),
-                product_id=product.id,
-                is_primary=(
-                    image_number == 0
-                ),
-            )
-
-            db.session.add(product_image)
-
-            image_number += 1
 
         # ----------------------------------------------------
         # COMMIT
         # ----------------------------------------------------
 
-        db.session.commit()
+        try:
+
+            db.session.commit()
+
+        except Exception as exc:
+
+            db.session.rollback()
+
+            print(
+                "Product database update failed: "
+                f"{exc}"
+            )
+
+            flash(
+                "The product could not be updated. "
+                "Please try again.",
+                "danger",
+            )
+
+            return render_template(
+                "admin/product_form.html",
+                form=form,
+                title="Edit Product",
+                product=product,
+            )
+
+        # ----------------------------------------------------
+        # SUCCESS
+        # ----------------------------------------------------
 
         flash(
             "Product updated successfully.",
@@ -462,6 +813,10 @@ def edit_product(product_id):
                 "admin_products.products"
             )
         )
+
+    # --------------------------------------------------------
+    # DISPLAY FORM
+    # --------------------------------------------------------
 
     return render_template(
         "admin/product_form.html",
@@ -479,6 +834,7 @@ def edit_product(product_id):
     "/<int:product_id>/delete",
     methods=["POST"],
 )
+@login_required
 def delete_product(product_id):
 
     product = Product.query.get_or_404(
@@ -486,33 +842,65 @@ def delete_product(product_id):
     )
 
     # --------------------------------------------------------
-    # DELETE IMAGE FILES
+    # COLLECT IMAGE URLS
     # --------------------------------------------------------
 
-    for image in product.images:
+    image_urls = [
+        image.image_url
+        for image in product.images
+        if image.image_url
+    ]
 
-        if image.image_url:
+    # --------------------------------------------------------
+    # DELETE PRODUCT FROM DATABASE
+    #
+    # Blob deletion is deliberately performed after the
+    # database operation so a Blob problem does not prevent
+    # product deletion.
+    # --------------------------------------------------------
 
-            filename = os.path.basename(
-                image.image_url
+    db.session.delete(
+        product
+    )
+
+    try:
+
+        db.session.commit()
+
+    except Exception as exc:
+
+        db.session.rollback()
+
+        print(
+            "Product deletion failed: "
+            f"{exc}"
+        )
+
+        flash(
+            "The product could not be deleted. "
+            "Please try again.",
+            "danger",
+        )
+
+        return redirect(
+            url_for(
+                "admin_products.products"
             )
-
-            file_path = os.path.join(
-                current_app.config["UPLOAD_FOLDER"],
-                filename,
-            )
-
-            if os.path.exists(file_path):
-
-                os.remove(file_path)
+        )
 
     # --------------------------------------------------------
-    # DELETE PRODUCT
+    # CLEAN UP BLOB IMAGES
     # --------------------------------------------------------
 
-    db.session.delete(product)
+    for image_url in image_urls:
 
-    db.session.commit()
+        delete_product_image_file(
+            image_url
+        )
+
+    # --------------------------------------------------------
+    # SUCCESS
+    # --------------------------------------------------------
 
     flash(
         "Product deleted successfully.",
@@ -526,7 +914,7 @@ def delete_product(product_id):
     )
 
 
-    # ============================================================
+# ============================================================
 # DELETE PRODUCT IMAGE
 # ============================================================
 
@@ -534,6 +922,7 @@ def delete_product(product_id):
     "/image/<int:image_id>/delete",
     methods=["POST"],
 )
+@login_required
 def delete_product_image(image_id):
 
     image = ProductImage.query.get_or_404(
@@ -541,37 +930,22 @@ def delete_product_image(image_id):
     )
 
     product_id = image.product_id
-
-    # --------------------------------------------------------
-    # DELETE PHYSICAL FILE
-    # --------------------------------------------------------
-
-    if image.image_url:
-
-        filename = os.path.basename(
-            image.image_url
-        )
-
-        file_path = os.path.join(
-            current_app.config["UPLOAD_FOLDER"],
-            filename,
-        )
-
-        if os.path.exists(file_path):
-            os.remove(file_path)
-
+    image_url = image.image_url
     was_primary = image.is_primary
 
     # --------------------------------------------------------
     # DELETE DATABASE RECORD
     # --------------------------------------------------------
 
-    db.session.delete(image)
+    db.session.delete(
+        image
+    )
 
     db.session.flush()
 
     # --------------------------------------------------------
-    # IF PRIMARY WAS DELETED, SELECT ANOTHER IMAGE
+    # IF PRIMARY IMAGE WAS DELETED,
+    # SELECT ANOTHER IMAGE
     # --------------------------------------------------------
 
     if was_primary:
@@ -583,9 +957,50 @@ def delete_product_image(image_id):
         ).first()
 
         if replacement:
+
             replacement.is_primary = True
 
-    db.session.commit()
+    # --------------------------------------------------------
+    # COMMIT DATABASE CHANGE
+    # --------------------------------------------------------
+
+    try:
+
+        db.session.commit()
+
+    except Exception as exc:
+
+        db.session.rollback()
+
+        print(
+            "Product image database deletion failed: "
+            f"{exc}"
+        )
+
+        flash(
+            "The product image could not be deleted. "
+            "Please try again.",
+            "danger",
+        )
+
+        return redirect(
+            url_for(
+                "admin_products.edit_product",
+                product_id=product_id,
+            )
+        )
+
+    # --------------------------------------------------------
+    # DELETE BLOB AFTER DATABASE SUCCESS
+    # --------------------------------------------------------
+
+    delete_product_image_file(
+        image_url
+    )
+
+    # --------------------------------------------------------
+    # SUCCESS
+    # --------------------------------------------------------
 
     flash(
         "Product image deleted successfully.",
@@ -600,7 +1015,7 @@ def delete_product_image(image_id):
     )
 
 
-    # ============================================================
+# ============================================================
 # SET PRIMARY PRODUCT IMAGE
 # ============================================================
 
@@ -608,6 +1023,7 @@ def delete_product_image(image_id):
     "/image/<int:image_id>/primary",
     methods=["POST"],
 )
+@login_required
 def set_primary_image(image_id):
 
     image = ProductImage.query.get_or_404(
@@ -617,7 +1033,7 @@ def set_primary_image(image_id):
     product_id = image.product_id
 
     # --------------------------------------------------------
-    # REMOVE PRIMARY STATUS FROM ALL PRODUCT IMAGES
+    # REMOVE PRIMARY STATUS FROM ALL IMAGES
     # --------------------------------------------------------
 
     ProductImage.query.filter_by(
@@ -629,12 +1045,40 @@ def set_primary_image(image_id):
     )
 
     # --------------------------------------------------------
-    # MAKE SELECTED IMAGE PRIMARY
+    # SET SELECTED IMAGE AS PRIMARY
     # --------------------------------------------------------
 
     image.is_primary = True
 
-    db.session.commit()
+    try:
+
+        db.session.commit()
+
+    except Exception as exc:
+
+        db.session.rollback()
+
+        print(
+            "Primary image update failed: "
+            f"{exc}"
+        )
+
+        flash(
+            "The primary image could not be updated. "
+            "Please try again.",
+            "danger",
+        )
+
+        return redirect(
+            url_for(
+                "admin_products.edit_product",
+                product_id=product_id,
+            )
+        )
+
+    # --------------------------------------------------------
+    # SUCCESS
+    # --------------------------------------------------------
 
     flash(
         "Primary product image updated.",

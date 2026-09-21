@@ -19,3 +19,4 @@ gunicorn==21.2.0
 Flask-WTF
 Flask-Mail
 psycopg[binary]==3.3.6
+vercel
