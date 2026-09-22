@@ -15,12 +15,7 @@ class Config:
     # ============================================================
     # DATABASE
     # ============================================================
-    SQLALCHEMY_DATABASE_URI = (
-        os.environ.get("DATABASE_URL", "")
-        .replace("postgres://", "postgresql+psycopg://", 1)
-        .replace("postgresql://", "postgresql+psycopg://", 1)
-        or "sqlite:///agromart.db"
-    )
+    SQLALCHEMY_DATABASE_URI = (os.environ.get("DATABASE_URL", "").replace("postgres://", "postgresql+psycopg://", 1).replace("postgresql://", "postgresql+psycopg://", 1) or "sqlite:///agromart.db")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
