@@ -31,7 +31,11 @@ def load_user(user_id):
 
 def create_app():
 
-    app = Flask(__name__)
+    import os
+
+    instance_path = "/tmp/agromart-instance" if os.environ.get("VERCEL") else None
+
+    app = Flask(__name__, instance_path=instance_path)
 
     app.config.from_object(Config)
 
