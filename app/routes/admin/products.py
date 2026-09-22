@@ -940,6 +940,7 @@ def delete_product_image(image_id):
     db.session.delete(
         image
     )
+    
 
     db.session.flush()
 
