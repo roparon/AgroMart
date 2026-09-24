@@ -1,55 +1,243 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
 from flask_login import login_user, logout_user, login_required, current_user
+from sqlalchemy.exc import SQLAlchemyError, IntegrityError
+
 from app import db
 from app.forms import RegisterForm, LoginForm
 from app.models.user import User
 from app.services.email_service import send_email
 
+
 auth_bp = Blueprint("auth", __name__)
 
+
+# ============================================================
+# REGISTER
+# ============================================================
 
 @auth_bp.route("/register", methods=["GET", "POST"])
 def register():
 
     if current_user.is_authenticated:
         return redirect(url_for("home.home"))
+
     form = RegisterForm()
+
     if form.validate_on_submit():
-        username_exists = User.query.filter_by(
-            username=form.username.data).first()
+
+        username = form.username.data.strip()
+        email = form.email.data.strip().lower()
+
+        # ----------------------------------------------------
+        # Check username
+        # ----------------------------------------------------
+
+        try:
+
+            username_exists = User.query.filter_by(
+                username=username
+            ).first()
+
+        except SQLAlchemyError:
+            db.session.rollback()
+
+            current_app.logger.exception(
+                "Database error while checking username during registration."
+            )
+
+            flash(
+                "We could not process your registration right now. "
+                "Please try again in a moment.",
+                "danger"
+            )
+
+            return render_template(
+                "register.html",
+                form=form
+            )
+
         if username_exists:
-            flash("Username already exists.", "danger")
-            return render_template("register.html", form=form)
-        email_exists = User.query.filter_by(
-            email=form.email.data).first()
+
+            flash(
+                "Username already exists.",
+                "danger"
+            )
+
+            return render_template(
+                "register.html",
+                form=form
+            )
+
+        # ----------------------------------------------------
+        # Check email
+        # ----------------------------------------------------
+
+        try:
+
+            email_exists = User.query.filter_by(
+                email=email
+            ).first()
+
+        except SQLAlchemyError:
+
+            db.session.rollback()
+
+            current_app.logger.exception(
+                "Database error while checking email during registration."
+            )
+
+            flash(
+                "We could not process your registration right now. "
+                "Please try again in a moment.",
+                "danger"
+            )
+
+            return render_template(
+                "register.html",
+                form=form
+            )
+
         if email_exists:
-            flash("Email already exists.", "danger")
-            return render_template("register.html", form=form)
+
+            flash(
+                "Email already exists.",
+                "danger"
+            )
+
+            return render_template(
+                "register.html",
+                form=form
+            )
+
+        # ----------------------------------------------------
+        # Create user
+        # ----------------------------------------------------
+
         user = User(
-            first_name=form.first_name.data,
-            last_name=form.last_name.data,
-            username=form.username.data,
-            email=form.email.data,
-            phone=form.phone.data
-        )
-        user.set_password(form.password.data)
-        db.session.add(user)
-        db.session.commit()
-        send_email(
-            subject="Welcome to Bomet Machineries Ltd",
-            recipients=[user.email],
-            template="emails/welcome.html",
-            user=user,
+            first_name=form.first_name.data.strip(),
+            last_name=form.last_name.data.strip(),
+            username=username,
+            email=email,
+            phone=(form.phone.data.strip() if form.phone.data else None)
         )
 
+        try:
+
+            user.set_password(
+                form.password.data
+            )
+
+            db.session.add(user)
+            db.session.commit()
+
+        except IntegrityError:
+
+            db.session.rollback()
+
+            current_app.logger.exception(
+                "Registration failed because of a database integrity error."
+            )
+
+            flash(
+                "We could not create your account because some of "
+                "the information is already in use. Please check "
+                "your username and email and try again.",
+                "danger"
+            )
+
+            return render_template(
+                "register.html",
+                form=form
+            )
+
+        except SQLAlchemyError:
+
+            db.session.rollback()
+
+            current_app.logger.exception(
+                "Database error while creating a new user."
+            )
+
+            flash(
+                "We could not create your account right now. "
+                "Please try again in a moment.",
+                "danger"
+            )
+
+            return render_template(
+                "register.html",
+                form=form
+            )
+
+        except Exception:
+
+            db.session.rollback()
+
+            current_app.logger.exception(
+                "Unexpected error while creating a new user."
+            )
+
+            flash(
+                "We could not create your account right now. "
+                "Please try again in a moment.",
+                "danger"
+            )
+
+            return render_template(
+                "register.html",
+                form=form
+            )
+
+        # ----------------------------------------------------
+        # Welcome email
+        #
+        # Email is intentionally NOT part of the account
+        # creation transaction.
+        #
+        # The account already exists successfully. If email
+        # delivery fails, registration must still succeed.
+        # ----------------------------------------------------
+
+        try:
+
+            email_sent = send_email(
+                subject="Welcome to Bomet Machineries Ltd",
+                recipients=[user.email],
+                template="emails/welcome.html",
+                user=user,
+            )
+
+            if not email_sent:
+
+                current_app.logger.warning(
+                    "Welcome email could not be sent to %s.",
+                    user.email
+                )
+
+        except Exception:
+
+            current_app.logger.exception(
+                "Unexpected error while sending welcome email to %s.",
+                user.email
+            )
+
+        # ----------------------------------------------------
+        # Registration completed
+        # ----------------------------------------------------
 
         flash(
             "Account created successfully. Please log in.",
             "success",
         )
-        return redirect(url_for("auth.login"))
-    return render_template("register.html", form=form)
 
+        return redirect(
+            url_for("auth.login")
+        )
+
+    return render_template(
+        "register.html",
+        form=form
+    )
 
 
 # ============================================================
@@ -65,17 +253,15 @@ def login():
 
     if current_user.is_authenticated:
 
-        # Admin → Admin Dashboard
         if current_user.is_admin:
+
             return redirect(
                 url_for("dashboard.dashboard")
             )
 
-        # Customer → Storefront
         return redirect(
             url_for("home.home")
         )
-
 
     # --------------------------------------------------------
     # Login form
@@ -83,26 +269,62 @@ def login():
 
     form = LoginForm()
 
-
     if form.validate_on_submit():
 
         username = form.username.data.strip()
 
-        user = User.query.filter_by(
-            username=username
-        ).first()
+        try:
 
+            user = User.query.filter_by(
+                username=username
+            ).first()
+
+        except SQLAlchemyError:
+
+            db.session.rollback()
+
+            current_app.logger.exception(
+                "Database error during login."
+            )
+
+            flash(
+                "We could not log you in right now. "
+                "Please try again in a moment.",
+                "danger"
+            )
+
+            return render_template(
+                "login.html",
+                form=form
+            )
 
         # ----------------------------------------------------
         # Validate credentials
         # ----------------------------------------------------
 
-        if user and user.check_password(
-            form.password.data
-        ):
+        password_valid = False
+
+        if user:
+
+            try:
+
+                password_valid = user.check_password(
+                    form.password.data
+                )
+
+            except Exception:
+
+                current_app.logger.exception(
+                    "Password verification failed for username '%s'.",
+                    username
+                )
+
+                password_valid = False
+
+        if user and password_valid:
 
             # ------------------------------------------------
-            # Make sure account is active
+            # Check account status
             # ------------------------------------------------
 
             if not user.is_active:
@@ -118,16 +340,34 @@ def login():
                     form=form
                 )
 
-
             # ------------------------------------------------
             # Log user in
             # ------------------------------------------------
 
-            login_user(
-                user,
-                remember=form.remember.data
-            )
+            try:
 
+                login_user(
+                    user,
+                    remember=form.remember.data
+                )
+
+            except Exception:
+
+                current_app.logger.exception(
+                    "Failed to create login session for user %s.",
+                    user.id
+                )
+
+                flash(
+                    "We could not log you in right now. "
+                    "Please try again.",
+                    "danger"
+                )
+
+                return render_template(
+                    "login.html",
+                    form=form
+                )
 
             # ------------------------------------------------
             # Welcome message
@@ -147,18 +387,15 @@ def login():
                     "success"
                 )
 
-
             # ------------------------------------------------
-            # Respect Flask-Login "next" parameter
+            # Respect Flask-Login next parameter
             # ------------------------------------------------
 
             next_page = request.args.get("next")
 
-
             if next_page and next_page.startswith("/"):
 
                 return redirect(next_page)
-
 
             # ------------------------------------------------
             # Admin → Admin Dashboard
@@ -170,7 +407,6 @@ def login():
                     url_for("dashboard.dashboard")
                 )
 
-
             # ------------------------------------------------
             # Customer → Storefront
             # ------------------------------------------------
@@ -178,7 +414,6 @@ def login():
             return redirect(
                 url_for("home.home")
             )
-
 
         # ----------------------------------------------------
         # Invalid credentials
@@ -188,7 +423,6 @@ def login():
             "Invalid username or password.",
             "danger"
         )
-
 
     return render_template(
         "login.html",
@@ -204,10 +438,6 @@ def login():
 @login_required
 def admin_profile():
 
-    # --------------------------------------------------------
-    # Only administrators can access this page
-    # --------------------------------------------------------
-
     if not current_user.is_admin:
 
         flash(
@@ -218,19 +448,19 @@ def admin_profile():
         return redirect(
             url_for("home.home")
         )
-
 
     return render_template(
         "admin/profile.html"
     )
 
+
+# ============================================================
+# EDIT ADMIN PROFILE
+# ============================================================
+
 @auth_bp.route("/admin/profile/edit", methods=["GET", "POST"])
 @login_required
 def edit_admin_profile():
-
-    # --------------------------------------------------------
-    # Admin-only access
-    # --------------------------------------------------------
 
     if not current_user.is_admin:
 
@@ -242,11 +472,6 @@ def edit_admin_profile():
         return redirect(
             url_for("home.home")
         )
-
-
-    # --------------------------------------------------------
-    # Handle form submission
-    # --------------------------------------------------------
 
     if request.method == "POST":
 
@@ -280,7 +505,6 @@ def edit_admin_profile():
             ""
         ).strip()
 
-
         # ----------------------------------------------------
         # Required fields
         # ----------------------------------------------------
@@ -296,7 +520,6 @@ def edit_admin_profile():
                 "admin/edit_profile.html"
             )
 
-
         if not username:
 
             flash(
@@ -307,7 +530,6 @@ def edit_admin_profile():
             return render_template(
                 "admin/edit_profile.html"
             )
-
 
         if not email:
 
@@ -320,16 +542,34 @@ def edit_admin_profile():
                 "admin/edit_profile.html"
             )
 
-
         # ----------------------------------------------------
         # Check username uniqueness
         # ----------------------------------------------------
 
-        existing_username = User.query.filter(
-            User.username == username,
-            User.id != current_user.id
-        ).first()
+        try:
 
+            existing_username = User.query.filter(
+                User.username == username,
+                User.id != current_user.id
+            ).first()
+
+        except SQLAlchemyError:
+
+            db.session.rollback()
+
+            current_app.logger.exception(
+                "Database error while checking admin username."
+            )
+
+            flash(
+                "We could not update your profile right now. "
+                "Please try again.",
+                "danger"
+            )
+
+            return render_template(
+                "admin/edit_profile.html"
+            )
 
         if existing_username:
 
@@ -342,16 +582,34 @@ def edit_admin_profile():
                 "admin/edit_profile.html"
             )
 
-
         # ----------------------------------------------------
         # Check email uniqueness
         # ----------------------------------------------------
 
-        existing_email = User.query.filter(
-            User.email == email,
-            User.id != current_user.id
-        ).first()
+        try:
 
+            existing_email = User.query.filter(
+                User.email == email,
+                User.id != current_user.id
+            ).first()
+
+        except SQLAlchemyError:
+
+            db.session.rollback()
+
+            current_app.logger.exception(
+                "Database error while checking admin email."
+            )
+
+            flash(
+                "We could not update your profile right now. "
+                "Please try again.",
+                "danger"
+            )
+
+            return render_template(
+                "admin/edit_profile.html"
+            )
 
         if existing_email:
 
@@ -363,7 +621,6 @@ def edit_admin_profile():
             return render_template(
                 "admin/edit_profile.html"
             )
-
 
         # ----------------------------------------------------
         # Update profile
@@ -380,7 +637,6 @@ def edit_admin_profile():
 
             db.session.commit()
 
-
             flash(
                 "Your administrator profile has been updated successfully.",
                 "success"
@@ -390,24 +646,51 @@ def edit_admin_profile():
                 url_for("auth.admin_profile")
             )
 
-
-        except Exception as e:
+        except IntegrityError:
 
             db.session.rollback()
 
-            print(
-                f"ADMIN PROFILE UPDATE FAILED: {e}"
+            current_app.logger.exception(
+                "Admin profile update failed because of a database integrity error."
             )
 
             flash(
-                "Unable to update your profile. Please try again.",
+                "That username or email address is already in use.",
                 "danger"
             )
 
+        except SQLAlchemyError:
+
+            db.session.rollback()
+
+            current_app.logger.exception(
+                "Database error while updating admin profile."
+            )
+
+            flash(
+                "Unable to update your profile right now. "
+                "Please try again.",
+                "danger"
+            )
+
+        except Exception:
+
+            db.session.rollback()
+
+            current_app.logger.exception(
+                "Unexpected error while updating admin profile."
+            )
+
+            flash(
+                "Unable to update your profile. "
+                "Please try again.",
+                "danger"
+            )
 
     return render_template(
         "admin/edit_profile.html"
     )
+
 
 # ============================================================
 # ACCOUNT DASHBOARD
@@ -417,53 +700,85 @@ def edit_admin_profile():
 @login_required
 def account():
 
-    # All orders belonging to the logged-in customer
-    orders = (
-        current_user.orders
-        if current_user.orders
-        else []
-    )
+    try:
 
-    # Order statistics
-    total_orders = len(orders)
+        orders = (
+            current_user.orders
+            if current_user.orders
+            else []
+        )
 
-    pending_orders = sum(
-        1
-        for order in orders
-        if order.status == "Pending"
-    )
+        total_orders = len(orders)
 
-    processing_orders = sum(
-        1
-        for order in orders
-        if order.status == "Processing"
-    )
+        pending_orders = sum(
+            1
+            for order in orders
+            if order.status == "Pending"
+        )
 
-    shipped_orders = sum(
-        1
-        for order in orders
-        if order.status == "Shipped"
-    )
+        processing_orders = sum(
+            1
+            for order in orders
+            if order.status == "Processing"
+        )
 
-    delivered_orders = sum(
-        1
-        for order in orders
-        if order.status == "Delivered"
-    )
+        shipped_orders = sum(
+            1
+            for order in orders
+            if order.status == "Shipped"
+        )
 
-    # Total amount spent
-    total_spent = sum(
-        order.total_amount
-        for order in orders
-        if order.status != "Cancelled"
-    )
+        delivered_orders = sum(
+            1
+            for order in orders
+            if order.status == "Delivered"
+        )
 
-    # Most recent orders
-    recent_orders = sorted(
-        orders,
-        key=lambda order: order.created_at,
-        reverse=True
-    )[:5]
+        total_spent = sum(
+            order.total_amount
+            for order in orders
+            if order.status != "Cancelled"
+        )
+
+        recent_orders = sorted(
+            orders,
+            key=lambda order: order.created_at,
+            reverse=True
+        )[:5]
+
+    except SQLAlchemyError:
+
+        db.session.rollback()
+
+        current_app.logger.exception(
+            "Database error while loading account dashboard."
+        )
+
+        flash(
+            "We could not load your account information right now. "
+            "Please try again.",
+            "danger"
+        )
+
+        return redirect(
+            url_for("home.home")
+        )
+
+    except Exception:
+
+        current_app.logger.exception(
+            "Unexpected error while loading account dashboard."
+        )
+
+        flash(
+            "We could not load your account information right now. "
+            "Please try again.",
+            "danger"
+        )
+
+        return redirect(
+            url_for("home.home")
+        )
 
     return render_template(
         "account.html",
@@ -477,11 +792,33 @@ def account():
     )
 
 
+# ============================================================
+# LOGOUT
+# ============================================================
+
 @auth_bp.route("/logout")
 @login_required
 def logout():
 
-    logout_user()
+    try:
+
+        logout_user()
+
+    except Exception:
+
+        current_app.logger.exception(
+            "Logout operation encountered an error."
+        )
+
+        flash(
+            "There was a problem logging you out. "
+            "Please try again.",
+            "warning"
+        )
+
+        return redirect(
+            url_for("home.home")
+        )
 
     flash(
         "You have been logged out.",
@@ -501,10 +838,6 @@ def logout():
 @login_required
 def change_password():
 
-    # --------------------------------------------------------
-    # Only administrators can use this page
-    # --------------------------------------------------------
-
     if not current_user.is_admin:
 
         flash(
@@ -515,11 +848,6 @@ def change_password():
         return redirect(
             url_for("home.home")
         )
-
-
-    # --------------------------------------------------------
-    # Handle password change
-    # --------------------------------------------------------
 
     if request.method == "POST":
 
@@ -538,7 +866,6 @@ def change_password():
             ""
         )
 
-
         # ----------------------------------------------------
         # Validate current password
         # ----------------------------------------------------
@@ -554,10 +881,22 @@ def change_password():
                 "admin/change_password.html"
             )
 
+        try:
 
-        if not current_user.check_password(
-            current_password
-        ):
+            current_password_valid = current_user.check_password(
+                current_password
+            )
+
+        except Exception:
+
+            current_app.logger.exception(
+                "Current password verification failed for user %s.",
+                current_user.id
+            )
+
+            current_password_valid = False
+
+        if not current_password_valid:
 
             flash(
                 "Your current password is incorrect.",
@@ -567,7 +906,6 @@ def change_password():
             return render_template(
                 "admin/change_password.html"
             )
-
 
         # ----------------------------------------------------
         # Validate new password
@@ -584,9 +922,6 @@ def change_password():
                 "admin/change_password.html"
             )
 
-
-        # Minimum password length
-
         if len(new_password) < 8:
 
             flash(
@@ -597,7 +932,6 @@ def change_password():
             return render_template(
                 "admin/change_password.html"
             )
-
 
         # ----------------------------------------------------
         # Confirm password
@@ -614,14 +948,26 @@ def change_password():
                 "admin/change_password.html"
             )
 
-
         # ----------------------------------------------------
-        # Prevent using the same password
+        # Prevent same password
         # ----------------------------------------------------
 
-        if current_user.check_password(
-            new_password
-        ):
+        try:
+
+            same_password = current_user.check_password(
+                new_password
+            )
+
+        except Exception:
+
+            current_app.logger.exception(
+                "New password comparison failed for user %s.",
+                current_user.id
+            )
+
+            same_password = False
+
+        if same_password:
 
             flash(
                 "Your new password must be different from your current password.",
@@ -631,7 +977,6 @@ def change_password():
             return render_template(
                 "admin/change_password.html"
             )
-
 
         # ----------------------------------------------------
         # Update password
@@ -645,7 +990,6 @@ def change_password():
 
             db.session.commit()
 
-
             flash(
                 "Your password has been changed successfully.",
                 "success"
@@ -655,24 +999,35 @@ def change_password():
                 url_for("auth.admin_profile")
             )
 
-
-        except Exception as e:
+        except SQLAlchemyError:
 
             db.session.rollback()
 
-            print(
-                f"PASSWORD CHANGE FAILED: {e}"
+            current_app.logger.exception(
+                "Database error while changing password for user %s.",
+                current_user.id
             )
 
             flash(
-                "Unable to change your password. Please try again.",
+                "Unable to change your password right now. "
+                "Please try again.",
                 "danger"
             )
 
+        except Exception:
 
-    # --------------------------------------------------------
-    # Display password page
-    # --------------------------------------------------------
+            db.session.rollback()
+
+            current_app.logger.exception(
+                "Unexpected error while changing password for user %s.",
+                current_user.id
+            )
+
+            flash(
+                "Unable to change your password right now. "
+                "Please try again.",
+                "danger"
+            )
 
     return render_template(
         "admin/change_password.html"
