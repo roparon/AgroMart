@@ -10,6 +10,7 @@ from flask import (
     url_for,
 )
 from flask_login import current_user, login_required
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from werkzeug.utils import secure_filename
 
 from app import db
@@ -86,9 +87,14 @@ def save_category_image(image):
     # Check file size
     # --------------------------------------------------------
 
-    image.stream.seek(0, os.SEEK_END)
-    file_size = image.stream.tell()
-    image.stream.seek(0)
+    try:
+        image.stream.seek(0, os.SEEK_END)
+        file_size = image.stream.tell()
+        image.stream.seek(0)
+    except (OSError, ValueError):
+        raise ValueError(
+            "Unable to read the uploaded category image."
+        )
 
     if file_size > MAX_IMAGE_SIZE:
         raise ValueError(
@@ -105,20 +111,42 @@ def save_category_image(image):
         "categories",
     )
 
-    os.makedirs(
-        upload_folder,
-        exist_ok=True,
-    )
+    try:
+        os.makedirs(
+            upload_folder,
+            exist_ok=True,
+        )
+    except OSError:
+        current_app.logger.exception(
+            "Failed to create category image upload directory."
+        )
+        raise ValueError(
+            "Unable to prepare category image storage."
+        )
 
     # --------------------------------------------------------
     # Generate unique filename
     # --------------------------------------------------------
 
+    original_filename = secure_filename(
+        image.filename
+    )
+
+    if not original_filename or "." not in original_filename:
+        raise ValueError(
+            "The uploaded category image has an invalid filename."
+        )
+
     extension = (
-        secure_filename(image.filename)
+        original_filename
         .rsplit(".", 1)[1]
         .lower()
     )
+
+    if extension not in ALLOWED_EXTENSIONS:
+        raise ValueError(
+            "Only JPG, JPEG, PNG and WEBP images are allowed."
+        )
 
     filename = f"{uuid.uuid4().hex}.{extension}"
 
@@ -127,7 +155,25 @@ def save_category_image(image):
         filename,
     )
 
-    image.save(filepath)
+    try:
+        image.save(filepath)
+    except (OSError, ValueError):
+        current_app.logger.exception(
+            "Failed to save category image."
+        )
+
+        # Best-effort cleanup in case a partial file was created.
+        try:
+            if os.path.isfile(filepath):
+                os.remove(filepath)
+        except OSError:
+            current_app.logger.exception(
+                "Failed to clean up partially saved category image."
+            )
+
+        raise ValueError(
+            "Unable to save the category image."
+        )
 
     # Store path relative to /static
     return f"uploads/categories/{filename}"
@@ -136,21 +182,53 @@ def save_category_image(image):
 def delete_category_image(image_url):
     """
     Delete an existing category image from disk.
+
+    Filesystem cleanup is intentionally best-effort so that an
+    image deletion failure does not crash an otherwise successful
+    database operation.
     """
 
     if not image_url:
         return
 
-    filepath = os.path.join(
-        current_app.static_folder,
-        image_url,
-    )
+    try:
+        filepath = os.path.join(
+            current_app.static_folder,
+            image_url,
+        )
 
-    if os.path.isfile(filepath):
-        try:
-            os.remove(filepath)
-        except OSError:
-            pass
+        # Prevent accidental deletion outside static/.
+        static_folder = os.path.abspath(
+            current_app.static_folder
+        )
+        absolute_filepath = os.path.abspath(filepath)
+
+        if not (
+            absolute_filepath == static_folder
+            or absolute_filepath.startswith(
+                static_folder + os.sep
+            )
+        ):
+            current_app.logger.warning(
+                "Refused to delete category image outside static folder: %s",
+                image_url,
+            )
+            return
+
+        if os.path.isfile(absolute_filepath):
+            try:
+                os.remove(absolute_filepath)
+            except OSError:
+                current_app.logger.exception(
+                    "Failed to delete category image: %s",
+                    image_url,
+                )
+
+    except (OSError, TypeError, ValueError):
+        current_app.logger.exception(
+            "Unexpected error while deleting category image: %s",
+            image_url,
+        )
 
 
 # ============================================================
@@ -164,14 +242,32 @@ def categories():
     if not admin_required():
         return redirect(url_for("home.home"))
 
-    categories = (
-        Category.query
-        .order_by(
-            Category.created_at.desc(),
-            Category.id.desc(),
+    try:
+        categories = (
+            Category.query
+            .order_by(
+                Category.created_at.desc(),
+                Category.id.desc(),
+            )
+            .all()
         )
-        .all()
-    )
+
+    except SQLAlchemyError:
+        db.session.rollback()
+
+        current_app.logger.exception(
+            "Failed to load admin categories."
+        )
+
+        flash(
+            "Unable to load categories right now. Please try again.",
+            "danger",
+        )
+
+        return render_template(
+            "admin/categories.html",
+            categories=[],
+        )
 
     return render_template(
         "admin/categories.html",
@@ -201,16 +297,44 @@ def add_category():
         # Normalize values
         # ----------------------------------------------------
 
-        name = form.name.data.strip()
-        slug = form.slug.data.strip().lower()
+        name = (
+            form.name.data.strip()
+            if form.name.data
+            else ""
+        )
+
+        slug = (
+            form.slug.data.strip().lower()
+            if form.slug.data
+            else ""
+        )
 
         # ----------------------------------------------------
         # Check duplicate category name
         # ----------------------------------------------------
 
-        existing_name = Category.query.filter(
-            db.func.lower(Category.name) == name.lower()
-        ).first()
+        try:
+            existing_name = Category.query.filter(
+                db.func.lower(Category.name) == name.lower()
+            ).first()
+
+        except SQLAlchemyError:
+            db.session.rollback()
+
+            current_app.logger.exception(
+                "Failed to check duplicate category name."
+            )
+
+            flash(
+                "Unable to validate the category name right now.",
+                "danger",
+            )
+
+            return render_template(
+                "admin/category_form.html",
+                form=form,
+                title="Add Category",
+            )
 
         if existing_name:
             flash(
@@ -228,9 +352,28 @@ def add_category():
         # Check duplicate category slug
         # ----------------------------------------------------
 
-        existing_slug = Category.query.filter(
-            db.func.lower(Category.slug) == slug.lower()
-        ).first()
+        try:
+            existing_slug = Category.query.filter(
+                db.func.lower(Category.slug) == slug.lower()
+            ).first()
+
+        except SQLAlchemyError:
+            db.session.rollback()
+
+            current_app.logger.exception(
+                "Failed to check duplicate category slug."
+            )
+
+            flash(
+                "Unable to validate the category slug right now.",
+                "danger",
+            )
+
+            return render_template(
+                "admin/category_form.html",
+                form=form,
+                title="Add Category",
+            )
 
         if existing_slug:
             flash(
@@ -285,11 +428,61 @@ def add_category():
             db.session.add(category)
             db.session.commit()
 
+        except IntegrityError:
+            db.session.rollback()
+
+            # A duplicate may still occur after the pre-check
+            # because another request could create the same
+            # category concurrently.
+            if image_url:
+                delete_category_image(image_url)
+
+            current_app.logger.warning(
+                "Category creation failed due to a database "
+                "integrity constraint."
+            )
+
+            flash(
+                "A category with this name or slug already exists.",
+                "danger",
+            )
+
+            return render_template(
+                "admin/category_form.html",
+                form=form,
+                title="Add Category",
+            )
+
+        except SQLAlchemyError:
+            db.session.rollback()
+
+            if image_url:
+                delete_category_image(image_url)
+
+            current_app.logger.exception(
+                "Database error while creating category."
+            )
+
+            flash(
+                "An error occurred while creating the category.",
+                "danger",
+            )
+
+            return render_template(
+                "admin/category_form.html",
+                form=form,
+                title="Add Category",
+            )
+
         except Exception:
             db.session.rollback()
 
             if image_url:
                 delete_category_image(image_url)
+
+            current_app.logger.exception(
+                "Unexpected error while creating category."
+            )
 
             flash(
                 "An error occurred while creating the category.",
@@ -332,9 +525,37 @@ def edit_category(category_id):
     if not admin_required():
         return redirect(url_for("home.home"))
 
-    category = Category.query.get_or_404(
-        category_id
-    )
+    try:
+        category = Category.query.get(
+            category_id
+        )
+
+    except SQLAlchemyError:
+        db.session.rollback()
+
+        current_app.logger.exception(
+            "Failed to load category %s for editing.",
+            category_id,
+        )
+
+        flash(
+            "Unable to load the category right now.",
+            "danger",
+        )
+
+        return redirect(
+            url_for("admin_categories.categories")
+        )
+
+    if category is None:
+        flash(
+            "Category not found.",
+            "danger",
+        )
+
+        return redirect(
+            url_for("admin_categories.categories")
+        )
 
     form = CategoryForm(
         obj=category
@@ -346,17 +567,48 @@ def edit_category(category_id):
         # Normalize values
         # ----------------------------------------------------
 
-        name = form.name.data.strip()
-        slug = form.slug.data.strip().lower()
+        name = (
+            form.name.data.strip()
+            if form.name.data
+            else ""
+        )
+
+        slug = (
+            form.slug.data.strip().lower()
+            if form.slug.data
+            else ""
+        )
 
         # ----------------------------------------------------
         # Check duplicate name
         # ----------------------------------------------------
 
-        existing_name = Category.query.filter(
-            db.func.lower(Category.name) == name.lower(),
-            Category.id != category.id,
-        ).first()
+        try:
+            existing_name = Category.query.filter(
+                db.func.lower(Category.name) == name.lower(),
+                Category.id != category.id,
+            ).first()
+
+        except SQLAlchemyError:
+            db.session.rollback()
+
+            current_app.logger.exception(
+                "Failed to check duplicate category name "
+                "while editing category %s.",
+                category_id,
+            )
+
+            flash(
+                "Unable to validate the category name right now.",
+                "danger",
+            )
+
+            return render_template(
+                "admin/category_form.html",
+                form=form,
+                title="Edit Category",
+                category=category,
+            )
 
         if existing_name:
             flash(
@@ -375,10 +627,32 @@ def edit_category(category_id):
         # Check duplicate slug
         # ----------------------------------------------------
 
-        existing_slug = Category.query.filter(
-            db.func.lower(Category.slug) == slug.lower(),
-            Category.id != category.id,
-        ).first()
+        try:
+            existing_slug = Category.query.filter(
+                db.func.lower(Category.slug) == slug.lower(),
+                Category.id != category.id,
+            ).first()
+
+        except SQLAlchemyError:
+            db.session.rollback()
+
+            current_app.logger.exception(
+                "Failed to check duplicate category slug "
+                "while editing category %s.",
+                category_id,
+            )
+
+            flash(
+                "Unable to validate the category slug right now.",
+                "danger",
+            )
+
+            return render_template(
+                "admin/category_form.html",
+                form=form,
+                title="Edit Category",
+                category=category,
+            )
 
         if existing_slug:
             flash(
@@ -440,10 +714,11 @@ def edit_category(category_id):
         try:
             db.session.commit()
 
-        except Exception:
+        except IntegrityError:
             db.session.rollback()
 
-            # Remove newly uploaded image if DB update fails
+            # Remove replacement image because the database
+            # update did not succeed.
             if (
                 new_image_url
                 and new_image_url != old_image_url
@@ -451,6 +726,68 @@ def edit_category(category_id):
                 delete_category_image(
                     new_image_url
                 )
+
+            current_app.logger.warning(
+                "Category update failed due to a database "
+                "integrity constraint for category %s.",
+                category_id,
+            )
+
+            flash(
+                "Another category already uses this name or slug.",
+                "danger",
+            )
+
+            return render_template(
+                "admin/category_form.html",
+                form=form,
+                title="Edit Category",
+                category=category,
+            )
+
+        except SQLAlchemyError:
+            db.session.rollback()
+
+            if (
+                new_image_url
+                and new_image_url != old_image_url
+            ):
+                delete_category_image(
+                    new_image_url
+                )
+
+            current_app.logger.exception(
+                "Database error while updating category %s.",
+                category_id,
+            )
+
+            flash(
+                "An error occurred while updating the category.",
+                "danger",
+            )
+
+            return render_template(
+                "admin/category_form.html",
+                form=form,
+                title="Edit Category",
+                category=category,
+            )
+
+        except Exception:
+            db.session.rollback()
+
+            if (
+                new_image_url
+                and new_image_url != old_image_url
+            ):
+                delete_category_image(
+                    new_image_url
+                )
+
+            current_app.logger.exception(
+                "Unexpected error while updating category %s.",
+                category_id,
+            )
 
             flash(
                 "An error occurred while updating the category.",
@@ -507,15 +844,63 @@ def delete_category(category_id):
     if not admin_required():
         return redirect(url_for("home.home"))
 
-    category = Category.query.get_or_404(
-        category_id
-    )
+    try:
+        category = Category.query.get(
+            category_id
+        )
+
+    except SQLAlchemyError:
+        db.session.rollback()
+
+        current_app.logger.exception(
+            "Failed to load category %s for deletion.",
+            category_id,
+        )
+
+        flash(
+            "Unable to load the category right now.",
+            "danger",
+        )
+
+        return redirect(
+            url_for("admin_categories.categories")
+        )
+
+    if category is None:
+        flash(
+            "Category not found.",
+            "danger",
+        )
+
+        return redirect(
+            url_for("admin_categories.categories")
+        )
 
     # --------------------------------------------------------
     # Prevent deleting categories containing products
     # --------------------------------------------------------
 
-    if category.products:
+    try:
+        has_products = bool(category.products)
+
+    except SQLAlchemyError:
+        db.session.rollback()
+
+        current_app.logger.exception(
+            "Failed to check products for category %s.",
+            category_id,
+        )
+
+        flash(
+            "Unable to verify whether the category can be deleted.",
+            "danger",
+        )
+
+        return redirect(
+            url_for("admin_categories.categories")
+        )
+
+    if has_products:
 
         flash(
             "Cannot delete this category because it contains "
@@ -533,8 +918,49 @@ def delete_category(category_id):
         db.session.delete(category)
         db.session.commit()
 
+    except IntegrityError:
+        db.session.rollback()
+
+        current_app.logger.warning(
+            "Category deletion failed due to an integrity "
+            "constraint for category %s.",
+            category_id,
+        )
+
+        flash(
+            "Cannot delete this category because it is still "
+            "being used by other records.",
+            "danger",
+        )
+
+        return redirect(
+            url_for("admin_categories.categories")
+        )
+
+    except SQLAlchemyError:
+        db.session.rollback()
+
+        current_app.logger.exception(
+            "Database error while deleting category %s.",
+            category_id,
+        )
+
+        flash(
+            "An error occurred while deleting the category.",
+            "danger",
+        )
+
+        return redirect(
+            url_for("admin_categories.categories")
+        )
+
     except Exception:
         db.session.rollback()
+
+        current_app.logger.exception(
+            "Unexpected error while deleting category %s.",
+            category_id,
+        )
 
         flash(
             "An error occurred while deleting the category.",
@@ -576,17 +1002,67 @@ def toggle_category_status(category_id):
     if not admin_required():
         return redirect(url_for("home.home"))
 
-    category = Category.query.get_or_404(
-        category_id
-    )
+    try:
+        category = Category.query.get(
+            category_id
+        )
+
+    except SQLAlchemyError:
+        db.session.rollback()
+
+        current_app.logger.exception(
+            "Failed to load category %s for status toggle.",
+            category_id,
+        )
+
+        flash(
+            "Unable to load the category right now.",
+            "danger",
+        )
+
+        return redirect(
+            url_for("admin_categories.categories")
+        )
+
+    if category is None:
+        flash(
+            "Category not found.",
+            "danger",
+        )
+
+        return redirect(
+            url_for("admin_categories.categories")
+        )
 
     category.is_active = not category.is_active
 
     try:
         db.session.commit()
 
+    except SQLAlchemyError:
+        db.session.rollback()
+
+        current_app.logger.exception(
+            "Database error while updating category status %s.",
+            category_id,
+        )
+
+        flash(
+            "Unable to update category status.",
+            "danger",
+        )
+
+        return redirect(
+            url_for("admin_categories.categories")
+        )
+
     except Exception:
         db.session.rollback()
+
+        current_app.logger.exception(
+            "Unexpected error while updating category status %s.",
+            category_id,
+        )
 
         flash(
             "Unable to update category status.",
