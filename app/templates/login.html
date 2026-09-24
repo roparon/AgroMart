@@ -292,6 +292,25 @@
 
 
 /* ==========================================================
+   FORGOT PASSWORD
+   ========================================================== */
+
+.login-forgot {
+    color: var(--login-green);
+
+    font-size: .76rem;
+    font-weight: 750;
+
+    text-decoration: none;
+}
+
+.login-forgot:hover {
+    color: var(--login-green-dark);
+    text-decoration: underline;
+}
+
+
+/* ==========================================================
    SUBMIT
    ========================================================== */
 
@@ -507,6 +526,20 @@
                             </div>
 
                         {% endfor %}
+
+                    </div>
+
+
+                    <!-- FORGOT PASSWORD -->
+
+                    <div class="text-end mb-3">
+
+                        <a
+                            href="{{ url_for('auth.forgot_password') }}"
+                            class="login-forgot"
+                        >
+                            Forgot your password?
+                        </a>
 
                     </div>
 

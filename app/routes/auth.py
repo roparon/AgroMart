@@ -1,4 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
+from hashlib import sha256
+from itsdangerous import BadSignature, SignatureExpired, URLSafeTimedSerializer
 from flask_login import login_user, logout_user, login_required, current_user
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 
@@ -9,6 +11,187 @@ from app.services.email_service import send_email
 
 
 auth_bp = Blueprint("auth", __name__)
+
+
+# ============================================================
+# PASSWORD RESET HELPERS
+# ============================================================
+
+PASSWORD_RESET_MAX_AGE = 3600  # 1 hour
+
+
+def _password_reset_serializer():
+    return URLSafeTimedSerializer(
+        current_app.config["SECRET_KEY"],
+        salt="agromart-password-reset",
+    )
+
+
+def _password_version(user):
+    return sha256(
+        user.password_hash.encode("utf-8")
+    ).hexdigest()
+
+
+def _generate_password_reset_token(user):
+    return _password_reset_serializer().dumps(
+        {
+            "user_id": user.id,
+            "password_version": _password_version(user),
+        }
+    )
+
+
+def _load_password_reset_user(token):
+    try:
+        data = _password_reset_serializer().loads(
+            token,
+            max_age=PASSWORD_RESET_MAX_AGE,
+        )
+
+    except SignatureExpired:
+        return None
+
+    except BadSignature:
+        return None
+
+    user_id = data.get("user_id")
+    password_version = data.get("password_version")
+
+    if not user_id or not password_version:
+        return None
+
+    try:
+        user = db.session.get(User, int(user_id))
+
+    except (ValueError, TypeError):
+        return None
+
+    except SQLAlchemyError:
+        db.session.rollback()
+
+        current_app.logger.exception(
+            "Database error while validating a password reset token."
+        )
+
+        return None
+
+    if not user:
+        return None
+
+    if not user.is_active:
+        return None
+
+    # A changed password creates a new hash, which invalidates
+    # previously issued reset tokens automatically.
+    if password_version != _password_version(user):
+        return None
+
+    return user
+
+
+# ============================================================
+# FORGOT PASSWORD
+# ============================================================
+
+@auth_bp.route("/forgot-password", methods=["GET", "POST"])
+def forgot_password():
+
+    if current_user.is_authenticated:
+        return redirect(url_for("home.home"))
+
+    if request.method == "POST":
+
+        email = request.form.get(
+            "email",
+            ""
+        ).strip().lower()
+
+        if not email:
+
+            flash(
+                "Please enter your email address.",
+                "danger"
+            )
+
+            return render_template(
+                "forgot_password.html"
+            )
+
+        try:
+
+            user = User.query.filter_by(
+                email=email
+            ).first()
+
+        except SQLAlchemyError:
+
+            db.session.rollback()
+
+            current_app.logger.exception(
+                "Database error while processing a password reset request."
+            )
+
+            # Do not reveal whether an account exists.
+            flash(
+                "If an account exists for that email address, "
+                "password reset instructions have been sent.",
+                "info"
+            )
+
+            return redirect(
+                url_for("auth.login")
+            )
+
+        if user and user.is_active:
+
+            try:
+
+                token = _generate_password_reset_token(user)
+
+                reset_url = url_for(
+                    "auth.reset_password",
+                    token=token,
+                    _external=True,
+                )
+
+                email_sent = send_email(
+                    subject="Reset Your Bomet Machineries Password",
+                    recipients=[user.email],
+                    template="emails/password_reset.html",
+                    user=user,
+                    reset_url=reset_url,
+                    expires_minutes=PASSWORD_RESET_MAX_AGE // 60,
+                )
+
+                if not email_sent:
+
+                    current_app.logger.warning(
+                        "Password reset email could not be sent to %s.",
+                        user.email,
+                    )
+
+            except Exception:
+
+                current_app.logger.exception(
+                    "Unexpected error while preparing password reset "
+                    "email for user %s.",
+                    user.id,
+                )
+
+        flash(
+            "If an account exists for that email address, "
+            "password reset instructions have been sent.",
+            "info"
+        )
+
+        return redirect(
+            url_for("auth.login")
+        )
+
+    return render_template(
+        "forgot_password.html"
+    )
 
 
 # ============================================================
@@ -427,6 +610,146 @@ def login():
     return render_template(
         "login.html",
         form=form
+    )
+
+
+# ============================================================
+# RESET PASSWORD
+# ============================================================
+
+@auth_bp.route("/reset-password/<token>", methods=["GET", "POST"])
+def reset_password(token):
+
+    if current_user.is_authenticated:
+        return redirect(url_for("home.home"))
+
+    user = _load_password_reset_user(token)
+
+    if not user:
+
+        flash(
+            "This password reset link is invalid or has expired. "
+            "Please request a new one.",
+            "danger"
+        )
+
+        return redirect(
+            url_for("auth.forgot_password")
+        )
+
+    if request.method == "POST":
+
+        new_password = request.form.get(
+            "new_password",
+            ""
+        )
+
+        confirm_password = request.form.get(
+            "confirm_password",
+            ""
+        )
+
+        if not new_password:
+
+            flash(
+                "Please enter a new password.",
+                "danger"
+            )
+
+            return render_template(
+                "reset_password.html"
+            )
+
+        if len(new_password) < 8:
+
+            flash(
+                "Your new password must contain at least 8 characters.",
+                "danger"
+            )
+
+            return render_template(
+                "reset_password.html"
+            )
+
+        if new_password != confirm_password:
+
+            flash(
+                "The new passwords do not match.",
+                "danger"
+            )
+
+            return render_template(
+                "reset_password.html"
+            )
+
+        try:
+
+            if user.check_password(new_password):
+
+                flash(
+                    "Your new password must be different from "
+                    "your current password.",
+                    "warning"
+                )
+
+                return render_template(
+                    "reset_password.html"
+                )
+
+            user.set_password(new_password)
+
+            db.session.commit()
+
+        except SQLAlchemyError:
+
+            db.session.rollback()
+
+            current_app.logger.exception(
+                "Database error while resetting password for user %s.",
+                user.id,
+            )
+
+            flash(
+                "Unable to reset your password right now. "
+                "Please try again.",
+                "danger"
+            )
+
+            return render_template(
+                "reset_password.html"
+            )
+
+        except Exception:
+
+            db.session.rollback()
+
+            current_app.logger.exception(
+                "Unexpected error while resetting password for user %s.",
+                user.id,
+            )
+
+            flash(
+                "Unable to reset your password right now. "
+                "Please try again.",
+                "danger"
+            )
+
+            return render_template(
+                "reset_password.html"
+            )
+
+        flash(
+            "Your password has been reset successfully. "
+            "You can now log in.",
+            "success"
+        )
+
+        return redirect(
+            url_for("auth.login")
+        )
+
+    return render_template(
+        "reset_password.html"
     )
 
 
