@@ -3,6 +3,7 @@ from flask import (Blueprint, render_template, request, session, abort,)
 from flask_login import current_user
 from sqlalchemy import or_, and_, func
 from sqlalchemy.orm import joinedload, selectinload
+from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from app.models.product import Product
 from app.models.category import Category
 from app.models.wishlist import Wishlist
@@ -116,42 +117,57 @@ def get_recently_viewed_ids(product_id):
 
 def get_active_categories():
     """
-    Load active categories.
+    Load active categories safely.
+
+    If the database is temporarily unavailable or a query
+    fails, return an empty list instead of crashing the
+    product pages.
     """
 
-    return (
-        Category.query
-        .filter(
-            Category.is_active.is_(True)
+    try:
+        return (
+            Category.query
+            .filter(
+                Category.is_active.is_(True)
+            )
+            .order_by(
+                Category.name.asc()
+            )
+            .all()
         )
-        .order_by(
-            Category.name.asc()
-        )
-        .all()
-    )
+
+    except SQLAlchemyError:
+        return []
 
 
 def get_wishlist_product_ids():
     """
     Return product IDs already in the
-    authenticated user's wishlist.
+    authenticated user's wishlist safely.
+
+    Wishlist failures should never prevent the
+    product listing from loading.
     """
 
     if not current_user.is_authenticated:
         return set()
 
-    wishlist_items = (
-        Wishlist.query
-        .filter_by(
-            user_id=current_user.id
+    try:
+        wishlist_items = (
+            Wishlist.query
+            .filter_by(
+                user_id=current_user.id
+            )
+            .all()
         )
-        .all()
-    )
 
-    return {
-        item.product_id
-        for item in wishlist_items
-    }
+        return {
+            item.product_id
+            for item in wishlist_items
+        }
+
+    except SQLAlchemyError:
+        return set()
 
 
 def build_product_prices(products):
@@ -1202,16 +1218,20 @@ def products():
                 category_id
             )
 
-            selected_category = (
-                Category.query
-                .filter(
-                    Category.id
-                    == category_id_int,
+            try:
+                selected_category = (
+                    Category.query
+                    .filter(
+                        Category.id
+                        == category_id_int,
 
-                    Category.is_active.is_(True),
+                        Category.is_active.is_(True),
+                    )
+                    .first()
                 )
-                .first()
-            )
+
+            except SQLAlchemyError:
+                selected_category = None
 
 
             if selected_category:
@@ -1270,14 +1290,28 @@ def products():
     # PAGINATION
     # --------------------------------------------------------
 
-    pagination = query.paginate(
-        page=page,
-        per_page=PRODUCTS_PER_PAGE,
-        error_out=False,
+    try:
+        pagination = query.paginate(
+            page=page,
+            per_page=PRODUCTS_PER_PAGE,
+            error_out=False,
+        )
+
+    except SQLAlchemyError:
+        pagination = None
+
+
+    products_list = (
+        pagination.items
+        if pagination is not None
+        else []
     )
 
-
-    products_list = pagination.items
+    product_count = (
+        pagination.total
+        if pagination is not None
+        else 0
+    )
 
 
     # --------------------------------------------------------
@@ -1334,7 +1368,7 @@ def products():
 
         product_prices=product_prices,
 
-        product_count=pagination.total,
+        product_count=product_count,
 
         wishlist_product_ids=wishlist_product_ids,
     )
@@ -1353,14 +1387,21 @@ def category_products(slug):
     # FIND ACTIVE CATEGORY
     # --------------------------------------------------------
 
-    category = (
-        Category.query
-        .filter(
-            Category.slug == slug,
-            Category.is_active.is_(True),
+    try:
+        category = (
+            Category.query
+            .filter(
+                Category.slug == slug,
+                Category.is_active.is_(True),
+            )
+            .first()
         )
-        .first_or_404()
-    )
+
+    except SQLAlchemyError:
+        abort(500)
+
+    if category is None:
+        abort(404)
 
 
     # --------------------------------------------------------
@@ -1419,14 +1460,28 @@ def category_products(slug):
     # PAGINATION
     # --------------------------------------------------------
 
-    pagination = query.paginate(
-        page=page,
-        per_page=PRODUCTS_PER_PAGE,
-        error_out=False,
+    try:
+        pagination = query.paginate(
+            page=page,
+            per_page=PRODUCTS_PER_PAGE,
+            error_out=False,
+        )
+
+    except SQLAlchemyError:
+        pagination = None
+
+
+    products_list = (
+        pagination.items
+        if pagination is not None
+        else []
     )
 
-
-    products_list = pagination.items
+    product_count = (
+        pagination.total
+        if pagination is not None
+        else 0
+    )
 
 
     # --------------------------------------------------------
@@ -1485,7 +1540,7 @@ def category_products(slug):
 
         product_prices=product_prices,
 
-        product_count=pagination.total,
+        product_count=product_count,
 
         wishlist_product_ids=wishlist_product_ids,
     )
@@ -1504,17 +1559,23 @@ def product_details(id):
     # PRODUCT + CATEGORY + IMAGES
     # --------------------------------------------------------
 
-    product = (
-        Product.query
-        .options(
-            joinedload(Product.category),
-            selectinload(Product.images),
+    try:
+        product = (
+            Product.query
+            .options(
+                joinedload(Product.category),
+                selectinload(Product.images),
+            )
+            .filter(
+                Product.id == id
+            )
+            .first()
         )
-        .filter(
-            Product.id == id
-        )
-        .first_or_404()
-    )
+    except SQLAlchemyError:
+        abort(500)
+
+    if product is None:
+        abort(404)
 
 
     # --------------------------------------------------------
@@ -1556,15 +1617,18 @@ def product_details(id):
 
     if current_user.is_authenticated:
 
-        is_in_wishlist = (
-            Wishlist.query
-            .filter_by(
-                user_id=current_user.id,
-                product_id=product.id,
+        try:
+            is_in_wishlist = (
+                Wishlist.query
+                .filter_by(
+                    user_id=current_user.id,
+                    product_id=product.id,
+                )
+                .first()
+                is not None
             )
-            .first()
-            is not None
-        )
+        except SQLAlchemyError:
+            is_in_wishlist = False
 
 
     # ========================================================
@@ -1600,12 +1664,15 @@ def product_details(id):
     )
 
 
-    recently_viewed = (
-        get_recently_viewed_products(
-            recently_viewed_ids,
-            product.id,
+    try:
+        recently_viewed = (
+            get_recently_viewed_products(
+                recently_viewed_ids,
+                product.id,
+            )
         )
-    )
+    except SQLAlchemyError:
+        recently_viewed = []
 
 
     # --------------------------------------------------------
