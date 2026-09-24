@@ -11,7 +11,10 @@ from flask_login import (
     current_user,
 )
 
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import (
+    IntegrityError,
+    SQLAlchemyError,
+)
 
 from app import db
 from app.models.wishlist import Wishlist
@@ -32,12 +35,28 @@ wishlist_bp = Blueprint(
 @login_required
 def wishlist():
 
-    items = (
-        Wishlist.query
-        .filter_by(user_id=current_user.id)
-        .order_by(Wishlist.created_at.desc())
-        .all()
-    )
+    try:
+        items = (
+            Wishlist.query
+            .filter_by(user_id=current_user.id)
+            .order_by(Wishlist.created_at.desc())
+            .all()
+        )
+
+    except SQLAlchemyError as e:
+
+        db.session.rollback()
+
+        print(f"WISHLIST PAGE DATABASE ERROR: {e}")
+
+        flash(
+            "Unable to load your wishlist right now. Please try again.",
+            "danger"
+        )
+
+        return redirect(
+            url_for("product.products")
+        )
 
     products = [
         item.product
@@ -63,7 +82,34 @@ def wishlist():
 @login_required
 def add_to_wishlist(product_id):
 
-    product = Product.query.get_or_404(product_id)
+    try:
+        product = Product.query.get(product_id)
+
+    except SQLAlchemyError as e:
+
+        db.session.rollback()
+
+        print(f"WISHLIST ADD PRODUCT LOOKUP ERROR: {e}")
+
+        flash(
+            "Unable to find this product right now. Please try again.",
+            "danger"
+        )
+
+        return redirect(
+            url_for("product.products")
+        )
+
+    if product is None:
+
+        flash(
+            "This product could not be found.",
+            "warning"
+        )
+
+        return redirect(
+            url_for("product.products")
+        )
 
     if not product.is_active:
 
@@ -79,10 +125,29 @@ def add_to_wishlist(product_id):
             )
         )
 
-    existing = Wishlist.query.filter_by(
-        user_id=current_user.id,
-        product_id=product.id
-    ).first()
+    try:
+        existing = Wishlist.query.filter_by(
+            user_id=current_user.id,
+            product_id=product.id
+        ).first()
+
+    except SQLAlchemyError as e:
+
+        db.session.rollback()
+
+        print(f"WISHLIST ADD CHECK ERROR: {e}")
+
+        flash(
+            "Unable to check your wishlist right now. Please try again.",
+            "danger"
+        )
+
+        return redirect(
+            url_for(
+                "product.product_details",
+                id=product.id
+            )
+        )
 
     if existing:
 
@@ -116,6 +181,24 @@ def add_to_wishlist(product_id):
         flash(
             "This product is already in your wishlist.",
             "info"
+        )
+
+        return redirect(
+            url_for(
+                "product.product_details",
+                id=product.id
+            )
+        )
+
+    except SQLAlchemyError as e:
+
+        db.session.rollback()
+
+        print(f"WISHLIST ADD DATABASE ERROR: {e}")
+
+        flash(
+            "Unable to add this product to your wishlist.",
+            "danger"
         )
 
         return redirect(
@@ -167,10 +250,26 @@ def add_to_wishlist(product_id):
 @login_required
 def remove_from_wishlist(product_id):
 
-    item = Wishlist.query.filter_by(
-        user_id=current_user.id,
-        product_id=product_id
-    ).first()
+    try:
+        item = Wishlist.query.filter_by(
+            user_id=current_user.id,
+            product_id=product_id
+        ).first()
+
+    except SQLAlchemyError as e:
+
+        db.session.rollback()
+
+        print(f"WISHLIST REMOVE LOOKUP ERROR: {e}")
+
+        flash(
+            "Unable to access your wishlist right now. Please try again.",
+            "danger"
+        )
+
+        return redirect(
+            url_for("wishlist.wishlist")
+        )
 
     if not item:
 
@@ -187,6 +286,21 @@ def remove_from_wishlist(product_id):
 
         db.session.delete(item)
         db.session.commit()
+
+    except SQLAlchemyError as e:
+
+        db.session.rollback()
+
+        print(f"WISHLIST REMOVE DATABASE ERROR: {e}")
+
+        flash(
+            "Unable to remove the product from your wishlist.",
+            "danger"
+        )
+
+        return redirect(
+            url_for("wishlist.wishlist")
+        )
 
     except Exception as e:
 
@@ -224,7 +338,34 @@ def remove_from_wishlist(product_id):
 @login_required
 def toggle_wishlist(product_id):
 
-    product = Product.query.get_or_404(product_id)
+    try:
+        product = Product.query.get(product_id)
+
+    except SQLAlchemyError as e:
+
+        db.session.rollback()
+
+        print(f"WISHLIST TOGGLE PRODUCT LOOKUP ERROR: {e}")
+
+        flash(
+            "Unable to find this product right now. Please try again.",
+            "danger"
+        )
+
+        return redirect(
+            url_for("product.products")
+        )
+
+    if product is None:
+
+        flash(
+            "This product could not be found.",
+            "warning"
+        )
+
+        return redirect(
+            url_for("product.products")
+        )
 
     if not product.is_active:
 
@@ -240,10 +381,29 @@ def toggle_wishlist(product_id):
             )
         )
 
-    item = Wishlist.query.filter_by(
-        user_id=current_user.id,
-        product_id=product.id
-    ).first()
+    try:
+        item = Wishlist.query.filter_by(
+            user_id=current_user.id,
+            product_id=product.id
+        ).first()
+
+    except SQLAlchemyError as e:
+
+        db.session.rollback()
+
+        print(f"WISHLIST TOGGLE CHECK ERROR: {e}")
+
+        flash(
+            "Unable to check your wishlist right now. Please try again.",
+            "danger"
+        )
+
+        return redirect(
+            url_for(
+                "product.product_details",
+                id=product.id
+            )
+        )
 
     if item:
 
@@ -251,6 +411,24 @@ def toggle_wishlist(product_id):
 
             db.session.delete(item)
             db.session.commit()
+
+        except SQLAlchemyError as e:
+
+            db.session.rollback()
+
+            print(f"WISHLIST TOGGLE REMOVE DATABASE ERROR: {e}")
+
+            flash(
+                "Unable to remove this product from your wishlist.",
+                "danger"
+            )
+
+            return redirect(
+                url_for(
+                    "product.product_details",
+                    id=product.id
+                )
+            )
 
         except Exception as e:
 
@@ -295,6 +473,17 @@ def toggle_wishlist(product_id):
             flash(
                 "This product is already in your wishlist.",
                 "info"
+            )
+
+        except SQLAlchemyError as e:
+
+            db.session.rollback()
+
+            print(f"WISHLIST TOGGLE ADD DATABASE ERROR: {e}")
+
+            flash(
+                "Unable to add this product to your wishlist.",
+                "danger"
             )
 
         except Exception as e:

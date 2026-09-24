@@ -1,6 +1,8 @@
 from collections import defaultdict
 
 from flask import Blueprint, render_template, request
+from flask_login import current_user
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import joinedload, selectinload
 
 from app.models.category import Category
@@ -27,6 +29,9 @@ def home():
 
     Administrators may use ?preview=1 to preview unpublished
     homepage sections/content.
+
+    Database failures are handled safely so the homepage does
+    not crash with an unhandled 500 error.
     """
 
     # ==========================================================
@@ -40,8 +45,6 @@ def home():
 
     # Only administrators can use preview mode.
     if preview:
-        from flask_login import current_user
-
         if (
             not current_user.is_authenticated
             or not current_user.is_admin
@@ -52,13 +55,20 @@ def home():
     # 2. HOMEPAGE SETTINGS
     # ==========================================================
 
-    settings = (
-        HomepageSetting.query
-        .filter(
-            HomepageSetting.is_active.is_(True)
+    settings = None
+
+    try:
+        settings = (
+            HomepageSetting.query
+            .filter(
+                HomepageSetting.is_active.is_(True)
+            )
+            .first()
         )
-        .first()
-    )
+    except SQLAlchemyError:
+        # Do not allow a homepage settings database failure
+        # to crash the entire homepage.
+        settings = None
 
     # If no active settings exist, create a safe fallback object
     # for the template without writing anything to the database.
@@ -73,20 +83,26 @@ def home():
     # 3. HOMEPAGE SECTIONS
     # ==========================================================
 
-    sections_query = (
-        HomepageSection.query
-        .order_by(
-            HomepageSection.sort_order.asc(),
-            HomepageSection.id.asc(),
-        )
-    )
+    sections = []
 
-    if not preview:
-        sections_query = sections_query.filter(
-            HomepageSection.is_active.is_(True)
+    try:
+        sections_query = (
+            HomepageSection.query
+            .order_by(
+                HomepageSection.sort_order.asc(),
+                HomepageSection.id.asc(),
+            )
         )
 
-    sections = sections_query.all()
+        if not preview:
+            sections_query = sections_query.filter(
+                HomepageSection.is_active.is_(True)
+            )
+
+        sections = sections_query.all()
+
+    except SQLAlchemyError:
+        sections = []
 
     # ==========================================================
     # 4. LEGACY HOMEPAGE CONTENT
@@ -96,20 +112,26 @@ def home():
     # homepage content does not suddenly disappear.
     #
 
-    content_query = (
-        HomepageContent.query
-        .order_by(
-            HomepageContent.sort_order.asc(),
-            HomepageContent.id.asc(),
-        )
-    )
+    homepage_items = []
 
-    if not preview:
-        content_query = content_query.filter(
-            HomepageContent.is_active.is_(True)
+    try:
+        content_query = (
+            HomepageContent.query
+            .order_by(
+                HomepageContent.sort_order.asc(),
+                HomepageContent.id.asc(),
+            )
         )
 
-    homepage_items = content_query.all()
+        if not preview:
+            content_query = content_query.filter(
+                HomepageContent.is_active.is_(True)
+            )
+
+        homepage_items = content_query.all()
+
+    except SQLAlchemyError:
+        homepage_items = []
 
     cms = {
         item.key: item
@@ -120,16 +142,22 @@ def home():
     # 5. ACTIVE CATEGORIES
     # ==========================================================
 
-    categories = (
-        Category.query
-        .filter(
-            Category.is_active.is_(True)
+    categories = []
+
+    try:
+        categories = (
+            Category.query
+            .filter(
+                Category.is_active.is_(True)
+            )
+            .order_by(
+                Category.name.asc()
+            )
+            .all()
         )
-        .order_by(
-            Category.name.asc()
-        )
-        .all()
-    )
+
+    except SQLAlchemyError:
+        categories = []
 
     # ==========================================================
     # 6. HOMEPAGE PRODUCT POOL
@@ -145,22 +173,28 @@ def home():
     #     Loads product images in a separate efficient query.
     #
 
-    homepage_products = (
-        Product.query
-        .options(
-            joinedload(Product.category),
-            selectinload(Product.images),
+    homepage_products = []
+
+    try:
+        homepage_products = (
+            Product.query
+            .options(
+                joinedload(Product.category),
+                selectinload(Product.images),
+            )
+            .filter(
+                Product.is_active.is_(True),
+            )
+            .order_by(
+                Product.featured.desc(),
+                Product.created_at.desc(),
+            )
+            .limit(60)
+            .all()
         )
-        .filter(
-            Product.is_active.is_(True),
-        )
-        .order_by(
-            Product.featured.desc(),
-            Product.created_at.desc(),
-        )
-        .limit(60)
-        .all()
-    )
+
+    except SQLAlchemyError:
+        homepage_products = []
 
     # ==========================================================
     # 7. GROUP PRODUCTS BY CATEGORY
