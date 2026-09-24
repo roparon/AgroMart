@@ -9,7 +9,9 @@ from flask import (
     request,
 )
 
-from flask_login import login_required
+from flask_login import current_user, login_required
+
+from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 
 from vercel.blob import BlobClient
 
@@ -32,6 +34,25 @@ products_bp = Blueprint(
     "admin_products",
     __name__,
 )
+
+
+# ============================================================
+# ADMIN ACCESS
+# ============================================================
+
+def admin_required():
+    """
+    Allow access only to authenticated administrators.
+    """
+
+    if not current_user.is_authenticated or not current_user.is_admin:
+        flash(
+            "Administrator privileges are required to access this page.",
+            "danger",
+        )
+        return False
+
+    return True
 
 
 # ============================================================
@@ -266,14 +287,8 @@ def delete_product_image_file(image_url):
     """
     Delete an image from Vercel Blob.
 
-    Important:
-    Older images using local URLs such as:
-
-        /static/uploads/products/...
-
-    are intentionally left untouched.
-
-    Only Vercel Blob URLs are sent to the Blob API.
+    Older local static URLs are intentionally ignored.
+    Blob deletion failures never interrupt database operations.
     """
 
     if not image_url:
@@ -287,7 +302,6 @@ def delete_product_image_file(image_url):
         return
 
     try:
-
         client = _get_blob_client()
 
         client.delete(
@@ -295,9 +309,6 @@ def delete_product_image_file(image_url):
         )
 
     except Exception as exc:
-
-        # Blob deletion failure should never prevent the
-        # database operation from completing.
         print(
             "Warning: could not delete "
             f"Vercel Blob image: {exc}"
@@ -312,9 +323,30 @@ def delete_product_image_file(image_url):
 @login_required
 def products():
 
-    products = Product.query.order_by(
-        Product.created_at.desc()
-    ).all()
+    if not admin_required():
+        return redirect(
+            url_for("auth.login")
+        )
+
+    try:
+        products = Product.query.order_by(
+            Product.created_at.desc()
+        ).all()
+
+    except SQLAlchemyError as exc:
+        db.session.rollback()
+
+        print(
+            "Admin product list query failed: "
+            f"{exc}"
+        )
+
+        flash(
+            "Products could not be loaded. Please try again.",
+            "danger",
+        )
+
+        products = []
 
     return render_template(
         "admin/products.html",
@@ -333,17 +365,39 @@ def products():
 @login_required
 def add_product():
 
+    if not admin_required():
+        return redirect(
+            url_for("auth.login")
+        )
+
     form = ProductForm()
 
     # --------------------------------------------------------
     # LOAD ACTIVE CATEGORIES
     # --------------------------------------------------------
 
-    categories = Category.query.filter_by(
-        is_active=True
-    ).order_by(
-        Category.name.asc()
-    ).all()
+    try:
+        categories = Category.query.filter_by(
+            is_active=True
+        ).order_by(
+            Category.name.asc()
+        ).all()
+
+    except SQLAlchemyError as exc:
+        db.session.rollback()
+
+        print(
+            "Admin product categories query failed: "
+            f"{exc}"
+        )
+
+        flash(
+            "Product categories could not be loaded. "
+            "Please try again.",
+            "danger",
+        )
+
+        categories = []
 
     form.category.choices = [
         (
@@ -365,9 +419,30 @@ def add_product():
 
         if form.slug.data:
 
-            existing_slug = Product.query.filter_by(
-                slug=form.slug.data
-            ).first()
+            try:
+                existing_slug = Product.query.filter_by(
+                    slug=form.slug.data
+                ).first()
+
+            except SQLAlchemyError as exc:
+                db.session.rollback()
+
+                print(
+                    "Product slug check failed: "
+                    f"{exc}"
+                )
+
+                flash(
+                    "The product could not be checked. "
+                    "Please try again.",
+                    "danger",
+                )
+
+                return render_template(
+                    "admin/product_form.html",
+                    form=form,
+                    title="Add Product",
+                )
 
             if existing_slug:
 
@@ -399,38 +474,39 @@ def add_product():
             is_active=form.is_active.data,
         )
 
-        db.session.add(
-            product
-        )
-
-        # ----------------------------------------------------
-        # FLUSH
-        #
-        # Gives product its database ID before images are
-        # inserted.
-        # ----------------------------------------------------
-
-        db.session.flush()
-
-        # ----------------------------------------------------
-        # GENERATE SKU
-        # ----------------------------------------------------
-
-        product.sku = (
-            f"BM-{product.id:06d}"
-        )
-
-        # ----------------------------------------------------
-        # GET UPLOADED IMAGES
-        # ----------------------------------------------------
-
-        uploaded_images = request.files.getlist(
-            "images"
-        )
-
-        image_number = 0
+        uploaded_blob_urls = []
 
         try:
+            db.session.add(
+                product
+            )
+
+            # ------------------------------------------------
+            # FLUSH
+            #
+            # Gives product its database ID before images
+            # are inserted.
+            # ------------------------------------------------
+
+            db.session.flush()
+
+            # ------------------------------------------------
+            # GENERATE SKU
+            # ------------------------------------------------
+
+            product.sku = (
+                f"BM-{product.id:06d}"
+            )
+
+            # ------------------------------------------------
+            # GET UPLOADED IMAGES
+            # ------------------------------------------------
+
+            uploaded_images = request.files.getlist(
+                "images"
+            )
+
+            image_number = 0
 
             for image in uploaded_images:
 
@@ -444,7 +520,6 @@ def add_product():
                 if not allowed_image(
                     image.filename
                 ):
-
                     raise ValueError(
                         f"Invalid image format: "
                         f"{image.filename}"
@@ -460,6 +535,10 @@ def add_product():
 
                 if not image_url:
                     continue
+
+                uploaded_blob_urls.append(
+                    image_url
+                )
 
                 # --------------------------------------------
                 # CREATE IMAGE DATABASE RECORD
@@ -479,19 +558,29 @@ def add_product():
 
                 image_number += 1
 
-        except Exception as exc:
+            # ------------------------------------------------
+            # COMMIT PRODUCT + IMAGES
+            # ------------------------------------------------
+
+            db.session.commit()
+
+        except IntegrityError as exc:
 
             db.session.rollback()
 
             print(
-                "Product image upload failed: "
+                "Product creation integrity error: "
                 f"{exc}"
             )
 
+            for image_url in uploaded_blob_urls:
+                delete_product_image_file(
+                    image_url
+                )
+
             flash(
-                "The product could not be created because "
-                "the image upload failed. Please check the "
-                "image format and size and try again.",
+                "The product could not be saved because "
+                "some product information already exists.",
                 "danger",
             )
 
@@ -501,25 +590,73 @@ def add_product():
                 title="Add Product",
             )
 
-        # ----------------------------------------------------
-        # COMMIT PRODUCT + IMAGES
-        # ----------------------------------------------------
+        except ValueError as exc:
 
-        try:
+            db.session.rollback()
 
-            db.session.commit()
+            print(
+                "Product image validation failed: "
+                f"{exc}"
+            )
+
+            for image_url in uploaded_blob_urls:
+                delete_product_image_file(
+                    image_url
+                )
+
+            flash(
+                str(exc),
+                "danger",
+            )
+
+            return render_template(
+                "admin/product_form.html",
+                form=form,
+                title="Add Product",
+            )
+
+        except SQLAlchemyError as exc:
+
+            db.session.rollback()
+
+            print(
+                "Product database operation failed: "
+                f"{exc}"
+            )
+
+            for image_url in uploaded_blob_urls:
+                delete_product_image_file(
+                    image_url
+                )
+
+            flash(
+                "The product could not be saved. "
+                "Please try again.",
+                "danger",
+            )
+
+            return render_template(
+                "admin/product_form.html",
+                form=form,
+                title="Add Product",
+            )
 
         except Exception as exc:
 
             db.session.rollback()
 
             print(
-                "Product database commit failed: "
-                f"{exc}"
+                "Product creation failed: "
+                f"{type(exc).__name__}: {exc}"
             )
 
+            for image_url in uploaded_blob_urls:
+                delete_product_image_file(
+                    image_url
+                )
+
             flash(
-                "The product could not be saved. "
+                "The product could not be created. "
                 "Please try again.",
                 "danger",
             )
@@ -568,9 +705,51 @@ def add_product():
 @login_required
 def edit_product(product_id):
 
-    product = Product.query.get_or_404(
-        product_id
-    )
+    if not admin_required():
+        return redirect(
+            url_for("auth.login")
+        )
+
+    # --------------------------------------------------------
+    # LOAD PRODUCT
+    # --------------------------------------------------------
+
+    try:
+        product = Product.query.get(
+            product_id
+        )
+
+    except SQLAlchemyError as exc:
+        db.session.rollback()
+
+        print(
+            "Admin product lookup failed: "
+            f"{exc}"
+        )
+
+        flash(
+            "The product could not be loaded. "
+            "Please try again.",
+            "danger",
+        )
+
+        return redirect(
+            url_for(
+                "admin_products.products"
+            )
+        )
+
+    if not product:
+        flash(
+            "Product not found.",
+            "danger",
+        )
+
+        return redirect(
+            url_for(
+                "admin_products.products"
+            )
+        )
 
     form = ProductForm(
         obj=product
@@ -580,11 +759,28 @@ def edit_product(product_id):
     # LOAD ACTIVE CATEGORIES
     # --------------------------------------------------------
 
-    categories = Category.query.filter_by(
-        is_active=True
-    ).order_by(
-        Category.name.asc()
-    ).all()
+    try:
+        categories = Category.query.filter_by(
+            is_active=True
+        ).order_by(
+            Category.name.asc()
+        ).all()
+
+    except SQLAlchemyError as exc:
+        db.session.rollback()
+
+        print(
+            "Admin product categories query failed: "
+            f"{exc}"
+        )
+
+        flash(
+            "Product categories could not be loaded. "
+            "Please try again.",
+            "danger",
+        )
+
+        categories = []
 
     form.category.choices = [
         (
@@ -624,10 +820,32 @@ def edit_product(product_id):
 
         if form.sku.data:
 
-            existing_sku = Product.query.filter(
-                Product.sku == form.sku.data,
-                Product.id != product.id,
-            ).first()
+            try:
+                existing_sku = Product.query.filter(
+                    Product.sku == form.sku.data,
+                    Product.id != product.id,
+                ).first()
+
+            except SQLAlchemyError as exc:
+                db.session.rollback()
+
+                print(
+                    "Product SKU check failed: "
+                    f"{exc}"
+                )
+
+                flash(
+                    "The product could not be checked. "
+                    "Please try again.",
+                    "danger",
+                )
+
+                return render_template(
+                    "admin/product_form.html",
+                    form=form,
+                    title="Edit Product",
+                    product=product,
+                )
 
             if existing_sku:
 
@@ -649,10 +867,32 @@ def edit_product(product_id):
 
         if form.slug.data:
 
-            existing_slug = Product.query.filter(
-                Product.slug == form.slug.data,
-                Product.id != product.id,
-            ).first()
+            try:
+                existing_slug = Product.query.filter(
+                    Product.slug == form.slug.data,
+                    Product.id != product.id,
+                ).first()
+
+            except SQLAlchemyError as exc:
+                db.session.rollback()
+
+                print(
+                    "Product slug check failed: "
+                    f"{exc}"
+                )
+
+                flash(
+                    "The product could not be checked. "
+                    "Please try again.",
+                    "danger",
+                )
+
+                return render_template(
+                    "admin/product_form.html",
+                    form=form,
+                    title="Edit Product",
+                    product=product,
+                )
 
             if existing_slug:
 
@@ -668,36 +908,38 @@ def edit_product(product_id):
                     product=product,
                 )
 
-        # ----------------------------------------------------
-        # UPDATE PRODUCT FIELDS
-        # ----------------------------------------------------
-
-        product.name = form.name.data
-        product.brand = form.brand.data
-        product.description = form.description.data
-        product.price = form.price.data
-        product.discount = form.discount.data or 0
-        product.stock = form.stock.data
-        product.slug = form.slug.data
-        product.category_id = form.category.data
-        product.featured = form.featured.data
-        product.is_active = form.is_active.data
-
-        # ----------------------------------------------------
-        # GET NEW IMAGES
-        # ----------------------------------------------------
-
-        uploaded_images = request.files.getlist(
-            "images"
-        )
-
-        existing_images = ProductImage.query.filter_by(
-            product_id=product.id
-        ).count()
-
-        image_number = existing_images
+        uploaded_blob_urls = []
 
         try:
+
+            # ------------------------------------------------
+            # UPDATE PRODUCT FIELDS
+            # ------------------------------------------------
+
+            product.name = form.name.data
+            product.brand = form.brand.data
+            product.description = form.description.data
+            product.price = form.price.data
+            product.discount = form.discount.data or 0
+            product.stock = form.stock.data
+            product.slug = form.slug.data
+            product.category_id = form.category.data
+            product.featured = form.featured.data
+            product.is_active = form.is_active.data
+
+            # ------------------------------------------------
+            # GET NEW IMAGES
+            # ------------------------------------------------
+
+            uploaded_images = request.files.getlist(
+                "images"
+            )
+
+            existing_images = ProductImage.query.filter_by(
+                product_id=product.id
+            ).count()
+
+            image_number = existing_images
 
             for image in uploaded_images:
 
@@ -711,7 +953,6 @@ def edit_product(product_id):
                 if not allowed_image(
                     image.filename
                 ):
-
                     raise ValueError(
                         f"Invalid image format: "
                         f"{image.filename}"
@@ -727,6 +968,10 @@ def edit_product(product_id):
 
                 if not image_url:
                     continue
+
+                uploaded_blob_urls.append(
+                    image_url
+                )
 
                 # --------------------------------------------
                 # CREATE DATABASE RECORD
@@ -746,19 +991,29 @@ def edit_product(product_id):
 
                 image_number += 1
 
-        except Exception as exc:
+            # ------------------------------------------------
+            # COMMIT
+            # ------------------------------------------------
+
+            db.session.commit()
+
+        except IntegrityError as exc:
 
             db.session.rollback()
 
             print(
-                "Product image upload failed: "
+                "Product update integrity error: "
                 f"{exc}"
             )
 
+            for image_url in uploaded_blob_urls:
+                delete_product_image_file(
+                    image_url
+                )
+
             flash(
                 "The product could not be updated because "
-                "the image upload failed. Please check the "
-                "image format and size and try again.",
+                "some product information already exists.",
                 "danger",
             )
 
@@ -769,15 +1024,33 @@ def edit_product(product_id):
                 product=product,
             )
 
-        # ----------------------------------------------------
-        # COMMIT
-        # ----------------------------------------------------
+        except ValueError as exc:
 
-        try:
+            db.session.rollback()
 
-            db.session.commit()
+            print(
+                "Product image validation failed: "
+                f"{exc}"
+            )
 
-        except Exception as exc:
+            for image_url in uploaded_blob_urls:
+                delete_product_image_file(
+                    image_url
+                )
+
+            flash(
+                str(exc),
+                "danger",
+            )
+
+            return render_template(
+                "admin/product_form.html",
+                form=form,
+                title="Edit Product",
+                product=product,
+            )
+
+        except SQLAlchemyError as exc:
 
             db.session.rollback()
 
@@ -785,6 +1058,38 @@ def edit_product(product_id):
                 "Product database update failed: "
                 f"{exc}"
             )
+
+            for image_url in uploaded_blob_urls:
+                delete_product_image_file(
+                    image_url
+                )
+
+            flash(
+                "The product could not be updated. "
+                "Please try again.",
+                "danger",
+            )
+
+            return render_template(
+                "admin/product_form.html",
+                form=form,
+                title="Edit Product",
+                product=product,
+            )
+
+        except Exception as exc:
+
+            db.session.rollback()
+
+            print(
+                "Product update failed: "
+                f"{type(exc).__name__}: {exc}"
+            )
+
+            for image_url in uploaded_blob_urls:
+                delete_product_image_file(
+                    image_url
+                )
 
             flash(
                 "The product could not be updated. "
@@ -837,19 +1142,82 @@ def edit_product(product_id):
 @login_required
 def delete_product(product_id):
 
-    product = Product.query.get_or_404(
-        product_id
-    )
+    if not admin_required():
+        return redirect(
+            url_for("auth.login")
+        )
+
+    # --------------------------------------------------------
+    # LOAD PRODUCT
+    # --------------------------------------------------------
+
+    try:
+        product = Product.query.get(
+            product_id
+        )
+
+    except SQLAlchemyError as exc:
+        db.session.rollback()
+
+        print(
+            "Product deletion lookup failed: "
+            f"{exc}"
+        )
+
+        flash(
+            "The product could not be loaded. "
+            "Please try again.",
+            "danger",
+        )
+
+        return redirect(
+            url_for(
+                "admin_products.products"
+            )
+        )
+
+    if not product:
+        flash(
+            "Product not found.",
+            "danger",
+        )
+
+        return redirect(
+            url_for(
+                "admin_products.products"
+            )
+        )
 
     # --------------------------------------------------------
     # COLLECT IMAGE URLS
     # --------------------------------------------------------
 
-    image_urls = [
-        image.image_url
-        for image in product.images
-        if image.image_url
-    ]
+    try:
+        image_urls = [
+            image.image_url
+            for image in product.images
+            if image.image_url
+        ]
+
+    except SQLAlchemyError as exc:
+        db.session.rollback()
+
+        print(
+            "Product image collection failed: "
+            f"{exc}"
+        )
+
+        flash(
+            "The product could not be deleted. "
+            "Please try again.",
+            "danger",
+        )
+
+        return redirect(
+            url_for(
+                "admin_products.products"
+            )
+        )
 
     # --------------------------------------------------------
     # DELETE PRODUCT FROM DATABASE
@@ -859,21 +1227,62 @@ def delete_product(product_id):
     # product deletion.
     # --------------------------------------------------------
 
-    db.session.delete(
-        product
-    )
-
     try:
+        db.session.delete(
+            product
+        )
 
         db.session.commit()
 
-    except Exception as exc:
+    except IntegrityError as exc:
+
+        db.session.rollback()
+
+        print(
+            "Product deletion integrity error: "
+            f"{exc}"
+        )
+
+        flash(
+            "The product could not be deleted because "
+            "it is still being used by another record.",
+            "danger",
+        )
+
+        return redirect(
+            url_for(
+                "admin_products.products"
+            )
+        )
+
+    except SQLAlchemyError as exc:
 
         db.session.rollback()
 
         print(
             "Product deletion failed: "
             f"{exc}"
+        )
+
+        flash(
+            "The product could not be deleted. "
+            "Please try again.",
+            "danger",
+        )
+
+        return redirect(
+            url_for(
+                "admin_products.products"
+            )
+        )
+
+    except Exception as exc:
+
+        db.session.rollback()
+
+        print(
+            "Unexpected product deletion error: "
+            f"{type(exc).__name__}: {exc}"
         )
 
         flash(
@@ -925,57 +1334,120 @@ def delete_product(product_id):
 @login_required
 def delete_product_image(image_id):
 
-    image = ProductImage.query.get_or_404(
-        image_id
-    )
+    if not admin_required():
+        return redirect(
+            url_for("auth.login")
+        )
+
+    # --------------------------------------------------------
+    # LOAD IMAGE
+    # --------------------------------------------------------
+
+    try:
+        image = ProductImage.query.get(
+            image_id
+        )
+
+    except SQLAlchemyError as exc:
+        db.session.rollback()
+
+        print(
+            "Product image lookup failed: "
+            f"{exc}"
+        )
+
+        flash(
+            "The product image could not be loaded. "
+            "Please try again.",
+            "danger",
+        )
+
+        return redirect(
+            url_for(
+                "admin_products.products"
+            )
+        )
+
+    if not image:
+        flash(
+            "Product image not found.",
+            "danger",
+        )
+
+        return redirect(
+            url_for(
+                "admin_products.products"
+            )
+        )
 
     product_id = image.product_id
     image_url = image.image_url
     was_primary = image.is_primary
 
-    # --------------------------------------------------------
-    # DELETE DATABASE RECORD
-    # --------------------------------------------------------
-
-    db.session.delete(
-        image
-    )
-    
-
-    db.session.flush()
-
-    # --------------------------------------------------------
-    # IF PRIMARY IMAGE WAS DELETED,
-    # SELECT ANOTHER IMAGE
-    # --------------------------------------------------------
-
-    if was_primary:
-
-        replacement = ProductImage.query.filter_by(
-            product_id=product_id
-        ).order_by(
-            ProductImage.id.asc()
-        ).first()
-
-        if replacement:
-
-            replacement.is_primary = True
-
-    # --------------------------------------------------------
-    # COMMIT DATABASE CHANGE
-    # --------------------------------------------------------
-
     try:
+
+        # ----------------------------------------------------
+        # DELETE DATABASE RECORD
+        # ----------------------------------------------------
+
+        db.session.delete(
+            image
+        )
+
+        db.session.flush()
+
+        # ----------------------------------------------------
+        # IF PRIMARY IMAGE WAS DELETED,
+        # SELECT ANOTHER IMAGE
+        # ----------------------------------------------------
+
+        if was_primary:
+
+            replacement = ProductImage.query.filter_by(
+                product_id=product_id
+            ).order_by(
+                ProductImage.id.asc()
+            ).first()
+
+            if replacement:
+
+                replacement.is_primary = True
+
+        # ----------------------------------------------------
+        # COMMIT DATABASE CHANGE
+        # ----------------------------------------------------
 
         db.session.commit()
 
-    except Exception as exc:
+    except SQLAlchemyError as exc:
 
         db.session.rollback()
 
         print(
             "Product image database deletion failed: "
             f"{exc}"
+        )
+
+        flash(
+            "The product image could not be deleted. "
+            "Please try again.",
+            "danger",
+        )
+
+        return redirect(
+            url_for(
+                "admin_products.edit_product",
+                product_id=product_id,
+            )
+        )
+
+    except Exception as exc:
+
+        db.session.rollback()
+
+        print(
+            "Unexpected product image deletion error: "
+            f"{type(exc).__name__}: {exc}"
         )
 
         flash(
@@ -1027,41 +1499,131 @@ def delete_product_image(image_id):
 @login_required
 def set_primary_image(image_id):
 
-    image = ProductImage.query.get_or_404(
-        image_id
-    )
+    if not admin_required():
+        return redirect(
+            url_for("auth.login")
+        )
+
+    # --------------------------------------------------------
+    # LOAD IMAGE
+    # --------------------------------------------------------
+
+    try:
+        image = ProductImage.query.get(
+            image_id
+        )
+
+    except SQLAlchemyError as exc:
+        db.session.rollback()
+
+        print(
+            "Primary image lookup failed: "
+            f"{exc}"
+        )
+
+        flash(
+            "The product image could not be loaded. "
+            "Please try again.",
+            "danger",
+        )
+
+        return redirect(
+            url_for(
+                "admin_products.products"
+            )
+        )
+
+    if not image:
+        flash(
+            "Product image not found.",
+            "danger",
+        )
+
+        return redirect(
+            url_for(
+                "admin_products.products"
+            )
+        )
 
     product_id = image.product_id
 
-    # --------------------------------------------------------
-    # REMOVE PRIMARY STATUS FROM ALL IMAGES
-    # --------------------------------------------------------
-
-    ProductImage.query.filter_by(
-        product_id=product_id
-    ).update(
-        {
-            ProductImage.is_primary: False
-        }
-    )
-
-    # --------------------------------------------------------
-    # SET SELECTED IMAGE AS PRIMARY
-    # --------------------------------------------------------
-
-    image.is_primary = True
-
     try:
 
+        # ----------------------------------------------------
+        # REMOVE PRIMARY STATUS FROM ALL IMAGES
+        # ----------------------------------------------------
+
+        ProductImage.query.filter_by(
+            product_id=product_id
+        ).update(
+            {
+                ProductImage.is_primary: False
+            }
+        )
+
+        # ----------------------------------------------------
+        # SET SELECTED IMAGE AS PRIMARY
+        # ----------------------------------------------------
+
+        image.is_primary = True
+
+        # ----------------------------------------------------
+        # COMMIT
+        # ----------------------------------------------------
+
         db.session.commit()
+
+    except IntegrityError as exc:
+
+        db.session.rollback()
+
+        print(
+            "Primary image integrity error: "
+            f"{exc}"
+        )
+
+        flash(
+            "The primary image could not be updated. "
+            "Please try again.",
+            "danger",
+        )
+
+        return redirect(
+            url_for(
+                "admin_products.edit_product",
+                product_id=product_id,
+            )
+        )
+
+    except SQLAlchemyError as exc:
+
+        db.session.rollback()
+
+        print(
+            "Primary image database update failed: "
+            f"{exc}"
+        )
+
+        flash(
+            "The primary image could not be updated. "
+            "Please try again.",
+            "danger",
+        )
+
+        return redirect(
+            url_for(
+                "admin_products.edit_product",
+                product_id=product_id,
+            )
+        )
 
     except Exception as exc:
 
         db.session.rollback()
 
         print(
-            "Primary image update failed: "
-            f"{exc}"
+            "Unexpected primary image update error: "
+            f"{type(exc).__name__}: {exc}"
         )
 
         flash(
