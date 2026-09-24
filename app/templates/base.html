@@ -3694,5 +3694,59 @@
     {% block extra_js %}{% endblock %}
     {% block scripts %}{% endblock %}
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll('input[type="password"]').forEach(function (input) {
+
+                const wrapper = document.createElement("div");
+                wrapper.style.position = "relative";
+
+                input.parentNode.insertBefore(wrapper, input);
+                wrapper.appendChild(input);
+
+                const button = document.createElement("button");
+                button.type = "button";
+                button.setAttribute("aria-label", "Show password");
+                button.setAttribute("aria-pressed", "false");
+
+                button.innerHTML = "&#128065;";
+
+                button.style.position = "absolute";
+                button.style.right = "8px";
+                button.style.top = "50%";
+                button.style.transform = "translateY(-50%)";
+                button.style.width = "40px";
+                button.style.height = "40px";
+                button.style.border = "0";
+                button.style.background = "transparent";
+                button.style.cursor = "pointer";
+                button.style.fontSize = "18px";
+                button.style.lineHeight = "1";
+                button.style.padding = "0";
+                button.style.zIndex = "2";
+
+                input.style.paddingRight = "48px";
+
+                button.addEventListener("click", function () {
+                    const showing = input.type === "text";
+
+                    input.type = showing ? "password" : "text";
+
+                    button.setAttribute(
+                        "aria-label",
+                        showing ? "Show password" : "Hide password"
+                    );
+
+                    button.setAttribute(
+                        "aria-pressed",
+                        showing ? "false" : "true"
+                    );
+                });
+
+                wrapper.appendChild(button);
+            });
+        });
+    </script>
+
 </body>
 </html>
