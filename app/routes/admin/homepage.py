@@ -13,7 +13,7 @@ from flask import (
     url_for,
 )
 from flask_login import current_user, login_required
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from werkzeug.utils import secure_filename
 
 from vercel.blob import BlobClient
@@ -31,6 +31,73 @@ homepage_bp = Blueprint(
     "admin_homepage",
     __name__,
 )
+
+
+@homepage_bp.errorhandler(SQLAlchemyError)
+def handle_homepage_database_error(error):
+    """Safely handle unexpected homepage CMS database errors."""
+    db.session.rollback()
+
+    current_app.logger.exception(
+        "Unhandled homepage CMS database error: %s",
+        error,
+    )
+
+    if request.path.endswith("/sections/reorder"):
+        return (
+            jsonify(
+                {
+                    "success": False,
+                    "message": (
+                        "Unable to save section order. "
+                        "Please try again."
+                    ),
+                }
+            ),
+            500,
+        )
+
+    flash(
+        "A database error occurred while managing the homepage. "
+        "Please try again.",
+        "danger",
+    )
+
+    return redirect(url_for("admin_homepage.homepage"))
+
+
+@homepage_bp.errorhandler(Exception)
+def handle_homepage_unexpected_error(error):
+    """Final safety net for unexpected homepage CMS errors."""
+    db.session.rollback()
+
+    current_app.logger.exception(
+        "Unhandled homepage CMS error: %s",
+        error,
+    )
+
+    if request.path.endswith("/sections/reorder"):
+        return (
+            jsonify(
+                {
+                    "success": False,
+                    "message": (
+                        "Unable to process the homepage request. "
+                        "Please try again."
+                    ),
+                }
+            ),
+            500,
+        )
+
+    flash(
+        "Unable to complete the homepage request right now. "
+        "Please try again.",
+        "danger",
+    )
+
+    return redirect(url_for("admin_homepage.homepage"))
+
 
 
 ALLOWED_EXTENSIONS = {
