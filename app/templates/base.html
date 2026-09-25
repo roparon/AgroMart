@@ -5,8 +5,10 @@
 
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
     <!-- Security / Application -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <!-- Browser Theme -->
     <meta name="theme-color" content="#198754">
 
@@ -21,14 +23,13 @@
     <!-- SEO Description -->
     <meta name="description"
           content="Bomet Machineries Ltd. — quality agricultural machinery, farm tools, generators, water pumps, refrigeration equipment, genuine spare parts and more.">
+
     <!-- Canonical URL -->
     <link rel="canonical"
           href="{{ request.base_url }}">
 
     <!-- =========================================================
          OPEN GRAPH / SOCIAL LINK PREVIEW
-         Used when the website link is shared on WhatsApp,
-         Facebook, LinkedIn and other platforms.
     ========================================================== -->
 
     <meta property="og:title"
@@ -49,7 +50,6 @@
     <meta property="og:locale"
           content="en_KE">
 
-    <!-- Existing homepage image -->
     <meta property="og:image"
           content="{{ url_for('static', filename='uploads/homepage/1a30c95bb80841139baac0e1c4e5b489.png', _external=True) }}">
 
@@ -61,7 +61,6 @@
 
     <meta property="og:image:height"
           content="630">
-
 
     <!-- =========================================================
          TWITTER / X LINK PREVIEW
@@ -82,19 +81,13 @@
     <meta name="twitter:image:alt"
           content="Bomet Machineries Ltd.">
 
-
     <!-- Page Title -->
     <title>{% block title %}Bomet Machineries Ltd.{% endblock %}</title>
 
-
     <!-- =========================================================
          PERFORMANCE / CORE DEPENDENCIES
-
-         Bootstrap and Bootstrap Icons are retained because the
-         existing application actively uses their classes/scripts.
     ========================================================== -->
 
-    <!-- Faster connection to CDN -->
     <link rel="preconnect"
           href="https://cdn.jsdelivr.net"
           crossorigin>
@@ -106,7 +99,6 @@
     <!-- Bootstrap Icons 1.11.3 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
           rel="stylesheet">
-
 
     <!-- =========================================================
          GLOBAL APPLICATION STYLESHEET
@@ -126,51 +118,42 @@
         ========================================================== */
 
         :root {
-            /* Brand */
             --bomet-green: #198754;
             --bomet-green-dark: #0f5132;
             --bomet-green-deep: #073b24;
             --bomet-green-soft: #eaf7ef;
 
-            /* Surfaces */
             --bomet-white: #ffffff;
             --bomet-bg: #f7f9f7;
             --bomet-surface: #ffffff;
             --bomet-surface-soft: #f3f6f4;
 
-            /* Text */
             --bomet-text: #17211b;
             --bomet-muted: #6c7770;
             --bomet-muted-light: #8a948d;
 
-            /* Borders */
             --bomet-border: #e4e9e5;
             --bomet-border-light: #eef1ef;
 
-            /* Status */
             --bomet-success: #198754;
             --bomet-warning: #f0ad00;
             --bomet-danger: #dc3545;
             --bomet-info: #0dcaf0;
 
-            /* Radius */
             --bomet-radius-sm: 9px;
             --bomet-radius: 14px;
             --bomet-radius-lg: 20px;
 
-            /* Shadows */
             --bomet-shadow:
                 0 4px 20px rgba(15, 81, 50, .07);
 
             --bomet-shadow-lg:
                 0 12px 40px rgba(15, 81, 50, .12);
 
-            /* Layout */
             --bomet-container-max: 1380px;
             --bomet-mobile-header-height: 66px;
             --bomet-bottom-nav-height: 68px;
 
-            /* Motion */
             --bomet-transition-fast:
                 150ms ease;
 
@@ -205,10 +188,6 @@
             background: var(--bomet-bg);
             color: var(--bomet-text);
 
-            /*
-             * System font stack removes the additional Google Fonts
-             * network request while maintaining excellent readability.
-             */
             font-family:
                 system-ui,
                 -apple-system,
@@ -226,7 +205,6 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
-        /* Prevent long content from creating horizontal overflow */
         img,
         picture,
         video,
@@ -415,11 +393,6 @@
             background: rgba(255, 255, 255, .98);
 
             border-bottom: 1px solid var(--bomet-border);
-
-            /*
-             * Avoiding backdrop-filter keeps the header inexpensive
-             * on lower-powered mobile devices.
-             */
         }
 
         .bomet-header-main {
@@ -845,19 +818,50 @@
 
         .bomet-offcanvas {
             width: min(88vw, 360px) !important;
-            max-width: 360px;
+            max-width: 250px;
 
             border: 0 !important;
 
             /*
-             * Safe area support for modern phones.
+             * IMPORTANT:
+             * Bootstrap normally stretches an offcanvas from top
+             * to bottom of the viewport.
+             *
+             * This drawer is intentionally content-sized so a short
+             * menu does not produce a large empty white area below
+             * the final navigation item.
              */
-            padding-top: env(safe-area-inset-top);
-            padding-bottom: env(safe-area-inset-bottom);
+            top: max(0px, env(safe-area-inset-top, 0px)) !important;
+            bottom: auto !important;
+
+            height: fit-content !important;
+
+            max-height:
+                calc(
+                    100dvh
+                    - env(safe-area-inset-top, 0px)
+                    - env(safe-area-inset-bottom, 0px)
+                ) !important;
+
+            overflow: hidden;
+
+            display: flex;
+            flex-direction: column;
+
+            flex-grow: 0 !important;
+
+            /*
+             * Safe area is handled by top/max-height above.
+             * Keeping the bottom padding prevents content from
+             * touching the bottom edge on devices with a home area.
+             */
+            padding-bottom: env(safe-area-inset-bottom, 0px);
         }
 
         .bomet-offcanvas .offcanvas-header {
             min-height: 68px;
+
+            flex: 0 0 auto;
 
             padding:
                 10px 14px;
@@ -885,6 +889,8 @@
         }
 
         .offcanvas-user {
+            flex: 0 0 auto;
+
             padding: 14px;
 
             background:
@@ -933,6 +939,9 @@
         .bomet-offcanvas .offcanvas-body {
             min-height: 0;
 
+            flex: 0 1 auto !important;
+            flex-grow: 0 !important;
+
             overflow-y: auto;
             overflow-x: hidden;
 
@@ -953,11 +962,6 @@
             letter-spacing: .08em;
         }
 
-        /*
-         * Categories are deliberately constrained.
-         * This prevents 20+ categories from making the entire
-         * mobile drawer unnecessarily long.
-         */
         .offcanvas-category-list {
             max-height: min(38vh, 320px);
 
@@ -1088,7 +1092,15 @@
         ========================================================== */
 
         .bomet-main {
-            min-height: 55vh;
+            /*
+             * IMPORTANT:
+             * Do not impose a viewport-based minimum height here.
+             *
+             * Short product/listing pages should end immediately
+             * after their actual content instead of creating a
+             * large empty area before the footer.
+             */
+            min-height: 0;
 
             width: 100%;
             max-width: 100%;
@@ -1096,14 +1108,17 @@
             overflow-x: clip;
         }
 
+        /*
+         * The fixed mobile bottom dock remains visually above the
+         * page, but it must not create a large block of whitespace
+         * after pagination before the footer.
+         *
+         * Individual pages can still add their own bottom spacing
+         * where content genuinely needs it.
+         */
         @media (max-width: 767.98px) {
             .bomet-main {
-                padding-bottom:
-                    calc(
-                        var(--bomet-bottom-nav-height)
-                        + env(safe-area-inset-bottom)
-                        + 20px
-                    );
+                padding-bottom: 0;
             }
         }
 
@@ -1248,10 +1263,6 @@
                 1px solid rgba(255, 255, 255, .08);
         }
 
-        /*
-         * Lightweight decorative background.
-         * No blur/backdrop filters or animated effects.
-         */
         .bomet-footer::before {
             content: "";
 
@@ -1794,8 +1805,13 @@
                 min-height: 70px;
             }
 
+            /*
+             * No artificial minimum height on the main content.
+             * This prevents short pages from pushing the footer
+             * downward unnecessarily.
+             */
             .bomet-main {
-                min-height: 60vh;
+                min-height: 0;
             }
 
             .footer-top {
@@ -1879,9 +1895,6 @@
 
         /* =========================================================
            GLOBAL THIRD-PARTY OCR SAFETY
-           
-           Existing project behavior is preserved: known OCR
-           overlays are prevented from obstructing mobile screens.
         ========================================================== */
 
         @media (max-width: 991.98px) {
@@ -1965,7 +1978,6 @@
 
             <div class="bomet-header-main">
 
-                <!-- Mobile Menu -->
                 <button
                     class="btn header-action mobile-menu-btn"
                     type="button"
@@ -1979,7 +1991,6 @@
                 </button>
 
 
-                <!-- Brand -->
                 <a
                     class="bomet-brand"
                     href="{{ url_for('home.home') }}"
@@ -2002,7 +2013,6 @@
                 </a>
 
 
-                <!-- Desktop Search -->
                 <form
                     class="desktop-search"
                     method="GET"
@@ -2053,10 +2063,8 @@
                 </form>
 
 
-                <!-- Header Actions -->
                 <div class="header-actions">
 
-                    <!-- Mobile Search -->
                     <button
                         type="button"
                         class="header-action d-lg-none"
@@ -2068,7 +2076,6 @@
                     </button>
 
 
-                    <!-- Account -->
                     {% if current_user.is_authenticated %}
 
                         {% if current_user.is_admin %}
@@ -2109,7 +2116,6 @@
                     {% endif %}
 
 
-                    <!-- Wishlist -->
                     {% if current_user.is_authenticated and not current_user.is_admin %}
 
                         <a
@@ -2130,7 +2136,6 @@
                     {% endif %}
 
 
-                    <!-- Cart -->
                     {% if current_user.is_authenticated and not current_user.is_admin %}
 
                         <a
@@ -2156,10 +2161,6 @@
 
         </div>
 
-
-        <!-- =====================================================
-             DESKTOP NAVIGATION
-        ====================================================== -->
 
         <div class="desktop-navigation">
 
@@ -2364,7 +2365,6 @@
         </div>
 
 
-        <!-- Logged-in User -->
         {% if current_user.is_authenticated %}
 
             <div class="offcanvas-user">
@@ -2417,8 +2417,6 @@
 
         <div class="offcanvas-body p-0">
 
-            <!-- Navigation -->
-
             <div class="offcanvas-section-title">
                 Navigation
             </div>
@@ -2445,8 +2443,6 @@
 
             </a>
 
-
-            <!-- Categories -->
 
             <div class="offcanvas-section-title">
                 Categories
@@ -2483,8 +2479,6 @@
 
             </div>
 
-
-            <!-- Account -->
 
             <div class="offcanvas-section-title">
                 Account
@@ -2677,8 +2671,6 @@
 
         <div class="mobile-dock-inner">
 
-            <!-- Home -->
-
             <a
                 href="{{ url_for('home.home') }}"
                 class="dock-item {% if request.endpoint == 'home.home' %}active{% endif %}"
@@ -2690,8 +2682,6 @@
 
             </a>
 
-
-            <!-- Shop -->
 
             <a
                 href="{{ url_for('product.products') }}"
@@ -2705,8 +2695,6 @@
             </a>
 
 
-            <!-- Search -->
-
             <button
                 type="button"
                 class="dock-item bg-transparent"
@@ -2719,8 +2707,6 @@
 
             </button>
 
-
-            <!-- Wishlist -->
 
             <a
                 href="{% if current_user.is_authenticated and not current_user.is_admin %}{{ url_for('wishlist.wishlist') }}{% else %}{{ url_for('auth.login') }}{% endif %}"
@@ -2742,8 +2728,6 @@
             </a>
 
 
-            <!-- Cart -->
-
             <a
                 href="{% if current_user.is_authenticated and not current_user.is_admin %}{{ url_for('cart.cart') }}{% else %}{{ url_for('auth.login') }}{% endif %}"
                 class="dock-item {% if request.endpoint == 'cart.cart' %}active{% endif %}"
@@ -2763,8 +2747,6 @@
 
             </a>
 
-
-            <!-- Account -->
 
             <a
                 href="{% if current_user.is_authenticated %}{% if current_user.is_admin %}{{ url_for('auth.admin_profile') }}{% else %}{{ url_for('auth.account') }}{% endif %}{% else %}{{ url_for('auth.login') }}{% endif %}"
@@ -2792,17 +2774,11 @@
 
         <div class="container">
 
-            <!-- =====================================================
-                 DESKTOP FOOTER
-            ====================================================== -->
-
             <div class="desktop-footer">
 
                 <div class="footer-top">
 
                     <div class="row g-4 g-lg-5">
-
-                        <!-- Company -->
 
                         <div class="col-md-5 col-lg-4">
 
@@ -2845,50 +2821,24 @@
                                 aria-label="Why shop with Bomet Machineries">
 
                                 <div class="footer-trust-item">
-
-                                    <i
-                                        class="bi bi-check-circle"
-                                        aria-hidden="true">
-                                    </i>
-
-                                    <span>
-                                        Quality Products
-                                    </span>
-
+                                    <i class="bi bi-check-circle" aria-hidden="true"></i>
+                                    <span>Quality Products</span>
                                 </div>
 
                                 <div class="footer-trust-item">
-
-                                    <i
-                                        class="bi bi-gear"
-                                        aria-hidden="true">
-                                    </i>
-
-                                    <span>
-                                        Genuine Spare Parts
-                                    </span>
-
+                                    <i class="bi bi-gear" aria-hidden="true"></i>
+                                    <span>Genuine Spare Parts</span>
                                 </div>
 
                                 <div class="footer-trust-item">
-
-                                    <i
-                                        class="bi bi-headset"
-                                        aria-hidden="true">
-                                    </i>
-
-                                    <span>
-                                        Reliable Support
-                                    </span>
-
+                                    <i class="bi bi-headset" aria-hidden="true"></i>
+                                    <span>Reliable Support</span>
                                 </div>
 
                             </div>
 
                         </div>
 
-
-                        <!-- Quick Links -->
 
                         <div class="col-6 col-md-3 col-lg-2">
 
@@ -3001,8 +2951,6 @@
                         </div>
 
 
-                        <!-- Categories -->
-
                         <div class="col-6 col-md-4 col-lg-3">
 
                             <div class="footer-heading">
@@ -3042,8 +2990,6 @@
                         </div>
 
 
-                        <!-- Customer Support -->
-
                         <div class="col-md-5 col-lg-3">
 
                             <div class="footer-heading">
@@ -3055,10 +3001,7 @@
 
                                 <div class="footer-contact-static">
 
-                                    <i
-                                        class="bi bi-geo-alt"
-                                        aria-hidden="true">
-                                    </i>
+                                    <i class="bi bi-geo-alt" aria-hidden="true"></i>
 
                                     <span>
                                         Kipchamba Street, Bomet
@@ -3072,10 +3015,7 @@
                                     class="footer-contact-link"
                                     aria-label="Call Bomet Machineries Ltd. at plus 254 722 434 519">
 
-                                    <i
-                                        class="bi bi-telephone"
-                                        aria-hidden="true">
-                                    </i>
+                                    <i class="bi bi-telephone" aria-hidden="true"></i>
 
                                     <span>
                                         +254 722 434 519
@@ -3086,10 +3026,7 @@
 
                                 <div class="footer-contact-static">
 
-                                    <i
-                                        class="bi bi-truck"
-                                        aria-hidden="true">
-                                    </i>
+                                    <i class="bi bi-truck" aria-hidden="true"></i>
 
                                     <span>
                                         Serving customers across Kenya
@@ -3141,10 +3078,6 @@
             </div>
 
 
-            <!-- =====================================================
-                 MOBILE FOOTER
-            ====================================================== -->
-
             <div class="mobile-footer mb-3">
 
                 <div class="footer-top">
@@ -3188,10 +3121,7 @@
 
                         <div class="footer-trust-item">
 
-                            <i
-                                class="bi bi-check-circle"
-                                aria-hidden="true">
-                            </i>
+                            <i class="bi bi-check-circle" aria-hidden="true"></i>
 
                             <span>
                                 Quality Products
@@ -3201,10 +3131,7 @@
 
                         <div class="footer-trust-item">
 
-                            <i
-                                class="bi bi-gear"
-                                aria-hidden="true">
-                            </i>
+                            <i class="bi bi-gear" aria-hidden="true"></i>
 
                             <span>
                                 Genuine Parts
@@ -3214,10 +3141,7 @@
 
                         <div class="footer-trust-item">
 
-                            <i
-                                class="bi bi-headset"
-                                aria-hidden="true">
-                            </i>
+                            <i class="bi bi-headset" aria-hidden="true"></i>
 
                             <span>
                                 Reliable Support
@@ -3263,13 +3187,9 @@
                 </div>
 
 
-                <!-- Mobile Footer Accordion -->
-
                 <div
                     class="accordion accordion-flush"
                     id="footerAccordion">
-
-                    <!-- Quick Navigation -->
 
                     <div class="accordion-item">
 
@@ -3304,10 +3224,7 @@
                                     href="{{ url_for('home.home') }}"
                                     class="footer-link">
 
-                                    <i
-                                        class="bi bi-house"
-                                        aria-hidden="true">
-                                    </i>
+                                    <i class="bi bi-house" aria-hidden="true"></i>
 
                                     Home
 
@@ -3318,10 +3235,7 @@
                                     href="{{ url_for('product.products') }}"
                                     class="footer-link">
 
-                                    <i
-                                        class="bi bi-grid"
-                                        aria-hidden="true">
-                                    </i>
+                                    <i class="bi bi-grid" aria-hidden="true"></i>
 
                                     Products
 
@@ -3426,8 +3340,6 @@
                     </div>
 
 
-                    <!-- Categories -->
-
                     <div class="accordion-item">
 
                         <h2
@@ -3491,8 +3403,6 @@
 
                     </div>
 
-
-                    <!-- Customer Support -->
 
                     <div class="accordion-item">
 
@@ -3582,10 +3492,6 @@
             </div>
 
 
-            <!-- =====================================================
-                 FOOTER BOTTOM
-            ====================================================== -->
-
             <div class="footer-bottom">
 
                 <div class="footer-bottom-copy">
@@ -3606,7 +3512,6 @@
 
     <!-- =========================================================
          BOOTSTRAP JAVASCRIPT
-         Single copy only.
     ========================================================== -->
 
     <script
@@ -3650,10 +3555,6 @@
                     "overflow-hidden"
                 );
 
-                /*
-                 * Focus after rendering so mobile browsers have
-                 * a better chance of opening the keyboard correctly.
-                 */
                 if (searchInput) {
                     window.setTimeout(function () {
                         searchInput.focus();
@@ -3724,11 +3625,6 @@
                             window.setTimeout(
                                 function () {
 
-                                    /*
-                                     * Respect reduced-motion users.
-                                     * Bootstrap handles the normal
-                                     * dismissal animation.
-                                     */
                                     if (
                                         window.matchMedia &&
                                         window.matchMedia(
