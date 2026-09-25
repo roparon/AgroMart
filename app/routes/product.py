@@ -1699,6 +1699,8 @@ def product_details(id):
 
         is_in_wishlist=is_in_wishlist,
 
+        wishlist_product_ids=get_wishlist_product_ids(),
+
         related_products=related_products,
 
         related_searches=related_searches,

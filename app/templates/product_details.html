@@ -1312,6 +1312,61 @@
         border-color .18s ease;
 }
 
+/* ============================================================
+   RELATED PRODUCT WISHLIST
+   ============================================================ */
+
+.related-product-wishlist-form {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 20;
+    margin: 0;
+}
+
+.related-product-wishlist {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.97);
+    color: #68736d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    line-height: 1;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.related-product-wishlist:hover {
+    background: #fff;
+    color: var(--bomet-danger);
+    transform: scale(1.06);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.14);
+}
+
+.related-product-wishlist:active {
+    transform: scale(0.92);
+}
+
+.related-product-wishlist:focus-visible {
+    outline: 3px solid rgba(220, 53, 69, 0.2);
+    outline-offset: 2px;
+}
+
+.related-product-wishlist.is-wishlisted {
+    color: var(--bomet-danger);
+}
+
 .related-product-card:hover {
     transform: translateY(-2px);
 
@@ -2884,6 +2939,45 @@
 
                 <article class="related-product-card">
 
+                    <!-- WISHLIST -->
+
+                    <form
+                        action="{{ url_for(
+                            'wishlist.toggle_wishlist',
+                            product_id=related.id
+                        ) }}"
+                        method="POST"
+                        class="related-product-wishlist-form"
+                        onclick="event.preventDefault(); event.stopPropagation();"
+                    >
+
+                        <input
+                            type="hidden"
+                            name="csrf_token"
+                            value="{{ csrf_token() }}"
+                        >
+
+                        <button
+                            type="button"
+                            class="related-product-wishlist{% if wishlist_product_ids is defined and related.id in wishlist_product_ids %} is-wishlisted{% endif %}"
+                            data-wishlist-button
+                            data-product-id="{{ related.id }}"
+                            aria-label="{% if wishlist_product_ids is defined and related.id in wishlist_product_ids %}Remove {{ related.name }} from wishlist{% else %}Add {{ related.name }} to wishlist{% endif %}"
+                            title="{% if wishlist_product_ids is defined and related.id in wishlist_product_ids %}Remove from wishlist{% else %}Add to wishlist{% endif %}"
+                            aria-pressed="{{ 'true' if wishlist_product_ids is defined and related.id in wishlist_product_ids else 'false' }}"
+                        >
+
+                            {% if wishlist_product_ids is defined and related.id in wishlist_product_ids %}
+                                <i class="bi bi-heart-fill" aria-hidden="true"></i>
+                            {% else %}
+                                <i class="bi bi-heart" aria-hidden="true"></i>
+                            {% endif %}
+
+                        </button>
+
+                    </form>
+
+
                     <!-- IMAGE -->
 
                     <a
@@ -3065,6 +3159,45 @@
             {% for recent in recently_viewed %}
 
                 <article class="related-product-card">
+
+                    <!-- WISHLIST -->
+
+                    <form
+                        action="{{ url_for(
+                            'wishlist.toggle_wishlist',
+                            product_id=recent.id
+                        ) }}"
+                        method="POST"
+                        class="related-product-wishlist-form"
+                        onclick="event.preventDefault(); event.stopPropagation();"
+                    >
+
+                        <input
+                            type="hidden"
+                            name="csrf_token"
+                            value="{{ csrf_token() }}"
+                        >
+
+                        <button
+                            type="button"
+                            class="related-product-wishlist{% if wishlist_product_ids is defined and recent.id in wishlist_product_ids %} is-wishlisted{% endif %}"
+                            data-wishlist-button
+                            data-product-id="{{ recent.id }}"
+                            aria-label="{% if wishlist_product_ids is defined and recent.id in wishlist_product_ids %}Remove {{ recent.name }} from wishlist{% else %}Add {{ recent.name }} to wishlist{% endif %}"
+                            title="{% if wishlist_product_ids is defined and recent.id in wishlist_product_ids %}Remove from wishlist{% else %}Add to wishlist{% endif %}"
+                            aria-pressed="{{ 'true' if wishlist_product_ids is defined and recent.id in wishlist_product_ids else 'false' }}"
+                        >
+
+                            {% if wishlist_product_ids is defined and recent.id in wishlist_product_ids %}
+                                <i class="bi bi-heart-fill" aria-hidden="true"></i>
+                            {% else %}
+                                <i class="bi bi-heart" aria-hidden="true"></i>
+                            {% endif %}
+
+                        </button>
+
+                    </form>
+
 
                     <a
                         href="{{ url_for(
@@ -4483,6 +4616,229 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
         }
+    );
+
+
+    /* ============================================================
+       RELATED + RECENTLY VIEWED WISHLIST
+       ============================================================ */
+
+    document.addEventListener(
+        "click",
+        async function (event) {
+
+            const button =
+                event.target.closest(
+                    "[data-wishlist-button]"
+                );
+
+
+            if (!button) {
+                return;
+            }
+
+
+            event.preventDefault();
+            event.stopPropagation();
+
+
+            if (button.dataset.wishlistBusy === "true") {
+                return;
+            }
+
+
+            const form =
+                button.closest("form");
+
+
+            if (!form) {
+                return;
+            }
+
+
+            const icon =
+                button.querySelector("i");
+
+
+            if (!icon) {
+                return;
+            }
+
+
+            const productId =
+                button.dataset.productId;
+
+
+            const wasWishlisted =
+                button.classList.contains(
+                    "is-wishlisted"
+                );
+
+
+            const wasPressed =
+                button.getAttribute(
+                    "aria-pressed"
+                );
+
+
+            const previousAriaLabel =
+                button.getAttribute(
+                    "aria-label"
+                );
+
+
+            const previousTitle =
+                button.getAttribute(
+                    "title"
+                );
+
+
+            button.dataset.wishlistBusy =
+                "true";
+
+
+            /*
+             * Optimistic UI update:
+             * change the heart immediately.
+             */
+
+            const nowWishlisted =
+                !wasWishlisted;
+
+
+            button.classList.toggle(
+                "is-wishlisted",
+                nowWishlisted
+            );
+
+
+            button.setAttribute(
+                "aria-pressed",
+                nowWishlisted
+                    ? "true"
+                    : "false"
+            );
+
+
+            icon.className =
+                nowWishlisted
+                    ? "bi bi-heart-fill"
+                    : "bi bi-heart";
+
+
+            const productName =
+                button.getAttribute(
+                    "aria-label"
+                )?.replace(
+                    /^(Add|Remove) .*? from wishlist$/,
+                    ""
+                ).trim();
+
+
+            if (productName) {
+
+                button.setAttribute(
+                    "aria-label",
+                    nowWishlisted
+                        ? `Remove ${productName} from wishlist`
+                        : `Add ${productName} to wishlist`
+                );
+
+            }
+
+
+            button.setAttribute(
+                "title",
+                nowWishlisted
+                    ? "Remove from wishlist"
+                    : "Add to wishlist"
+            );
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        form.action,
+                        {
+                            method: "POST",
+                            body: new FormData(form),
+                            credentials: "same-origin",
+                            redirect: "follow",
+                            headers: {
+                                "X-Requested-With":
+                                    "XMLHttpRequest"
+                            }
+                        }
+                    );
+
+
+                const finalUrl =
+                    new URL(
+                        response.url,
+                        window.location.href
+                    );
+
+
+                if (
+                    !response.ok ||
+                    (
+                        response.redirected &&
+                        finalUrl.pathname.includes(
+                            "/auth/login"
+                        )
+                    )
+                ) {
+                    throw new Error(
+                        "Wishlist request failed."
+                    );
+                }
+
+            } catch (error) {
+
+                /*
+                 * Restore the exact previous state
+                 * if the backend request fails.
+                 */
+
+                button.classList.toggle(
+                    "is-wishlisted",
+                    wasWishlisted
+                );
+
+
+                button.setAttribute(
+                    "aria-pressed",
+                    wasPressed
+                );
+
+
+                button.setAttribute(
+                    "aria-label",
+                    previousAriaLabel
+                );
+
+
+                button.setAttribute(
+                    "title",
+                    previousTitle
+                );
+
+
+                icon.className =
+                    wasWishlisted
+                        ? "bi bi-heart-fill"
+                        : "bi bi-heart";
+
+            } finally {
+
+                button.dataset.wishlistBusy =
+                    "false";
+
+            }
+
+        },
+        true
     );
 
 });
