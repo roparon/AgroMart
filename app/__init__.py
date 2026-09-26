@@ -104,6 +104,7 @@ def create_app():
     from app.routes.admin.orders import orders_bp
     from app.routes.wishlist import wishlist_bp
     from app.routes.admin.homepage import homepage_bp
+    from app.routes.seo import seo_bp
 
     app.register_blueprint(home_bp)
     app.register_blueprint(auth_bp, url_prefix="/auth")
@@ -116,6 +117,9 @@ def create_app():
     app.register_blueprint(orders_bp, url_prefix="/admin/orders")
     app.register_blueprint(wishlist_bp, url_prefix="/wishlist")
     app.register_blueprint(homepage_bp, url_prefix="/admin/homepage")
+
+
+    app.register_blueprint(seo_bp)
 
 
 
