@@ -117,6 +117,16 @@ def create_app():
     app.register_blueprint(wishlist_bp, url_prefix="/wishlist")
     app.register_blueprint(homepage_bp, url_prefix="/admin/homepage")
 
+
+
+        # ========================================================
+    # GOOGLE SEARCH CONSOLE VERIFICATION
+    # ========================================================
+
+    @app.route("/googleaaeb185e1a9c2151.html")
+    def google_search_console_verification():
+        return "google-site-verification: googleaaeb185e1a9c2151.html"
+
     # ========================================================
     # GENERAL CONTEXT UTILITIES
     # ========================================================
