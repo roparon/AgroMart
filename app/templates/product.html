@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+
 {% block title %}
 {% if category %}
 {{ category.name }} | Bomet Machineries Ltd.
@@ -7,8 +8,130 @@ Search: {{ search }} | Bomet Machineries Ltd.
 {% else %}
 Products | Bomet Machineries Ltd.
 {% endif %}
-
 {% endblock %}
+
+
+{% block meta_description %}
+{% if category %}
+{% if category.description %}
+{{ category.description
+    |striptags
+    |replace("\n", " ")
+    |replace("\r", " ")
+    |trim
+    |truncate(155, True, "")
+}}
+{% else %}
+Shop quality {{ category.name|lower }} from Bomet Machineries Ltd. in Kenya. Browse available machinery, equipment and genuine spare parts.
+{% endif %}
+{% elif search %}
+Search results for {{ search }} | Bomet Machineries Ltd. — agricultural machinery, equipment and genuine spare parts in Kenya.
+{% else %}
+Bomet Machineries Ltd. — quality agricultural machinery, equipment, farm tools and genuine spare parts in Kenya.
+{% endif %}
+{% endblock %}
+
+
+{% block canonical_url %}
+{% if category %}
+{{ url_for(
+    'product.category_products',
+    slug=category.slug,
+    _external=True
+) }}
+{% else %}
+{{ request.base_url }}
+{% endif %}
+{% endblock %}
+
+
+{% block og_title %}
+{% if category %}
+{{ category.name }} | Bomet Machineries Ltd.
+{% elif search %}
+Search: {{ search }} | Bomet Machineries Ltd.
+{% else %}
+Products | Bomet Machineries Ltd.
+{% endif %}
+{% endblock %}
+
+
+{% block og_description %}
+{% if category %}
+{% if category.description %}
+{{ category.description
+    |striptags
+    |replace("\n", " ")
+    |replace("\r", " ")
+    |trim
+    |truncate(200, True, "")
+}}
+{% else %}
+Shop quality {{ category.name|lower }} from Bomet Machineries Ltd. in Kenya.
+{% endif %}
+{% elif search %}
+Browse products matching {{ search }} from Bomet Machineries Ltd. in Kenya.
+{% else %}
+Quality agricultural machinery, equipment, farm tools and genuine spare parts from Bomet Machineries Ltd. in Kenya.
+{% endif %}
+{% endblock %}
+
+
+{% block og_type %}
+website
+{% endblock %}
+
+
+{% block og_image_alt %}
+{% if category %}
+{{ category.name }} - Bomet Machineries Ltd.
+{% else %}
+Bomet Machineries Ltd. - Agricultural Machinery and Genuine Spare Parts
+{% endif %}
+{% endblock %}
+
+
+{% block twitter_title %}
+{% if category %}
+{{ category.name }} | Bomet Machineries Ltd.
+{% elif search %}
+Search: {{ search }} | Bomet Machineries Ltd.
+{% else %}
+Products | Bomet Machineries Ltd.
+{% endif %}
+{% endblock %}
+
+
+{% block twitter_description %}
+{% if category %}
+{% if category.description %}
+{{ category.description
+    |striptags
+    |replace("\n", " ")
+    |replace("\r", " ")
+    |trim
+    |truncate(200, True, "")
+}}
+{% else %}
+Shop quality {{ category.name|lower }} from Bomet Machineries Ltd. in Kenya.
+{% endif %}
+{% elif search %}
+Browse products matching {{ search }} from Bomet Machineries Ltd. in Kenya.
+{% else %}
+Quality agricultural machinery, equipment, farm tools and genuine spare parts from Bomet Machineries Ltd. in Kenya.
+{% endif %}
+{% endblock %}
+
+
+{% block twitter_image_alt %}
+{% if category %}
+{{ category.name }} - Bomet Machineries Ltd.
+{% else %}
+Bomet Machineries Ltd. - Agricultural Machinery and Genuine Spare Parts
+{% endif %}
+{% endblock %}
+
+
 {% block content %}
 
 <style>
