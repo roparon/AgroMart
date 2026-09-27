@@ -1,6 +1,193 @@
 {% extends "base.html" %}
 
-{% block title %}{{ product.name }} - Bomet Machineries Ltd.{% endblock %}
+{% block title %}
+{{ product.name }} | Bomet Machineries Ltd.
+{% endblock %}
+
+
+{% block meta_description %}
+{% if product.description %}
+{{ product.description
+    |striptags
+    |replace("\n", " ")
+    |replace("\r", " ")
+    |trim
+    |truncate(155, True, "")
+}}
+{% elif product.brand and product.category %}
+{{ product.name }} by {{ product.brand }}, {{ product.category.name|lower }} available from Bomet Machineries Ltd. in Kenya.
+{% elif product.category %}
+{{ product.name }}, {{ product.category.name|lower }} available from Bomet Machineries Ltd. in Kenya.
+{% else %}
+{{ product.name }} available from Bomet Machineries Ltd. in Kenya. Quality agricultural machinery and equipment.
+{% endif %}
+{% endblock %}
+
+
+{% block canonical_url %}
+{{ url_for(
+    'product.product_details',
+    id=product.id,
+    _external=True
+) }}
+{% endblock %}
+
+
+{% block og_title %}
+{{ product.name }} | Bomet Machineries Ltd.
+{% endblock %}
+
+
+{% block og_description %}
+{% if product.description %}
+{{ product.description
+    |striptags
+    |replace("\n", " ")
+    |replace("\r", " ")
+    |trim
+    |truncate(200, True, "")
+}}
+{% elif product.category %}
+{{ product.name }} — quality {{ product.category.name|lower }} from Bomet Machineries Ltd. in Kenya.
+{% else %}
+{{ product.name }} — quality agricultural equipment from Bomet Machineries Ltd.
+{% endif %}
+{% endblock %}
+
+
+{% block og_type %}
+product
+{% endblock %}
+
+
+{% block og_image_alt %}
+{{ product.name }} - Bomet Machineries Ltd.
+{% endblock %}
+
+
+{% block twitter_title %}
+{{ product.name }} | Bomet Machineries Ltd.
+{% endblock %}
+
+
+{% block twitter_description %}
+{% if product.description %}
+{{ product.description
+    |striptags
+    |replace("\n", " ")
+    |replace("\r", " ")
+    |trim
+    |truncate(200, True, "")
+}}
+{% elif product.category %}
+{{ product.name }} — quality {{ product.category.name|lower }} from Bomet Machineries Ltd. in Kenya.
+{% else %}
+{{ product.name }} — quality agricultural equipment from Bomet Machineries Ltd.
+{% endif %}
+{% endblock %}
+
+
+
+{% block twitter_image_alt %}
+{{ product.name }} - Bomet Machineries Ltd.
+{% endblock %}
+
+
+{% block extra_head %}
+
+{# ============================================================
+   PRODUCT STRUCTURED DATA
+   ============================================================ #}
+
+{% set final_price =
+    discounted_price
+    if discounted_price is defined
+    else product.price
+%}
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Product",
+
+    "name": {{ product.name|tojson }},
+
+    {% if product.description %}
+    "description": {{ product.description
+        |striptags
+        |replace("\n", " ")
+        |replace("\r", " ")
+        |trim
+        |tojson
+    }},
+    {% endif %}
+
+    {% if product.sku %}
+    "sku": {{ product.sku|tojson }},
+    {% endif %}
+
+    {% if product.brand %}
+    "brand": {
+        "@type": "Brand",
+        "name": {{ product.brand|tojson }}
+    },
+    {% endif %}
+
+    {% if product.category %}
+    "category": {{ product.category.name|tojson }},
+    {% endif %}
+
+    {% set seo_images = product.images|selectattr("image_url")|list %}
+
+    {% if seo_images %}
+    "image": [
+        {% for image in seo_images %}
+        {{
+            (
+                image.image_url
+                if image.image_url.startswith("http")
+                else request.url_root.rstrip("/") ~ "/" ~ image.image_url.lstrip("/")
+            )|tojson
+        }}{% if not loop.last %},{% endif %}
+        {% endfor %}
+    ],
+    {% endif %}
+
+    "offers": {
+        "@type": "Offer",
+
+        "url": {{ url_for(
+            'product.product_details',
+            id=product.id,
+            _external=True
+        )|tojson }},
+
+        "priceCurrency": "KES",
+
+        "price": {{ "%.2f"|format(final_price) }},
+
+        "availability":
+        {% if product.stock > 0 %}
+        "https://schema.org/InStock"
+        {% else %}
+        "https://schema.org/OutOfStock"
+        {% endif %},
+
+        "itemCondition": "https://schema.org/NewCondition",
+
+        "seller": {
+            "@type": "Organization",
+            "name": "Bomet Machineries Ltd."
+        }
+    }
+}
+</script>
+
+{% endblock %}
+
+
+
+
 
 {% block content %}
 

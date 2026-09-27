@@ -20,26 +20,29 @@
     <link rel="apple-touch-icon"
           href="{{ url_for('static', filename='favicon.png') }}">
 
-    <!-- SEO Description -->
+    <!-- =========================================================
+         SEO / SEARCH ENGINE METADATA
+    ========================================================== -->
+
     <meta name="description"
-          content="Bomet Machineries Ltd. — quality agricultural machinery, farm tools, generators, water pumps, refrigeration equipment, genuine spare parts and more.">
+          content="{% block meta_description %}Bomet Machineries Ltd. — quality agricultural machinery, farm tools, generators, water pumps, refrigeration equipment, genuine spare parts and more in Kenya.{% endblock %}">
 
     <!-- Canonical URL -->
     <link rel="canonical"
-          href="{{ request.base_url }}">
+          href="{% block canonical_url %}{{ request.base_url }}{% endblock %}">
 
     <!-- =========================================================
          OPEN GRAPH / SOCIAL LINK PREVIEW
     ========================================================== -->
 
     <meta property="og:title"
-          content="Bomet Machineries Ltd.">
+          content="{% block og_title %}Bomet Machineries Ltd.{% endblock %}">
 
     <meta property="og:description"
-          content="Quality agricultural machinery, farm tools, generators, water pumps, refrigeration equipment, genuine spare parts and more.">
+          content="{% block og_description %}Quality agricultural machinery, farm tools, generators, water pumps, refrigeration equipment, genuine spare parts and more in Kenya.{% endblock %}">
 
     <meta property="og:type"
-          content="website">
+          content="{% block og_type %}website{% endblock %}">
 
     <meta property="og:url"
           content="{{ request.base_url }}">
@@ -54,7 +57,7 @@
           content="{{ url_for('static', filename='uploads/homepage/1a30c95bb80841139baac0e1c4e5b489.png', _external=True) }}">
 
     <meta property="og:image:alt"
-          content="Bomet Machineries Ltd.">
+          content="{% block og_image_alt %}Bomet Machineries Ltd. - Agricultural Machinery and Genuine Spare Parts{% endblock %}">
 
     <meta property="og:image:width"
           content="1200">
@@ -70,16 +73,16 @@
           content="summary_large_image">
 
     <meta name="twitter:title"
-          content="Bomet Machineries Ltd.">
+          content="{% block twitter_title %}Bomet Machineries Ltd.{% endblock %}">
 
     <meta name="twitter:description"
-          content="Quality agricultural machinery, farm tools, generators, water pumps, refrigeration equipment, genuine spare parts and more.">
+          content="{% block twitter_description %}Quality agricultural machinery, farm tools, generators, water pumps, refrigeration equipment, genuine spare parts and more in Kenya.{% endblock %}">
 
     <meta name="twitter:image"
           content="{{ url_for('static', filename='uploads/homepage/1a30c95bb80841139baac0e1c4e5b489.png', _external=True) }}">
 
     <meta name="twitter:image:alt"
-          content="Bomet Machineries Ltd.">
+          content="{% block twitter_image_alt %}Bomet Machineries Ltd. - Agricultural Machinery and Genuine Spare Parts{% endblock %}">
 
     <!-- Page Title -->
     <title>{% block title %}Bomet Machineries Ltd.{% endblock %}</title>
@@ -1918,6 +1921,8 @@
             }
         }
     </style>
+    {% block extra_head %}{% endblock %}
+
 </head>
 
 <body>
