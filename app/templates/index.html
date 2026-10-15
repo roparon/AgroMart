@@ -4,6 +4,42 @@
 {{ settings.site_title if settings and settings.site_title else "Bomet Machineries Ltd. | Agricultural Machinery & Genuine Spare Parts in Kenya" }}
 {% endblock %}
 
+{% block meta_description %}
+Bomet Machineries Ltd. supplies agricultural machinery, farm tools, generators, water pumps and genuine spare parts in Kenya.
+{% endblock %}
+
+{% block canonical_url %}
+{{ url_for('home.home', _external=True) }}
+{% endblock %}
+
+{% block og_title %}
+{{ settings.site_title if settings and settings.site_title else "Bomet Machineries Ltd. | Agricultural Machinery & Genuine Spare Parts in Kenya" }}
+{% endblock %}
+
+{% block og_description %}
+Bomet Machineries Ltd. supplies agricultural machinery, farm tools, generators, water pumps and genuine spare parts in Kenya.
+{% endblock %}
+
+{% block og_type %}
+website
+{% endblock %}
+
+{% block og_image_alt %}
+Bomet Machineries Ltd. - Agricultural Machinery and Genuine Spare Parts in Kenya
+{% endblock %}
+
+{% block twitter_title %}
+{{ settings.site_title if settings and settings.site_title else "Bomet Machineries Ltd. | Agricultural Machinery & Genuine Spare Parts in Kenya" }}
+{% endblock %}
+
+{% block twitter_description %}
+Bomet Machineries Ltd. supplies agricultural machinery, farm tools, generators, water pumps and genuine spare parts in Kenya.
+{% endblock %}
+
+{% block twitter_image_alt %}
+Bomet Machineries Ltd. - Agricultural Machinery and Genuine Spare Parts in Kenya
+{% endblock %}
+
 {% block content %}
 
 <style>
